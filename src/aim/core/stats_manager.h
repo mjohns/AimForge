@@ -21,6 +21,11 @@ struct AggregateScenarioStats {
   int total_runs = 0;
 };
 
+struct LatestStatsRun {
+  std::string scenario_name;
+  i64 run_id;
+};
+
 class StatsManager {
  public:
   virtual ~StatsManager() {}
@@ -30,6 +35,8 @@ class StatsManager {
   virtual std::vector<StatsDbRow> GetStats(const std::string& scenario_name) = 0;
 
   virtual i64 GetLatestRunId(const std::string& scenario_name) = 0;
+
+  virtual std::optional<LatestStatsRun> GetLatestRun() = 0;
 
   virtual AggregateScenarioStats GetAggregateStats(const std::string& scenario_name) = 0;
 

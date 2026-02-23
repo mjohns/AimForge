@@ -16,6 +16,8 @@ class StatsManagerImpl : public StatsManager {
     i64 scenario_id = db_->GetScenarioId(scenario_name);
     db_->AddStats(scenario_id, row);
     stats_cache_.erase(scenario_id);
+    latest_scenario_id_ = scenario_id;
+    latest_run_id_ = row->stats_id;
   }
 
   std::vector<StatsDbRow> GetStats(const std::string& scenario_name) override {
@@ -55,6 +57,16 @@ class StatsManagerImpl : public StatsManager {
     stats_cache_.erase(scenario_id);
   }
 
+  std::optional<LatestStatsRun> GetLatestRun() override {
+    if (latest_scenario_id_ < 0) {
+      return {};
+    }
+    LatestStatsRun run;
+    run.scenario_name = db_->GetScenarioName(latest_scenario_id_);
+    run.run_id = latest_run_id_;
+    return run;
+  }
+
  private:
   std::vector<StatsDbRow> GetStats(i64 scenario_id) {
     // TODO: Cache at this layer?
@@ -87,6 +99,9 @@ class StatsManagerImpl : public StatsManager {
   std::unique_ptr<StatsDbRow> stats_db_;
   std::unordered_map<i64, AggregateScenarioStats> stats_cache_;
   AimDb* db_;
+
+  i64 latest_scenario_id_ = -1;
+  i64 latest_run_id_ = -1;
 };
 
 }  // namespace

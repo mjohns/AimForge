@@ -156,6 +156,15 @@ TEST_F(AimDbTest, GetPlaylistNameMap) {
           Pair("p1", id1), Pair("p2", id2), Pair("p5", id5), Pair("p4", id4), Pair("p3", new_id3)));
 }
 
+TEST_F(AimDbTest, GetScenarioNameFromId) {
+  i64 id1 = db_->GetScenarioId("s1");
+  i64 id2 = db_->GetScenarioId("s2");
+
+  EXPECT_THAT(db_->GetScenarioName(id1), StrEq("s1"));
+  EXPECT_THAT(db_->GetScenarioName(id2), StrEq("s2"));
+  EXPECT_THAT(db_->GetScenarioName(-1), StrEq(""));
+}
+
 TEST_F(AimDbTest, CreateAndUpdateScenarioSettings) {
   ScenarioSettings settings;
   i64 id = db_->GetScenarioId("Scenario");

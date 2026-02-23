@@ -292,6 +292,13 @@ class HomeScreen : public UiScreen {
                           app_screen_ == AppScreen::BUNDLES)) {
       app_screen_ = AppScreen::BUNDLES;
     }
+    auto latest_run = app_.stats_manager().GetLatestRun();
+    if (latest_run) {
+      if (ImGui::Selectable(std::format("{} Last run", icons::kAssignment).c_str(),
+                            app_screen_ == AppScreen::BUNDLES)) {
+        PushNextScreen(CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, &app_));
+      }
+    }
 
     if (original_app_screen != app_screen_) {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);

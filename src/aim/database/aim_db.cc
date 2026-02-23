@@ -75,6 +75,10 @@ const char* kGetAllScenarioIdsSql = R"AIMS(
 SELECT ScenarioId, ScenarioName FROM Scenarios;
 )AIMS";
 
+const char* kGetScenarioNameSql = R"AIMS(
+SELECT ScenarioName FROM Scenarios where ScenarioId = ?;
+)AIMS";
+
 const char* kGetScenarioNamesWithPrefixSql = R"AIMS(
 SELECT ScenarioName FROM Scenarios
 WHERE ScenarioName LIKE ?;
@@ -523,6 +527,26 @@ class AimDbImpl : public AimDb {
   std::unordered_map<std::string, i64> GetScenarioIdMap() override {
     return GetNameToIdMap(kGetAllScenarioIdsSql);
   }
+
+  std::string GetScenarioName(i64 scenario_id) override {
+    sqlite3_stmt* stmt;
+
+    int rc = sqlite3_prepare_v2(db_, kGetScenarioNameSql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+      Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
+      return {};
+    }
+    sqlite3_bind_int64(stmt, 1, scenario_id);
+
+    std::string name;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+      name = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+    }
+
+    sqlite3_finalize(stmt);
+    return name;
+  }
+
 
   bool AddStats(i64 scenario_id, StatsDbRow* row) override {
     if (row->epoch_seconds < 0) {
