@@ -1,4 +1,5 @@
 # Requires shadercross CLI installed from SDL_shadercross
+cd source
 for filename in *.vert.hlsl; do
     if [ -f "$filename" ]; then
         shadercross "$filename" -o "../compiled/${filename/.hlsl/.spv}"
