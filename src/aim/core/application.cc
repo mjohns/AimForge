@@ -232,6 +232,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
     return std::format("Failed to create window: {}", SDL_GetError());
   }
   trace.Add("SDL_CreateGPUDevice");
+  SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
   gpu_device_ = SDL_CreateGPUDevice(
       SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
       true,  // debug

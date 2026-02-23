@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -198,12 +198,8 @@ bool SDL_CalculateBlit(SDL_Surface *surface, SDL_Surface *dst)
         return SDL_SetError("Blit combination not supported");
     }
 
-#ifdef SDL_HAVE_RLE
-    // Clean everything out to start
-    if (surface->internal_flags & SDL_INTERNAL_SURFACE_RLEACCEL) {
-        SDL_UnRLESurface(surface, true);
-    }
-#endif
+    // We should have cleared out RLE at this point
+    SDL_assert(!(surface->internal_flags & SDL_INTERNAL_SURFACE_RLEACCEL));
 
     map->blit = SDL_SoftBlit;
     map->info.src_surface = surface;
