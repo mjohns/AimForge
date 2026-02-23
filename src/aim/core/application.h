@@ -218,6 +218,7 @@ class Application {
   bool should_exit_ = false;
   bool should_restart_ = false;
   i64 application_start_time_micros_ = 0;
+  bool imgui_initialized_ = false;
 };
 
 }  // namespace aim

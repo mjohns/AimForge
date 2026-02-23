@@ -363,7 +363,7 @@ class ReplayViewerScreen : public Screen {
     }
   }
 
-  void OnEvents(std::span<SDL_Event> events) {
+  void OnEvents(std::span<SDL_Event> events) override {
     ImGuiIO& io = ImGui::GetIO();
     for (const SDL_Event& event : events) {
       if (event.type == SDL_EVENT_QUIT) {

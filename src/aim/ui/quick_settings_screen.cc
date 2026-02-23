@@ -125,7 +125,7 @@ class QuickSettingsScreen : public UiScreen {
                                  : MaybeIntToString(updater_.settings.metronome_bpm());
       float text_size = ImGui::CalcTextSize(top_text.c_str()).x;
       ImGui::SetCursorPosX((screen.width - text_size) / 2.0);
-      ImGui::Text(top_text.c_str());
+      ImGui::Text(top_text);
       ImGui::Spacing();
       ImGui::Spacing();
     }

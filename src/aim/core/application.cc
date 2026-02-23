@@ -159,9 +159,11 @@ Application::~Application() {
   if (implot_ctx != nullptr) {
     ImPlot::DestroyContext(implot_ctx);
   }
-  ImGui_ImplSDLGPU3_Shutdown();
-  ImGui_ImplSDL3_Shutdown();
-  ImGui::DestroyContext();
+  if (imgui_initialized_) {
+    ImGui_ImplSDLGPU3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
+  }
 
   if (gpu_device_ != nullptr) {
     if (crosshair_manager_) {
@@ -226,12 +228,20 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   if (sdl_window_ == nullptr) {
     return std::format("Failed to create window: {}", SDL_GetError());
   }
+
   trace.Add("SDL_CreateGPUDevice");
-  SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
+  // SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
   gpu_device_ = SDL_CreateGPUDevice(
       SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-      true,  // debug
-      nullptr);
+      kIsDebugBuild,
+      "vulkan");
+  if (gpu_device_ == nullptr) {
+    // Fallback to search for any renderer
+    gpu_device_ = SDL_CreateGPUDevice(
+        SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+        kIsDebugBuild,
+        nullptr);
+  }
   if (gpu_device_ == nullptr) {
     return std::format("Failed to create GPU device: {}", SDL_GetError());
   }
@@ -306,6 +316,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
       SDL_GPU_SWAPCHAINCOMPOSITION_SDR;  // Only used in multi-viewports mode.
   init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
   ImGui_ImplSDLGPU3_Init(&init_info);
+  imgui_initialized_ = true;
 
   trace.Add("InitDone");
   return {};
