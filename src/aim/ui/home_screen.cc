@@ -318,7 +318,10 @@ class HomeScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::TextFmt("{} Fps {}", icons::kWarning, fps);
     }
+
     /*
+    const char* driverName = SDL_GetGPUDeviceDriver(app_.gpu_device());
+    ImGui::Text(driverName);
     for (int i = 0; i < 30; ++i) {
       ImGui::Spacing();
     }

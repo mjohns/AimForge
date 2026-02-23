@@ -67,6 +67,10 @@ struct TextureWallDrawData {
   Texture* texture;
 };
 
+struct SolidColorInstancedUniform {
+  u32 instance_offset = 0;
+};
+
 struct DrawData {
   std::vector<TextureWallDrawData> texture_walls;
 
@@ -703,7 +707,7 @@ class RendererImpl : public Renderer {
 
   bool Initialize(const std::filesystem::path& shader_dir) {
     solid_color_instanced_vertex_shader_ = LoadShader(
-        device_, shader_dir, "solid_color_instanced.vert", SDL_GPU_SHADERSTAGE_VERTEX, 0, 0, 1);
+        device_, shader_dir, "solid_color_instanced.vert", SDL_GPU_SHADERSTAGE_VERTEX, 1, 0, 1);
     solid_color_instanced_fragment_shader_ =
         LoadShader(device_, shader_dir, "solid_color_instanced.frag", SDL_GPU_SHADERSTAGE_FRAGMENT);
     texture_fragment_shader_ =
@@ -734,10 +738,10 @@ class RendererImpl : public Renderer {
     render_texture_info.sample_count = msaa_sample_count_;
     msaa_render_texture_ = SDL_CreateGPUTexture(device_, &render_texture_info);
 
-    if (!CreateSolidColorPipeline()) {
+    if (!CreateTextureQuadPipeline()) {
       return false;
     }
-    if (!CreateTextureQuadPipeline()) {
+    if (!CreateSolidColorPipeline()) {
       return false;
     }
 
@@ -984,36 +988,44 @@ class RendererImpl : public Renderer {
     binding.offset = 0;
     SDL_BindGPUVertexBuffers(ctx->render_pass, 0, &binding, 1);
 
+    auto set_instance_offset_uniform = [ctx](u32 offset) {
+      SolidColorInstancedUniform uniform_data;
+      uniform_data.instance_offset = offset;
+      SDL_PushGPUVertexUniformData(
+          ctx->command_buffer, 0, &uniform_data, sizeof(SolidColorInstancedUniform));
+    };
+
     if (instances.num_spheres > 0) {
+      set_instance_offset_uniform(instances.GetSpheresOffset());
       SDL_DrawGPUPrimitives(ctx->render_pass,
                             num_sphere_vertices_,
                             instances.num_spheres,
                             sphere_vertices_offset_,
-                            instances.GetSpheresOffset());
+                            0);
     }
 
     if (instances.num_cylinders > 0) {
+      set_instance_offset_uniform(instances.GetCylindersOffset());
       SDL_DrawGPUPrimitives(ctx->render_pass,
                             num_cylinder_vertices_,
                             instances.num_cylinders,
                             cylinder_vertices_offset_,
-                            instances.GetCylindersOffset());
+                            0);
     }
 
     if (instances.num_quads > 0) {
-      SDL_DrawGPUPrimitives(ctx->render_pass,
-                            kQuadNumVertices,
-                            instances.num_quads,
-                            quad_vertices_offset_,
-                            instances.GetQuadsOffset());
+      set_instance_offset_uniform(instances.GetQuadsOffset());
+      SDL_DrawGPUPrimitives(
+          ctx->render_pass, kQuadNumVertices, instances.num_quads, quad_vertices_offset_, 0);
     }
 
     if (instances.num_cylinder_walls > 0) {
+      set_instance_offset_uniform(instances.GetCylinderWallsOffset());
       SDL_DrawGPUPrimitives(ctx->render_pass,
                             num_cylinder_wall_vertices_,
                             instances.num_cylinder_walls,
                             cylinder_wall_vertices_offset_,
-                            instances.GetCylinderWallsOffset());
+                            0);
     }
 
     SDL_PopGPUDebugGroup(ctx->command_buffer);

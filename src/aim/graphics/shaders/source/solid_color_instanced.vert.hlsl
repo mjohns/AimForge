@@ -1,3 +1,7 @@
+cbuffer UniformBlock : register(b0, space1) {
+    uint InstanceOffset: packoffset(c0);
+};
+
 struct InstanceData {
   float4x4 MatrixTransform;
   float4 Color;
@@ -20,7 +24,7 @@ Output main(Input input) {
   Output output;
 
   // Pull the specific data for this instance using the ID
-  InstanceData data = InstanceBuffer[input.InstanceID];
+  InstanceData data = InstanceBuffer[InstanceOffset + input.InstanceID];
 
   output.Position = mul(data.MatrixTransform, float4(input.Position, 1.0f));
   output.Color = data.Color;
