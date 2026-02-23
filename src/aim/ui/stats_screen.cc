@@ -826,11 +826,9 @@ class StatsScreen : public UiScreen {
 
     double high_score =
         std::max<double>(details_.previous_high_score_stats.score, details_.stats.score);
-    float max_score = 0;
     float min_score = high_score + 1;
     for (const auto& row : stats) {
       float score = row.score;
-      max_score = std::max(score, max_score);
       min_score = std::min(score, min_score);
     }
 
@@ -838,7 +836,7 @@ class StatsScreen : public UiScreen {
     ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
 
     ImPlot::SetupAxisLimits(ImAxis_X1, 1, stats.size() + 1, ImPlotCond_Always);
-    ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.9, high_score * 1.1, ImPlotCond_Always);
+    ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.95, high_score * 1.05, ImPlotCond_Always);
 
     struct PlotData {
       std::span<StatsDbRow> rows;

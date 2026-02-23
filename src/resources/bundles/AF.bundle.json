@@ -437,6 +437,166 @@
    }
   },
   {
+   "name": "AlternateClick VerticalTall",
+   "def": {
+    "description": "Alternate clicks focusing on vertical movement with longer flicks.",
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 2
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 225,
+      "width": 170
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": 0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       },
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "AlternateClick VerticalTall Ladder",
+   "def": {
+    "description": "Alternate clicks focusing on vertical movement.",
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 5
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 225,
+      "width": 170
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "scoreTargets": {
+     "start": 80,
+     "end": 100
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": 0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       },
+       {
+        "xOffset": {
+         "xPercentValue": 0
+        },
+        "yOffset": {
+         "yPercentValue": -0.25
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.3
+         },
+         "yLength": {
+          "yPercentValue": 0.1
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
    "name": "AlternateClick Wander",
    "def": {
     "durationSeconds": 60,
@@ -4443,6 +4603,15 @@
    "def": {
     "levels": {
      "baseScenario": "AF AlternateClick Vertical Ladder",
+     "maxLevel": 30
+    }
+   }
+  },
+  {
+   "name": "AlternateClick VerticalTall Ladder ",
+   "def": {
+    "levels": {
+     "baseScenario": "AF AlternateClick VerticalTall Ladder",
      "maxLevel": 30
     }
    }
