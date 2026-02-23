@@ -30,8 +30,7 @@ set(SDLMIXER_FLAC_DRFLAC           TRUE)
 set(SDLMIXER_GME                   FALSE)
 
 set(SDLMIXER_MOD                   TRUE)
-set(SDLMIXER_MOD_MODPLUG           TRUE)
-set(SDLMIXER_MOD_XMP               FALSE)
+set(SDLMIXER_MOD_XMP               TRUE)
 set(SDLMIXER_MOD_XMP_LITE          FALSE)
 
 set(SDLMIXER_MP3                   TRUE)
@@ -40,7 +39,6 @@ set(SDLMIXER_MP3_MPG123            FALSE)
 
 set(SDLMIXER_MIDI                  TRUE)
 set(SDLMIXER_MIDI_FLUIDSYNTH       FALSE)
-set(SDLMIXER_MIDI_NATIVE           TRUE)
 set(SDLMIXER_MIDI_TIMIDITY         TRUE)
 
 set(SDLMIXER_OPUS                  TRUE)

@@ -7,8 +7,8 @@ Metronome::Metronome(float target_bpm, const std::string& sound_name, Applicatio
     float seconds_per_target = 60 / target_bpm;
     TimedInvokerParams metronome_params;
     metronome_params.interval_micros = seconds_per_target * 1000000;
-    maybe_invoker_ = TimedInvoker(metronome_params,
-                                  [=] { app->sound_manager()->PlayMetronomeSound(sound_name); });
+    maybe_invoker_ =
+        TimedInvoker(metronome_params, [=] { app->sound_manager()->PlayLoadedSound(sound_name); });
   }
 }
 

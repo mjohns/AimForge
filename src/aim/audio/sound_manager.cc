@@ -12,10 +12,11 @@ constexpr int kShootChannel = 2;
 constexpr int kMetronomeChannel = 3;
 constexpr int kKillChannel = 4;
 
-std::unique_ptr<Sound> LoadSound(const std::vector<std::filesystem::path>& sound_dirs,
+std::unique_ptr<Sound> LoadSound(MIX_Mixer* mixer,
+                                 const std::vector<std::filesystem::path>& sound_dirs,
                                  const std::string& name) {
   for (const std::filesystem::path& dir : sound_dirs) {
-    auto loaded_sound = Sound::Load(dir / name);
+    auto loaded_sound = Sound::Load(mixer, dir / name);
     if (loaded_sound) {
       return std::move(loaded_sound);
     }
@@ -46,14 +47,14 @@ std::vector<std::string> SoundManager::ListSounds() {
   return sorted_sound_names;
 }
 
-SoundManager::SoundManager(const std::vector<std::filesystem::path>& sound_dirs)
-    : sound_dirs_(sound_dirs) {}
+SoundManager::SoundManager(MIX_Mixer* mixer, const std::vector<std::filesystem::path>& sound_dirs)
+    : mixer_(mixer), sound_dirs_(sound_dirs) {}
 
 void SoundManager::LoadSounds(const Settings& settings) {
   const SoundSettings& s = settings.sound();
   if (s.has_master_volume_level()) {
-    float level = glm::clamp<float>(s.master_volume_level(), 0, 1);
-    Mix_MasterVolume(level * MIX_MAX_VOLUME);
+    float level = glm::clamp<float>(s.master_volume_level(), 0, 2);
+    MIX_SetMixerGain(mixer_, level);
   }
   std::vector<std::string> sounds{
       s.hit(),
@@ -69,14 +70,9 @@ void SoundManager::LoadSounds(const Settings& settings) {
   }
 }
 
-SoundManager& SoundManager::PlayKillSound(const std::string& name) {
-  PlaySound(name, kKillChannel);
-  return *this;
-}
-
-bool SoundManager::LoadAndPlaySound(const std::string& name, int channel) {
+bool SoundManager::LoadAndPlaySound(const std::string& name) {
   MaybeLoadSound(name);
-  return PlaySound(name, channel);
+  return PlayLoadedSound(name);
 }
 
 void SoundManager::MaybeLoadSound(const std::string& sound_name) {
@@ -85,12 +81,12 @@ void SoundManager::MaybeLoadSound(const std::string& sound_name) {
   }
   auto it = sound_cache_.find(sound_name);
   if (it == sound_cache_.end()) {
-    std::unique_ptr<Sound> sound = LoadSound(sound_dirs_, sound_name);
+    std::unique_ptr<Sound> sound = LoadSound(mixer_, sound_dirs_, sound_name);
     sound_cache_[sound_name] = std::move(sound);
   }
 }
 
-bool SoundManager::PlaySound(const std::string& name, int channel) {
+bool SoundManager::PlayLoadedSound(const std::string& name) {
   if (name.empty()) {
     return false;
   }
@@ -98,27 +94,12 @@ bool SoundManager::PlaySound(const std::string& name, int channel) {
   if (it != sound_cache_.end()) {
     Sound* sound = it->second.get();
     if (sound != nullptr) {
-      sound->Play(channel);
+      sound->Play();
       return true;
     }
   }
 
   return false;
-}
-
-SoundManager& SoundManager::PlayHitSound(const std::string& name) {
-  PlaySound(name, kHitChannel);
-  return *this;
-}
-
-SoundManager& SoundManager::PlayShootSound(const std::string& name) {
-  PlaySound(name, kShootChannel);
-  return *this;
-}
-
-SoundManager& SoundManager::PlayMetronomeSound(const std::string& name) {
-  PlaySound(name, kMetronomeChannel);
-  return *this;
 }
 
 }  // namespace aim

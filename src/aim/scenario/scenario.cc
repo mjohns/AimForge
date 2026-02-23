@@ -577,28 +577,28 @@ void Scenario::AddRemoveTargetEvent(u16 target_id) {
 }
 
 void Scenario::PlayShootSound() {
-  app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayHitSound() {
-  app_.sound_manager()->PlayHitSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::HIT);
   }
 }
 
 void Scenario::PlayMissSound() {
-  app_.sound_manager()->PlayShootSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayKillSound() {
-  app_.sound_manager()->PlayKillSound(settings_.sound().kill());
+  app_.sound_manager()->PlayLoadedSound(settings_.sound().kill());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::KILL);
   }

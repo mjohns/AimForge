@@ -42,7 +42,6 @@ add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
 
 add_subdirectory(SDL3)
-# https://github.com/libsdl-org/SDL_mixer/commit/269c637263b8c63b053d72b4dde4129b944d6e57
 add_subdirectory(SDL_mixer)
 
 add_subdirectory(SDL_image)

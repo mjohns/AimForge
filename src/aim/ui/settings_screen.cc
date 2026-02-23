@@ -51,7 +51,7 @@ class SoundInputDialog {
           auto lid = loop_id.Get();
 
           if (ImGui::Button(icons::kPlayArrow)) {
-            app.sound_manager()->LoadAndPlaySound(sound_name, 1);
+            app.sound_manager()->LoadAndPlaySound(sound_name);
           }
           ImGui::SameLine();
           if (ImGui::Button(sound_name)) {
@@ -376,7 +376,7 @@ class SettingsScreen : public UiScreen {
 
         ImGui::TableNextColumn();
         if (ImGui::Button(icons::kPlayArrow)) {
-          app_.sound_manager()->LoadAndPlaySound(*sound_name, 1);
+          app_.sound_manager()->LoadAndPlaySound(*sound_name);
         }
         ImGui::SameLine();
         float char_x = ImGui::GetDefaultCharSizeX();

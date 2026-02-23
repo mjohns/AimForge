@@ -182,9 +182,7 @@ Application::~Application() {
     SDL_DestroySurface(icon_);
   }
 
-  Mix_CloseAudio();
-  Mix_Quit();
-
+  MIX_Quit();
   SDL_Quit();
 
   Logger::getInstance().ResetToDefault();
@@ -208,17 +206,14 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   }
 
   state_->initialization_times.audio.start = stopwatch.GetElapsedMicros();
-  trace.Add("Mix_Init");
-  if (Mix_Init(MIX_INIT_OGG) == 0) {
+  trace.Add("MIX_Init");
+  if (!MIX_Init()) {
     return std::format("SDL audio initialization failed: {}", SDL_GetError());
   }
 
-  SDL_AudioSpec spec;
-  spec.freq = MIX_DEFAULT_FREQUENCY;
-  spec.format = MIX_DEFAULT_FORMAT;
-  spec.channels = MIX_DEFAULT_CHANNELS;
-  trace.Add("Mix_OpenAudio");
-  if (!Mix_OpenAudio(0, &spec)) {
+  trace.Add("MIX_CreateMixerDevice");
+  sdl_mixer_ = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+  if (!sdl_mixer_) {
     return std::format("Could not open audio device: {}", SDL_GetError());
   }
 
@@ -346,7 +341,7 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
   std::vector<std::filesystem::path> sound_dirs = {
       file_system_->GetUserDataPath("resources/sounds"),
   };
-  sound_manager_ = std::make_unique<SoundManager>(sound_dirs);
+  sound_manager_ = std::make_unique<SoundManager>(sdl_mixer_, sound_dirs);
 
   auto fonts_path = file_system_->GetBasePath("resources/fonts");
   font_manager_ = std::make_unique<FontManager>(fonts_path);

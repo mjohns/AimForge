@@ -6,28 +6,23 @@
 
 namespace aim {
 
-std::unique_ptr<Sound> Sound::Load(const std::filesystem::path& sound_path) {
+std::unique_ptr<Sound> Sound::Load(MIX_Mixer* mixer, const std::filesystem::path& sound_path) {
   if (!std::filesystem::exists(sound_path)) {
     return {};
   }
-  Mix_Chunk* chunk = Mix_LoadWAV(sound_path.string().c_str());
-  if (chunk == nullptr) {
+  MIX_Audio* audio = MIX_LoadAudio(mixer, sound_path.string().c_str(), true);
+  if (audio == nullptr) {
     return {};
   }
-  return std::unique_ptr<Sound>(new Sound(chunk));
+  return std::unique_ptr<Sound>(new Sound(mixer, audio));
 }
 
-Sound::Sound(Mix_Chunk* chunk) : chunk_(chunk) {}
+Sound::Sound(MIX_Mixer* mixer, MIX_Audio* audio) : mixer_(mixer), audio_(audio) {}
 
-Sound::~Sound() {
-  if (chunk_ != nullptr) {
-    Mix_FreeChunk(chunk_);
-  }
-}
+Sound::~Sound() {}
 
-void Sound::Play(int channel) {
-  // Mix_VolumeChunk
-  Mix_PlayChannel(channel, chunk_, 0);
+void Sound::Play() {
+  MIX_PlayAudio(mixer_, audio_);
 }
 
 }  // namespace aim

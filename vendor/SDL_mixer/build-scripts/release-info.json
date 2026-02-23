@@ -3,7 +3,7 @@
   "remote": "libsdl-org/SDL_mixer",
   "dependencies": {
     "SDL": {
-      "startswith": "3.",
+      "startswith": "3.4",
       "repo": "libsdl-org/SDL"
     }
   },
@@ -15,9 +15,9 @@
   },
   "source": {
     "checks": [
-      "src/mixer.c",
+      "src/SDL_mixer.c",
       "include/SDL3_mixer/SDL_mixer.h",
-      "examples/playmus.c"
+      "test/testmixer.c"
     ]
   },
   "dmg": {
@@ -36,34 +36,41 @@
       "archs": ["x86", "x64"],
       "args": [
         "-DBUILD_SHARED_LIBS=ON",
-        "-DSDLMIXER_SNDFILE=ON",
         "-DSDLMIXER_FLAC=ON",
         "-DSDLMIXER_FLAC_DRFLAC=ON",
-        "-DSDLMIXER_GME=OFF",
-        "-DSDLMIXER_MOD=OFF",
-        "-DSDLMIXER_MOD_MODPLUG=OFF",
-        "-DSDLMIXER_MOD_XMP=OFF",
+        "-DSDLMIXER_FLAC_LIBFLAC=OFF",
+        "-DSDLMIXER_GME=ON",
+        "-DSDLMIXER_MOD=ON",
+        "-DSDLMIXER_MOD_XMP=ON",
         "-DSDLMIXER_MP3=ON",
-        "-DSDLMIXER_MP3_MINIMP3=ON",
+        "-DSDLMIXER_MP3_DRMP3=ON",
         "-DSDLMIXER_MP3_MPG123=OFF",
         "-DSDLMIXER_MIDI=ON",
-        "-DSDLMIXER_MIDI_NATIVE=ON",
-        "-DSDLMIXER_OPUS=OFF",
-        "-DSDLMIXER_VORBIS=STB",
+        "-DSDLMIXER_MIDI_FLUIDSYNTH=OFF",
+        "-DSDLMIXER_MIDI_TIMIDITY=ON",
+        "-DSDLMIXER_OPUS=ON",
+        "-DSDLMIXER_VORBIS_STB=ON",
+        "-DSDLMIXER_VORBIS_TREMOR=OFF",
+        "-DSDLMIXER_VORBIS_VORBISFILE=OFF",
         "-DSDLMIXER_WAVE=ON",
-        "-DSDLMIXER_WAVPACK=OFF",
+        "-DSDLMIXER_WAVPACK=ON",
         "-DSDLMIXER_RELOCATABLE=ON",
-        "-DSDLMIXER_SAMPLES=OFF",
-        "-DSDLMIXER_VENDORED=ON"
+        "-DSDLMIXER_TESTS=OFF",
+        "-DSDLMIXER_VENDORED=OFF",
+        "-DCMAKE_C_FLAGS=-I@<@PROJECT_ROOT@>@/VisualC/external/include",
+        "-DSDLMIXER_DYNAMIC_GME=@<@PROJECT_ROOT@>@/VisualC/external/optional/@<@ARCH@>@/libgme.dll",
+        "-DSDLMIXER_DYNAMIC_WAVPACK=@<@PROJECT_ROOT@>@/VisualC/external/optional/@<@ARCH@>@/libwavpack-1.dll",
+        "-DSDLMIXER_DYNAMIC_OPUSFILE=@<@PROJECT_ROOT@>@/VisualC/external/optional/@<@ARCH@>@/libopusfile-0.dll",
+        "-DSDLMIXER_DYNAMIC_MOD_XMP=@<@PROJECT_ROOT@>@/VisualC/external/optional/@<@ARCH@>@/libxmp.dll"
       ],
       "shared-static": "args"
     },
     "files": {
       "": [
-        "CHANGES.txt",
+        "build-scripts/pkg-support/mingw/INSTALL.md.in:INSTALL.md",
+        "build-scripts/pkg-support/mingw/Makefile",
         "LICENSE.txt",
-        "README.txt",
-        "build-scripts/pkg-support/mingw/Makefile"
+        "README.md"
       ],
       "cmake": [
         "build-scripts/pkg-support/mingw/cmake/SDL3_mixerConfig.cmake",
@@ -138,21 +145,24 @@
         "-DSDLMIXER_SNDFILE=ON",
         "-DSDLMIXER_FLAC=ON",
         "-DSDLMIXER_FLAC_DRFLAC=ON",
+        "-DSDLMIXER_FLAC_LIBFLAC=OFF",
         "-DSDLMIXER_GME=ON",
         "-DSDLMIXER_MOD=ON",
-        "-DSDLMIXER_MOD_MODPLUG=OFF",
         "-DSDLMIXER_MOD_XMP=ON",
         "-DSDLMIXER_MP3=ON",
-        "-DSDLMIXER_MP3_MINIMP3=ON",
+        "-DSDLMIXER_MP3_DRMP3=ON",
         "-DSDLMIXER_MP3_MPG123=OFF",
         "-DSDLMIXER_MIDI=ON",
-        "-DSDLMIXER_MIDI_NATIVE=ON",
+        "-DSDLMIXER_MIDI_FLUIDSYNTH=OFF",
+        "-DSDLMIXER_MIDI_TIMIDITY=ON",
         "-DSDLMIXER_OPUS=ON",
-        "-DSDLMIXER_VORBIS=STB",
+        "-DSDLMIXER_VORBIS_STB=ON",
+        "-DSDLMIXER_VORBIS_TREMOR=OFF",
+        "-DSDLMIXER_VORBIS_VORBISFILE=OFF",
         "-DSDLMIXER_WAVE=ON",
         "-DSDLMIXER_WAVPACK=ON",
         "-DSDLMIXER_RELOCATABLE=ON",
-        "-DSDLMIXER_SAMPLES=OFF",
+        "-DSDLMIXER_TESTS=OFF",
         "-DSDLMIXER_DEPS_SHARED=ON",
         "-DSDLMIXER_VENDORED=ON"
       ],
@@ -166,7 +176,13 @@
           "bin/ogg-0.dll",
           "bin/opus-0.dll",
           "bin/opusfile-0.dll",
-          "bin/libwavpack-1.dll"
+          "bin/libwavpack-1.dll",
+          "share/licenses/SDL3_mixer/optional/LICENSE.gme.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.ogg-vorbis.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.opus.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.opusfile.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.wavpack.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.xmp.txt"
         ]
       },
       "files-devel": {
@@ -181,20 +197,28 @@
           "bin/ogg-0.dll",
           "bin/opus-0.dll",
           "bin/opusfile-0.dll",
-          "bin/libwavpack-1.dll"
+          "bin/libwavpack-1.dll",
+          "share/licenses/SDL3_mixer/optional/LICENSE.gme.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.ogg-vorbis.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.opus.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.opusfile.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.wavpack.txt",
+          "share/licenses/SDL3_mixer/optional/LICENSE.xmp.txt"
         ]
       }
     },
     "files-lib": {
       "": [
-        "README.txt"
+        "build-scripts/pkg-support/msvc/@<@ARCH@>@/INSTALL.md.in:INSTALL.md",
+        "LICENSE.txt",
+        "README.md"
       ]
     },
     "files-devel": {
       "": [
-        "CHANGES.txt",
+        "build-scripts/pkg-support/msvc/INSTALL.md.in:INSTALL.md",
         "LICENSE.txt",
-        "README.txt"
+        "README.md"
       ],
       "cmake": [
         "build-scripts/pkg-support/msvc/cmake/SDL3_mixerConfig.cmake.in:SDL3_mixerConfig.cmake",
@@ -228,20 +252,23 @@
         "-DSDLMIXER_SNDFILE=ON",
         "-DSDLMIXER_FLAC=ON",
         "-DSDLMIXER_FLAC_DRFLAC=ON",
+        "-DSDLMIXER_FLAC_LIBFLAC=OFF",
         "-DSDLMIXER_GME=OFF",
         "-DSDLMIXER_MOD=OFF",
-        "-DSDLMIXER_MOD_MODPLUG=OFF",
         "-DSDLMIXER_MOD_XMP=OFF",
         "-DSDLMIXER_MP3=ON",
-        "-DSDLMIXER_MP3_MINIMP3=ON",
+        "-DSDLMIXER_MP3_DRMP3=ON",
         "-DSDLMIXER_MP3_MPG123=OFF",
         "-DSDLMIXER_MIDI=ON",
-        "-DSDLMIXER_MIDI_NATIVE=ON",
+        "-DSDLMIXER_MIDI_FLUIDSYNTH=OFF",
+        "-DSDLMIXER_MIDI_TIMIDITY=ON",
         "-DSDLMIXER_OPUS=OFF",
-        "-DSDLMIXER_VORBIS=STB",
+        "-DSDLMIXER_VORBIS_STB=ON",
+        "-DSDLMIXER_VORBIS_TREMOR=OFF",
+        "-DSDLMIXER_VORBIS_VORBISFILE=OFF",
         "-DSDLMIXER_WAVE=ON",
         "-DSDLMIXER_WAVPACK=OFF",
-        "-DSDLMIXER_SAMPLES=OFF",
+        "-DSDLMIXER_TESTS=OFF",
         "-DSDLMIXER_VENDORED=ON"
       ]
     },
@@ -264,9 +291,9 @@
       "x86",
       "x86_64"
     ],
-    "api-minimum": 19,
-    "api-target": 29,
-    "ndk-minimum": 21,
+    "api-minimum": 21,
+    "api-target": 35,
+    "ndk-minimum": 28,
     "aar-files": {
       "": [
         "build-scripts/pkg-support/android/aar/__main__.py.in:__main__.py",
@@ -283,7 +310,9 @@
     },
     "files": {
       "": [
-        "build-scripts/pkg-support/android/README.md.in:README.md"
+        "build-scripts/pkg-support/android/INSTALL.md.in:INSTALL.md",
+        "LICENSE.txt",
+        "README.md"
       ]
     },
     "dependencies": {

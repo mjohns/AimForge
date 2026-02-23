@@ -38,10 +38,10 @@ class TrackingSound {
  private:
   void PlaySound() {
     if (is_hitting_) {
-      app_->sound_manager()->PlayShootSound(settings_.shoot());
-      app_->sound_manager()->PlayHitSound(settings_.hit());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.hit());
     } else {
-      app_->sound_manager()->PlayShootSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
     }
   }
 
@@ -99,10 +99,10 @@ class ProximityTrackingSound {
  private:
   void PlaySound(bool is_hitting, i64 replay_now_micros, ReplayRecorder* replay) {
     if (is_hitting) {
-      app_->sound_manager()->PlayShootSound(settings_.shoot());
-      app_->sound_manager()->PlayHitSound(settings_.hit());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.hit());
     } else {
-      app_->sound_manager()->PlayShootSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
     }
     if (replay) {
       replay->PlaySound(replay_now_micros, ReplaySoundType::SHOOT);

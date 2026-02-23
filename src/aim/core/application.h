@@ -24,6 +24,8 @@
 #include "imgui.h"
 #include "spdlog/spdlog.h"
 
+struct MIX_Mixer;
+
 namespace aim {
 
 class BundleManager;
@@ -181,6 +183,7 @@ class Application {
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
+  MIX_Mixer* sdl_mixer_ = nullptr;
 
   int window_width_ = -1;
   int window_height_ = -1;

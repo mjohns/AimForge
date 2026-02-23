@@ -8,11 +8,9 @@ set_package_properties(SDL3_mixer PROPERTIES
     DESCRIPTION "SDL_mixer is a sample multi-channel audio mixer library"
 )
 
-set(SDL3_mixer_FOUND                ON)
+set(SDL3_mixer_FOUND               ON)
 
 set(SDLMIXER_VENDORED              @SDLMIXER_VENDORED@)
-
-set(SDLMIXER_SNDFILE               @SDLMIXER_SNDFILE_ENABLED@)
 
 set(SDLMIXER_FLAC                  @SDLMIXER_FLAC_ENABLED@)
 set(SDLMIXER_FLAC_LIBFLAC          @SDLMIXER_FLAC_LIBFLAC_ENABLED@)
@@ -21,7 +19,6 @@ set(SDLMIXER_FLAC_DRFLAC           @SDLMIXER_FLAC_DRFLAC_ENABLED@)
 set(SDLMIXER_GME                   @SDLMIXER_GME_ENABLED@)
 
 set(SDLMIXER_MOD                   @SDLMIXER_MOD_ENABLED@)
-set(SDLMIXER_MOD_MODPLUG           @SDLMIXER_MOD_MODPLUG_ENABLED@)
 set(SDLMIXER_MOD_XMP               @SDLMIXER_MOD_XMP_ENABLED@)
 set(SDLMIXER_MOD_XMP_LITE          @SDLMIXER_MOD_XMP_ENABLED@)
 
@@ -31,7 +28,6 @@ set(SDLMIXER_MP3_MPG123            @SDLMIXER_MP3_MPG123_ENABLED@)
 
 set(SDLMIXER_MIDI                  @SDLMIXER_MIDI_ENABLED@)
 set(SDLMIXER_MIDI_FLUIDSYNTH       @SDLMIXER_MIDI_FLUIDSYNTH_ENABLED@)
-set(SDLMIXER_MIDI_NATIVE           @SDLMIXER_MIDI_NATIVE_ENABLED@)
 set(SDLMIXER_MIDI_TIMIDITY         @SDLMIXER_MIDI_TIMIDITY_ENABLED@)
 
 set(SDLMIXER_OPUS                  @SDLMIXER_OPUS_ENABLED@)
@@ -75,16 +71,14 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SDL3_mixer-static-targets.cmake")
             set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ON)
         endif()
 
-        if(SDLMIXER_SNDFILE AND NOT TARGET SndFile::sndfile)
-            find_dependency(SndFile)
-        endif()
-
         if(SDLMIXER_FLAC_LIBFLAC AND NOT TARGET FLAC::FLAC)
             find_dependency(FLAC)
-        endif()
-
-        if(SDLMIXER_MOD_MODPLUG AND NOT TARGET modplug::modplug)
-            find_dependency(modplug)
+            # Xiph's CMake script does not handle Threads::Threads correctly:
+            # https://github.com/xiph/flac/issues/820
+            get_property(flac_interface_link_libraries TARGET FLAC::FLAC PROPERTY INTERFACE_LINK_LIBRARIES)
+            if(Threads::Threads IN_LIST flac_interface_link_libraries)
+                find_package(Threads)
+            endif()
         endif()
 
         if(SDLMIXER_MOD_XMP AND NOT TARGET libxmp::libxmp)
@@ -100,7 +94,7 @@ if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SDL3_mixer-static-targets.cmake")
         endif()
 
         if(SDLMIXER_MIDI_FLUIDSYNTH AND NOT TARGET FluidSynth::libfluidsynth)
-            find_dependency(FluidSynth)
+            find_dependency(FluidSynth "2.2.0")
         endif()
 
         if(SDLMIXER_VORBIS_TREMOR AND NOT TARGET tremor::tremor)
@@ -154,5 +148,8 @@ if(NOT TARGET SDL3_mixer::SDL3_mixer)
     endif()
 endif()
 
+if(NOT SDL3_mixer_COMPONENTS AND NOT TARGET SDL3_mixer::SDL3_mixer-shared AND NOT TARGET SDL3_mixer::SDL3_mixer-static)
+    set(SDL3_mixer_FOUND FALSE)
+endif()
 @PACKAGE_INIT@
 check_required_components(SDL3_mixer)

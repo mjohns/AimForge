@@ -1,2 +1,0 @@
-3.0.0:
- * Updated for SDL 3.0
