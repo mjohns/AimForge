@@ -3176,6 +3176,26 @@
    }
   },
   {
+   "name": "SmoothSwerve Precision Ladder",
+   "def": {
+    "overrides": {
+     "targetRadiusMultiplier": 2
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "scoreTargets": {
+     "start": 50,
+     "end": 75
+    },
+    "referenceDef": {
+     "scenarioName": "AF SmoothSwerve",
+     "durationSeconds": 30,
+     "description": "Ladder for \"AF SmoothSwerve\" where the target gets smaller."
+    }
+   }
+  },
+  {
    "name": "SnakeClick",
    "def": {
     "durationSeconds": 60,
@@ -4818,6 +4838,17 @@
       "numPlays": 1
      }
     ]
+   }
+  },
+  {
+   "name": "SmoothSwerve Precision Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF SmoothSwerve Precision Ladder",
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
    }
   },
   {
