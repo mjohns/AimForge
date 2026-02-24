@@ -835,7 +835,7 @@ class StatsScreen : public UiScreen {
     ImPlot::SetupAxis(ImAxis_X1, "Run number", ImPlotAxisFlags_NoDecorations);
     ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
 
-    ImPlot::SetupAxisLimits(ImAxis_X1, 1, stats.size() + 1, ImPlotCond_Always);
+    ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
 
     ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.95, high_score * 1.05, ImPlotCond_Always);
 
