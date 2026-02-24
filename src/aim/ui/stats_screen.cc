@@ -30,6 +30,9 @@
 namespace aim {
 namespace {
 
+const ImVec4 kTopThresholdColor(0.9, 0.2, 0.4, 0.9);
+const ImVec4 kMidThresholdColor(0.4, 0.4, 0.5, 0.7);
+
 struct ScoresOverTime {
   ScoresOverTime(const std::vector<float>& replay_scores) {
     scores.reserve(replay_scores.size());
@@ -83,7 +86,7 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
   // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
   ImPlot::PlotLine("Score History", times.data(), scores.data(), scores.size());
 
-  ImPlot::DragLineY(0, &threshold, ImVec4(1, 0, 0, 1), 1.0f, ImPlotDragToolFlags_NoInputs);
+  ImPlot::DragLineY(0, &threshold, kTopThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
 
   if (ImPlot::IsPlotHovered()) {
     ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
@@ -824,6 +827,11 @@ class StatsScreen : public UiScreen {
       stats = stats.subspan(stats.size() - max_to_show, max_to_show);
     }
 
+    double score_target = 0;
+    if (evaluated_scenario_def_) {
+      score_target = evaluated_scenario_def_->score_targets().end();
+    }
+
     double high_score =
         std::max<double>(details_.previous_high_score_stats.score, details_.stats.score);
     float min_score = high_score + 1;
@@ -837,10 +845,11 @@ class StatsScreen : public UiScreen {
 
     ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
 
-    float score_range = abs(high_score - min_score);
+    double top_score = std::max(score_target, high_score);
+    float score_range = abs(top_score - min_score);
     float vertical_padding = score_range * 0.05;
     ImPlot::SetupAxisLimits(
-        ImAxis_Y1, min_score - vertical_padding, high_score + vertical_padding, ImPlotCond_Always);
+        ImAxis_Y1, min_score - vertical_padding, top_score + vertical_padding, ImPlotCond_Always);
 
     struct PlotData {
       std::span<StatsDbRow> rows;
@@ -853,7 +862,11 @@ class StatsScreen : public UiScreen {
       return ImPlotPoint(idx + 1, data.rows[idx].score);
     };
 
-    ImPlot::DragLineY(0, &high_score, ImVec4(1, 0, 0, 1), 1.0f, ImPlotDragToolFlags_NoInputs);
+    ImPlot::DragLineY(0, &high_score, kTopThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
+    if (score_target > 0) {
+      ImPlot::DragLineY(1, &score_target, kMidThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
+    }
+
     // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
     ImPlot::PlotLineG("Scores", point_getter, &plot_data, stats.size());
     ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle, 3.0f);
@@ -892,6 +905,30 @@ class StatsScreen : public UiScreen {
           ImPlot::SetNextMarkerStyle(
               ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
           ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
+        } else {
+          // See if it is near one of the drag lines and show the tooltip if so.
+          ImPlotPoint threshold = ImPlot::GetPlotDistanceFromPixels(10);
+          if (abs(high_score - mouse_pos.y) < threshold.y) {
+            ImGui::BeginTooltip();
+            ImGui::TextFmt("High score: {}", MaybeIntToString(high_score, 2));
+            ImGui::EndTooltip();
+
+            ImPlot::SetNextMarkerStyle(
+                ImPlotMarker_Circle, 3.0f, kTopThresholdColor, IMPLOT_AUTO, kTopThresholdColor);
+            float float_high_score = high_score;
+            float mouse_x = mouse_pos.x;
+            ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1);
+          } else if (score_target > 0 && abs(score_target - mouse_pos.y) < threshold.y) {
+            ImGui::BeginTooltip();
+            ImGui::TextFmt("Score target: {}", MaybeIntToString(score_target, 2));
+            ImGui::EndTooltip();
+
+            ImPlot::SetNextMarkerStyle(
+                ImPlotMarker_Circle, 3.0f, kMidThresholdColor, IMPLOT_AUTO, kMidThresholdColor);
+            float float_score_target = score_target;
+            float mouse_x = mouse_pos.x;
+            ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &float_score_target, 1);
+          }
         }
       }
     }
