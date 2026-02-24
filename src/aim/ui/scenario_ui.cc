@@ -213,6 +213,9 @@ class ScenarioBrowserComponent {
 
     search_text_ = app_->local_store().Get(GetSearchTextKey());
 
+    shot_types_.push_back({ShotType::TYPE_NOT_SET, "None"});
+    shot_types_.insert(shot_types_.end(), kShotTypes.begin(), kShotTypes.end());
+
     UpdateFilteredScenarios();
     initial_search_text_ = search_text_;
   }
@@ -228,6 +231,7 @@ class ScenarioBrowserComponent {
   }
 
   void Show(ScenarioDialogs* dialogs) {
+    float char_x = ImGui::GetDefaultCharSizeX();
     ImGui::IdGuard cid(id_);
 
     ImGui::Spacing();
@@ -255,8 +259,45 @@ class ScenarioBrowserComponent {
       UpdateFilteredScenarios();
     }
 
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-    ImGui::SetNextItemWidth(char_size.x * 30);
+    if (advanced_filters_open_) {
+      ImGui::Indent();
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Shot type");
+      ImGui::SameLine();
+      bool shot_type_changed = ImGui::SimpleTypeDropdown(
+          "##ShotTypeFilter", &shot_type_filter_, shot_types_, char_x * 15);
+      if (shot_type_changed) {
+        UpdateFilteredScenarios();
+      }
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Scenario type");
+      ImGui::SameLine();
+      bool scenario_type_changed = ImGui::SimpleTypeDropdown(
+          "##ScenarioTypeFilter", &scenario_type_filter_, scenario_types_, char_x * 12);
+      if (scenario_type_changed) {
+        UpdateFilteredScenarios();
+      }
+
+      if (ImGui::Button("Clear filters")) {
+        shot_type_filter_ = ShotType::TYPE_NOT_SET;
+        scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
+        UpdateFilteredScenarios();
+        advanced_filters_open_ = false;
+      }
+
+      ImGui::Unindent();
+      ImGui::Spacing();
+    } else {
+      ImGui::SameLine(0, char_x);
+      if (ImGui::Button("Advanced")) {
+        advanced_filters_open_ = true;
+      }
+      ImGui::HelpTooltip("Filter scenarios using advanced filters like by shot type");
+    }
+
+    ImGui::SetNextItemWidth(char_x * 31);
     ImGui::InputTextWithHint("##ScenarioSearchInput", icons::kSearch, &search_text_);
     if (search_text_.size() > 0) {
       ImGui::SameLine();
@@ -333,6 +374,7 @@ class ScenarioBrowserComponent {
   std::string GetViewTypeKey() {
     return std::format("ScenarioViewType_{}", id_);
   }
+
   std::string GetSearchTextKey() {
     return std::format("ScenarioSearchText_{}", id_);
   }
@@ -379,22 +421,50 @@ class ScenarioBrowserComponent {
 
     filtered_scenario_names_.reserve(app_->scenario_manager().scenario_names()->size());
     auto search_words = GetSearchWords(search_text_);
+
+    bool has_shot_type_filter = shot_type_filter_ != ShotType::TYPE_NOT_SET;
+    bool has_scenario_type_filter = scenario_type_filter_ != ScenarioDef::TYPE_NOT_SET;
+    bool has_advanced_filter = has_shot_type_filter || has_scenario_type_filter;
+
+    auto scenario_name_matches = [&](const std::string& scenario_name) {
+      bool search_matches = StringMatchesSearch(scenario_name, search_words);
+      if (!search_matches) {
+        return false;
+      }
+      if (!has_advanced_filter) {
+        return true;
+      }
+      // Filter by shot type
+      auto maybe_def = app_->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
+      if (!maybe_def) {
+        return false;
+      }
+      const ScenarioDef& def = *maybe_def;
+      if (has_shot_type_filter && def.shot_type().type_case() != shot_type_filter_) {
+        return false;
+      }
+      if (has_scenario_type_filter && def.type_case() != scenario_type_filter_) {
+        return false;
+      }
+      return true;
+    };
+
     if (view_type_ == ScenarioViewType::STARRED) {
       auto items = app_->labels_manager().ListStarredItems(ObjectType::SCENARIO);
       for (const std::string& scenario_name : items->items) {
-        if (StringMatchesSearch(scenario_name, search_words)) {
+        if (scenario_name_matches(scenario_name)) {
           filtered_scenario_names_.push_back(scenario_name);
         }
       }
     } else if (view_type_ == ScenarioViewType::RECENT) {
       for (const std::string& scenario_name : app_->history_manager().recent_scenarios()) {
-        if (StringMatchesSearch(scenario_name, search_words)) {
+        if (scenario_name_matches(scenario_name)) {
           filtered_scenario_names_.push_back(scenario_name);
         }
       }
     } else {
       for (const std::string& scenario_name : *app_->scenario_manager().scenario_names()) {
-        if (StringMatchesSearch(scenario_name, search_words)) {
+        if (scenario_name_matches(scenario_name)) {
           filtered_scenario_names_.push_back(scenario_name);
         }
       }
@@ -417,6 +487,24 @@ class ScenarioBrowserComponent {
   std::string id_;
 
   ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
+  ShotType::TypeCase shot_type_filter_ = ShotType::TYPE_NOT_SET;
+  std::vector<std::pair<ShotType::TypeCase, std::string>> shot_types_;
+  std::vector<std::pair<ScenarioDef::TypeCase, std::string>> scenario_types_{
+      {ScenarioDef::TYPE_NOT_SET, "None"},
+      {ScenarioDef::kStaticDef, "Static"},
+      {ScenarioDef::kStrafeDef, "Strafe"},
+      {ScenarioDef::kBounceDef, "Bounce"},
+      {ScenarioDef::kLinearDef, "Linear"},
+      {ScenarioDef::kWallWanderDef, "Wall Wander"},
+      {ScenarioDef::kCenteringDef, "Centering"},
+      {ScenarioDef::kWaypointDef, "Waypoint"},
+      {ScenarioDef::kBarrelDef, "Barrel"},
+      {ScenarioDef::kCircleDef, "Circle"},
+      {ScenarioDef::kWallArcDef, "Wall Arc"},
+      {ScenarioDef::kSineDef, "Sine"},
+      {ScenarioDef::kAngleStrafeDef, "Angle Strafe"},
+  };
+  bool advanced_filters_open_ = false;
 };
 
 class ScenariosComponentImpl : public ScenariosComponent {
@@ -521,9 +609,8 @@ class ScenariosComponentImpl : public ScenariosComponent {
       ImGui::Text("High score");
       ImGui::SameLine();
       if (ImGui::Button(MaybeIntToString(stats.high_score_stats.score))) {
-        app_.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(item.name,
-                                                                  stats.high_score_stats.stats_id,
-                                                                  &app_));
+        app_.GetCurrentScreen()->PushNextScreen(
+            CreateStatsScreen(item.name, stats.high_score_stats.stats_id, &app_));
       }
       ImGui::HelpTooltip("View stats for run.");
       std::string high_score_time = GetHowLongAgoStringFromEpochSeconds(
