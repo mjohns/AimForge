@@ -837,7 +837,10 @@ class StatsScreen : public UiScreen {
 
     ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
 
-    ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.95, high_score * 1.05, ImPlotCond_Always);
+    float score_range = abs(high_score - min_score);
+    float vertical_padding = score_range * 0.05;
+    ImPlot::SetupAxisLimits(
+        ImAxis_Y1, min_score - vertical_padding, high_score + vertical_padding, ImPlotCond_Always);
 
     struct PlotData {
       std::span<StatsDbRow> rows;
