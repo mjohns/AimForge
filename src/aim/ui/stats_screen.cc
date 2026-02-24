@@ -40,10 +40,15 @@ struct ScoresOverTime {
     for (int i = 0; i < replay_scores.size(); ++i) {
       float score = replay_scores[i];
       scores.push_back(score);
-      max_score = std::max(score, max_score);
-      min_score = std::min(score, min_score);
+      float t = i / static_cast<float>(kRecordScoresPerSecond);
 
-      times.push_back(i / static_cast<float>(kRecordScoresPerSecond));
+      max_score = std::max(score, max_score);
+      if (t > 1.5) {
+        // Don't count the very beginning scores as they will be close to 0.
+        min_score = std::min(score, min_score);
+      }
+
+      times.push_back(t);
     }
   }
 
@@ -56,7 +61,8 @@ struct ScoresOverTime {
 
 void DrawScoresOverTimePlot(const std::string& scenario_name,
                             i64 run_id,
-                            ScoresOverTime& scores_over_time) {
+                            ScoresOverTime& scores_over_time,
+                            float score_target) {
   std::vector<float>& scores = scores_over_time.scores;
   std::vector<float>& times = scores_over_time.times;
   if (scores.empty()) {
@@ -68,6 +74,7 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
   }
 
   double threshold = scores.back();
+  double double_score_target = score_target;
 
   ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
   ImPlotFlags plot_flags =
@@ -81,12 +88,17 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
   ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
 
   ImPlot::SetupAxisLimits(ImAxis_X1, times.front(), times.back(), ImPlotCond_Always);
-  ImPlot::SetupAxisLimits(ImAxis_Y1, scores_over_time.min_score, scores_over_time.max_score);
+  ImPlot::SetupAxisLimits(
+      ImAxis_Y1, scores_over_time.min_score * 0.95, scores_over_time.max_score * 1.05);
 
   // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
   ImPlot::PlotLine("Score History", times.data(), scores.data(), scores.size());
 
   ImPlot::DragLineY(0, &threshold, kTopThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
+  if (double_score_target > 0) {
+    ImPlot::DragLineY(
+        1, &double_score_target, kMidThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
+  }
 
   if (ImPlot::IsPlotHovered()) {
     ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
@@ -245,6 +257,9 @@ class StatsScreen : public UiScreen {
     screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_name);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
+    if (evaluated_scenario_def_) {
+      score_target_ = evaluated_scenario_def_->score_targets().end();
+    }
     if (scenario_) {
       reference_scenario_name_ = scenario_->unevaluated_def.reference_def().scenario_name();
     }
@@ -772,7 +787,7 @@ class StatsScreen : public UiScreen {
       if (scores_over_time_) {
         ImGui::SpacedSeparator();
         if (ImGui::TreeNode("Score over time")) {
-          DrawScoresOverTimePlot(scenario_name_, run_id_, *scores_over_time_);
+          DrawScoresOverTimePlot(scenario_name_, run_id_, *scores_over_time_, score_target_);
           ImGui::TreePop();
         }
       }
@@ -827,11 +842,6 @@ class StatsScreen : public UiScreen {
       stats = stats.subspan(stats.size() - max_to_show, max_to_show);
     }
 
-    double score_target = 0;
-    if (evaluated_scenario_def_) {
-      score_target = evaluated_scenario_def_->score_targets().end();
-    }
-
     double high_score =
         std::max<double>(details_.previous_high_score_stats.score, details_.stats.score);
     float min_score = high_score + 1;
@@ -845,7 +855,8 @@ class StatsScreen : public UiScreen {
 
     ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
 
-    double top_score = std::max(score_target, high_score);
+    double double_score_target = score_target_;
+    double top_score = std::max(double_score_target, high_score);
     float score_range = abs(top_score - min_score);
     float vertical_padding = score_range * 0.05;
     ImPlot::SetupAxisLimits(
@@ -863,8 +874,9 @@ class StatsScreen : public UiScreen {
     };
 
     ImPlot::DragLineY(0, &high_score, kTopThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
-    if (score_target > 0) {
-      ImPlot::DragLineY(1, &score_target, kMidThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
+    if (double_score_target > 0) {
+      ImPlot::DragLineY(
+          1, &double_score_target, kMidThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
     }
 
     // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
@@ -918,16 +930,15 @@ class StatsScreen : public UiScreen {
             float float_high_score = high_score;
             float mouse_x = mouse_pos.x;
             ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1);
-          } else if (score_target > 0 && abs(score_target - mouse_pos.y) < threshold.y) {
+          } else if (score_target_ > 0 && abs(score_target_ - mouse_pos.y) < threshold.y) {
             ImGui::BeginTooltip();
-            ImGui::TextFmt("Score target: {}", MaybeIntToString(score_target, 2));
+            ImGui::TextFmt("Score target: {}", MaybeIntToString(score_target_, 2));
             ImGui::EndTooltip();
 
             ImPlot::SetNextMarkerStyle(
                 ImPlotMarker_Circle, 3.0f, kMidThresholdColor, IMPLOT_AUTO, kMidThresholdColor);
-            float float_score_target = score_target;
             float mouse_x = mouse_pos.x;
-            ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &float_score_target, 1);
+            ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &score_target_, 1);
           }
         }
       }
@@ -1158,6 +1169,7 @@ class StatsScreen : public UiScreen {
   SelectedScreen selected_screen_ = SelectedScreen::STATS;
   std::shared_ptr<Replay> replay_;
   std::optional<ScoresOverTime> scores_over_time_;
+  float score_target_ = 0;
 };
 
 }  // namespace
