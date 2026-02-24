@@ -387,10 +387,17 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 1);
   ImGui::Text("%s", scenario_name_.c_str());
 
+  float score_target = def_.score_targets().end();
+  if (score_target > 0) {
+    std::string message = std::format("Target score: {}", MaybeIntToString(score_target, 2));
+    text_size = ImGui::CalcTextSize(message.c_str());
+    ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+    ImGui::Text("%s", message.c_str());
+  }
+
   std::string message = std::format("cm/360: {}", MaybeIntToString(effective_cm_per_360_, 1));
   text_size = ImGui::CalcTextSize(message.c_str());
   ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
-  ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 2);
   ImGui::Text("%s", message.c_str());
 
   ImGui::PopStyleColor();

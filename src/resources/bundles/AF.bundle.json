@@ -3396,7 +3396,7 @@
   {
    "name": "Static Speed Ladder",
    "def": {
-    "description": "Ladder for improving static clicking speed. The targets get progressively smaller while requiring a high number of kills.\nSpeed is valued over accuracy in terms of accuracy penalties.",
+    "description": "Ladder for improving static clicking speed. The targets get progressively smaller while requiring a high number of kills.",
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
@@ -3445,7 +3445,7 @@
         },
         "ellipse": {
          "xDiameter": {
-          "xPercentValue": 0.560000062
+          "xPercentValue": 0.560000122
          },
          "yDiameter": {
           "yPercentValue": 0.3
@@ -3467,7 +3467,7 @@
           "xPercentValue": 0.61
          },
          "yLength": {
-          "yPercentValue": 0.51000005
+          "yPercentValue": 0.51
          }
         }
        }
