@@ -8,6 +8,7 @@
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/implot_ext.h"
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/util.h"
@@ -90,6 +91,7 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
     float time = mouse_pos.x;
 
     int closest_index = std::round(time * kRecordScoresPerSecond);
+
     if (IsValidIndex(scores, closest_index)) {
       float x_val = mouse_pos.x;
       float y_val = scores[closest_index];
@@ -834,6 +836,7 @@ class StatsScreen : public UiScreen {
     ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
 
     ImPlot::SetupAxisLimits(ImAxis_X1, 1, stats.size() + 1, ImPlotCond_Always);
+
     ImPlot::SetupAxisLimits(ImAxis_Y1, min_score * 0.95, high_score * 1.05, ImPlotCond_Always);
 
     struct PlotData {
@@ -857,32 +860,36 @@ class StatsScreen : public UiScreen {
       ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
 
       float plot_index = mouse_pos.x;
-
       int closest_index = std::round(plot_index) - 1;
       if (IsValidIndex(stats, closest_index)) {
         float x_val = closest_index + 1;
         const auto& row = stats[closest_index];
         float score = row.score;
-        ImGui::BeginTooltip();
 
-        if (score < high_score) {
-          float diff_percent = (high_score - score) / high_score;
-          ImGui::TextFmt("Score: {} (-{}%)",
-                         MaybeIntToString(score, 2),
-                         MaybeIntToString(diff_percent * 100, 1));
-        } else {
-          ImGui::TextFmt("Score: {} (High)", MaybeIntToString(score, 2));
+        float vertical_distance = abs(score - mouse_pos.y) / score;
+
+        if (ImPlot::IsPointNearMouse(mouse_pos, x_val, score)) {
+          ImGui::BeginTooltip();
+
+          if (score < high_score) {
+            float diff_percent = (high_score - score) / high_score;
+            ImGui::TextFmt("Score: {} (-{}%)",
+                           MaybeIntToString(score, 2),
+                           MaybeIntToString(diff_percent * 100, 1));
+          } else {
+            ImGui::TextFmt("Score: {} (High)", MaybeIntToString(score, 2));
+          }
+
+          std::string time_ago =
+              GetHowLongAgoStringFromEpochSeconds(GetNowEpochSeconds(), row.epoch_seconds);
+          ImGui::Text(time_ago);
+
+          ImGui::EndTooltip();
+
+          ImPlot::SetNextMarkerStyle(
+              ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+          ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
         }
-
-        std::string time_ago =
-            GetHowLongAgoStringFromEpochSeconds(GetNowEpochSeconds(), row.epoch_seconds);
-        ImGui::Text(time_ago);
-
-        ImGui::EndTooltip();
-
-        ImPlot::SetNextMarkerStyle(
-            ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
-        ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
       }
     }
 
