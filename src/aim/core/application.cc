@@ -232,10 +232,13 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
 
   trace.Add("SDL_CreateGPUDevice");
   // SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
-  gpu_device_ = SDL_CreateGPUDevice(
-      SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-      kIsDebugBuild,
-      "vulkan");
+  bool prefer_vulkan = true;
+  if (prefer_vulkan) {
+    gpu_device_ = SDL_CreateGPUDevice(
+        SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+        kIsDebugBuild,
+        "vulkan");
+  }
   if (gpu_device_ == nullptr) {
     // Fallback to search for any renderer
     gpu_device_ = SDL_CreateGPUDevice(

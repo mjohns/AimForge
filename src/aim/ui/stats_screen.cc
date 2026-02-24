@@ -901,11 +901,11 @@ class StatsScreen : public UiScreen {
 
           if (score < high_score) {
             float diff_percent = (high_score - score) / high_score;
-            ImGui::TextFmt("Score: {} (-{}%)",
+            ImGui::TextFmt("{} (-{}%)",
                            MaybeIntToString(score, 2),
                            MaybeIntToString(diff_percent * 100, 1));
           } else {
-            ImGui::TextFmt("Score: {} (High)", MaybeIntToString(score, 2));
+            ImGui::TextFmt("{} (High)", MaybeIntToString(score, 2));
           }
 
           std::string time_ago =

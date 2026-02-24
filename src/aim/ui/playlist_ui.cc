@@ -141,6 +141,19 @@ class PlaylistComponentImpl : public PlaylistComponent {
         showing_editor_ = true;
       }
       ImGui::HelpTooltip("Edit playlist");
+    } else {
+      ImGui::SameLine();
+      ImGui::AlignTextToFramePadding();
+      ImGui::BeginDisabled();
+      ImGui::Text("%s", icons::kEditOff);
+      ImGui::EndDisabled();
+      if (has_dynamic_suffix) {
+        // TODO: Support editing and switching to edit the base version by default.
+        ImGui::HelpTooltip("Cannot edit playlist with cm/360 or level suffix");
+      } else {
+        ImGui::HelpTooltip(
+            std::format("Bundle \"{}\" is readonly.", GetBundleName(run->playlist.name)));
+      }
     }
 
     const char* menu_id = "CurrentPlaylistMenu";
