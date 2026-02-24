@@ -216,6 +216,9 @@ class ScenarioBrowserComponent {
     shot_types_.push_back({ShotType::TYPE_NOT_SET, "None"});
     shot_types_.insert(shot_types_.end(), kShotTypes.begin(), kShotTypes.end());
 
+    scenario_types_.push_back({ScenarioDef::TYPE_NOT_SET, "None"});
+    scenario_types_.insert(scenario_types_.end(), kScenarioTypes.begin(), kScenarioTypes.end());
+
     UpdateFilteredScenarios();
     initial_search_text_ = search_text_;
   }
@@ -439,13 +442,28 @@ class ScenarioBrowserComponent {
       if (!maybe_def) {
         return false;
       }
+      auto maybe_scenario_item = app_->scenario_manager().GetScenario(scenario_name);
+      if (!maybe_scenario_item) {
+        return false;
+      }
       const ScenarioDef& def = *maybe_def;
+      const ScenarioDef& unevaluated_def = maybe_scenario_item->unevaluated_def;
       if (has_shot_type_filter && def.shot_type().type_case() != shot_type_filter_) {
         return false;
       }
-      if (has_scenario_type_filter && def.type_case() != scenario_type_filter_) {
-        return false;
+
+      if (has_scenario_type_filter) {
+        if (scenario_type_filter_ == ScenarioDef::kReferenceDef) {
+          if (unevaluated_def.type_case() != ScenarioDef::kReferenceDef) {
+            return false;
+          }
+        } else {
+          if (def.type_case() != scenario_type_filter_) {
+            return false;
+          }
+        }
       }
+
       return true;
     };
 
@@ -489,21 +507,7 @@ class ScenarioBrowserComponent {
   ScenarioDef::TypeCase scenario_type_filter_ = ScenarioDef::TYPE_NOT_SET;
   ShotType::TypeCase shot_type_filter_ = ShotType::TYPE_NOT_SET;
   std::vector<std::pair<ShotType::TypeCase, std::string>> shot_types_;
-  std::vector<std::pair<ScenarioDef::TypeCase, std::string>> scenario_types_{
-      {ScenarioDef::TYPE_NOT_SET, "None"},
-      {ScenarioDef::kStaticDef, "Static"},
-      {ScenarioDef::kStrafeDef, "Strafe"},
-      {ScenarioDef::kBounceDef, "Bounce"},
-      {ScenarioDef::kLinearDef, "Linear"},
-      {ScenarioDef::kWallWanderDef, "Wall Wander"},
-      {ScenarioDef::kCenteringDef, "Centering"},
-      {ScenarioDef::kWaypointDef, "Waypoint"},
-      {ScenarioDef::kBarrelDef, "Barrel"},
-      {ScenarioDef::kCircleDef, "Circle"},
-      {ScenarioDef::kWallArcDef, "Wall Arc"},
-      {ScenarioDef::kSineDef, "Sine"},
-      {ScenarioDef::kAngleStrafeDef, "Angle Strafe"},
-  };
+  std::vector<std::pair<ScenarioDef::TypeCase, std::string>> scenario_types_;
   bool advanced_filters_open_ = false;
 };
 
