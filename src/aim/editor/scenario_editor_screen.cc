@@ -479,9 +479,9 @@ class ScenarioEditorScreen : public UiScreen {
       }
       ImGui::SpacedSeparator();
       if (def_.has_reference_def()) {
-        DrawRoomEditorInputs(*def_.mutable_reference_def()->mutable_room());
+        DrawRoomEditorInputs(*def_.mutable_reference_def()->mutable_room(), &camera_updates_);
       } else {
-        DrawRoomEditorInputs(*def_.mutable_room());
+        DrawRoomEditorInputs(*def_.mutable_room(), &camera_updates_);
       }
     }
     ImGui::End();
@@ -498,6 +498,10 @@ class ScenarioEditorScreen : public UiScreen {
     target_manager_.UpdateRoom(room);
     CameraParams camera_params(room);
     Camera camera(camera_params);
+
+    camera.UpdatePitch(camera.GetPitch() + camera_updates_.delta_pitch);
+    camera.UpdateYaw(camera.GetYaw() + camera_updates_.delta_yaw);
+   
     auto look_at = camera.GetLookAt();
 
     RenderContext ctx;
@@ -580,6 +584,7 @@ class ScenarioEditorScreen : public UiScreen {
   ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionDialog"};
   ImGui::MultilineTextEntryDialog reference_description_dialog_{"ReferenceDescriptionDialog"};
   ImGui::MultilineTextEntryDialog import_from_json_dialog_{"ImportFromJsonDialog"};
+  CameraUpdates camera_updates_;
 };
 
 }  // namespace

@@ -5,6 +5,9 @@
 
 namespace aim {
 
+// Provides an interface to read and update a float field in a proto (or an actual float). This
+// allows passing fields within a proto to generic custom ImGui inputs and other utilities.
+// Instances of this type are typically created with the PROTO_FLOAT_FIELD, PROTO_INT_FIELD macros.
 template <typename T>
 struct Field {
   Field(std::function<T()> get,
@@ -64,6 +67,34 @@ Field<bool> CreateBoolField(T* instance,
   return Field<bool>(std::bind_front(get, instance), std::bind_front(set, instance), clear, has);
 }
 
+#define PROTO_FIELD(T, ProtoClass, instance, field_name)           \
+  aim::CreateField<T, ProtoClass>(instance,                        \
+                                  &ProtoClass::field_name,         \
+                                  &ProtoClass::set_##field_name,   \
+                                  &ProtoClass::clear_##field_name, \
+                                  &ProtoClass::has_##field_name)
+
+#define PROTO_FLOAT_FIELD(ProtoClass, instance, field_name) \
+  PROTO_FIELD(float, ProtoClass, instance, field_name)
+
+#define PROTO_INT_FIELD(ProtoClass, instance, field_name) \
+  PROTO_FIELD(int, ProtoClass, instance, field_name)
+
+#define PROTO_STRING_FIELD(ProtoClass, instance, field_name) \
+  PROTO_FIELD(std::string, ProtoClass, instance, field_name)
+
+#define PROTO_BOOL_FIELD(ProtoClass, instance, field_name) \
+  aim::CreateBoolField<ProtoClass>(instance, &ProtoClass::field_name, &ProtoClass::set_##field_name)
+
+// A float field that is displayed multiplied by 100. i.e. real value is 0.5 but
+// shows 50%
+#define PROTO_PERCENT_FIELD(ProtoClass, instance, field_name) \
+  MultiplyField(PROTO_FIELD(float, ProtoClass, instance, field_name), 100)
+
+// Two Field instances for a jittered field typically found in the proto. This takes advantage of
+// the convention that the fields are together in the proto with the same name except the additional
+// _jitter suffix.
+// Create instances with PROTO_JITTERED_FIELD.
 template <typename T>
 struct JitteredField {
   JitteredField(Field<T> value, Field<T> jitter) : value(value), jitter(jitter) {}
@@ -72,31 +103,13 @@ struct JitteredField {
   Field<T> jitter;
 };
 
-#define PROTO_FIELD(T, ProtoClass, instance, field_name)           \
-  aim::CreateField<T, ProtoClass>(instance,                        \
-                                  &ProtoClass::field_name,         \
-                                  &ProtoClass::set_##field_name,   \
-                                  &ProtoClass::clear_##field_name, \
-                                  &ProtoClass::has_##field_name)
-
-#define PROTO_BOOL_FIELD(ProtoClass, instance, field_name) \
-  aim::CreateBoolField<ProtoClass>(instance, &ProtoClass::field_name, &ProtoClass::set_##field_name)
-
-#define PROTO_FLOAT_FIELD(ProtoClass, instance, field_name) \
-  PROTO_FIELD(float, ProtoClass, instance, field_name)
-#define PROTO_INT_FIELD(ProtoClass, instance, field_name) \
-  PROTO_FIELD(int, ProtoClass, instance, field_name)
-#define PROTO_STRING_FIELD(ProtoClass, instance, field_name) \
-  PROTO_FIELD(std::string, ProtoClass, instance, field_name)
-// A float field that is displayed multiplied by 100. i.e. real value is 0.5 but
-// shows 50%
-#define PROTO_PERCENT_FIELD(ProtoClass, instance, field_name) \
-  MultiplyField(PROTO_FIELD(float, ProtoClass, instance, field_name), 100)
-
 #define PROTO_JITTERED_FIELD(ProtoClass, instance, field_name)              \
   JitteredField<float>(PROTO_FLOAT_FIELD(ProtoClass, instance, field_name), \
                        PROTO_FLOAT_FIELD(ProtoClass, instance, field_name##_jitter))
 
+// Similar to Field but for Messages within a proto. The main difference is exposing the
+// mutable_foo() method on the proto in a generic way. Use PROTO_PTR_FIELD macro to create
+// instances.
 template <typename T>
 struct PtrField {
   PtrField(std::function<T()> get,

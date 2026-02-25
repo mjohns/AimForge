@@ -40,7 +40,7 @@ float GetDefaultSideAngleForDegrees(float degrees) {
   return std::roundf(min_side_angle + side_angle_range * percent);
 }
 
-void DrawRoomEditorInputs(Room& room) {
+void DrawRoomEditorInputs(Room& room, CameraUpdates* camera_updates) {
   ImGuiComboFlags combo_flags = 0;
   float char_x = ImGui::GetDefaultCharSizeX();
 
@@ -206,6 +206,34 @@ void DrawRoomEditorInputs(Room& room) {
     ImGui::Unindent();
   } else {
     room.clear_camera_front();
+  }
+
+  ImGui::SpacedSeparator();
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Look around");
+
+  float yaw_per_click = 0.2;
+  float pitch_per_click = 0.2;
+  ImGui::SameLine();
+  if (ImGui::Button(icons::kArrowLeft)) {
+    camera_updates->delta_yaw -= yaw_per_click;
+  }
+  ImGui::SameLine();
+  if (ImGui::Button(icons::kArrowDropUp)) {
+    camera_updates->delta_pitch += pitch_per_click;
+  }
+  ImGui::SameLine();
+  if (ImGui::Button(icons::kArrowDropDown)) {
+    camera_updates->delta_pitch -= pitch_per_click;
+  }
+  ImGui::SameLine();
+  if (ImGui::Button(icons::kArrowRight)) {
+    camera_updates->delta_yaw += yaw_per_click;
+  }
+  ImGui::SameLine();
+  if (ImGui::SelectableButton(icons::kClear)) {
+    camera_updates->delta_pitch = 0;
+    camera_updates->delta_yaw = 0;
   }
 }
 
