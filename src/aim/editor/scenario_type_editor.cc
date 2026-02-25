@@ -180,7 +180,7 @@ void DrawWallWanderEditor(WallWanderScenarioDef& d) {
   ImGui::Indent();
   DrawProfileList("WanderProfileList",
                   "Profile",
-                  PROTO_PTR_FIELD(ProfileListInfo, WallWanderScenarioDef, d, profiles_info),
+                  PROTO_PTR_FIELD(ProfileListInfo, WallWanderScenarioDef, &d, profiles_info),
                   d.mutable_profiles(),
                   std::bind_front(&DrawWallWanderProfile, char_x));
   ImGui::Unindent();
@@ -503,7 +503,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Left/right profiles");
   ImGui::Indent();
   DrawLeftRightStrafeProfiles(
-      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, left_right_profiles_info),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, &d, left_right_profiles_info),
       d.mutable_left_right_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -515,7 +515,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Up/down profiles");
   ImGui::Indent();
   DrawUpDownStrafeProfiles(
-      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, up_down_profiles_info),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, &d, up_down_profiles_info),
       d.mutable_up_down_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -527,7 +527,7 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
   ImGui::Text("Forward/back profiles");
   ImGui::Indent();
   DrawForwardBackStrafeProfiles(
-      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, d, forward_back_profiles_info),
+      PROTO_PTR_FIELD(ProfileListInfo, StrafeScenarioDef, &d, forward_back_profiles_info),
       d.mutable_forward_back_profiles(),
       d.mutable_bounds(),
       d.mutable_relative_bounds(),
@@ -630,7 +630,7 @@ void DrawBounceEditor(BounceScenarioDef& d) {
   ImGui::Indent();
   DrawProfileList("BounceProfileList",
                   "Profile",
-                  PROTO_PTR_FIELD(ProfileListInfo, BounceScenarioDef, d, bounce_profiles_info),
+                  PROTO_PTR_FIELD(ProfileListInfo, BounceScenarioDef, &d, bounce_profiles_info),
                   d.mutable_bounce_profiles(),
                   std::bind_front(&DrawBounceProfile, char_x));
   ImGui::Unindent();
@@ -742,7 +742,7 @@ void DrawAngleStrafeEditor(AngleStrafeScenarioDef& w) {
   ImGui::Indent();
   DrawProfileList("StrafeProfileList",
                   "Profile",
-                  PROTO_PTR_FIELD(ProfileListInfo, AngleStrafeScenarioDef, w, profiles_info),
+                  PROTO_PTR_FIELD(ProfileListInfo, AngleStrafeScenarioDef, &w, profiles_info),
                   w.mutable_profiles(),
                   std::bind_front(&DrawAngleStrafeProfile, char_x));
   ImGui::Unindent();

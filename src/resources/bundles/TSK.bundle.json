@@ -2445,7 +2445,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.0999999,
+       "targetRadius": 1.1,
        "speed": 75.5999908,
        "pill": {
         "height": 20
@@ -2467,7 +2467,7 @@
      }
     },
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
+     "targetRadiusMultiplier": 0.95
     },
     "strafeDef": {
      "bounds": {
@@ -2486,8 +2486,8 @@
        "distanceJitter": {
         "xPercentValue": 0
        },
-       "speedMultiplier": 1.34999967,
-       "targetRadiusMultiplier": 1.29999971
+       "speedMultiplier": 1.35,
+       "targetRadiusMultiplier": 1.3
       },
       {
        "info": {
@@ -2511,11 +2511,17 @@
        "distanceJitter": {
         "xPercentValue": 0
        },
-       "speedMultiplier": 0.650000334,
-       "targetRadiusMultiplier": 0.650000334
+       "speedMultiplier": 0.65,
+       "targetRadiusMultiplier": 0.65
       }
      ],
-     "leftRightProfilesInfo": {},
+     "leftRightProfilesInfo": {
+      "explicitOrder": [
+       0,
+       1,
+       2
+      ]
+     },
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
      "upDownInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"

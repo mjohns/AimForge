@@ -258,7 +258,7 @@ void StrafeController::ChangeDirection(Random& rand,
     }
   }
 
-  if (p->has_target_radius_multiplier()) {
+  if (p->has_target_radius_multiplier() || p->has_target_radius_multiplier_jitter()) {
     float radius_mult =
         rand.GetJittered(p->target_radius_multiplier(), p->target_radius_multiplier_jitter());
     *target_radius_out = radius_mult * original_target_radius_;
