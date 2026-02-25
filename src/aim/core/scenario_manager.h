@@ -54,6 +54,9 @@ class ScenarioManager {
 
   virtual bool SetCurrentScenario(const std::string& scenario_name) = 0;
 
+  // Gets the list of scenarios that are directly referencing the provided scenario.
+  virtual std::vector<std::string> GetReferencingScenarios(const std::string& scenario_name) = 0;
+
   std::optional<ScenarioItem> GetCurrentScenario() {
     return GetScenario(GetCurrentScenarioName());
   }

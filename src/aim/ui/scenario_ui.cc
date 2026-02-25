@@ -637,10 +637,13 @@ class ScenariosComponentImpl : public ScenariosComponent {
       ImGui::TextWrapped(description);
     }
 
-    if (matching_playlists_scenario_name_ != item.name || !matching_playlists_) {
+    if (cached_scenario_name_ != item.name) {
+      // Calculate "expensive" things only the first time the scenario is switched to.
       matching_playlists_ = app_.playlist_manager().FindPlaylistsContainingScenario(item.name);
-      matching_playlists_scenario_name_ = item.name;
       absl::c_sort(*matching_playlists_);
+      referencing_scenarios_ = app_.scenario_manager().GetReferencingScenarios(item.name);
+      absl::c_sort(referencing_scenarios_);
+      cached_scenario_name_ = item.name;
     }
 
     std::string referenced_scenario = item.unevaluated_def.reference_def().scenario_name();
@@ -657,6 +660,24 @@ class ScenariosComponentImpl : public ScenariosComponent {
       if (ImGui::Button(referenced_scenario)) {
         app_.scenario_manager().SetCurrentScenario(referenced_scenario);
       }
+    }
+
+    if (!referencing_scenarios_.empty()) {
+      ImGui::SpacedSeparator();
+      ImGui::Text("Referencing scenarios");
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Scenarios that extend this scenario. Changing this scenario would change the following "
+          "ones too.");
+      ImGui::Indent();
+      ImGui::LoopId loop_id;
+      for (const std::string& name : referencing_scenarios_) {
+        auto lid = loop_id.Get();
+        if (ImGui::Button(name)) {
+          app_.scenario_manager().SetCurrentScenario(name);
+        }
+      }
+      ImGui::Unindent();
     }
 
     if (!matching_playlists_->empty()) {
@@ -676,8 +697,11 @@ class ScenariosComponentImpl : public ScenariosComponent {
   Application& app_;
   ScenarioBrowserComponent scenario_browser_;
 
+  // The scenario which cached information was stored for
+  std::string cached_scenario_name_;
   std::optional<std::vector<std::string>> matching_playlists_;
-  std::string matching_playlists_scenario_name_;
+  std::vector<std::string> referencing_scenarios_;
+
   ScenarioDialogs dialogs_;
 };
 

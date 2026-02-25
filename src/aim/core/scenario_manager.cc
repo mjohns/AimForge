@@ -221,6 +221,21 @@ class ScenarioManagerImpl : public ScenarioManager {
     return GetEvaluatedScenarioDef(scenario_name, &visited_scenarios, /*depth=*/1);
   }
 
+  // Gets the list of scenarios that are directly referencing the provided scenario.
+  std::vector<std::string> GetReferencingScenarios(const std::string& scenario_name) override {
+    std::vector<std::string> result;
+    result.reserve(30);
+    std::string base_name = GetScenarioNameInfo(scenario_name).base_name;
+    for (const auto& entry : scenario_map_) {
+      const ScenarioCacheItem& cache_item = entry.second;
+      if (GetScenarioNameInfo(cache_item.def.reference_def().scenario_name()).base_name ==
+          scenario_name) {
+        result.push_back(cache_item.name);
+      }
+    }
+    return result;
+  }
+
  private:
   std::optional<ScenarioDef> GetEvaluatedScenarioDef(
       const std::string& scenario_name,

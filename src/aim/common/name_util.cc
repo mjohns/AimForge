@@ -24,6 +24,9 @@ namespace {
 
 NameInfo GetNameInfo(const std::string& name, bool support_levels = true) {
   NameInfo info;
+  if (name.empty()) {
+    return info;
+  }
 
   std::string base_name(absl::StripAsciiWhitespace(name));
 
