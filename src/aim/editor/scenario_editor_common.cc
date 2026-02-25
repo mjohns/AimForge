@@ -376,10 +376,11 @@ void DrawTargetPlacementStrategyEditor(const std::string& id,
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Fixed distance");
   ImGui::SameLine();
-  DrawOptionalRegionLengthEditor(
+  DrawOptionalJitteredRegionLengthEditor(
       "FixedDistanceInput",
       RegionLength::kXPercentValue,
       PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target),
+      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target_jitter),
       10);
   ImGui::SameLine();
   ImGui::HelpMarker(
