@@ -1,0 +1,72 @@
+{
+ "name": "AF SolarizedDark",
+ "roofAppearance": {
+  "color": {
+   "r": 101,
+   "g": 123,
+   "b": 131
+  },
+  "mixColor": {},
+  "mixPercent": 0.259999961
+ },
+ "sideAppearance": {
+  "color": {
+   "r": 101,
+   "g": 123,
+   "b": 131
+  },
+  "mixColor": {},
+  "mixPercent": 0.159999982
+ },
+ "frontAppearance": {
+  "color": {
+   "r": 101,
+   "g": 123,
+   "b": 131
+  },
+  "mixColor": {}
+ },
+ "floorAppearance": {
+  "color": {
+   "r": 101,
+   "g": 123,
+   "b": 131
+  },
+  "mixColor": {},
+  "mixPercent": 0.239999965
+ },
+ "crosshair": {
+  "color": {
+   "hex": "#cb4b16"
+  },
+  "outlineColor": {
+   "hex": "#000000"
+  }
+ },
+ "targetColor": {
+  "r": 0,
+  "g": 43,
+  "b": 54
+ },
+ "ghostTargetColor": {
+  "r": 88,
+  "g": 110,
+  "b": 117,
+  "multiplier": 0.73
+ },
+ "healthBar": {
+  "healthColor": {
+   "r": 211,
+   "g": 54,
+   "b": 130
+  },
+  "backgroundColor": {
+   "r": 101,
+   "g": 123,
+   "b": 131,
+   "multiplier": 0.67
+  },
+  "backgroundAlpha": 0.35
+ }
+}
+
