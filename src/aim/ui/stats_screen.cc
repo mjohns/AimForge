@@ -42,10 +42,10 @@ struct ScoresOverTime {
       scores.push_back(score);
       float t = i / static_cast<float>(kRecordScoresPerSecond);
 
-      max_score = std::max(score, max_score);
-      if (t > 1.5) {
-        // Don't count the very beginning scores as they will be close to 0.
+      if (t >= 2) {
+        // Don't count the very beginning scores as they will be unpredictable
         min_score = std::min(score, min_score);
+        max_score = std::max(score, max_score);
       }
 
       times.push_back(t);
