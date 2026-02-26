@@ -158,18 +158,6 @@ void Scenario::RefreshState() {
   crosshair_ = app_.settings_manager().GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
   theme_ = app_.settings_manager().GetCurrentTheme();
-  if (ShouldAutoHold()) {
-    is_click_held_ = true;
-  }
-}
-
-bool Scenario::ShouldAutoHold() {
-  if (!settings_.auto_hold_tracking()) {
-    return false;
-  }
-  auto type = GetShotType();
-  return type == ShotType::kTrackingInvincible || type == ShotType::kTrackingKill ||
-         type == ShotType::kTrackingProximity;
 }
 
 void Scenario::OnEvents(std::span<SDL_Event> events) {
@@ -207,15 +195,13 @@ void Scenario::OnEvent(const SDL_Event& event) {
     std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
 
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+      is_click_held_ = true;
       if (is_running()) {
-        if (!ShouldAutoHold()) {
-          if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-            i64 now_micros = timer_.GetElapsedMicros();
-            if (now_micros - last_click_time_micros_ > kClickDebounceMicros) {
-              update_data_.has_click = true;
-              last_click_time_micros_ = now_micros;
-            }
-            is_click_held_ = true;
+        if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+          i64 now_micros = timer_.GetElapsedMicros();
+          if (now_micros - last_click_time_micros_ > kClickDebounceMicros) {
+            update_data_.has_click = true;
+            last_click_time_micros_ = now_micros;
           }
         }
       } else if (run_state_ == WAITING_FOR_CLICK_TO_START) {
@@ -266,11 +252,8 @@ void Scenario::OnEvent(const SDL_Event& event) {
       is_adjusting_crosshair_ = false;
       save_crosshair_ = true;
     }
-    if (is_running() && !ShouldAutoHold()) {
-      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
-        update_data_.has_click_up = true;
-        is_click_held_ = false;
-      }
+    if (KeyMappingMatchesEvent(event_name, settings_.keybinds().fire())) {
+      is_click_held_ = false;
     }
   }
 
@@ -445,7 +428,7 @@ void Scenario::OnRunningTick() {
   }
   look_at_ = camera_.GetLookAt();
 
-  update_data_.is_click_held = is_click_held_;
+  update_data_.is_click_held = is_click_held_ || settings_.auto_hold_tracking();
   for (auto& task : delayed_tasks_) {
     if (task.fn.has_value() && task.run_time_seconds < timer_.GetElapsedSeconds()) {
       std::function<void()> fn = std::move(*task.fn);

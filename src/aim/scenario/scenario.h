@@ -35,7 +35,6 @@ struct CreateScenarioParams {
 
 struct UpdateStateData {
   bool has_click = false;
-  bool has_click_up = false;
   bool is_click_held = false;
   // Set to true to force rendering.
   bool force_render = false;
