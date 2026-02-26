@@ -380,7 +380,8 @@ void DrawTargetPlacementStrategyEditor(const std::string& id,
       "FixedDistanceInput",
       RegionLength::kXPercentValue,
       PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target),
-      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target_jitter),
+      PROTO_PTR_FIELD(
+          RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target_jitter),
       10);
   ImGui::SameLine();
   ImGui::HelpMarker(

@@ -547,7 +547,6 @@ class AimDbImpl : public AimDb {
     return name;
   }
 
-
   bool AddStats(i64 scenario_id, StatsDbRow* row) override {
     if (row->epoch_seconds < 0) {
       row->epoch_seconds = GetNowEpochSeconds();

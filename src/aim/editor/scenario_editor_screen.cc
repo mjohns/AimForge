@@ -501,7 +501,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     camera.UpdatePitch(camera.GetPitch() + camera_updates_.delta_pitch);
     camera.UpdateYaw(camera.GetYaw() + camera_updates_.delta_yaw);
-   
+
     auto look_at = camera.GetLookAt();
 
     RenderContext ctx;
