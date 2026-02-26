@@ -217,10 +217,6 @@ struct StatsDetails {
   StatsDbRow previous_high_score_stats;
   StatsDbRow average_stats;
 
-  int last_n_average = 0;
-  StatsDbRow last_n_average_stats;
-  StatsDbRow before_last_n_average_stats;
-
   std::vector<double> scores;
   float min_score = 0;
 };
@@ -440,6 +436,8 @@ class StatsScreen : public UiScreen {
       if (!is_comparisons) {
         if (details_.all_stats.size() > 1) {
           DrawStatsTableRow("High score", details_.stats, details_.previous_high_score_stats);
+        }
+        if (details_.all_stats.size() > 2) {
           DrawStatsTableRow("Average", details_.stats, details_.average_stats);
         }
 
@@ -754,7 +752,7 @@ class StatsScreen : public UiScreen {
         }
       }
     }
-    if (all_stats.size() > 1) {
+    if (all_stats.size() > 2) {
       auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Average");
@@ -901,9 +899,8 @@ class StatsScreen : public UiScreen {
 
           if (score < high_score) {
             float diff_percent = (high_score - score) / high_score;
-            ImGui::TextFmt("{} (-{}%)",
-                           MaybeIntToString(score, 2),
-                           MaybeIntToString(diff_percent * 100, 1));
+            ImGui::TextFmt(
+                "{} (-{}%)", MaybeIntToString(score, 2), MaybeIntToString(diff_percent * 100, 1));
           } else {
             ImGui::TextFmt("{} (High)", MaybeIntToString(score, 2));
           }
@@ -1084,25 +1081,26 @@ class StatsScreen : public UiScreen {
     bool found_stats = false;
     details_.min_score = 1000000;
 
-    float total_runs_count = 0;
+    float average_runs_count = 0;
     for (int i = 0; i < all_stats.size(); ++i) {
       StatsDbRow& stats = all_stats[i];
       details_.all_stats.push_back(stats);
       details_.scores.push_back(stats.score);
 
-      details_.average_stats.score += stats.score;
-      details_.average_stats.mm_per_360 += stats.mm_per_360;
-
-      StatsInfo& info = details_.average_stats.info;
-      info.set_num_hits(info.num_hits() + stats.info.num_hits());
-      info.set_num_shots(info.num_shots() + stats.info.num_shots());
-
-      total_runs_count++;
-
       if (stats.stats_id == run_id_) {
         details_.stats = stats;
         found_stats = true;
         break;
+      }
+
+      {
+        // Sum values for calculating the average. This will not include the current run.
+        details_.average_stats.score += stats.score;
+        details_.average_stats.mm_per_360 += stats.mm_per_360;
+        StatsInfo& info = details_.average_stats.info;
+        info.set_num_hits(info.num_hits() + stats.info.num_hits());
+        info.set_num_shots(info.num_shots() + stats.info.num_shots());
+        average_runs_count++;
       }
 
       if (stats.score >= max_score && stats.score > 0) {
@@ -1114,14 +1112,14 @@ class StatsScreen : public UiScreen {
       }
     }
 
-    if (total_runs_count > 0) {
-      details_.average_stats.score /= total_runs_count;
+    if (average_runs_count > 0) {
+      details_.average_stats.score /= average_runs_count;
 
       details_.average_stats.info.set_num_hits(details_.average_stats.info.num_hits() /
-                                               total_runs_count);
+                                               average_runs_count);
       details_.average_stats.info.set_num_shots(details_.average_stats.info.num_shots() /
-                                                total_runs_count);
-      details_.average_stats.mm_per_360 /= total_runs_count;
+                                                average_runs_count);
+      details_.average_stats.mm_per_360 /= average_runs_count;
     }
 
     if (!found_stats) {
