@@ -158,6 +158,21 @@ void Scenario::RefreshState() {
   crosshair_ = app_.settings_manager().GetCurrentCrosshair();
   crosshair_size_ = settings_.crosshair_size();
   theme_ = app_.settings_manager().GetCurrentTheme();
+
+  {
+    auto& h = theme_.health_bar();
+    auto health_rgb = ToStoredRgb(h.health_color());
+    auto background_rgb = ToStoredRgb(h.background_color());
+    health_color_ = IM_COL32(health_rgb.r(),
+                             health_rgb.g(),
+                             health_rgb.b(),
+                             (h.has_health_alpha() ? h.health_alpha() : 1.0f) * 255);
+    health_background_color_ =
+        IM_COL32(background_rgb.r(),
+                 background_rgb.g(),
+                 background_rgb.b(),
+                 (h.has_background_alpha() ? h.background_alpha() : 1.0f) * 255);
+  }
 }
 
 void Scenario::OnEvents(std::span<SDL_Event> events) {
@@ -166,7 +181,7 @@ void Scenario::OnEvents(std::span<SDL_Event> events) {
   float yrel = 0;
   bool has_mouse_move = false;
   for (const SDL_Event& event : events) {
-    if (event.type == SDL_EVENT_MOUSE_MOTION && is_running()) {
+    if (event.type == SDL_EVENT_MOUSE_MOTION && (is_running() || is_start_countdown())) {
       current_times_.mouse_events_count++;
       xrel += event.motion.xrel;
       yrel += event.motion.yrel;
@@ -204,7 +219,7 @@ void Scenario::OnEvent(const SDL_Event& event) {
             last_click_time_micros_ = now_micros;
           }
         }
-      } else if (run_state_ == WAITING_FOR_CLICK_TO_START) {
+      } else if (is_waiting_for_click_to_start()) {
         update_data_.has_click = true;
       }
     }
@@ -262,6 +277,17 @@ void Scenario::OnEvent(const SDL_Event& event) {
   }
 }
 
+void Scenario::BeginRunWithOptionalCountdown() {
+  float countdown_seconds = settings_.start_countdown_time();
+  if (countdown_seconds > 0) {
+    start_countdown_stopwatch_.Start();
+    run_state_ = ScenarioRunState::START_COUNTDOWN;
+    return;
+  }
+  run_state_ = ScenarioRunState::RUNNING;
+  timer_.ResumeRun();
+}
+
 void Scenario::OnAttach() {
   app_.SetPresentMode(settings_.present_mode());
   SDL_SetWindowRelativeMouseMode(app_.sdl_window(), true);
@@ -299,9 +325,11 @@ void Scenario::OnTickStart() {
   }
 
   if (run_state_ == ScenarioRunState::NOT_STARTED) {
-    if (settings_.disable_click_to_start() || force_start_immediately_) {
+    if (force_start_immediately_) {
       run_state_ = ScenarioRunState::RUNNING;
       timer_.ResumeRun();
+    } else if (settings_.disable_click_to_start()) {
+      BeginRunWithOptionalCountdown();
     } else {
       run_state_ = ScenarioRunState::WAITING_FOR_CLICK_TO_START;
     }
@@ -319,19 +347,24 @@ void Scenario::OnTickStart() {
 }
 
 void Scenario::OnTick() {
-  if (is_running()) {
-    OnRunningTick();
-    return;
-  }
-  if (run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START) {
-    OnWaitingForClickTick();
+  switch (run_state_) {
+    case ScenarioRunState::RUNNING:
+      OnRunningTick();
+      return;
+    case ScenarioRunState::START_COUNTDOWN:
+      OnStartCountdownClickTick();
+      return;
+    case ScenarioRunState::WAITING_FOR_CLICK_TO_START:
+      OnWaitingForClickTick();
+      return;
+    defaut:
+      break;
   }
 }
 
 void Scenario::OnWaitingForClickTick() {
   if (update_data_.has_click) {
-    run_state_ = ScenarioRunState::RUNNING;
-    timer_.ResumeRun();
+    BeginRunWithOptionalCountdown();
     return;
   }
   look_at_ = camera_.GetLookAt();
@@ -386,6 +419,82 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::PopStyleColor();
   ImGui::End();
 
+  RenderContext ctx;
+  if (app_.StartRender(&ctx)) {
+    app_.renderer()->DrawScenario(projection_,
+                                  def_.room(),
+                                  theme_,
+                                  settings_.health_bar(),
+                                  target_manager_.GetTargets(),
+                                  look_at_,
+                                  &ctx);
+    app_.FinishRender(&ctx);
+  }
+}
+
+void Scenario::OnStartCountdownClickTick() {
+  float elapsed_seconds = start_countdown_stopwatch_.GetElapsedSeconds();
+  float wait_seconds = settings_.start_countdown_time();
+  if (wait_seconds <= 0 || elapsed_seconds >= wait_seconds) {
+    run_state_ = ScenarioRunState::RUNNING;
+    timer_.ResumeRun();
+    start_countdown_stopwatch_.Stop();
+    return;
+  }
+
+  look_at_ = camera_.GetLookAt();
+  timer_.OnStartFrame();
+  bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > max_render_age_micros_;
+  if (!do_render) {
+    return;
+  }
+  timer_.OnStartRender();
+  auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
+
+  app_.NewImGuiFrame();
+  app_.BeginFullscreenWindow();
+  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+
+  ImGui::Text("%s", scenario_name_.c_str());
+  ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+
+  {
+    // Draw the countdown progress bar.
+    float time_remaining_percent = (wait_seconds - elapsed_seconds) / wait_seconds;
+
+    ScreenInfo screen_info = app_.screen_info();
+
+    float char_x = ImGui::GetDefaultCharSizeX();
+    float width = char_x * 20;
+
+    float left_width = width * time_remaining_percent;
+
+    float center_y = screen_info.height / 2.0f;
+    float y_min = center_y - char_x * 14;
+    float y_max = y_min + char_x * 2;
+
+    ImVec2 top_left(0, y_min);
+    ImVec2 bottom_right(width, y_max);
+
+    ImVec2 top_mid(left_width, y_min);
+    ImVec2 bottom_mid(left_width, y_max);
+
+    float x_offset = (screen_info.width - width) / 2.0f;
+
+    top_left.x += x_offset;
+    bottom_right.x += x_offset;
+    top_mid.x += x_offset;
+    bottom_mid.x += x_offset;
+
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    draw_list->AddRectFilled(top_left, bottom_mid, GetHealthColor());
+    draw_list->AddRectFilled(top_mid, bottom_right, GetHealthBackgroundColor());
+  }
+
+  ImGui::End();
+
+  // Draw progress bar.
   RenderContext ctx;
   if (app_.StartRender(&ctx)) {
     app_.renderer()->DrawScenario(projection_,

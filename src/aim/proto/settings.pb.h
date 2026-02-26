@@ -1610,6 +1610,7 @@ class Settings final : public ::google::protobuf::Message
     kDisablePerScenarioSettingsFieldNumber = 13,
     kMaxRenderFpsFieldNumber = 14,
     kPresentModeFieldNumber = 15,
+    kStartCountdownTimeFieldNumber = 17,
   };
   // string theme_name = 4;
   bool has_theme_name() const;
@@ -1798,12 +1799,23 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_present_mode(::aim::PresentMode value);
 
   public:
+  // float start_countdown_time = 17;
+  bool has_start_countdown_time() const;
+  void clear_start_countdown_time() ;
+  float start_countdown_time() const;
+  void set_start_countdown_time(float value);
+
+  private:
+  float _internal_start_countdown_time() const;
+  void _internal_set_start_countdown_time(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
-                                   3, 61,
+  static const ::google::protobuf::internal::TcParseTable<5, 16,
+                                   3, 69,
                                    2>
       _table_;
 
@@ -1839,6 +1851,7 @@ class Settings final : public ::google::protobuf::Message
     bool disable_per_scenario_settings_;
     float max_render_fps_;
     int present_mode_;
+    float start_countdown_time_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2735,6 +2748,35 @@ inline void Settings::set_allocated_sound(::aim::SoundSettings* PROTOBUF_NULLABL
 
   _impl_.sound_ = reinterpret_cast<::aim::SoundSettings*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.sound)
+}
+
+// float start_countdown_time = 17;
+inline bool Settings::has_start_countdown_time() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00008000U);
+  return value;
+}
+inline void Settings::clear_start_countdown_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_countdown_time_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00008000U);
+}
+inline float Settings::start_countdown_time() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.start_countdown_time)
+  return _internal_start_countdown_time();
+}
+inline void Settings::set_start_countdown_time(float value) {
+  _internal_set_start_countdown_time(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00008000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.start_countdown_time)
+}
+inline float Settings::_internal_start_countdown_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_countdown_time_;
+}
+inline void Settings::_internal_set_start_countdown_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_countdown_time_ = value;
 }
 
 // -------------------------------------------------------------------

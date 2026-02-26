@@ -227,12 +227,24 @@ class SettingsScreen : public UiScreen {
               .set_label("Disable per scenario settings"),
           PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
 
+      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+
+      ImGui::SpacedSeparator();
+
       ImGui::InputBool(
           ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
           PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));
 
-      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
-                       PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Start countdown time")
+                            .set_min(0.01)
+                            .set_is_optional()
+                            .set_default(0.4)
+                            .set_step(0.01, 0.1)
+                            .set_width(char_x_ * 10),
+                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, start_countdown_time));
+      ImGui::SameLine();
+      ImGui::HelpMarker("A countdown will be shown whenever a scenario is about to start");
 
       ImGui::SpacedSeparator();
       ImGui::InputBool(ImGui::InputBoolParams("EnableMetronome").set_label("Enable metronome"),

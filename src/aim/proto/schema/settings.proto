@@ -40,6 +40,9 @@ message Settings {
   PresentMode present_mode = 15;
 
   SoundSettings sound = 16;
+
+  // Time in seconds for a start countdown at the beginning of scenarios.
+  float start_countdown_time = 17;
 }
 
 message SoundSettings {

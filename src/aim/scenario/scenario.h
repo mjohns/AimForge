@@ -22,6 +22,7 @@ namespace aim {
 enum ScenarioRunState {
   NOT_STARTED,
   WAITING_FOR_CLICK_TO_START,
+  START_COUNTDOWN,
   RUNNING,
   DONE,
 };
@@ -60,6 +61,10 @@ class Scenario : public Screen {
 
   bool is_waiting_for_click_to_start() {
     return run_state_ == ScenarioRunState::WAITING_FOR_CLICK_TO_START;
+  }
+
+  bool is_start_countdown() {
+    return run_state_ == ScenarioRunState::START_COUNTDOWN;
   }
 
   void OnEvents(std::span<SDL_Event> events) override;
@@ -103,6 +108,14 @@ class Scenario : public Screen {
   TargetProfile GetNextTargetProfile();
   Target GetTargetTemplate(const TargetProfile& profile);
 
+  ImU32 GetHealthColor() {
+    return health_color_;
+  }
+
+  ImU32 GetHealthBackgroundColor() {
+    return health_background_color_;
+  }
+
   std::string scenario_name_;
   ScenarioDef def_;
   std::unique_ptr<Metronome> metronome_;
@@ -123,9 +136,11 @@ class Scenario : public Screen {
   void OnEvent(const SDL_Event& event);
   void OnRunningTick();
   void OnWaitingForClickTick();
+  void OnStartCountdownClickTick();
+
+  void BeginRunWithOptionalCountdown();
 
   void RefreshState();
-  bool ShouldAutoHold();
 
   void DoneAdjustingCrosshairSize();
 
@@ -144,6 +159,8 @@ class Scenario : public Screen {
   std::vector<DelayedTask> delayed_tasks_;
   i64 max_render_age_micros_;
 
+  Stopwatch start_countdown_stopwatch_;
+
   FrameTimes current_times_;
   RunPerformanceStats perf_stats_;
   bool force_start_immediately_ = false;
@@ -156,6 +173,8 @@ class Scenario : public Screen {
   bool from_scenario_editor_;
   bool play_time_flushed_ = false;
   const CreateScenarioParams create_params_;
+  ImU32 health_color_;
+  ImU32 health_background_color_;
 };
 
 }  // namespace aim

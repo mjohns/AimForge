@@ -413,20 +413,6 @@ void BaseScenario::DrawAdditionalUiElements() {
       ImVec2 top_mid(left_width, y_min);
       ImVec2 bottom_mid(left_width, y_max);
 
-      auto& h = theme_.health_bar();
-      auto health_rgb = ToStoredRgb(h.health_color());
-      auto background_rgb = ToStoredRgb(h.background_color());
-
-      auto health_color = IM_COL32(health_rgb.r(),
-                                   health_rgb.g(),
-                                   health_rgb.b(),
-                                   (h.has_health_alpha() ? h.health_alpha() : 1.0f) * 255);
-      auto background_color =
-          IM_COL32(background_rgb.r(),
-                   background_rgb.g(),
-                   background_rgb.b(),
-                   (h.has_background_alpha() ? h.background_alpha() : 1.0f) * 255);
-
       float x_offset = (screen_info.width - width) / 2.0f;
 
       top_left.x += x_offset;
@@ -436,8 +422,8 @@ void BaseScenario::DrawAdditionalUiElements() {
 
       ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-      draw_list->AddRectFilled(top_left, bottom_mid, health_color);
-      draw_list->AddRectFilled(top_mid, bottom_right, background_color);
+      draw_list->AddRectFilled(top_left, bottom_mid, GetHealthColor());
+      draw_list->AddRectFilled(top_mid, bottom_right, GetHealthBackgroundColor());
     }
   }
 }
