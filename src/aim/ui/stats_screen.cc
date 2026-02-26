@@ -929,7 +929,7 @@ class StatsScreen : public UiScreen {
             ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1);
           } else if (score_target_ > 0 && abs(score_target_ - mouse_pos.y) < threshold.y) {
             ImGui::BeginTooltip();
-            ImGui::TextFmt("Score target: {}", MaybeIntToString(score_target_, 2));
+            ImGui::TextFmt("Target score: {}", MaybeIntToString(score_target_, 2));
             ImGui::EndTooltip();
 
             ImPlot::SetNextMarkerStyle(
