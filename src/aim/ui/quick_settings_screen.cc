@@ -160,7 +160,7 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Text("Theme");
       ImGui::SameLine();
       ImGui::SimpleDropdown(
-          "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_size.x * 15);
+          "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_size.x * 20);
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Crosshair");
@@ -168,13 +168,18 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::SimpleDropdown("CrosshairDropdown",
                             updater_.settings.mutable_current_crosshair_name(),
                             crosshair_names_,
-                            char_size.x * 13);
+                            char_size.x * 18);
 
       ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
       ImGui::InputBool(
           ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
           PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
+
+      ImGui::InputBool(
+          ImGui::InputBoolParams("DisablePerScenarioSettings")
+              .set_label("Disable per scenario settings"),
+          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
     }
 
     if (type_ == QuickSettingsType::METRONOME) {

@@ -3169,7 +3169,7 @@
        "accelerationMultiplier": 0.1
       }
      ],
-     "leftRightInitialDirection": "DIRECTION_RANDOM",
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
      "upDownInitialDirection": "DIRECTION_RANDOM",
      "forwardBackInitialDirection": "DIRECTION_RANDOM"
     }
