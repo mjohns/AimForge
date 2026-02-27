@@ -16,7 +16,7 @@
 
 namespace aim {
 namespace {
-constexpr const float kPokeBallKillTimeSeconds = 0.05;
+constexpr const float kPokeBallKillTimeSeconds = 0.1;
 
 float GetPartialHitValue(const Target& target) {
   return 1 - target.GetHealthPercent();

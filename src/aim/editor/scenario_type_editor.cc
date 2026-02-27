@@ -900,7 +900,7 @@ void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
                           .set_label("Poke kill time")
                           .set_step(0.01, 0.1)
                           .set_min(0.01)
-                          .set_default(0.05)
+                          .set_default(0.1)
                           .set_is_optional()
                           .set_width(char_x * 10),
                       PROTO_FLOAT_FIELD(ShotType, &s, poke_kill_time_seconds));
