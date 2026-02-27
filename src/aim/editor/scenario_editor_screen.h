@@ -13,6 +13,7 @@ namespace aim {
 struct ScenarioEditorOptions {
   std::string scenario_name;
   bool is_new_copy = false;
+  bool copy_as_reference = false;
   std::string add_to_playlist;
   std::string force_bundle_name;
 };

@@ -63,7 +63,13 @@ class ScenarioEditorScreen : public UiScreen {
       // Initialize scenario def if source is found otherwise show error and exit.
       auto initial_scenario = app_.scenario_manager().GetScenario(opts.scenario_name);
       if (initial_scenario.has_value()) {
-        def_ = initial_scenario->unevaluated_def;
+        if (opts.copy_as_reference) {
+          def_ = {};
+          auto* r = def_.mutable_reference_def();
+          r->set_scenario_name(opts.scenario_name);
+        } else {
+          def_ = initial_scenario->unevaluated_def;
+        }
       } else {
         notification_popup_.NotifyOpen(
             std::format("Scenario \"{}\" does not exist.", opts.scenario_name));

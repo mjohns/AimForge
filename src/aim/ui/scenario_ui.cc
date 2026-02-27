@@ -158,6 +158,13 @@ void DrawScenarioRightClickMenu(const char* popup_id,
         app.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(
             scenario_name, app.stats_manager().GetLatestRunId(scenario_name), &app));
       }
+      if (ImGui::Selectable("Copy as reference")) {
+        ScenarioEditorOptions opts;
+        opts.scenario_name = scenario_name;
+        opts.is_new_copy = true;
+        opts.copy_as_reference = true;
+        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+      }
       if (ImGui::Selectable("Create levels playlist")) {
         dialogs->create_levels_playlist_dialog.NotifyOpen(scenario_name);
       }
