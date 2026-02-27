@@ -173,8 +173,9 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (!is_readonly) {
       ImGui::SpacedSeparator();
       if (ImGui::Selectable("Delete")) {
-        dialogs->delete_confirmation_dialog.NotifyOpen(std::format("Delete \"{}\"?", scenario_name),
-                                                       scenario_name);
+        std::string base_name = GetScenarioNameInfo(scenario_name).base_name;
+        dialogs->delete_confirmation_dialog.NotifyOpen(std::format("Delete \"{}\"?", base_name),
+                                                       base_name);
       }
     }
     ImGui::EndPopup();
