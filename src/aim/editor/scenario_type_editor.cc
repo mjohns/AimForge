@@ -50,13 +50,11 @@ void DrawWallArcEditor(WallArcScenarioDef& d) {
     d.clear_height_jitter();
   }
 
-  ImGui::InputBool(ImGui::InputBoolParams("Reflect").set_label("Reflect"),
-                   PROTO_BOOL_FIELD(WallArcScenarioDef, &d, reflect));
+  ImGui::InputBool("Reflect", PROTO_BOOL_FIELD(WallArcScenarioDef, &d, reflect));
   ImGui::SameLine();
   ImGui::HelpMarker("Turn the arc upside down.");
 
-  ImGui::InputBool(ImGui::InputBoolParams("StartOnGround").set_label("Start on ground"),
-                   PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
+  ImGui::InputBool("Start on floor", PROTO_BOOL_FIELD(WallArcScenarioDef, &d, start_on_ground));
 }
 
 void DrawSineEditor(SineScenarioDef& d) {
@@ -72,8 +70,7 @@ void DrawSineEditor(SineScenarioDef& d) {
   ImGui::SameLine();
   DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, d.mutable_width(), 20);
 
-  ImGui::InputBool(ImGui::InputBoolParams("GoingRight").set_label("Going left"),
-                   PROTO_BOOL_FIELD(SineScenarioDef, &d, going_left));
+  ImGui::InputBool("Going left", PROTO_BOOL_FIELD(SineScenarioDef, &d, going_left));
 }
 
 void DrawCircleEditor(CircleScenarioDef& d) {
@@ -105,8 +102,7 @@ void DrawCircleEditor(CircleScenarioDef& d) {
   ImGui::SameLine();
   ImGui::HelpMarker("0 degrees starts at 3 o'clock and rotates counter clockwise.");
 
-  ImGui::InputBool(ImGui::InputBoolParams("Clockwise").set_label("Start clockwise"),
-                   PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
+  ImGui::InputBool("Start clockwise", PROTO_BOOL_FIELD(CircleScenarioDef, &d, rotate_clockwise));
 
   ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Switch direction after time")
                         .set_is_optional()
@@ -575,8 +571,7 @@ void DrawBounceProfile(float char_x, BounceProfile* p) {
                                 .set_default(0)
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(BounceProfile, p, delay_seconds));
-  ImGui::InputBool(ImGui::InputBoolParams("OnlyDelayOnFloor").set_label("Only delay on floor"),
-                   PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
+  ImGui::InputBool("Only delay on floor", PROTO_BOOL_FIELD(BounceProfile, p, only_delay_on_floor));
 
   ImGui::InputJitteredFloat(ImGui::InputFloatParams::WithLabelAsId("Float time")
                                 .set_step(0.01, 0.05)
@@ -914,8 +909,7 @@ void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
   }
 
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
-    ImGui::InputBool(ImGui::InputBoolParams("RemoveClosest").set_label("Remove on miss"),
-                     PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
+    ImGui::InputBool("Remove on miss", PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
                           .set_is_optional()
@@ -984,8 +978,7 @@ void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
         "target, remove the target and  receive partial score. The kill sound will  be played "
         "early based on this time.");
 
-    ImGui::InputBool(ImGui::InputBoolParams("NoPartialKills").set_label("No partial kills"),
-                     PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
+    ImGui::InputBool("No partial kills", PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
   }
 }
 
