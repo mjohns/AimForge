@@ -3489,9 +3489,7 @@
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 1.4,
-       "targetRadiusJitter": 0,
        "speedJitter": 0
       }
      ]
@@ -3508,7 +3506,9 @@
      }
     },
     "overrides": {},
-    "levelOverrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -3561,82 +3561,27 @@
   {
    "name": "Static3 Ladder",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "targetRadius": 4
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 170
-     }
-    },
-    "overrides": {},
-    "levelOverrides": {
+    "overrides": {
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
      "start": 100,
      "end": 140
     },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.6
-         },
-         "yDiameter": {
-          "yPercentValue": 0.32
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.65
-         },
-         "yLength": {
-          "yPercentValue": 0.55
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 20
-      }
+    "referenceDef": {
+     "scenarioName": "AF Static3",
+     "explicitTargetRadius": 4
+    }
+   }
+  },
+  {
+   "name": "Static3 Poke Ladder",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF Static3 Ladder",
+     "shotType": {
+      "poke": true
      }
     }
    }
@@ -4891,6 +4836,17 @@
      "baseScenario": "AF Static3 Ladder",
      "maxLevel": 40,
      "levelStep": 0.5,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
+   "name": "Static3 Poke Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Static3 Poke Ladder",
+     "maxLevel": 40,
      "numPlaysPerLevel": 1
     }
    }
