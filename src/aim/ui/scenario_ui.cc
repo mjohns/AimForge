@@ -641,6 +641,9 @@ class ScenariosComponentImpl : public ScenariosComponent {
       if (ImGui::Button(referenced_scenario)) {
         app_.scenario_manager().SetCurrentScenario(referenced_scenario);
       }
+      const char* popup_id = "ReferencedScenarioMenu";
+      DrawScenarioRightClickMenu(popup_id, referenced_scenario, &dialogs_, app_);
+      ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
     }
 
     if (!referencing_scenarios_.empty()) {
@@ -657,6 +660,9 @@ class ScenariosComponentImpl : public ScenariosComponent {
         if (ImGui::Button(name)) {
           app_.scenario_manager().SetCurrentScenario(name);
         }
+        const char* popup_id = "ReferencingScenarioMenu";
+        DrawScenarioRightClickMenu(popup_id, name, &dialogs_, app_);
+        ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
       }
       ImGui::Unindent();
     }
