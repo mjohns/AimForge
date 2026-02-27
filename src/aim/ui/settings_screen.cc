@@ -233,8 +233,8 @@ class SettingsScreen : public UiScreen {
       ImGui::SpacedSeparator();
 
       ImGui::InputBool(
-          ImGui::InputBoolParams("DisableClickToStart").set_label("Disable \"Click to Start\""),
-          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start));
+          "Use \"Click to Start\"",
+          InvertBoolField(PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_click_to_start)));
 
       ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Start countdown time")
                             .set_min(0.01)

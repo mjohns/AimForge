@@ -334,18 +334,14 @@ class SettingsManagerImpl : public SettingsManager {
     if (scenario_settings.has_metronome_bpm()) {
       settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
     }
-    if (scenario_settings.has_enable_metronome()) {
-      settings_.set_enable_metronome(scenario_settings.enable_metronome());
-    }
+    settings_.set_enable_metronome(scenario_settings.enable_metronome());
     if (scenario_settings.has_crosshair_size()) {
       settings_.set_crosshair_size(scenario_settings.crosshair_size());
     }
     if (scenario_settings.has_crosshair_name()) {
       settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
     }
-    if (scenario_settings.has_auto_hold_tracking()) {
-      settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
-    }
+    settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
     if (scenario_settings.has_health_bar()) {
       *settings_.mutable_health_bar() = scenario_settings.health_bar();
     }

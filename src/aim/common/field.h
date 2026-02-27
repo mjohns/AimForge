@@ -63,8 +63,15 @@ Field<bool> CreateBoolField(T* instance,
                             std::function<bool(T*)> get,
                             std::function<void(T*, bool)> set) {
   std::function<bool()> has = []() { return true; };
-  std::function<void()> clear = [=]() { set(instance, false); };
+  std::function<void()> clear = [=]() {};
   return Field<bool>(std::bind_front(get, instance), std::bind_front(set, instance), clear, has);
+}
+
+// Reverses the meaning of true and false for the field.
+static Field<bool> InvertBoolField(Field<bool> base_field) {
+  std::function<bool()> get = [=]() { return !base_field.get(); };
+  std::function<void(bool)> set = [=](bool value) { base_field.set(!value); };
+  return Field<bool>(get, set, base_field.clear, base_field.has);
 }
 
 #define PROTO_FIELD(T, ProtoClass, instance, field_name)           \

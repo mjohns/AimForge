@@ -240,11 +240,11 @@ void InputBool(const InputBoolParams& params, aim::Field<bool> field) {
 
   bool value = field.get();
   ImGui::Checkbox("##Checkbox", &value);
-  if (value) {
-    field.set(true);
-  } else {
-    field.clear();
-  }
+  field.set(value);
+}
+
+void InputBool(const std::string& label, aim::Field<bool> field) {
+  InputBool(ImGui::InputBoolParams::WithLabelAsId(label), field);
 }
 
 void InputInt(const InputIntParams& params, aim::Field<int> field) {

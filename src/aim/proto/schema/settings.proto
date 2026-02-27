@@ -5,8 +5,8 @@ import "common.proto";
 package aim;
 
 message HealthBarSettings {
-  bool show = 1;
-  bool only_damaged = 2;
+  bool show = 1 [features.field_presence = IMPLICIT];
+  bool only_damaged = 2 [features.field_presence = IMPLICIT];
   float height = 3;
   float width = 4;
   float height_above_target = 5;
@@ -17,22 +17,22 @@ message Settings {
   float cm_per_360 = 2;
   string theme_name = 4;
 
-  bool enable_metronome = 3;
+  bool enable_metronome = 3 [features.field_presence = IMPLICIT];
   float metronome_bpm = 5;
 
   float crosshair_size = 6;
   string current_crosshair_name = 7;
 
-  bool disable_click_to_start = 8;
+  bool disable_click_to_start = 8 [features.field_presence = IMPLICIT];
 
   Keybinds keybinds = 9;
 
   // Left click is automatically held down in tracking scenarios.
-  bool auto_hold_tracking = 10;
+  bool auto_hold_tracking = 10 [features.field_presence = IMPLICIT];
 
   HealthBarSettings health_bar = 12;
 
-  bool disable_per_scenario_settings = 13;
+  bool disable_per_scenario_settings = 13 [features.field_presence = IMPLICIT];
 
   float max_render_fps = 14;
 
@@ -62,9 +62,9 @@ message ScenarioSettings {
   float metronome_bpm = 3;
   float crosshair_size = 4;
   string crosshair_name = 5;
-  bool auto_hold_tracking = 7;
+  bool auto_hold_tracking = 7 [features.field_presence = IMPLICIT];
   HealthBarSettings health_bar = 8;
-  bool enable_metronome = 9;
+  bool enable_metronome = 9 [features.field_presence = IMPLICIT];
 }
 
 message KeyMapping {

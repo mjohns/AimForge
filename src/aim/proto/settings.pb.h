@@ -752,8 +752,7 @@ class HealthBarSettings final : public ::google::protobuf::Message
     kWidthFieldNumber = 4,
     kHeightAboveTargetFieldNumber = 5,
   };
-  // bool show = 1;
-  bool has_show() const;
+  // bool show = 1 [features = {
   void clear_show() ;
   bool show() const;
   void set_show(bool value);
@@ -763,8 +762,7 @@ class HealthBarSettings final : public ::google::protobuf::Message
   void _internal_set_show(bool value);
 
   public:
-  // bool only_damaged = 2;
-  bool has_only_damaged() const;
+  // bool only_damaged = 2 [features = {
   void clear_only_damaged() ;
   bool only_damaged() const;
   void set_only_damaged(bool value);
@@ -1090,8 +1088,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
   void _internal_set_cm_per_360_jitter(float value);
 
   public:
-  // bool auto_hold_tracking = 7;
-  bool has_auto_hold_tracking() const;
+  // bool auto_hold_tracking = 7 [features = {
   void clear_auto_hold_tracking() ;
   bool auto_hold_tracking() const;
   void set_auto_hold_tracking(bool value);
@@ -1101,8 +1098,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
   void _internal_set_auto_hold_tracking(bool value);
 
   public:
-  // bool enable_metronome = 9;
-  bool has_enable_metronome() const;
+  // bool enable_metronome = 9 [features = {
   void clear_enable_metronome() ;
   bool enable_metronome() const;
   void set_enable_metronome(bool value);
@@ -1733,8 +1729,7 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_crosshair_size(float value);
 
   public:
-  // bool enable_metronome = 3;
-  bool has_enable_metronome() const;
+  // bool enable_metronome = 3 [features = {
   void clear_enable_metronome() ;
   bool enable_metronome() const;
   void set_enable_metronome(bool value);
@@ -1744,8 +1739,7 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_enable_metronome(bool value);
 
   public:
-  // bool disable_click_to_start = 8;
-  bool has_disable_click_to_start() const;
+  // bool disable_click_to_start = 8 [features = {
   void clear_disable_click_to_start() ;
   bool disable_click_to_start() const;
   void set_disable_click_to_start(bool value);
@@ -1755,8 +1749,7 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_disable_click_to_start(bool value);
 
   public:
-  // bool auto_hold_tracking = 10;
-  bool has_auto_hold_tracking() const;
+  // bool auto_hold_tracking = 10 [features = {
   void clear_auto_hold_tracking() ;
   bool auto_hold_tracking() const;
   void set_auto_hold_tracking(bool value);
@@ -1766,8 +1759,7 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_auto_hold_tracking(bool value);
 
   public:
-  // bool disable_per_scenario_settings = 13;
-  bool has_disable_per_scenario_settings() const;
+  // bool disable_per_scenario_settings = 13 [features = {
   void clear_disable_per_scenario_settings() ;
   bool disable_per_scenario_settings() const;
   void set_disable_per_scenario_settings(bool value);
@@ -1876,11 +1868,7 @@ extern const ::google::protobuf::internal::ClassDataFull Settings_class_data_;
 
 // HealthBarSettings
 
-// bool show = 1;
-inline bool HealthBarSettings::has_show() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
-  return value;
-}
+// bool show = 1 [features = {
 inline void HealthBarSettings::clear_show() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.show_ = false;
@@ -1905,11 +1893,7 @@ inline void HealthBarSettings::_internal_set_show(bool value) {
   _impl_.show_ = value;
 }
 
-// bool only_damaged = 2;
-inline bool HealthBarSettings::has_only_damaged() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
+// bool only_damaged = 2 [features = {
 inline void HealthBarSettings::clear_only_damaged() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.only_damaged_ = false;
@@ -2152,11 +2136,7 @@ inline void Settings::set_allocated_theme_name(::std::string* PROTOBUF_NULLABLE 
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.theme_name)
 }
 
-// bool enable_metronome = 3;
-inline bool Settings::has_enable_metronome() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
-  return value;
-}
+// bool enable_metronome = 3 [features = {
 inline void Settings::clear_enable_metronome() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.enable_metronome_ = false;
@@ -2308,11 +2288,7 @@ inline void Settings::set_allocated_current_crosshair_name(::std::string* PROTOB
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.current_crosshair_name)
 }
 
-// bool disable_click_to_start = 8;
-inline bool Settings::has_disable_click_to_start() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
-  return value;
-}
+// bool disable_click_to_start = 8 [features = {
 inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
@@ -2436,11 +2412,7 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* PROTOBUF_NULLABLE 
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.keybinds)
 }
 
-// bool auto_hold_tracking = 10;
-inline bool Settings::has_auto_hold_tracking() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
-  return value;
-}
+// bool auto_hold_tracking = 10 [features = {
 inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
@@ -2564,11 +2536,7 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* PROTOBU
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.health_bar)
 }
 
-// bool disable_per_scenario_settings = 13;
-inline bool Settings::has_disable_per_scenario_settings() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
-  return value;
-}
+// bool disable_per_scenario_settings = 13 [features = {
 inline void Settings::clear_disable_per_scenario_settings() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = false;
@@ -3346,11 +3314,7 @@ inline void ScenarioSettings::set_allocated_crosshair_name(::std::string* PROTOB
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.crosshair_name)
 }
 
-// bool auto_hold_tracking = 7;
-inline bool ScenarioSettings::has_auto_hold_tracking() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
-  return value;
-}
+// bool auto_hold_tracking = 7 [features = {
 inline void ScenarioSettings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
@@ -3474,11 +3438,7 @@ inline void ScenarioSettings::set_allocated_health_bar(::aim::HealthBarSettings*
   // @@protoc_insertion_point(field_set_allocated:aim.ScenarioSettings.health_bar)
 }
 
-// bool enable_metronome = 9;
-inline bool ScenarioSettings::has_enable_metronome() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
-  return value;
-}
+// bool enable_metronome = 9 [features = {
 inline void ScenarioSettings::clear_enable_metronome() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.enable_metronome_ = false;
