@@ -1817,60 +1817,11 @@
   {
    "name": "MicroPoke",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "poke": true
-    },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "info": {},
-       "targetRadius": 1.3,
-       "targetRadiusJitter": 0,
-       "speedJitter": 0
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 150,
-      "width": 170
-     }
-    },
     "overrides": {},
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.95
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.075
-         },
-         "yDiameter": {
-          "yPercentValue": 0.075
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 3
-      }
+    "referenceDef": {
+     "scenarioName": "AF MicroClick",
+     "shotType": {
+      "poke": true
      }
     }
    }
