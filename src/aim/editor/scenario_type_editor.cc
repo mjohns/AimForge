@@ -613,16 +613,13 @@ void DrawBounceEditor(BounceScenarioDef& d) {
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Floor height");
   ImGui::SameLine();
-  bool use_floor_height = d.has_floor_height();
-  ImGui::SameLine();
-  ImGui::Checkbox("##FloorHeight", &use_floor_height);
-  if (use_floor_height) {
-    ImGui::SameLine();
-    DrawRegionLengthEditor(
-        "FloorHeight", RegionLength::kYPercentValue, d.mutable_floor_height(), 0);
-  } else {
-    d.clear_floor_height();
-  }
+  DrawOptionalRegionLengthEditor("FloorHeight",
+                                 RegionLength::kYPercentValue,
+                                 PROTO_PTR_FIELD(RegionLength, BounceScenarioDef, &d, floor_height),
+                                 0);
+  ImGui::InputBool("Start on floor", PROTO_BOOL_FIELD(BounceScenarioDef, &d, start_on_floor));
+
+  ImGui::SpacedSeparator();
 
   if (d.bounce_profiles_size() == 0) {
     d.add_bounce_profiles();

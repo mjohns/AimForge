@@ -9496,6 +9496,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     kFloorHeightFieldNumber = 13,
     kLeftRightInitialDirectionFieldNumber = 11,
     kForwardBackInitialDirectionFieldNumber = 12,
+    kStartOnFloorFieldNumber = 14,
   };
   // repeated .aim.BounceProfile bounce_profiles = 3;
   int bounce_profiles_size() const;
@@ -9675,11 +9676,22 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
+  // bool start_on_floor = 14;
+  bool has_start_on_floor() const;
+  void clear_start_on_floor() ;
+  bool start_on_floor() const;
+  void set_start_on_floor(bool value);
+
+  private:
+  bool _internal_start_on_floor() const;
+  void _internal_set_start_on_floor(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.BounceScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 12,
+  static const ::google::protobuf::internal::TcParseTable<4, 13,
                                    10, 0,
                                    2>
       _table_;
@@ -9713,6 +9725,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     ::aim::RegionLength* PROTOBUF_NULLABLE floor_height_;
     int left_right_initial_direction_;
     int forward_back_initial_direction_;
+    bool start_on_floor_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -23327,6 +23340,35 @@ inline void BounceScenarioDef::set_allocated_floor_height(::aim::RegionLength* P
 
   _impl_.floor_height_ = reinterpret_cast<::aim::RegionLength*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.floor_height)
+}
+
+// bool start_on_floor = 14;
+inline bool BounceScenarioDef::has_start_on_floor() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
+  return value;
+}
+inline void BounceScenarioDef::clear_start_on_floor() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_on_floor_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00001000U);
+}
+inline bool BounceScenarioDef::start_on_floor() const {
+  // @@protoc_insertion_point(field_get:aim.BounceScenarioDef.start_on_floor)
+  return _internal_start_on_floor();
+}
+inline void BounceScenarioDef::set_start_on_floor(bool value) {
+  _internal_set_start_on_floor(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  // @@protoc_insertion_point(field_set:aim.BounceScenarioDef.start_on_floor)
+}
+inline bool BounceScenarioDef::_internal_start_on_floor() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_on_floor_;
+}
+inline void BounceScenarioDef::_internal_set_start_on_floor(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_on_floor_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -213,16 +213,11 @@ class BounceController {
 class MovementControllerImpl : public MovementController {
  public:
   MovementControllerImpl(
-      float speed, float acceleration, Wall wall, ScenarioDef def, Application& app)
+      float speed, float acceleration, Wall wall, float min_y, ScenarioDef def, Application& app)
       : def_(def), app_(app), wall_(wall) {
     auto d = def_.bounce_def();
     const WallBounds bounds = wall.GetWallBounds(d.bounds());
     const WallRelativeBounds relative_bounds = wall.GetWallRelativeBounds(d.relative_bounds());
-
-    float min_y = -1 * (wall.height / 2.0);
-    if (d.has_floor_height()) {
-      min_y += wall.GetRegionLength(d.floor_height());
-    }
     bounce_controller_ =
         std::make_unique<BounceController>(min_y, wall.height / 2.0f, acceleration);
 
@@ -327,9 +322,20 @@ class BounceScenario : public BaseScenario {
         pos.z = depth / 2.0;
       }
     }
+
+    auto d = def_.bounce_def();
+    float min_y = -1 * (wall_.height / 2.0);
+    if (d.has_floor_height()) {
+      min_y += wall_.GetRegionLength(d.floor_height());
+    }
+
+    if (d.start_on_floor()) {
+      pos.y = min_y + target->radius;
+    }
+
     target->SetWallPosition(pos, def_.room());
     target->movement_controller = std::make_shared<MovementControllerImpl>(
-        target->speed, target->acceleration, wall_, def_, app_);
+        target->speed, target->acceleration, wall_, min_y, def_, app_);
   }
 
   void UpdateTargetPositions() override {

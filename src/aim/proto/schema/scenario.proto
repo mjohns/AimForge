@@ -468,6 +468,7 @@ message BounceScenarioDef {
   Direction forward_back_initial_direction = 12;
 
   RegionLength floor_height = 13;
+  bool start_on_floor = 14 [features.field_presence = IMPLICIT];
 }
 
 message WallArcScenarioDef {
