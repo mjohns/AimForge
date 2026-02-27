@@ -7442,6 +7442,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     kRoomFieldNumber = 5,
     kDurationSecondsFieldNumber = 3,
     kNumTargetsFieldNumber = 4,
+    kExplicitTargetRadiusFieldNumber = 7,
   };
   // string scenario_name = 1;
   bool has_scenario_name() const;
@@ -7527,11 +7528,22 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_num_targets(::int32_t value);
 
   public:
+  // float explicit_target_radius = 7;
+  bool has_explicit_target_radius() const;
+  void clear_explicit_target_radius() ;
+  float explicit_target_radius() const;
+  void set_explicit_target_radius(float value);
+
+  private:
+  float _internal_explicit_target_radius() const;
+  void _internal_set_explicit_target_radius(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ReferenceScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 6,
+  static const ::google::protobuf::internal::TcParseTable<3, 7,
                                    2, 57,
                                    2>
       _table_;
@@ -7559,6 +7571,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     ::aim::Room* PROTOBUF_NULLABLE room_;
     ::int32_t duration_seconds_;
     ::int32_t num_targets_;
+    float explicit_target_radius_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -17112,6 +17125,35 @@ inline void ReferenceScenarioDef::set_allocated_description(::std::string* PROTO
     _impl_.description_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.ReferenceScenarioDef.description)
+}
+
+// float explicit_target_radius = 7;
+inline bool ReferenceScenarioDef::has_explicit_target_radius() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  return value;
+}
+inline void ReferenceScenarioDef::clear_explicit_target_radius() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.explicit_target_radius_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000040U);
+}
+inline float ReferenceScenarioDef::explicit_target_radius() const {
+  // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.explicit_target_radius)
+  return _internal_explicit_target_radius();
+}
+inline void ReferenceScenarioDef::set_explicit_target_radius(float value) {
+  _internal_set_explicit_target_radius(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.explicit_target_radius)
+}
+inline float ReferenceScenarioDef::_internal_explicit_target_radius() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.explicit_target_radius_;
+}
+inline void ReferenceScenarioDef::_internal_set_explicit_target_radius(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.explicit_target_radius_ = value;
 }
 
 // -------------------------------------------------------------------

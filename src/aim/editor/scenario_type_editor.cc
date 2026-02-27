@@ -1082,6 +1082,18 @@ void DrawReferenceEditor(ScenarioDef& def,
                       .set_width(char_x * 12),
                   PROTO_INT_FIELD(ReferenceScenarioDef, &r, num_targets));
 
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Target radius")
+                        .set_is_optional()
+                        .set_default(2)
+                        .set_min(0.01)
+                        .set_step(0.05, 0.5)
+                        .set_width(char_x * 12),
+                    PROTO_FLOAT_FIELD(ReferenceScenarioDef, &r, explicit_target_radius));
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "Provide an explicit radius for the target. Useful for providing a stable size for a base "
+      "level.");
+
   if (app != nullptr) {
     bool has_room = r.has_room();
     ImGui::AlignTextToFramePadding();

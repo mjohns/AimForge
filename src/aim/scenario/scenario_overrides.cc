@@ -5,6 +5,16 @@
 namespace aim {
 namespace {
 
+void MultiplyTargetRadiusValues(TargetProfile* profile, float mult) {
+  profile->set_target_radius(profile->target_radius() * mult);
+  if (profile->has_target_radius_at_kill()) {
+    profile->set_target_radius_at_kill(profile->target_radius_at_kill() * mult);
+  }
+  if (profile->has_target_radius_growth_size()) {
+    profile->set_target_radius_growth_size(profile->target_radius_growth_size() * mult);
+  }
+}
+
 void MultiplyRegionLength(RegionLength* l, float mult) {
   if (l->has_depth_percent_value()) {
     l->set_depth_percent_value(l->depth_percent_value() * mult);
@@ -56,13 +66,7 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
   if (overrides.has_target_radius_multiplier()) {
     float mult = get_multiplier(overrides.target_radius_multiplier());
     for (auto& profile : *result.mutable_target_def()->mutable_profiles()) {
-      profile.set_target_radius(profile.target_radius() * mult);
-      if (profile.has_target_radius_at_kill()) {
-        profile.set_target_radius_at_kill(profile.target_radius_at_kill() * mult);
-      }
-      if (profile.has_target_radius_growth_size()) {
-        profile.set_target_radius_growth_size(profile.target_radius_growth_size() * mult);
-      }
+      MultiplyTargetRadiusValues(&profile, mult);
     }
   }
   if (overrides.has_growth_time_multiplier()) {
@@ -181,6 +185,16 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   }
   if (!ref.reference_def().description().empty()) {
     def->set_description(ref.reference_def().description());
+  }
+  float explicit_radius = ref.reference_def().explicit_target_radius();
+  if (explicit_radius > 0 && def->target_def().profiles_size() > 0) {
+    float first_radius = def->target_def().profiles(0).target_radius();
+    if (first_radius > 0) {
+      float mult = explicit_radius / first_radius;
+      for (TargetProfile& profile : *def->mutable_target_def()->mutable_profiles()) {
+        MultiplyTargetRadiusValues(&profile, mult);
+      }
+    }
   }
 }
 

@@ -170,33 +170,6 @@ void DrawScenarioRightClickMenu(const char* popup_id,
       }
       ImGui::EndMenu();
     }
-    /*
-    if (app_.scenario_manager().has_running_scenario()) {
-      ImGui::SameLine();
-      if (ImGui::Button("Resume")) {
-        app_.state().scenario_run_option = ScenarioRunOption::RESUME_CURRENT;
-      }
-    }
-    */
-    /*
-    if (ImGui::BeginMenu("Add copy to")) {
-      ImGui::LoopId playlist_loop_id;
-      std::string selected_playlist;
-      for (auto& playlist_name : app.history_manager().recent_playlists()) {
-        auto id = playlist_loop_id.Get();
-        if (ImGui::MenuItem(playlist_name.c_str())) {
-          selected_playlist = playlist_name;
-          ScenarioEditorOptions opts;
-          opts.scenario_name = scenario_name;
-          opts.is_new_copy = true;
-          opts.add_to_playlist = playlist_name;
-          opts.force_bundle_name = ResourceName::Parse(playlist_name).bundle_name();
-          app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
-        }
-      }
-      ImGui::EndMenu();
-    }
-    */
     if (!is_readonly) {
       ImGui::SpacedSeparator();
       if (ImGui::Selectable("Delete")) {

@@ -20,7 +20,6 @@ extern char** environ;
 #include "google/protobuf/json/json.h"
 #include "google/protobuf/util/json_util.h"
 
-
 namespace aim {
 namespace {
 

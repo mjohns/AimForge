@@ -224,6 +224,11 @@ message ReferenceScenarioDef {
   int32 num_targets = 4;
   Room room = 5;
   string description = 6;
+
+  // Overrides the target radius with an explicit value. Useful for defining a stable base level in
+  // a ladder playlist. This will update the radius in the first profile and all other profiles will
+  // keep their relative size based on the new radius.
+  float explicit_target_radius = 7;
 }
 
 message StaticScenarioDef {
