@@ -357,7 +357,8 @@ void Scenario::OnTick() {
     case ScenarioRunState::WAITING_FOR_CLICK_TO_START:
       OnWaitingForClickTick();
       return;
-    defaut:
+    case ScenarioRunState::NOT_STARTED:
+    case ScenarioRunState::DONE:
       break;
   }
 }
