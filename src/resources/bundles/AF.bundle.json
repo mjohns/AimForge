@@ -3178,9 +3178,7 @@
   {
    "name": "SmoothSwerve Precision Ladder",
    "def": {
-    "overrides": {
-     "targetRadiusMultiplier": 2
-    },
+    "overrides": {},
     "levelOverrides": {
      "targetRadiusMultiplier": 0.96
     },
@@ -3191,7 +3189,8 @@
     "referenceDef": {
      "scenarioName": "AF SmoothSwerve",
      "durationSeconds": 45,
-     "description": "Ladder for \"AF SmoothSwerve\" where the target gets smaller."
+     "description": "Ladder for \"AF SmoothSwerve\" where the target gets smaller.",
+     "explicitTargetRadius": 6
     }
    }
   },
