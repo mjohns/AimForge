@@ -11,6 +11,7 @@
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
 #include "aim/core/application.h"
+#include "aim/core/application_state.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/editor/profile_list_editor.h"
 #include "aim/editor/room_editor.h"
@@ -1020,6 +1021,20 @@ void DrawReferenceEditor(ScenarioDef& def,
 
   if (app != nullptr) {
     ScenarioSearchInput(*app, r.mutable_scenario_name());
+    bool has_referenced_scenario =
+        app->scenario_manager().GetScenario(r.scenario_name()).has_value();
+    if (has_referenced_scenario) {
+      ImGui::SameLine();
+      if (ImGui::Button(icons::kOpenInNew)) {
+        // TODO: confirmation dialog and check if there are actual edits. Maybe go directly into the
+        // editor.
+        app->scenario_manager().SetCurrentScenario(r.scenario_name());
+        app->state().go_to_app_screen = AppScreen::SCENARIOS;
+        app->GetCurrentScreen()->ReturnHome();
+        app->GetCurrentScreen()->PopSelf();
+      }
+      ImGui::HelpTooltip("Go to the referenced scenario. All current edits will be lost.");
+    }
   } else {
     ImGui::InputText("##ScenarioReference", r.mutable_scenario_name());
   }
