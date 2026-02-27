@@ -3190,7 +3190,7 @@
     },
     "referenceDef": {
      "scenarioName": "AF SmoothSwerve",
-     "durationSeconds": 30,
+     "durationSeconds": 45,
      "description": "Ladder for \"AF SmoothSwerve\" where the target gets smaller."
     }
    }
