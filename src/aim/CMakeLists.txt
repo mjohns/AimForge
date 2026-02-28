@@ -27,4 +27,6 @@ set_target_properties(${NAME} PROPERTIES COMPILE_WARNING_AS_ERROR ON)
 if(MSVC)
     # Disables warnings from protobuf lib
     target_compile_options(${NAME} PRIVATE /wd4091)
+    # /we4062 treats missing enum cases as errors but allows default
+    target_compile_options(${NAME} PRIVATE /we4062)
 endif()

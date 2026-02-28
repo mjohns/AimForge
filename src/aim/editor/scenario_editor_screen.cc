@@ -172,20 +172,30 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::BeginTable("MainEditorColumns", 3, flags)) {
       // TODO: make each column default size to 1/3
       ImGui::TableNextColumn();
+      ImGui::BeginChild("FirstColumnContainer", ImVec2(0, 0));
+
       DrawDetailsEditor();
+      ImGui::SpacedSeparator();
+      DrawSecondaryScenarioTypeEditor(def_);
+
+      ImGui::EndChild();
 
       ImGui::TableNextColumn();
       ImGui::BeginChild("SecondColumnContainer", ImVec2(0, 0));
+
       std::string error_message;
       DrawScenarioTypeEditor(
           def_, &app_, &error_message, &editing_room_, &reference_description_dialog_);
       if (error_message.size() > 0) {
         SetErrorMessage(error_message);
       }
+
       ImGui::EndChild();
 
       ImGui::TableNextColumn();
+      ImGui::BeginChild("ThirdColumnContainer", ImVec2(0, 0));
       DrawTargetEditor(def_);
+      ImGui::EndChild();
 
       ImGui::EndTable();
     }
@@ -294,6 +304,8 @@ class ScenarioEditorScreen : public UiScreen {
       bool no_op_editing_room = false;
       DrawScenarioTypeEditor(
           compare_def, /*app=*/nullptr, &error_message, &no_op_editing_room, nullptr);
+      ImGui::SpacedSeparator();
+      DrawSecondaryScenarioTypeEditor(compare_def);
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Targets")) {
@@ -395,8 +407,6 @@ class ScenarioEditorScreen : public UiScreen {
     if (ImGui::SelectableButton(icons::kMoreVert)) {
       ImGui::OpenPopup(advanced_menu_id);
     }
-
-    ImGui::SpacedSeparator();
   }
 
   // Returns whether the screen should close

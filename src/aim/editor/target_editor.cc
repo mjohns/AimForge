@@ -208,18 +208,10 @@ void DrawTargetEditor(ScenarioDef& def) {
 
   ImGui::SpacedSeparator();
 
-  ImGui::AlignTextToFramePadding();
-
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Newest target is ghost");
-  ImGui::SameLine();
-  bool is_ghost = t->newest_target_is_ghost();
-  ImGui::Checkbox("##IsGhost", &is_ghost);
-  t->set_newest_target_is_ghost(is_ghost);
+  ImGui::InputBool("Newest target is ghost",
+                   PROTO_BOOL_FIELD(TargetDef, t, newest_target_is_ghost));
   ImGui::SameLine();
   ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
-
-  ImGui::SpacedSeparator();
 
   ImGui::InputFloat(ImGui::InputFloatParams("NewTargetDelaySeconds")
                         .set_label("New target delay")
@@ -300,6 +292,7 @@ void DrawTargetEditor(ScenarioDef& def) {
   } else {
     t->clear_delayed_target_times();
   }
+  ImGui::SpacedSeparator();
 }
 
 }  // namespace aim

@@ -19,6 +19,7 @@ struct BoundsDimensions {
 };
 
 TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def);
+void SetTargetPlacementStrategy(const TargetPlacementStrategy& strat, ScenarioDef* def);
 
 ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label);
 

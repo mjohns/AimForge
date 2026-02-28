@@ -18,4 +18,8 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
                             bool* editing_room,
                             ImGui::MultilineTextEntryDialog* description_dialog);
 
+// Overflow information for the scenario type shown in the left panel. Should not
+// be the primary details for the scenario type.
+void DrawSecondaryScenarioTypeEditor(ScenarioDef& def);
+
 }  // namespace aim

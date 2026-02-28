@@ -214,6 +214,41 @@ TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
   return {};
 }
 
+void SetTargetPlacementStrategy(const TargetPlacementStrategy& strat, ScenarioDef* def) {
+  auto get_mutable = [&]() {
+    if (def->has_static_def()) {
+      return def->mutable_static_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_waypoint_def()) {
+      return def->mutable_waypoint_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_linear_def()) {
+      return def->mutable_linear_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_wall_wander_def()) {
+      return def->mutable_wall_wander_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_angle_strafe_def()) {
+      return def->mutable_angle_strafe_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_strafe_def()) {
+      return def->mutable_strafe_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_bounce_def()) {
+      return def->mutable_bounce_def()->mutable_target_placement_strategy();
+    }
+    if (def->has_barrel_def()) {
+      return def->mutable_barrel_def()->mutable_target_placement_strategy();
+    }
+    return (TargetPlacementStrategy*)nullptr;
+  };
+
+  TargetPlacementStrategy* mutable_strat = get_mutable();
+  if (mutable_strat != nullptr) {
+    *mutable_strat = strat;
+  }
+}
+
 void DrawRegionLengthEditor(const std::string& id,
                             RegionLength::TypeCase default_type,
                             RegionLength* length,

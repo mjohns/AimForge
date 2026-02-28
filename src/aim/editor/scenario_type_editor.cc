@@ -183,19 +183,6 @@ void DrawWallWanderEditor(WallWanderScenarioDef& d) {
   ImGui::Unindent();
 
   ImGui::SpacedSeparator();
-
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Initial target location");
-  bool has_location = d.has_target_placement_strategy();
-  ImGui::SameLine();
-  ImGui::Checkbox("##UseInitial", &has_location);
-  if (has_location) {
-    ImGui::Indent();
-    DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
-    ImGui::Unindent();
-  } else {
-    d.clear_target_placement_strategy();
-  }
 }
 
 void DrawLinearEditor(LinearScenarioDef& d) {
@@ -533,19 +520,6 @@ void DrawStrafeEditor(StrafeScenarioDef& d) {
 
   ImGui::SpacedSeparator();
 
-  bool use_target_placement = d.has_target_placement_strategy();
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Set initial target location");
-  ImGui::SameLine();
-  ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
-  if (use_target_placement) {
-    ImGui::Indent();
-    DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
-    ImGui::Unindent();
-  } else {
-    d.clear_target_placement_strategy();
-  }
-
   if (IsDefaultInstance(d.relative_bounds())) {
     d.clear_relative_bounds();
   }
@@ -653,19 +627,6 @@ void DrawBounceEditor(BounceScenarioDef& d) {
 
   ImGui::SpacedSeparator();
 
-  bool use_target_placement = d.has_target_placement_strategy();
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Set initial target location");
-  ImGui::SameLine();
-  ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
-  if (use_target_placement) {
-    ImGui::Indent();
-    DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
-    ImGui::Unindent();
-  } else {
-    d.clear_target_placement_strategy();
-  }
-
   if (IsDefaultInstance(d.bounds())) {
     d.clear_bounds();
   }
@@ -743,19 +704,6 @@ void DrawAngleStrafeEditor(AngleStrafeScenarioDef& w) {
   ImGui::Spacing();
 
   ImGui::SpacedSeparator();
-
-  bool use_target_placement = w.has_target_placement_strategy();
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Set initial target location");
-  ImGui::SameLine();
-  ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
-  if (use_target_placement) {
-    ImGui::Indent();
-    DrawTargetPlacementStrategyEditor("Placement", w.mutable_target_placement_strategy());
-    ImGui::Unindent();
-  } else {
-    w.clear_target_placement_strategy();
-  }
 }
 
 void DrawCenteringEditor(CenteringScenarioDef& c) {
@@ -1161,44 +1109,55 @@ void DrawReferenceEditor(ScenarioDef& def,
 
 void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_type) {
   auto target_placement = GetTargetPlacementStrategy(def);
-  if (scenario_type == ScenarioDef::kStaticDef) {
-    *def.mutable_static_def()->mutable_target_placement_strategy() = target_placement;
-  }
-  if (scenario_type == ScenarioDef::kWaypointDef) {
-    *def.mutable_waypoint_def()->mutable_target_placement_strategy() = target_placement;
-  }
-  if (scenario_type == ScenarioDef::kCenteringDef) {
-    def.mutable_centering_def();
-  }
-  if (scenario_type == ScenarioDef::kAngleStrafeDef) {
-    auto* angle_strafe = def.mutable_angle_strafe_def();
-    if (target_placement.regions_size() > 0) {
-      *angle_strafe->mutable_target_placement_strategy() = target_placement;
+  switch (scenario_type) {
+    case ScenarioDef::kStaticDef:
+      def.mutable_static_def();
+      break;
+    case ScenarioDef::kWaypointDef:
+      def.mutable_waypoint_def();
+    case ScenarioDef::kWallWanderDef:
+      def.mutable_wall_wander_def();
+      break;
+    case ScenarioDef::kCenteringDef:
+      def.mutable_centering_def();
+      break;
+    case ScenarioDef::kAngleStrafeDef:
+      def.mutable_angle_strafe_def();
+      break;
+    case ScenarioDef::kStrafeDef:
+      def.mutable_strafe_def();
+      break;
+    case ScenarioDef::kBounceDef:
+      def.mutable_bounce_def();
+      break;
+    case ScenarioDef::kLinearDef:
+      def.mutable_linear_def();
+      break;
+    case ScenarioDef::kBarrelDef: {
+      def.mutable_barrel_def();
+      if (!def.room().has_barrel_room()) {
+        *def.mutable_room() = GetDefaultBarrelRoom();
+      }
+      break;
     }
+    case ScenarioDef::kWallArcDef:
+      def.mutable_wall_arc_def();
+      break;
+    case ScenarioDef::kCircleDef:
+      def.mutable_circle_def();
+      break;
+    case ScenarioDef::kSineDef:
+      def.mutable_sine_def();
+      break;
+    case ScenarioDef::kReferenceDef:
+      def.mutable_reference_def();
+      break;
+    case ScenarioDef::TYPE_NOT_SET:
+      break;
   }
-  if (scenario_type == ScenarioDef::kStrafeDef) {
-    auto* strafe = def.mutable_strafe_def();
-    if (target_placement.regions_size() > 0) {
-      *strafe->mutable_target_placement_strategy() = target_placement;
-    }
-  }
-  if (scenario_type == ScenarioDef::kBounceDef) {
-    auto* d = def.mutable_bounce_def();
-    if (target_placement.regions_size() > 0) {
-      *d->mutable_target_placement_strategy() = target_placement;
-    }
-  }
-  if (scenario_type == ScenarioDef::kLinearDef) {
-    *def.mutable_linear_def()->mutable_target_placement_strategy() = target_placement;
-  }
-  if (scenario_type == ScenarioDef::kBarrelDef) {
-    def.mutable_barrel_def();
-  }
-  if (scenario_type == ScenarioDef::kWallArcDef) {
-    def.mutable_wall_arc_def();
-  }
-  if (scenario_type == ScenarioDef::kReferenceDef) {
-    def.mutable_reference_def();
+
+  if (target_placement.regions_size() > 0) {
+    SetTargetPlacementStrategy(target_placement, &def);
   }
 }
 
@@ -1280,6 +1239,48 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
   }
   if (scenario_type == ScenarioDef::kSineDef) {
     DrawSineEditor(*def.mutable_sine_def());
+  }
+}
+
+void DrawSecondaryScenarioTypeEditor(ScenarioDef& def) {
+  std::optional<PtrField<TargetPlacementStrategy>> strat;
+  if (def.has_strafe_def()) {
+    strat = PROTO_PTR_FIELD(TargetPlacementStrategy,
+                            StrafeScenarioDef,
+                            def.mutable_strafe_def(),
+                            target_placement_strategy);
+  } else if (def.has_bounce_def()) {
+    strat = PROTO_PTR_FIELD(TargetPlacementStrategy,
+                            BounceScenarioDef,
+                            def.mutable_bounce_def(),
+                            target_placement_strategy);
+  } else if (def.has_wall_wander_def()) {
+    strat = PROTO_PTR_FIELD(TargetPlacementStrategy,
+                            WallWanderScenarioDef,
+                            def.mutable_wall_wander_def(),
+                            target_placement_strategy);
+  } else if (def.has_angle_strafe_def()) {
+    strat = PROTO_PTR_FIELD(TargetPlacementStrategy,
+                            AngleStrafeScenarioDef,
+                            def.mutable_angle_strafe_def(),
+                            target_placement_strategy);
+  }
+
+  if (!strat.has_value()) {
+    return;
+  }
+
+  bool use_target_placement = strat->has();
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Set initial target location");
+  ImGui::SameLine();
+  bool changed = ImGui::Checkbox("##UseTargetPlacement", &use_target_placement);
+  if (use_target_placement) {
+    ImGui::Indent();
+    DrawTargetPlacementStrategyEditor("Placement", strat->get_mutable());
+    ImGui::Unindent();
+  } else if (changed) {
+    strat->clear();
   }
 }
 
