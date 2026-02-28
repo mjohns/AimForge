@@ -30,17 +30,17 @@ void BaseScenario::Initialize() {
   for (int i = 0; i < num_targets_to_add_immediately; ++i) {
     float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
     if (stagger_seconds > 0) {
-      RunAfterSeconds(i * stagger_seconds, [=]() { AddNewTargetDuringRun(0); });
+      RunAfterSeconds(i * stagger_seconds, [=]() { AddNewTarget(0, true); });
     } else {
-      AddNewTargetDuringRun(0);
+      AddNewTarget(0, true);
     }
   }
 
   for (float delay : t.delayed_target_times()) {
     if (delay > 0) {
-      RunAfterSeconds(delay, [=]() { AddNewTargetDuringRun(0); });
+      RunAfterSeconds(delay, [=]() { AddNewTarget(0, true); });
     } else {
-      AddNewTargetDuringRun(0);
+      AddNewTarget(0, true);
     }
   }
 }
@@ -91,7 +91,7 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     if (target != nullptr && ShouldCountPartialKills()) {
       stats_.num_hits += GetPartialHitValue(*target);
     }
-    AddNewTargetDuringRun(target_id);
+    AddNewTarget(target_id);
   }
 
   UpdateTargetPositions();
@@ -203,7 +203,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
               PlayKillSound();
               target.kill_sound_played = true;
             }
-            AddNewTargetDuringRun(target.id);
+            AddNewTarget(target.id);
           }
         }
       }
@@ -302,7 +302,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           data->force_render = true;
 
           auto hit_target_id = *maybe_hit_target_id;
-          AddNewTargetDuringRun(hit_target_id);
+          AddNewTarget(hit_target_id);
 
           if (replay_) {
             replay_->AddMouseClick(timer_.GetElapsedMicros(), true);
@@ -361,7 +361,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
             PlayKillSound();
             data->force_render = true;
             auto hit_target_id = *maybe_hit_target_id;
-            AddNewTargetDuringRun(hit_target_id);
+            AddNewTarget(hit_target_id);
           }
         } else {
           stats_.num_hits++;
@@ -369,7 +369,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           PlayKillSound();
           data->force_render = true;
           auto hit_target_id = *maybe_hit_target_id;
-          AddNewTargetDuringRun(hit_target_id);
+          AddNewTarget(hit_target_id);
         }
 
       } else {
@@ -379,7 +379,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           std::optional<u16> target_id_to_remove =
               target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
           if (target_id_to_remove.has_value()) {
-            AddNewTargetDuringRun(*target_id_to_remove);
+            AddNewTarget(*target_id_to_remove);
           }
         }
       }
@@ -434,7 +434,7 @@ Target BaseScenario::GetNewTarget() {
   return t;
 }
 
-void BaseScenario::AddNewTargetDuringRun(u16 old_target_id) {
+void BaseScenario::AddNewTarget(u16 old_target_id, bool is_init) {
   if (old_target_id > 0) {
     AddRemoveTargetEvent(old_target_id);
     target_manager_.RemoveTarget(old_target_id);
@@ -446,7 +446,7 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id) {
     target.is_ghost = true;
   }
 
-  if (def_.target_def().new_target_delay_seconds() > 0) {
+  if (!is_init && def_.target_def().new_target_delay_seconds() > 0) {
     RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
       Target new_target = target;
       if (new_target.growth_info) {
@@ -455,6 +455,10 @@ void BaseScenario::AddNewTargetDuringRun(u16 old_target_id) {
       if (def_.target_def().remove_target_after_seconds() > 0) {
         new_target.remove_after_time_seconds =
             timer_.GetElapsedSeconds() + def_.target_def().remove_target_after_seconds();
+      }
+      // Make sure to remark at the time the target is getting added too.
+      if (def_.target_def().newest_target_is_ghost()) {
+        target_manager_.MarkAllAsNonGhost();
       }
       new_target = target_manager_.AddTarget(new_target);
       AddNewTargetEvent(new_target);

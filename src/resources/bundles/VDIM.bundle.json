@@ -3174,155 +3174,22 @@
   {
    "name": "VT 1w3ts Intermediate S5 Hard",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
+    "overrides": {
+     "targetRadiusMultiplier": 0.8
     },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "targetRadius": 1.38
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 180,
-      "width": 200
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.96
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.7
-         },
-         "yDiameter": {
-          "yPercentValue": 0.41
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.71
-         },
-         "yLength": {
-          "yPercentValue": 0.649999917
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 20
-      }
-     }
+    "referenceDef": {
+     "scenarioName": "VDIM VT 1w3ts Intermediate S5"
     }
    }
   },
   {
    "name": "VT 1w3ts Intermediate S5 Pokeball",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "poke": true
-    },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "targetRadius": 1.45
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 180,
-      "width": 200
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.96
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.7
-         },
-         "yDiameter": {
-          "yPercentValue": 0.41
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.71
-         },
-         "yLength": {
-          "yPercentValue": 0.649999917
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 20
-      }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "VDIM VT 1w3ts Intermediate S5",
+     "shotType": {
+      "poke": true
      }
     }
    }
@@ -3330,78 +3197,11 @@
   {
    "name": "VT 1w3ts Intermediate S5 Speed",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
+    "overrides": {
+     "targetRadiusMultiplier": 1.5
     },
-    "targetDef": {
-     "numTargets": 3,
-     "profiles": [
-      {
-       "targetRadius": 2.7
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 180,
-      "width": 200
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.96
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.7
-         },
-         "yDiameter": {
-          "yPercentValue": 0.41
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.71
-         },
-         "yLength": {
-          "yPercentValue": 0.649999917
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 20
-      }
-     }
+    "referenceDef": {
+     "scenarioName": "VDIM VT 1w3ts Intermediate S5"
     }
    }
   },
@@ -11271,80 +11071,11 @@
   {
    "name": "VT ww5t Intermediate S5 Pokeball",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "poke": true,
-     "pokeKillTimeSeconds": 0.08
-    },
-    "targetDef": {
-     "numTargets": 5,
-     "profiles": [
-      {
-       "targetRadius": 2.8
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 250,
-      "radius": 200,
-      "width": 390,
-      "sideAngleDegrees": 14
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.96
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.73
-         },
-         "yDiameter": {
-          "yPercentValue": 0.4
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.66
-         },
-         "yLength": {
-          "yPercentValue": 0.460000128
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 27
-      }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "VDIM VT ww5t Intermediate S5",
+     "shotType": {
+      "poke": true
      }
     }
    }

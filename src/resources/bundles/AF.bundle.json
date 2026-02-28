@@ -804,6 +804,119 @@
    }
   },
   {
+   "name": "AlternateClick WideTall",
+   "def": {
+    "description": "Wide alternate click where the vertical spread is larger",
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 1.8,
+       "speedJitter": 0
+      }
+     ],
+     "newestTargetIsGhost": true
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 125,
+      "width": 220
+     }
+    },
+    "overrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.95
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "Right"
+        },
+        "xOffset": {
+         "xPercentValue": 0.4
+        },
+        "yOffset": {
+         "value": 0
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.08
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "Left"
+        },
+        "xOffset": {
+         "xPercentValue": -0.4
+        },
+        "yOffset": {
+         "value": 0
+        },
+        "depth": {
+         "value": 0
+        },
+        "depthJitter": {
+         "value": 0
+        },
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.08
+         },
+         "yLength": {
+          "yPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      },
+      "minDistance": {
+       "value": 20
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "AlternateClick WideTall Poke",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF AlternateClick WideTall",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
    "name": "BarrelClick",
    "def": {
     "durationSeconds": 60,
