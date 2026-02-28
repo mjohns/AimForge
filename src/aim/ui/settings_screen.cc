@@ -222,12 +222,11 @@ class SettingsScreen : public UiScreen {
 
       ImGui::SpacedSeparator();
 
-      ImGui::InputBool(
-          ImGui::InputBoolParams("DisablePerScenarioSettings")
-              .set_label("Disable per scenario settings"),
-          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
+      ImGui::InputBool("Save settings per scenario",
+                       InvertBoolField(PROTO_BOOL_FIELD(
+                           Settings, &updater_.settings, disable_per_scenario_settings)));
 
-      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+      ImGui::InputBool("Auto hold tracking",
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
 
       ImGui::SpacedSeparator();

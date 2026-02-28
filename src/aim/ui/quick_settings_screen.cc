@@ -170,16 +170,15 @@ class QuickSettingsScreen : public UiScreen {
                             crosshair_names_,
                             char_size.x * 18);
 
-      ImGui::InputBool(ImGui::InputBoolParams("AutoHoldTracking").set_label("Auto hold tracking"),
+      ImGui::InputBool("Auto hold tracking",
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, auto_hold_tracking));
       ImGui::InputBool(
-          ImGui::InputBoolParams("ShowHealthBars").set_label("Show health bars"),
+          "Show health bars",
           PROTO_BOOL_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), show));
 
-      ImGui::InputBool(
-          ImGui::InputBoolParams("DisablePerScenarioSettings")
-              .set_label("Disable per scenario settings"),
-          PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_per_scenario_settings));
+      ImGui::InputBool("Save settings per scenario",
+                       InvertBoolField(PROTO_BOOL_FIELD(
+                           Settings, &updater_.settings, disable_per_scenario_settings)));
     }
 
     if (type_ == QuickSettingsType::METRONOME) {
