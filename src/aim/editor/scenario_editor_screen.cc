@@ -138,7 +138,7 @@ class ScenarioEditorScreen : public UiScreen {
       PopSelf();
     }
 
-    if (ImGui::Button(icons::kPlayCircle)) {
+    if (ImGui::Button(icons::kPlayArrow)) {
       PlayScenario();
     }
     ImGui::HelpTooltip("Try playing the edited version of the scenario.");
@@ -356,37 +356,47 @@ class ScenarioEditorScreen : public UiScreen {
       editing_room_ = true;
     }
 
+    ImGui::SameLine();
     if (ImGui::Button(std::format("{} Description", icons::kEdit))) {
       description_dialog_.NotifyOpen(def_.description());
     }
 
-    ImGui::SpacedSeparator();
-
-    if (!is_new_scenario_) {
-      if (ImGui::Button("Make changes in new copy")) {
-        is_new_scenario_ = true;
-        MakeRelativeNameUniqueInBundle();
+    const char* advanced_menu_id = "advanced_menu";
+    if (ImGui::BeginPopupContextItem(advanced_menu_id)) {
+      if (!is_new_scenario_) {
+        if (ImGui::Selectable("Make new copy")) {
+          is_new_scenario_ = true;
+          MakeRelativeNameUniqueInBundle();
+        }
+        ImGui::SameLine();
+        ImGui::HelpMarker(
+            "Save the current changes in a new copy of the scenario leaving the original "
+            "unchanged.");
       }
-      ImGui::HelpTooltip(
-          "Save the current changes in a new copy of the scenario leaving the original "
-          "unchanged.");
-    }
 
-    if (ImGui::Button("Import Json")) {
-      import_from_json_dialog_.NotifyOpen("");
-    }
+      if (ImGui::Selectable("Import Json")) {
+        import_from_json_dialog_.NotifyOpen("");
+      }
 
-    if (ImGui::Button("View Json")) {
-      SetErrorMessage(MessageToJson(def_));
-    }
+      if (ImGui::Selectable("View Json")) {
+        SetErrorMessage(MessageToJson(def_));
+      }
 
-    if (ImGui::Button("Compare")) {
-      comparison_window_open_ = !comparison_window_open_;
+      if (ImGui::Selectable("Compare")) {
+        comparison_window_open_ = !comparison_window_open_;
+      }
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Open a window displaying values from another scenario. Useful if you want to copy the "
+          "strafe patterns from another scenario.");
+      ImGui::EndPopup();
     }
     ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Open a window displaying values from another scenario. Useful if you want to copy the "
-        "strafe patterns from another scenario.");
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
+      ImGui::OpenPopup(advanced_menu_id);
+    }
+
+    ImGui::SpacedSeparator();
   }
 
   // Returns whether the screen should close
