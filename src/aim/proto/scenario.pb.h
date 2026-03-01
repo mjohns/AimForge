@@ -137,6 +137,10 @@ class RegionVec2;
 struct RegionVec2DefaultTypeInternal;
 extern RegionVec2DefaultTypeInternal _RegionVec2_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull RegionVec2_class_data_;
+class ReloadInfo;
+struct ReloadInfoDefaultTypeInternal;
+extern ReloadInfoDefaultTypeInternal _ReloadInfo_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull ReloadInfo_class_data_;
 class Room;
 struct RoomDefaultTypeInternal;
 extern RoomDefaultTypeInternal _Room_default_instance_;
@@ -481,401 +485,6 @@ class SimpleRoom final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull SimpleRoom_class_data_;
 // -------------------------------------------------------------------
 
-class ShotType final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.ShotType) */ {
- public:
-  inline ShotType() : ShotType(nullptr) {}
-  ~ShotType() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(ShotType* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(ShotType));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR ShotType(::google::protobuf::internal::ConstantInitialized);
-
-  inline ShotType(const ShotType& from) : ShotType(nullptr, from) {}
-  inline ShotType(ShotType&& from) noexcept
-      : ShotType(nullptr, ::std::move(from)) {}
-  inline ShotType& operator=(const ShotType& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ShotType& operator=(ShotType&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ShotType& default_instance() {
-    return *reinterpret_cast<const ShotType*>(
-        &_ShotType_default_instance_);
-  }
-  enum TypeCase {
-    kPoke = 1,
-    kTrackingKill = 2,
-    kTrackingInvincible = 3,
-    kClickSingle = 4,
-    kClickMulti = 5,
-    kTrackingProximity = 6,
-    TYPE_NOT_SET = 0,
-  };
-  static constexpr int kIndexInFileMessages = 12;
-  friend void swap(ShotType& a, ShotType& b) { a.Swap(&b); }
-  inline void Swap(ShotType* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ShotType* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ShotType* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<ShotType>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const ShotType& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const ShotType& from) { ShotType::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
-                        const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(ShotType* PROTOBUF_NONNULL other);
- private:
-  template <typename T>
-  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.ShotType"; }
-
-  explicit ShotType(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  ShotType(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ShotType& from);
-  ShotType(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, ShotType&& from) noexcept
-      : ShotType(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
-  static void* PROTOBUF_NONNULL PlacementNew_(
-      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static constexpr auto InternalNewImpl_();
-
- public:
-  static constexpr auto InternalGenerateClassData_();
-
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kPokeKillTimeSecondsFieldNumber = 10,
-    kHealthSecondsFieldNumber = 12,
-    kHealthRegenRateFieldNumber = 13,
-    kRemoveIfBelowHealthSecondsFieldNumber = 14,
-    kNoPartialKillsFieldNumber = 11,
-    kRemoveClosestOnMissFieldNumber = 19,
-    kHealthClicksFieldNumber = 16,
-    kClickRateSecondsFieldNumber = 17,
-    kAccuracyPenaltyMultiplierFieldNumber = 18,
-    kPokeFieldNumber = 1,
-    kTrackingKillFieldNumber = 2,
-    kTrackingInvincibleFieldNumber = 3,
-    kClickSingleFieldNumber = 4,
-    kClickMultiFieldNumber = 5,
-    kTrackingProximityFieldNumber = 6,
-  };
-  // float poke_kill_time_seconds = 10;
-  bool has_poke_kill_time_seconds() const;
-  void clear_poke_kill_time_seconds() ;
-  float poke_kill_time_seconds() const;
-  void set_poke_kill_time_seconds(float value);
-
-  private:
-  float _internal_poke_kill_time_seconds() const;
-  void _internal_set_poke_kill_time_seconds(float value);
-
-  public:
-  // float health_seconds = 12;
-  bool has_health_seconds() const;
-  void clear_health_seconds() ;
-  float health_seconds() const;
-  void set_health_seconds(float value);
-
-  private:
-  float _internal_health_seconds() const;
-  void _internal_set_health_seconds(float value);
-
-  public:
-  // float health_regen_rate = 13;
-  bool has_health_regen_rate() const;
-  void clear_health_regen_rate() ;
-  float health_regen_rate() const;
-  void set_health_regen_rate(float value);
-
-  private:
-  float _internal_health_regen_rate() const;
-  void _internal_set_health_regen_rate(float value);
-
-  public:
-  // float remove_if_below_health_seconds = 14;
-  bool has_remove_if_below_health_seconds() const;
-  void clear_remove_if_below_health_seconds() ;
-  float remove_if_below_health_seconds() const;
-  void set_remove_if_below_health_seconds(float value);
-
-  private:
-  float _internal_remove_if_below_health_seconds() const;
-  void _internal_set_remove_if_below_health_seconds(float value);
-
-  public:
-  // bool no_partial_kills = 11 [features = {
-  void clear_no_partial_kills() ;
-  bool no_partial_kills() const;
-  void set_no_partial_kills(bool value);
-
-  private:
-  bool _internal_no_partial_kills() const;
-  void _internal_set_no_partial_kills(bool value);
-
-  public:
-  // bool remove_closest_on_miss = 19 [features = {
-  void clear_remove_closest_on_miss() ;
-  bool remove_closest_on_miss() const;
-  void set_remove_closest_on_miss(bool value);
-
-  private:
-  bool _internal_remove_closest_on_miss() const;
-  void _internal_set_remove_closest_on_miss(bool value);
-
-  public:
-  // int32 health_clicks = 16;
-  bool has_health_clicks() const;
-  void clear_health_clicks() ;
-  ::int32_t health_clicks() const;
-  void set_health_clicks(::int32_t value);
-
-  private:
-  ::int32_t _internal_health_clicks() const;
-  void _internal_set_health_clicks(::int32_t value);
-
-  public:
-  // float click_rate_seconds = 17;
-  bool has_click_rate_seconds() const;
-  void clear_click_rate_seconds() ;
-  float click_rate_seconds() const;
-  void set_click_rate_seconds(float value);
-
-  private:
-  float _internal_click_rate_seconds() const;
-  void _internal_set_click_rate_seconds(float value);
-
-  public:
-  // float accuracy_penalty_multiplier = 18;
-  bool has_accuracy_penalty_multiplier() const;
-  void clear_accuracy_penalty_multiplier() ;
-  float accuracy_penalty_multiplier() const;
-  void set_accuracy_penalty_multiplier(float value);
-
-  private:
-  float _internal_accuracy_penalty_multiplier() const;
-  void _internal_set_accuracy_penalty_multiplier(float value);
-
-  public:
-  // bool poke = 1;
-  bool has_poke() const;
-  void clear_poke() ;
-  bool poke() const;
-  void set_poke(bool value);
-
-  private:
-  bool _internal_poke() const;
-  void _internal_set_poke(bool value);
-
-  public:
-  // bool tracking_kill = 2;
-  bool has_tracking_kill() const;
-  void clear_tracking_kill() ;
-  bool tracking_kill() const;
-  void set_tracking_kill(bool value);
-
-  private:
-  bool _internal_tracking_kill() const;
-  void _internal_set_tracking_kill(bool value);
-
-  public:
-  // bool tracking_invincible = 3;
-  bool has_tracking_invincible() const;
-  void clear_tracking_invincible() ;
-  bool tracking_invincible() const;
-  void set_tracking_invincible(bool value);
-
-  private:
-  bool _internal_tracking_invincible() const;
-  void _internal_set_tracking_invincible(bool value);
-
-  public:
-  // bool click_single = 4;
-  bool has_click_single() const;
-  void clear_click_single() ;
-  bool click_single() const;
-  void set_click_single(bool value);
-
-  private:
-  bool _internal_click_single() const;
-  void _internal_set_click_single(bool value);
-
-  public:
-  // bool click_multi = 5;
-  bool has_click_multi() const;
-  void clear_click_multi() ;
-  bool click_multi() const;
-  void set_click_multi(bool value);
-
-  private:
-  bool _internal_click_multi() const;
-  void _internal_set_click_multi(bool value);
-
-  public:
-  // bool tracking_proximity = 6;
-  bool has_tracking_proximity() const;
-  void clear_tracking_proximity() ;
-  bool tracking_proximity() const;
-  void set_tracking_proximity(bool value);
-
-  private:
-  bool _internal_tracking_proximity() const;
-  void _internal_set_tracking_proximity(bool value);
-
-  public:
-  void clear_type();
-  TypeCase type_case() const;
-  // @@protoc_insertion_point(class_scope:aim.ShotType)
- private:
-  class _Internal;
-  void set_has_poke();
-  void set_has_tracking_kill();
-  void set_has_tracking_invincible();
-  void set_has_click_single();
-  void set_has_click_multi();
-  void set_has_tracking_proximity();
-  inline bool has_type() const;
-  inline void clear_has_type();
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
-                                   0, 0,
-                                   2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const ShotType& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    float poke_kill_time_seconds_;
-    float health_seconds_;
-    float health_regen_rate_;
-    float remove_if_below_health_seconds_;
-    bool no_partial_kills_;
-    bool remove_closest_on_miss_;
-    ::int32_t health_clicks_;
-    float click_rate_seconds_;
-    float accuracy_penalty_multiplier_;
-    union TypeUnion {
-      constexpr TypeUnion() : _constinit_{} {}
-      ::google::protobuf::internal::ConstantInitialized _constinit_;
-      bool poke_;
-      bool tracking_kill_;
-      bool tracking_invincible_;
-      bool click_single_;
-      bool click_multi_;
-      bool tracking_proximity_;
-    } type_;
-    ::uint32_t _oneof_case_[1];
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-
-extern const ::google::protobuf::internal::ClassDataFull ShotType_class_data_;
-// -------------------------------------------------------------------
-
 class ScoreTargets final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.ScoreTargets) */ {
  public:
@@ -931,7 +540,7 @@ class ScoreTargets final : public ::google::protobuf::Message
     return *reinterpret_cast<const ScoreTargets*>(
         &_ScoreTargets_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 13;
+  static constexpr int kIndexInFileMessages = 14;
   friend void swap(ScoreTargets& a, ScoreTargets& b) { a.Swap(&b); }
   inline void Swap(ScoreTargets* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1349,6 +958,223 @@ class ScenarioOverrides final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull ScenarioOverrides_class_data_;
 // -------------------------------------------------------------------
 
+class ReloadInfo final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ReloadInfo) */ {
+ public:
+  inline ReloadInfo() : ReloadInfo(nullptr) {}
+  ~ReloadInfo() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ReloadInfo* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ReloadInfo));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ReloadInfo(::google::protobuf::internal::ConstantInitialized);
+
+  inline ReloadInfo(const ReloadInfo& from) : ReloadInfo(nullptr, from) {}
+  inline ReloadInfo(ReloadInfo&& from) noexcept
+      : ReloadInfo(nullptr, ::std::move(from)) {}
+  inline ReloadInfo& operator=(const ReloadInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReloadInfo& operator=(ReloadInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReloadInfo& default_instance() {
+    return *reinterpret_cast<const ReloadInfo*>(
+        &_ReloadInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 12;
+  friend void swap(ReloadInfo& a, ReloadInfo& b) { a.Swap(&b); }
+  inline void Swap(ReloadInfo* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReloadInfo* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReloadInfo* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ReloadInfo>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ReloadInfo& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ReloadInfo& from) { ReloadInfo::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ReloadInfo* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ReloadInfo"; }
+
+  explicit ReloadInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  ReloadInfo(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ReloadInfo& from);
+  ReloadInfo(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, ReloadInfo&& from) noexcept
+      : ReloadInfo(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kMaxShotsFieldNumber = 1,
+    kNumToReloadOnHitFieldNumber = 2,
+    kReloadTimeFieldNumber = 3,
+  };
+  // int32 max_shots = 1;
+  bool has_max_shots() const;
+  void clear_max_shots() ;
+  ::int32_t max_shots() const;
+  void set_max_shots(::int32_t value);
+
+  private:
+  ::int32_t _internal_max_shots() const;
+  void _internal_set_max_shots(::int32_t value);
+
+  public:
+  // int32 num_to_reload_on_hit = 2;
+  bool has_num_to_reload_on_hit() const;
+  void clear_num_to_reload_on_hit() ;
+  ::int32_t num_to_reload_on_hit() const;
+  void set_num_to_reload_on_hit(::int32_t value);
+
+  private:
+  ::int32_t _internal_num_to_reload_on_hit() const;
+  void _internal_set_num_to_reload_on_hit(::int32_t value);
+
+  public:
+  // float reload_time = 3;
+  bool has_reload_time() const;
+  void clear_reload_time() ;
+  float reload_time() const;
+  void set_reload_time(float value);
+
+  private:
+  float _internal_reload_time() const;
+  void _internal_set_reload_time(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.ReloadInfo)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
+                                   0, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const ReloadInfo& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::int32_t max_shots_;
+    ::int32_t num_to_reload_on_hit_;
+    float reload_time_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull ReloadInfo_class_data_;
+// -------------------------------------------------------------------
+
 class RegionLength final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.RegionLength) */ {
  public:
@@ -1653,7 +1479,7 @@ class ProfileListInfo final : public ::google::protobuf::Message
     return *reinterpret_cast<const ProfileListInfo*>(
         &_ProfileListInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 24;
+  static constexpr int kIndexInFileMessages = 25;
   friend void swap(ProfileListInfo& a, ProfileListInfo& b) { a.Swap(&b); }
   inline void Swap(ProfileListInfo* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1873,7 +1699,7 @@ class ProfileInfo final : public ::google::protobuf::Message
     return *reinterpret_cast<const ProfileInfo*>(
         &_ProfileInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 23;
+  static constexpr int kIndexInFileMessages = 24;
   friend void swap(ProfileInfo& a, ProfileInfo& b) { a.Swap(&b); }
   inline void Swap(ProfileInfo* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2107,7 +1933,7 @@ class PillTargetDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const PillTargetDef*>(
         &_PillTargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 36;
+  static constexpr int kIndexInFileMessages = 37;
   friend void swap(PillTargetDef& a, PillTargetDef& b) { a.Swap(&b); }
   inline void Swap(PillTargetDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2745,7 +2571,7 @@ class WallWanderProfile final : public ::google::protobuf::Message
     return *reinterpret_cast<const WallWanderProfile*>(
         &_WallWanderProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 33;
+  static constexpr int kIndexInFileMessages = 34;
   friend void swap(WallWanderProfile& a, WallWanderProfile& b) { a.Swap(&b); }
   inline void Swap(WallWanderProfile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -2992,7 +2818,7 @@ class WallArcScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const WallArcScenarioDef*>(
         &_WallArcScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 32;
+  static constexpr int kIndexInFileMessages = 33;
   friend void swap(WallArcScenarioDef& a, WallArcScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallArcScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3249,7 +3075,7 @@ class TargetProfile final : public ::google::protobuf::Message
     kPill = 10,
     TYPE_NOT_SET = 0,
   };
-  static constexpr int kIndexInFileMessages = 37;
+  static constexpr int kIndexInFileMessages = 38;
   friend void swap(TargetProfile& a, TargetProfile& b) { a.Swap(&b); }
   inline void Swap(TargetProfile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3605,7 +3431,7 @@ class StrafeProfile final : public ::google::protobuf::Message
     return *reinterpret_cast<const StrafeProfile*>(
         &_StrafeProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 28;
+  static constexpr int kIndexInFileMessages = 29;
   friend void swap(StrafeProfile& a, StrafeProfile& b) { a.Swap(&b); }
   inline void Swap(StrafeProfile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -3990,7 +3816,7 @@ class SineScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const SineScenarioDef*>(
         &_SineScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 22;
+  static constexpr int kIndexInFileMessages = 23;
   friend void swap(SineScenarioDef& a, SineScenarioDef& b) { a.Swap(&b); }
   inline void Swap(SineScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -4157,6 +3983,418 @@ class SineScenarioDef final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull SineScenarioDef_class_data_;
+// -------------------------------------------------------------------
+
+class ShotType final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ShotType) */ {
+ public:
+  inline ShotType() : ShotType(nullptr) {}
+  ~ShotType() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ShotType* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ShotType));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ShotType(::google::protobuf::internal::ConstantInitialized);
+
+  inline ShotType(const ShotType& from) : ShotType(nullptr, from) {}
+  inline ShotType(ShotType&& from) noexcept
+      : ShotType(nullptr, ::std::move(from)) {}
+  inline ShotType& operator=(const ShotType& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ShotType& operator=(ShotType&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ShotType& default_instance() {
+    return *reinterpret_cast<const ShotType*>(
+        &_ShotType_default_instance_);
+  }
+  enum TypeCase {
+    kPoke = 1,
+    kTrackingKill = 2,
+    kTrackingInvincible = 3,
+    kClickSingle = 4,
+    kClickMulti = 5,
+    kTrackingProximity = 6,
+    TYPE_NOT_SET = 0,
+  };
+  static constexpr int kIndexInFileMessages = 13;
+  friend void swap(ShotType& a, ShotType& b) { a.Swap(&b); }
+  inline void Swap(ShotType* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ShotType* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ShotType* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ShotType>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ShotType& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ShotType& from) { ShotType::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ShotType* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ShotType"; }
+
+  explicit ShotType(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  ShotType(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ShotType& from);
+  ShotType(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, ShotType&& from) noexcept
+      : ShotType(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kReloadFieldNumber = 20,
+    kPokeKillTimeSecondsFieldNumber = 10,
+    kHealthSecondsFieldNumber = 12,
+    kHealthRegenRateFieldNumber = 13,
+    kRemoveIfBelowHealthSecondsFieldNumber = 14,
+    kNoPartialKillsFieldNumber = 11,
+    kRemoveClosestOnMissFieldNumber = 19,
+    kHealthClicksFieldNumber = 16,
+    kClickRateSecondsFieldNumber = 17,
+    kAccuracyPenaltyMultiplierFieldNumber = 18,
+    kPokeFieldNumber = 1,
+    kTrackingKillFieldNumber = 2,
+    kTrackingInvincibleFieldNumber = 3,
+    kClickSingleFieldNumber = 4,
+    kClickMultiFieldNumber = 5,
+    kTrackingProximityFieldNumber = 6,
+  };
+  // .aim.ReloadInfo reload = 20;
+  bool has_reload() const;
+  void clear_reload() ;
+  const ::aim::ReloadInfo& reload() const;
+  [[nodiscard]] ::aim::ReloadInfo* PROTOBUF_NULLABLE release_reload();
+  ::aim::ReloadInfo* PROTOBUF_NONNULL mutable_reload();
+  void set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE value);
+  ::aim::ReloadInfo* PROTOBUF_NULLABLE unsafe_arena_release_reload();
+
+  private:
+  const ::aim::ReloadInfo& _internal_reload() const;
+  ::aim::ReloadInfo* PROTOBUF_NONNULL _internal_mutable_reload();
+
+  public:
+  // float poke_kill_time_seconds = 10;
+  bool has_poke_kill_time_seconds() const;
+  void clear_poke_kill_time_seconds() ;
+  float poke_kill_time_seconds() const;
+  void set_poke_kill_time_seconds(float value);
+
+  private:
+  float _internal_poke_kill_time_seconds() const;
+  void _internal_set_poke_kill_time_seconds(float value);
+
+  public:
+  // float health_seconds = 12;
+  bool has_health_seconds() const;
+  void clear_health_seconds() ;
+  float health_seconds() const;
+  void set_health_seconds(float value);
+
+  private:
+  float _internal_health_seconds() const;
+  void _internal_set_health_seconds(float value);
+
+  public:
+  // float health_regen_rate = 13;
+  bool has_health_regen_rate() const;
+  void clear_health_regen_rate() ;
+  float health_regen_rate() const;
+  void set_health_regen_rate(float value);
+
+  private:
+  float _internal_health_regen_rate() const;
+  void _internal_set_health_regen_rate(float value);
+
+  public:
+  // float remove_if_below_health_seconds = 14;
+  bool has_remove_if_below_health_seconds() const;
+  void clear_remove_if_below_health_seconds() ;
+  float remove_if_below_health_seconds() const;
+  void set_remove_if_below_health_seconds(float value);
+
+  private:
+  float _internal_remove_if_below_health_seconds() const;
+  void _internal_set_remove_if_below_health_seconds(float value);
+
+  public:
+  // bool no_partial_kills = 11 [features = {
+  void clear_no_partial_kills() ;
+  bool no_partial_kills() const;
+  void set_no_partial_kills(bool value);
+
+  private:
+  bool _internal_no_partial_kills() const;
+  void _internal_set_no_partial_kills(bool value);
+
+  public:
+  // bool remove_closest_on_miss = 19 [features = {
+  void clear_remove_closest_on_miss() ;
+  bool remove_closest_on_miss() const;
+  void set_remove_closest_on_miss(bool value);
+
+  private:
+  bool _internal_remove_closest_on_miss() const;
+  void _internal_set_remove_closest_on_miss(bool value);
+
+  public:
+  // int32 health_clicks = 16;
+  bool has_health_clicks() const;
+  void clear_health_clicks() ;
+  ::int32_t health_clicks() const;
+  void set_health_clicks(::int32_t value);
+
+  private:
+  ::int32_t _internal_health_clicks() const;
+  void _internal_set_health_clicks(::int32_t value);
+
+  public:
+  // float click_rate_seconds = 17;
+  bool has_click_rate_seconds() const;
+  void clear_click_rate_seconds() ;
+  float click_rate_seconds() const;
+  void set_click_rate_seconds(float value);
+
+  private:
+  float _internal_click_rate_seconds() const;
+  void _internal_set_click_rate_seconds(float value);
+
+  public:
+  // float accuracy_penalty_multiplier = 18;
+  bool has_accuracy_penalty_multiplier() const;
+  void clear_accuracy_penalty_multiplier() ;
+  float accuracy_penalty_multiplier() const;
+  void set_accuracy_penalty_multiplier(float value);
+
+  private:
+  float _internal_accuracy_penalty_multiplier() const;
+  void _internal_set_accuracy_penalty_multiplier(float value);
+
+  public:
+  // bool poke = 1;
+  bool has_poke() const;
+  void clear_poke() ;
+  bool poke() const;
+  void set_poke(bool value);
+
+  private:
+  bool _internal_poke() const;
+  void _internal_set_poke(bool value);
+
+  public:
+  // bool tracking_kill = 2;
+  bool has_tracking_kill() const;
+  void clear_tracking_kill() ;
+  bool tracking_kill() const;
+  void set_tracking_kill(bool value);
+
+  private:
+  bool _internal_tracking_kill() const;
+  void _internal_set_tracking_kill(bool value);
+
+  public:
+  // bool tracking_invincible = 3;
+  bool has_tracking_invincible() const;
+  void clear_tracking_invincible() ;
+  bool tracking_invincible() const;
+  void set_tracking_invincible(bool value);
+
+  private:
+  bool _internal_tracking_invincible() const;
+  void _internal_set_tracking_invincible(bool value);
+
+  public:
+  // bool click_single = 4;
+  bool has_click_single() const;
+  void clear_click_single() ;
+  bool click_single() const;
+  void set_click_single(bool value);
+
+  private:
+  bool _internal_click_single() const;
+  void _internal_set_click_single(bool value);
+
+  public:
+  // bool click_multi = 5;
+  bool has_click_multi() const;
+  void clear_click_multi() ;
+  bool click_multi() const;
+  void set_click_multi(bool value);
+
+  private:
+  bool _internal_click_multi() const;
+  void _internal_set_click_multi(bool value);
+
+  public:
+  // bool tracking_proximity = 6;
+  bool has_tracking_proximity() const;
+  void clear_tracking_proximity() ;
+  bool tracking_proximity() const;
+  void set_tracking_proximity(bool value);
+
+  private:
+  bool _internal_tracking_proximity() const;
+  void _internal_set_tracking_proximity(bool value);
+
+  public:
+  void clear_type();
+  TypeCase type_case() const;
+  // @@protoc_insertion_point(class_scope:aim.ShotType)
+ private:
+  class _Internal;
+  void set_has_poke();
+  void set_has_tracking_kill();
+  void set_has_tracking_invincible();
+  void set_has_click_single();
+  void set_has_click_multi();
+  void set_has_tracking_proximity();
+  inline bool has_type() const;
+  inline void clear_has_type();
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<4, 16,
+                                   1, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const ShotType& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::aim::ReloadInfo* PROTOBUF_NULLABLE reload_;
+    float poke_kill_time_seconds_;
+    float health_seconds_;
+    float health_regen_rate_;
+    float remove_if_below_health_seconds_;
+    bool no_partial_kills_;
+    bool remove_closest_on_miss_;
+    ::int32_t health_clicks_;
+    float click_rate_seconds_;
+    float accuracy_penalty_multiplier_;
+    union TypeUnion {
+      constexpr TypeUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      bool poke_;
+      bool tracking_kill_;
+      bool tracking_invincible_;
+      bool click_single_;
+      bool click_multi_;
+      bool tracking_proximity_;
+    } type_;
+    ::uint32_t _oneof_case_[1];
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull ShotType_class_data_;
 // -------------------------------------------------------------------
 
 class Room final : public ::google::protobuf::Message
@@ -5445,7 +5683,7 @@ class CircleScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const CircleScenarioDef*>(
         &_CircleScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 17;
+  static constexpr int kIndexInFileMessages = 18;
   friend void swap(CircleScenarioDef& a, CircleScenarioDef& b) { a.Swap(&b); }
   inline void Swap(CircleScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -5738,7 +5976,7 @@ class Bounds final : public ::google::protobuf::Message
     return *reinterpret_cast<const Bounds*>(
         &_Bounds_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 26;
+  static constexpr int kIndexInFileMessages = 27;
   friend void swap(Bounds& a, Bounds& b) { a.Swap(&b); }
   inline void Swap(Bounds* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -5967,7 +6205,7 @@ class BounceProfile final : public ::google::protobuf::Message
     return *reinterpret_cast<const BounceProfile*>(
         &_BounceProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 30;
+  static constexpr int kIndexInFileMessages = 31;
   friend void swap(BounceProfile& a, BounceProfile& b) { a.Swap(&b); }
   inline void Swap(BounceProfile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -6364,7 +6602,7 @@ class AngleStrafeProfile final : public ::google::protobuf::Message
     return *reinterpret_cast<const AngleStrafeProfile*>(
         &_AngleStrafeProfile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 25;
+  static constexpr int kIndexInFileMessages = 26;
   friend void swap(AngleStrafeProfile& a, AngleStrafeProfile& b) { a.Swap(&b); }
   inline void Swap(AngleStrafeProfile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -7051,7 +7289,7 @@ class TargetDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const TargetDef*>(
         &_TargetDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 35;
+  static constexpr int kIndexInFileMessages = 36;
   friend void swap(TargetDef& a, TargetDef& b) { a.Swap(&b); }
   inline void Swap(TargetDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -7349,7 +7587,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const ReferenceScenarioDef*>(
         &_ReferenceScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 15;
+  static constexpr int kIndexInFileMessages = 16;
   friend void swap(ReferenceScenarioDef& a, ReferenceScenarioDef& b) { a.Swap(&b); }
   inline void Swap(ReferenceScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -7636,7 +7874,7 @@ class CenteringScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const CenteringScenarioDef*>(
         &_CenteringScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 18;
+  static constexpr int kIndexInFileMessages = 19;
   friend void swap(CenteringScenarioDef& a, CenteringScenarioDef& b) { a.Swap(&b); }
   inline void Swap(CenteringScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -8141,7 +8379,7 @@ class WaypointScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const WaypointScenarioDef*>(
         &_WaypointScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 19;
+  static constexpr int kIndexInFileMessages = 20;
   friend void swap(WaypointScenarioDef& a, WaypointScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WaypointScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -8348,7 +8586,7 @@ class WallWanderScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const WallWanderScenarioDef*>(
         &_WallWanderScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 34;
+  static constexpr int kIndexInFileMessages = 35;
   friend void swap(WallWanderScenarioDef& a, WallWanderScenarioDef& b) { a.Swap(&b); }
   inline void Swap(WallWanderScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -8579,7 +8817,7 @@ class StrafeScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const StrafeScenarioDef*>(
         &_StrafeScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 29;
+  static constexpr int kIndexInFileMessages = 30;
   friend void swap(StrafeScenarioDef& a, StrafeScenarioDef& b) { a.Swap(&b); }
   inline void Swap(StrafeScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -8955,7 +9193,7 @@ class StaticScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const StaticScenarioDef*>(
         &_StaticScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
+  static constexpr int kIndexInFileMessages = 17;
   friend void swap(StaticScenarioDef& a, StaticScenarioDef& b) { a.Swap(&b); }
   inline void Swap(StaticScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -9150,7 +9388,7 @@ class LinearScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const LinearScenarioDef*>(
         &_LinearScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 21;
+  static constexpr int kIndexInFileMessages = 22;
   friend void swap(LinearScenarioDef& a, LinearScenarioDef& b) { a.Swap(&b); }
   inline void Swap(LinearScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -9397,7 +9635,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const BounceScenarioDef*>(
         &_BounceScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 31;
+  static constexpr int kIndexInFileMessages = 32;
   friend void swap(BounceScenarioDef& a, BounceScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BounceScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -9676,8 +9914,7 @@ class BounceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_forward_back_initial_direction(::aim::Direction value);
 
   public:
-  // bool start_on_floor = 14;
-  bool has_start_on_floor() const;
+  // bool start_on_floor = 14 [features = {
   void clear_start_on_floor() ;
   bool start_on_floor() const;
   void set_start_on_floor(bool value);
@@ -9790,7 +10027,7 @@ class BarrelScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const BarrelScenarioDef*>(
         &_BarrelScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 20;
+  static constexpr int kIndexInFileMessages = 21;
   friend void swap(BarrelScenarioDef& a, BarrelScenarioDef& b) { a.Swap(&b); }
   inline void Swap(BarrelScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -9998,7 +10235,7 @@ class AngleStrafeScenarioDef final : public ::google::protobuf::Message
     return *reinterpret_cast<const AngleStrafeScenarioDef*>(
         &_AngleStrafeScenarioDef_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 27;
+  static constexpr int kIndexInFileMessages = 28;
   friend void swap(AngleStrafeScenarioDef& a, AngleStrafeScenarioDef& b) { a.Swap(&b); }
   inline void Swap(AngleStrafeScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -10311,7 +10548,7 @@ class ScenarioDef final : public ::google::protobuf::Message
     kBounceDef = 42,
     TYPE_NOT_SET = 0,
   };
-  static constexpr int kIndexInFileMessages = 14;
+  static constexpr int kIndexInFileMessages = 15;
   friend void swap(ScenarioDef& a, ScenarioDef& b) { a.Swap(&b); }
   inline void Swap(ScenarioDef* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -14451,6 +14688,97 @@ inline void ScenarioOverrides::_internal_set_remove_target_after_seconds_multipl
 
 // -------------------------------------------------------------------
 
+// ReloadInfo
+
+// int32 max_shots = 1;
+inline bool ReloadInfo::has_max_shots() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  return value;
+}
+inline void ReloadInfo::clear_max_shots() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_shots_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline ::int32_t ReloadInfo::max_shots() const {
+  // @@protoc_insertion_point(field_get:aim.ReloadInfo.max_shots)
+  return _internal_max_shots();
+}
+inline void ReloadInfo::set_max_shots(::int32_t value) {
+  _internal_set_max_shots(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  // @@protoc_insertion_point(field_set:aim.ReloadInfo.max_shots)
+}
+inline ::int32_t ReloadInfo::_internal_max_shots() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.max_shots_;
+}
+inline void ReloadInfo::_internal_set_max_shots(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.max_shots_ = value;
+}
+
+// int32 num_to_reload_on_hit = 2;
+inline bool ReloadInfo::has_num_to_reload_on_hit() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  return value;
+}
+inline void ReloadInfo::clear_num_to_reload_on_hit() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_to_reload_on_hit_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline ::int32_t ReloadInfo::num_to_reload_on_hit() const {
+  // @@protoc_insertion_point(field_get:aim.ReloadInfo.num_to_reload_on_hit)
+  return _internal_num_to_reload_on_hit();
+}
+inline void ReloadInfo::set_num_to_reload_on_hit(::int32_t value) {
+  _internal_set_num_to_reload_on_hit(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  // @@protoc_insertion_point(field_set:aim.ReloadInfo.num_to_reload_on_hit)
+}
+inline ::int32_t ReloadInfo::_internal_num_to_reload_on_hit() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.num_to_reload_on_hit_;
+}
+inline void ReloadInfo::_internal_set_num_to_reload_on_hit(::int32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.num_to_reload_on_hit_ = value;
+}
+
+// float reload_time = 3;
+inline bool ReloadInfo::has_reload_time() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  return value;
+}
+inline void ReloadInfo::clear_reload_time() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.reload_time_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline float ReloadInfo::reload_time() const {
+  // @@protoc_insertion_point(field_get:aim.ReloadInfo.reload_time)
+  return _internal_reload_time();
+}
+inline void ReloadInfo::set_reload_time(float value) {
+  _internal_set_reload_time(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:aim.ReloadInfo.reload_time)
+}
+inline float ReloadInfo::_internal_reload_time() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.reload_time_;
+}
+inline void ReloadInfo::_internal_set_reload_time(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.reload_time_ = value;
+}
+
+// -------------------------------------------------------------------
+
 // ShotType
 
 // bool poke = 1;
@@ -14653,14 +14981,14 @@ inline bool ShotType::_internal_tracking_proximity() const {
 
 // float poke_kill_time_seconds = 10;
 inline bool ShotType::has_poke_kill_time_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
   return value;
 }
 inline void ShotType::clear_poke_kill_time_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.poke_kill_time_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
+                  0x00000002U);
 }
 inline float ShotType::poke_kill_time_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.poke_kill_time_seconds)
@@ -14668,7 +14996,7 @@ inline float ShotType::poke_kill_time_seconds() const {
 }
 inline void ShotType::set_poke_kill_time_seconds(float value) {
   _internal_set_poke_kill_time_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
   // @@protoc_insertion_point(field_set:aim.ShotType.poke_kill_time_seconds)
 }
 inline float ShotType::_internal_poke_kill_time_seconds() const {
@@ -14685,7 +15013,7 @@ inline void ShotType::clear_no_partial_kills() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.no_partial_kills_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline bool ShotType::no_partial_kills() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.no_partial_kills)
@@ -14693,7 +15021,7 @@ inline bool ShotType::no_partial_kills() const {
 }
 inline void ShotType::set_no_partial_kills(bool value) {
   _internal_set_no_partial_kills(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.ShotType.no_partial_kills)
 }
 inline bool ShotType::_internal_no_partial_kills() const {
@@ -14707,14 +15035,14 @@ inline void ShotType::_internal_set_no_partial_kills(bool value) {
 
 // float health_seconds = 12;
 inline bool ShotType::has_health_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   return value;
 }
 inline void ShotType::clear_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000004U);
 }
 inline float ShotType::health_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_seconds)
@@ -14722,7 +15050,7 @@ inline float ShotType::health_seconds() const {
 }
 inline void ShotType::set_health_seconds(float value) {
   _internal_set_health_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_seconds)
 }
 inline float ShotType::_internal_health_seconds() const {
@@ -14736,14 +15064,14 @@ inline void ShotType::_internal_set_health_seconds(float value) {
 
 // float health_regen_rate = 13;
 inline bool ShotType::has_health_regen_rate() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   return value;
 }
 inline void ShotType::clear_health_regen_rate() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_regen_rate_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000008U);
 }
 inline float ShotType::health_regen_rate() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_regen_rate)
@@ -14751,7 +15079,7 @@ inline float ShotType::health_regen_rate() const {
 }
 inline void ShotType::set_health_regen_rate(float value) {
   _internal_set_health_regen_rate(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_regen_rate)
 }
 inline float ShotType::_internal_health_regen_rate() const {
@@ -14765,14 +15093,14 @@ inline void ShotType::_internal_set_health_regen_rate(float value) {
 
 // float remove_if_below_health_seconds = 14;
 inline bool ShotType::has_remove_if_below_health_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void ShotType::clear_remove_if_below_health_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_if_below_health_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline float ShotType::remove_if_below_health_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.remove_if_below_health_seconds)
@@ -14780,7 +15108,7 @@ inline float ShotType::remove_if_below_health_seconds() const {
 }
 inline void ShotType::set_remove_if_below_health_seconds(float value) {
   _internal_set_remove_if_below_health_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.ShotType.remove_if_below_health_seconds)
 }
 inline float ShotType::_internal_remove_if_below_health_seconds() const {
@@ -14794,14 +15122,14 @@ inline void ShotType::_internal_set_remove_if_below_health_seconds(float value) 
 
 // int32 health_clicks = 16;
 inline bool ShotType::has_health_clicks() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void ShotType::clear_health_clicks() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_clicks_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000080U);
 }
 inline ::int32_t ShotType::health_clicks() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_clicks)
@@ -14809,7 +15137,7 @@ inline ::int32_t ShotType::health_clicks() const {
 }
 inline void ShotType::set_health_clicks(::int32_t value) {
   _internal_set_health_clicks(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_clicks)
 }
 inline ::int32_t ShotType::_internal_health_clicks() const {
@@ -14823,14 +15151,14 @@ inline void ShotType::_internal_set_health_clicks(::int32_t value) {
 
 // float click_rate_seconds = 17;
 inline bool ShotType::has_click_rate_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void ShotType::clear_click_rate_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.click_rate_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000100U);
 }
 inline float ShotType::click_rate_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.click_rate_seconds)
@@ -14838,7 +15166,7 @@ inline float ShotType::click_rate_seconds() const {
 }
 inline void ShotType::set_click_rate_seconds(float value) {
   _internal_set_click_rate_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.ShotType.click_rate_seconds)
 }
 inline float ShotType::_internal_click_rate_seconds() const {
@@ -14852,14 +15180,14 @@ inline void ShotType::_internal_set_click_rate_seconds(float value) {
 
 // float accuracy_penalty_multiplier = 18;
 inline bool ShotType::has_accuracy_penalty_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void ShotType::clear_accuracy_penalty_multiplier() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_multiplier_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000200U);
 }
 inline float ShotType::accuracy_penalty_multiplier() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty_multiplier)
@@ -14867,7 +15195,7 @@ inline float ShotType::accuracy_penalty_multiplier() const {
 }
 inline void ShotType::set_accuracy_penalty_multiplier(float value) {
   _internal_set_accuracy_penalty_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty_multiplier)
 }
 inline float ShotType::_internal_accuracy_penalty_multiplier() const {
@@ -14884,7 +15212,7 @@ inline void ShotType::clear_remove_closest_on_miss() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_closest_on_miss_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline bool ShotType::remove_closest_on_miss() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.remove_closest_on_miss)
@@ -14892,7 +15220,7 @@ inline bool ShotType::remove_closest_on_miss() const {
 }
 inline void ShotType::set_remove_closest_on_miss(bool value) {
   _internal_set_remove_closest_on_miss(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.ShotType.remove_closest_on_miss)
 }
 inline bool ShotType::_internal_remove_closest_on_miss() const {
@@ -14902,6 +15230,105 @@ inline bool ShotType::_internal_remove_closest_on_miss() const {
 inline void ShotType::_internal_set_remove_closest_on_miss(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_closest_on_miss_ = value;
+}
+
+// .aim.ReloadInfo reload = 20;
+inline bool ShotType::has_reload() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  PROTOBUF_ASSUME(!value || _impl_.reload_ != nullptr);
+  return value;
+}
+inline void ShotType::clear_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.reload_ != nullptr) _impl_.reload_->Clear();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline const ::aim::ReloadInfo& ShotType::_internal_reload() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::ReloadInfo* p = _impl_.reload_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::ReloadInfo&>(::aim::_ReloadInfo_default_instance_);
+}
+inline const ::aim::ReloadInfo& ShotType::reload() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.ShotType.reload)
+  return _internal_reload();
+}
+inline void ShotType::unsafe_arena_set_allocated_reload(
+    ::aim::ReloadInfo* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.reload_);
+  }
+  _impl_.reload_ = reinterpret_cast<::aim::ReloadInfo*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.ShotType.reload)
+}
+inline ::aim::ReloadInfo* PROTOBUF_NULLABLE ShotType::release_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::aim::ReloadInfo* released = _impl_.reload_;
+  _impl_.reload_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::ReloadInfo* PROTOBUF_NULLABLE ShotType::unsafe_arena_release_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.ShotType.reload)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::aim::ReloadInfo* temp = _impl_.reload_;
+  _impl_.reload_ = nullptr;
+  return temp;
+}
+inline ::aim::ReloadInfo* PROTOBUF_NONNULL ShotType::_internal_mutable_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.reload_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::ReloadInfo>(GetArena());
+    _impl_.reload_ = reinterpret_cast<::aim::ReloadInfo*>(p);
+  }
+  return _impl_.reload_;
+}
+inline ::aim::ReloadInfo* PROTOBUF_NONNULL ShotType::mutable_reload()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::aim::ReloadInfo* _msg = _internal_mutable_reload();
+  // @@protoc_insertion_point(field_mutable:aim.ShotType.reload)
+  return _msg;
+}
+inline void ShotType::set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.reload_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = value->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+
+  _impl_.reload_ = reinterpret_cast<::aim::ReloadInfo*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.ShotType.reload)
 }
 
 inline bool ShotType::has_type() const {
@@ -23342,11 +23769,7 @@ inline void BounceScenarioDef::set_allocated_floor_height(::aim::RegionLength* P
   // @@protoc_insertion_point(field_set_allocated:aim.BounceScenarioDef.floor_height)
 }
 
-// bool start_on_floor = 14;
-inline bool BounceScenarioDef::has_start_on_floor() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00001000U);
-  return value;
-}
+// bool start_on_floor = 14 [features = {
 inline void BounceScenarioDef::clear_start_on_floor() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_on_floor_ = false;

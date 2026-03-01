@@ -130,6 +130,12 @@ message ScenarioOverrides {
   float remove_target_after_seconds_multiplier = 9;
 }
 
+message ReloadInfo {
+  int32 max_shots = 1;
+  int32 num_to_reload_on_hit = 2;
+  float reload_time = 3;
+}
+
 message ShotType {
   oneof type {
     // Targets are killed after being "tracked"" consistently for a short duration. Typical for
@@ -176,6 +182,8 @@ message ShotType {
 
   // For clicking scenarios, remove the target if you miss it.
   bool remove_closest_on_miss = 19 [features.field_presence = IMPLICIT];
+
+  ReloadInfo reload = 20;
 }
 
 // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.

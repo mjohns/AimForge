@@ -1214,6 +1214,38 @@ void DrawShotTypeEditor(ShotType& s) {
                       PROTO_FLOAT_FIELD(ShotType, &s, click_rate_seconds));
     ImGui::SameLine();
     ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
+
+    bool has_reload = s.has_reload();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Reload");
+    ImGui::SameLine();
+    ImGui::Checkbox("##ReloadCheckbox", &has_reload);
+    if (has_reload) {
+      ImGui::Indent();
+      ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Max shots")
+                          .set_step(1, 1)
+                          .set_default(3)
+                          .set_width(char_x * 10),
+                      PROTO_INT_FIELD(ReloadInfo, s.mutable_reload(), max_shots));
+      ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Reload on hit")
+                          .set_step(1, 1)
+                          .set_default(3)
+                          .set_width(char_x * 10),
+                      PROTO_INT_FIELD(ReloadInfo, s.mutable_reload(), num_to_reload_on_hit));
+      ImGui::SameLine();
+      ImGui::HelpMarker("Number of shots to reload on a hit up to the \"max shots\".");
+
+      ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Reload time")
+                            .set_step(0.1, 0.2)
+                            .set_min(0.01)
+                            .set_default(0.4)
+                            .set_width(char_x * 10),
+                        PROTO_FLOAT_FIELD(ReloadInfo, s.mutable_reload(), reload_time));
+      ImGui::Unindent();
+
+    } else {
+      s.clear_reload();
+    }
   } else {
     // Not clicking.
     s.clear_click_rate_seconds();

@@ -317,12 +317,15 @@ class ScenarioEditorScreen : public UiScreen {
     }
     if (ImGui::BeginTabItem("Targets")) {
       ImGui::Spacing();
+      DrawTargetEditor(compare_def);
+      ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Shot type")) {
+      ImGui::Spacing();
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Shot type");
       ImGui::SameLine();
       DrawShotTypeEditor(*compare_def.mutable_shot_type());
-      ImGui::SpacedSeparator();
-      DrawTargetEditor(compare_def);
       ImGui::EndTabItem();
     }
 
