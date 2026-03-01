@@ -752,6 +752,14 @@ class StatsScreen : public UiScreen {
         }
       }
     }
+    if (has_previous_high_score) {
+      std::string high_score_time = GetHowLongAgoStringFromEpochSeconds(
+          details_.previous_high_score_stats.epoch_seconds, GetNowEpochSeconds());
+      bool is_new_high = percent_diff > 0;
+      std::string prefix = is_new_high ? "Previous high" : "Current high";
+      ImGui::TextFmt(
+          "{}: {} ({})", prefix, MaybeIntToString(previous_high_score, 2), high_score_time);
+    }
     if (all_stats.size() > 2) {
       auto avg_comparison = GetStatsComparison(details_.stats, details_.average_stats);
       ImGui::AlignTextToFramePadding();
