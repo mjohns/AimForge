@@ -4145,7 +4145,6 @@ class ShotType final : public ::google::protobuf::Message
     kRemoveClosestOnMissFieldNumber = 19,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
-    kAccuracyPenaltyMultiplierFieldNumber = 18,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -4254,17 +4253,6 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_click_rate_seconds(float value);
 
   public:
-  // float accuracy_penalty_multiplier = 18;
-  bool has_accuracy_penalty_multiplier() const;
-  void clear_accuracy_penalty_multiplier() ;
-  float accuracy_penalty_multiplier() const;
-  void set_accuracy_penalty_multiplier(float value);
-
-  private:
-  float _internal_accuracy_penalty_multiplier() const;
-  void _internal_set_accuracy_penalty_multiplier(float value);
-
-  public:
   // bool poke = 1;
   bool has_poke() const;
   void clear_poke() ;
@@ -4345,7 +4333,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 16,
+  static const ::google::protobuf::internal::TcParseTable<4, 15,
                                    1, 0,
                                    2>
       _table_;
@@ -4376,7 +4364,6 @@ class ShotType final : public ::google::protobuf::Message
     bool remove_closest_on_miss_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
-    float accuracy_penalty_multiplier_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -15176,35 +15163,6 @@ inline float ShotType::_internal_click_rate_seconds() const {
 inline void ShotType::_internal_set_click_rate_seconds(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.click_rate_seconds_ = value;
-}
-
-// float accuracy_penalty_multiplier = 18;
-inline bool ShotType::has_accuracy_penalty_multiplier() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
-  return value;
-}
-inline void ShotType::clear_accuracy_penalty_multiplier() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accuracy_penalty_multiplier_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
-}
-inline float ShotType::accuracy_penalty_multiplier() const {
-  // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty_multiplier)
-  return _internal_accuracy_penalty_multiplier();
-}
-inline void ShotType::set_accuracy_penalty_multiplier(float value) {
-  _internal_set_accuracy_penalty_multiplier(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
-  // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty_multiplier)
-}
-inline float ShotType::_internal_accuracy_penalty_multiplier() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.accuracy_penalty_multiplier_;
-}
-inline void ShotType::_internal_set_accuracy_penalty_multiplier(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.accuracy_penalty_multiplier_ = value;
 }
 
 // bool remove_closest_on_miss = 19 [features = {

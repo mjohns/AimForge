@@ -3377,7 +3377,6 @@
     "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
-     "accuracyPenaltyMultiplier": 1.25,
      "removeClosestOnMiss": true
     },
     "targetDef": {
@@ -3463,8 +3462,12 @@
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
-     "accuracyPenaltyMultiplier": 0.5,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "reload": {
+      "maxShots": 3,
+      "numToReloadOnHit": 3,
+      "reloadTime": 0.5
+     }
     },
     "targetDef": {
      "numTargets": 4,

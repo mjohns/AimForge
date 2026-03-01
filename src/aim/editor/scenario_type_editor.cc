@@ -1193,18 +1193,6 @@ void DrawShotTypeEditor(ShotType& s) {
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
     ImGui::InputBool("Remove on miss", PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
 
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
-                          .set_is_optional()
-                          .set_step(0.01, 0.25)
-                          .set_min(0)
-                          .set_default(1)
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, accuracy_penalty_multiplier));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "0 means no penalty for missed shots. Default (1) is score-sqrt(accuracy%). 0.5 is half "
-        "the default penalty.");
-
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
                           .set_is_optional()
                           .set_step(0.05, 0.2)
@@ -1220,25 +1208,31 @@ void DrawShotTypeEditor(ShotType& s) {
     ImGui::Text("Reload");
     ImGui::SameLine();
     ImGui::Checkbox("##ReloadCheckbox", &has_reload);
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "There is no accuracy penalty but you will have to reload if you miss too many consecutive "
+        "shots");
     if (has_reload) {
       ImGui::Indent();
       ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Max shots")
                           .set_step(1, 1)
                           .set_default(3)
+                          .set_min(1)
                           .set_width(char_x * 10),
                       PROTO_INT_FIELD(ReloadInfo, s.mutable_reload(), max_shots));
       ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Reload on hit")
                           .set_step(1, 1)
                           .set_default(3)
+                          .set_min(1)
                           .set_width(char_x * 10),
                       PROTO_INT_FIELD(ReloadInfo, s.mutable_reload(), num_to_reload_on_hit));
       ImGui::SameLine();
       ImGui::HelpMarker("Number of shots to reload on a hit up to the \"max shots\".");
 
       ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Reload time")
-                            .set_step(0.1, 0.2)
+                            .set_step(0.05, 0.2)
                             .set_min(0.01)
-                            .set_default(0.4)
+                            .set_default(0.5)
                             .set_width(char_x * 10),
                         PROTO_FLOAT_FIELD(ReloadInfo, s.mutable_reload(), reload_time));
       ImGui::Unindent();
@@ -1249,7 +1243,6 @@ void DrawShotTypeEditor(ShotType& s) {
   } else {
     // Not clicking.
     s.clear_click_rate_seconds();
-    s.clear_accuracy_penalty_multiplier();
     s.clear_remove_closest_on_miss();
     s.clear_reload();
   }

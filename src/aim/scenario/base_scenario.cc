@@ -589,12 +589,13 @@ float BaseScenario::CalculateScore(float current_time) {
       if (stats_.num_shots <= 0) {
         return 0;
       }
+      if (def_.shot_type().has_reload()) {
+        // No accuracy penalty.
+        return stats_.num_hits * time_normalized_multiplier;
+      }
       float hit_percent = stats_.num_hits / stats_.num_shots;
       // float duration_modifier = 60.0f / def_.duration_seconds();
       float accuracy_penalty = 1.0 - sqrt(hit_percent);
-      if (def_.shot_type().has_accuracy_penalty_multiplier()) {
-        accuracy_penalty *= def_.shot_type().accuracy_penalty_multiplier();
-      }
       return stats_.num_hits * (1 - accuracy_penalty) * time_normalized_multiplier;
     }
     case ShotType::kPoke:

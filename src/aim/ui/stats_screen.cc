@@ -296,7 +296,7 @@ class StatsScreen : public UiScreen {
       switch (evaluated_scenario_def_->shot_type().type_case()) {
         case ShotType::kClickSingle:
         case ShotType::kClickMulti:
-          return true;
+          return !evaluated_scenario_def_->shot_type().has_reload();
         default:
           break;
       }
