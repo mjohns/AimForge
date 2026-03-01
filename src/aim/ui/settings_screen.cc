@@ -404,6 +404,7 @@ class SettingsScreen : public UiScreen {
       sound_input("Hit", s.mutable_hit());
       sound_input("Kill", s.mutable_kill());
       sound_input("Metronome", s.mutable_metronome());
+      sound_input("Reload", s.mutable_reload());
 
       ImGui::EndTable();
     }

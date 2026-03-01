@@ -237,6 +237,7 @@ class SoundSettings final : public ::google::protobuf::Message
     kKillFieldNumber = 11,
     kMetronomeFieldNumber = 12,
     kShootFieldNumber = 13,
+    kReloadFieldNumber = 14,
     kMasterVolumeLevelFieldNumber = 1,
   };
   // string hit = 10;
@@ -303,6 +304,22 @@ class SoundSettings final : public ::google::protobuf::Message
   ::std::string* PROTOBUF_NONNULL _internal_mutable_shoot();
 
   public:
+  // string reload = 14;
+  bool has_reload() const;
+  void clear_reload() ;
+  const ::std::string& reload() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_reload(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_reload();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_reload();
+  void set_allocated_reload(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_reload() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_reload(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_reload();
+
+  public:
   // float master_volume_level = 1;
   bool has_master_volume_level() const;
   void clear_master_volume_level() ;
@@ -318,8 +335,8 @@ class SoundSettings final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
-                                   0, 47,
+  static const ::google::protobuf::internal::TcParseTable<3, 6,
+                                   0, 53,
                                    2>
       _table_;
 
@@ -344,6 +361,7 @@ class SoundSettings final : public ::google::protobuf::Message
     ::google::protobuf::internal::ArenaStringPtr kill_;
     ::google::protobuf::internal::ArenaStringPtr metronome_;
     ::google::protobuf::internal::ArenaStringPtr shoot_;
+    ::google::protobuf::internal::ArenaStringPtr reload_;
     float master_volume_level_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -2753,14 +2771,14 @@ inline void Settings::_internal_set_start_countdown_time(float value) {
 
 // float master_volume_level = 1;
 inline bool SoundSettings::has_master_volume_level() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void SoundSettings::clear_master_volume_level() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.master_volume_level_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline float SoundSettings::master_volume_level() const {
   // @@protoc_insertion_point(field_get:aim.SoundSettings.master_volume_level)
@@ -2768,7 +2786,7 @@ inline float SoundSettings::master_volume_level() const {
 }
 inline void SoundSettings::set_master_volume_level(float value) {
   _internal_set_master_volume_level(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.SoundSettings.master_volume_level)
 }
 inline float SoundSettings::_internal_master_volume_level() const {
@@ -3054,6 +3072,75 @@ inline void SoundSettings::set_allocated_shoot(::std::string* PROTOBUF_NULLABLE 
     _impl_.shoot_.Set("", GetArena());
   }
   // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.shoot)
+}
+
+// string reload = 14;
+inline bool SoundSettings::has_reload() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  return value;
+}
+inline void SoundSettings::clear_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.reload_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000010U);
+}
+inline const ::std::string& SoundSettings::reload() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.SoundSettings.reload)
+  return _internal_reload();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void SoundSettings::set_reload(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  _impl_.reload_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.SoundSettings.reload)
+}
+inline ::std::string* PROTOBUF_NONNULL SoundSettings::mutable_reload()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  ::std::string* _s = _internal_mutable_reload();
+  // @@protoc_insertion_point(field_mutable:aim.SoundSettings.reload)
+  return _s;
+}
+inline const ::std::string& SoundSettings::_internal_reload() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.reload_.Get();
+}
+inline void SoundSettings::_internal_set_reload(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.reload_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL SoundSettings::_internal_mutable_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.reload_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE SoundSettings::release_reload() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.SoundSettings.reload)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000010U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  auto* released = _impl_.reload_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.reload_.Set("", GetArena());
+  }
+  return released;
+}
+inline void SoundSettings::set_allocated_reload(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  }
+  _impl_.reload_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.reload_.IsDefault()) {
+    _impl_.reload_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.SoundSettings.reload)
 }
 
 // -------------------------------------------------------------------

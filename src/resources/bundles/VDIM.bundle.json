@@ -1491,7 +1491,13 @@
    "def": {
     "durationSeconds": 60,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "accuracyPenaltyMultiplier": 0,
+     "reload": {
+      "maxShots": 3,
+      "numToReloadOnHit": 3,
+      "reloadTime": 0.5
+     }
     },
     "targetDef": {
      "numTargets": 3,

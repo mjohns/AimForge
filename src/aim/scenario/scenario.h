@@ -104,6 +104,7 @@ class Scenario : public Screen {
   void PlayHitSound();
   void PlayMissSound();
   void PlayKillSound();
+  void PlayReloadSound();
 
   TargetProfile GetNextTargetProfile();
   Target GetTargetTemplate(const TargetProfile& profile);

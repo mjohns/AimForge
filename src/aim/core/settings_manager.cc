@@ -42,6 +42,7 @@ Settings GetDefaultSettings() {
   sounds->set_metronome("AF Metronome.ogg");
   sounds->set_shoot("AF Shoot.ogg");
   sounds->set_kill("AF Kill.ogg");
+  sounds->set_reload("AF Reload.ogg");
 
   return settings;
 }
@@ -76,7 +77,11 @@ class SettingsManagerImpl : public SettingsManager {
       opts.ignore_unknown_fields = true;
       opts.case_insensitive_enum_parsing = true;
       std::string json = *maybe_content;
-      return google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
+      auto status = google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
+      if (settings_.sound().reload().empty()) {
+        settings_.mutable_sound()->set_reload("AF Reload.ogg");
+      }
+      return status;
     }
 
     // Write initial settings to file.

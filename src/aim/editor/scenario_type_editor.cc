@@ -1251,6 +1251,7 @@ void DrawShotTypeEditor(ShotType& s) {
     s.clear_click_rate_seconds();
     s.clear_accuracy_penalty_multiplier();
     s.clear_remove_closest_on_miss();
+    s.clear_reload();
   }
 
   if (type == ShotType::kTrackingKill) {

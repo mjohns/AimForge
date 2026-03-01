@@ -29,6 +29,7 @@ enum class ReplaySoundType : u16 {
   KILL = 1,
   HIT = 2,
   SHOOT = 3,
+  RELOAD = 4,
 };
 
 struct PlaySoundEvent {

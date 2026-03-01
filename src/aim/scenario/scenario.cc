@@ -685,6 +685,13 @@ void Scenario::PlayShootSound() {
   }
 }
 
+void Scenario::PlayReloadSound() {
+  app_.sound_manager()->PlayLoadedSound(settings_.sound().reload());
+  if (replay_) {
+    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::RELOAD);
+  }
+}
+
 void Scenario::PlayHitSound() {
   app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
   if (replay_) {

@@ -46,6 +46,7 @@ class BaseScenario : public Scenario {
 
  private:
   void HandleClickHits(UpdateStateData* data);
+  void HandlePokeHits(UpdateStateData* data);
   void HandleTrackingHits(UpdateStateData* data, std::vector<u16>* target_ids_to_remove);
   void HandleProximityTrackingHits(UpdateStateData* data);
   void AddNewTarget(u16 old_target_id, bool is_init = false);
@@ -68,6 +69,8 @@ class BaseScenario : public Scenario {
   std::unique_ptr<TrackingSound> tracking_sound_;
   std::unique_ptr<ProximityTrackingSound> proximity_tracking_sound_;
   i64 last_recorded_score_frame_ = -1;
+
+  int available_shots_ = 0;
 };
 
 }  // namespace aim

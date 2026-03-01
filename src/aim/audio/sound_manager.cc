@@ -61,6 +61,7 @@ void SoundManager::LoadSounds(const Settings& settings) {
       s.kill(),
       s.metronome(),
       s.shoot(),
+      s.reload(),
   };
   for (const std::string& name : sounds) {
     if (name.size() == 0) {

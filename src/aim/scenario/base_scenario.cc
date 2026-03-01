@@ -25,6 +25,7 @@ float GetPartialHitValue(const Target& target) {
 }  // namespace
 
 void BaseScenario::Initialize() {
+  available_shots_ = def_.shot_type().reload().max_shots();
   const TargetDef& t = def_.target_def();
   int num_targets_to_add_immediately = t.num_targets() - t.delayed_target_times_size();
   for (int i = 0; i < num_targets_to_add_immediately; ++i) {
@@ -53,6 +54,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     HandleTrackingHits(data, &targets_to_remove);
   } else if (shot_type == ShotType::kTrackingProximity) {
     HandleProximityTrackingHits(data);
+  } else if (shot_type == ShotType::kPoke) {
+    HandlePokeHits(data);
   } else {
     HandleClickHits(data);
   }
@@ -213,6 +216,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
   } else {
     TrackingHoldDone();
   }
+
   if (GetShotType() == ShotType::kTrackingKill) {
     for (Target& target : target_manager_.GetMutableTargets()) {
       if (target.health_seconds > 0 && target.radius_at_kill.has_value()) {
@@ -278,119 +282,146 @@ void BaseScenario::OnPause() {
   TrackingHoldDone();
 }
 
+void BaseScenario::HandlePokeHits(UpdateStateData* data) {
+  auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+  if (!maybe_hit_target_id.has_value()) {
+    // No current target. Clear.
+    current_poke_target_id_ = {};
+    current_poke_start_time_micros_ = 0;
+    return;
+  }
+
+  u16 hit_target_id = *maybe_hit_target_id;
+  bool is_hitting_current_target =
+      current_poke_target_id_.has_value() && *(current_poke_target_id_) == hit_target_id;
+  if (!is_hitting_current_target) {
+    // Starting time on new target.
+    current_poke_target_id_ = hit_target_id;
+    current_poke_start_time_micros_ = timer_.GetElapsedMicros();
+    return;
+  }
+
+  // Still targeting the correct target.
+  // Has enough time elapsed to kill target?
+  i64 now_micros = timer_.GetElapsedMicros();
+  i64 age_micros = now_micros - current_poke_start_time_micros_;
+  i64 min_age_micros = SecondsToMicros(def_.shot_type().has_poke_kill_time_seconds()
+                                           ? def_.shot_type().poke_kill_time_seconds()
+                                           : kPokeBallKillTimeSeconds);
+  if (age_micros >= min_age_micros) {
+    stats_.num_hits++;
+    stats_.num_shots++;
+    stats_.num_kills++;
+    PlayKillSound();
+    data->force_render = true;
+
+    auto hit_target_id = *maybe_hit_target_id;
+    AddNewTarget(hit_target_id);
+
+    if (replay_) {
+      replay_->AddMouseClick(timer_.GetElapsedMicros(), true);
+    }
+
+    current_poke_target_id_ = {};
+    current_poke_start_time_micros_ = 0;
+  }
+}
+
 void BaseScenario::HandleClickHits(UpdateStateData* data) {
-  if (GetShotType() == ShotType::kPoke) {
-    auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-    if (maybe_hit_target_id.has_value()) {
-      u16 hit_target_id = *maybe_hit_target_id;
-      bool is_hitting_current_target =
-          current_poke_target_id_.has_value() && *(current_poke_target_id_) == hit_target_id;
-      if (is_hitting_current_target) {
-        // Still targeting the correct target.
-        // Has enough time elapsed to kill target?
-        i64 now_micros = timer_.GetElapsedMicros();
-        i64 age_micros = now_micros - current_poke_start_time_micros_;
-        i64 min_age_micros = (def_.shot_type().has_poke_kill_time_seconds()
-                                  ? def_.shot_type().poke_kill_time_seconds()
-                                  : kPokeBallKillTimeSeconds) *
-                             1000000;
-        if (age_micros >= min_age_micros) {
-          stats_.num_hits++;
-          stats_.num_shots++;
-          stats_.num_kills++;
-          PlayKillSound();
-          data->force_render = true;
+  if (!data->has_click) {
+    return;
+  }
 
-          auto hit_target_id = *maybe_hit_target_id;
-          AddNewTarget(hit_target_id);
+  i64 now_micros = timer_.GetElapsedMicros();
+  i64 time_since_last_shot = now_micros - last_shot_time_micros_;
 
-          if (replay_) {
-            replay_->AddMouseClick(timer_.GetElapsedMicros(), true);
-          }
-
-          current_poke_target_id_ = {};
-          current_poke_start_time_micros_ = 0;
-        }
-      } else {
-        // Starting time on new target.
-        current_poke_target_id_ = hit_target_id;
-        current_poke_start_time_micros_ = timer_.GetElapsedMicros();
-      }
-    } else {
-      // No current target. Clear.
-      current_poke_target_id_ = {};
-      current_poke_start_time_micros_ = 0;
+  // Has available reload shot?
+  if (def_.shot_type().has_reload()) {
+    i64 reload_rate_micros = SecondsToMicros(def_.shot_type().reload().reload_time());
+    bool reload_on_time = time_since_last_shot >= reload_rate_micros;
+    if (reload_on_time) {
+      available_shots_ = def_.shot_type().reload().max_shots();
     }
-  } else {
-    bool shot_fired = data->has_click;
-    if (shot_fired && ShouldLimitShotRate()) {
-      // See if we should allow the shot.
-      i64 shot_rate_micros = def_.shot_type().click_rate_seconds() * 1000000;
-      i64 now_micros = timer_.GetElapsedMicros();
-      i64 time_since_last_shot = now_micros - last_shot_time_micros_;
-      if (time_since_last_shot < shot_rate_micros) {
-        shot_fired = false;
-      } else {
-        // Allow the shot.
-        last_shot_time_micros_ = now_micros;
+    if (available_shots_ <= 0) {
+      PlayReloadSound();
+      return;
+    }
+  }
+
+  if (ShouldLimitShotRate()) {
+    // See if we should allow the shot.
+    i64 shot_rate_micros = SecondsToMicros(def_.shot_type().click_rate_seconds());
+    if (time_since_last_shot < shot_rate_micros) {
+      // Play sound?
+      return;
+    }
+    // Allow the shot.
+  }
+
+  last_shot_time_micros_ = now_micros;
+  stats_.num_shots++;
+  auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+  PlayShootSound();
+  if (replay_) {
+    replay_->AddMouseClick(timer_.GetElapsedMicros(), maybe_hit_target_id.has_value());
+  }
+
+  bool is_hit = maybe_hit_target_id.has_value();
+  if (!is_hit) {
+    // Missed shot
+    if (def_.shot_type().remove_closest_on_miss()) {
+      // TODO(mjohns): Count partial kill for multi click?
+      std::optional<u16> target_id_to_remove =
+          target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
+      if (target_id_to_remove.has_value()) {
+        AddNewTarget(*target_id_to_remove);
       }
     }
 
-    if (shot_fired) {
-      stats_.num_shots++;
-      auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-      PlayShootSound();
-      if (replay_) {
-        replay_->AddMouseClick(timer_.GetElapsedMicros(), maybe_hit_target_id.has_value());
-      }
-      if (maybe_hit_target_id.has_value()) {
-        if (GetShotType() == ShotType::kClickMulti) {
-          Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);
-          stats_.num_hits++;
-          hit_target->click_count++;
-          PlayHitSound();
-          if (hit_target->radius_at_kill.has_value()) {
-            float radius_diff =
-                hit_target->radius_at_kill->start_radius - hit_target->radius_at_kill->end_radius;
-            float health_percent = hit_target->GetHealthPercent();
-            hit_target->radius =
-                hit_target->radius_at_kill->end_radius + health_percent * radius_diff;
-          }
-          if (hit_target->click_count >= hit_target->health_clicks) {
-            stats_.num_kills++;
-            PlayKillSound();
-            data->force_render = true;
-            auto hit_target_id = *maybe_hit_target_id;
-            AddNewTarget(hit_target_id);
-          }
-        } else {
-          stats_.num_hits++;
-          stats_.num_kills++;
-          PlayKillSound();
-          data->force_render = true;
-          auto hit_target_id = *maybe_hit_target_id;
-          AddNewTarget(hit_target_id);
-        }
-
-      } else {
-        // Missed shot
-        if (def_.shot_type().remove_closest_on_miss()) {
-          // TODO(mjohns): Count partial kill for multi click?
-          std::optional<u16> target_id_to_remove =
-              target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
-          if (target_id_to_remove.has_value()) {
-            AddNewTarget(*target_id_to_remove);
-          }
-        }
-      }
+    if (def_.shot_type().has_reload()) {
+      available_shots_ = std::max<int>(0, available_shots_ - 1);
     }
+    return;
+  }
+
+  // Shot is a hit.
+  stats_.num_hits++;
+
+  if (def_.shot_type().has_reload()) {
+    available_shots_ =
+        std::min<int>(def_.shot_type().reload().max_shots(),
+                      available_shots_ + def_.shot_type().reload().num_to_reload_on_hit());
+  }
+
+  bool is_kill = true;
+
+  if (GetShotType() == ShotType::kClickMulti) {
+    Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);
+    hit_target->click_count++;
+    PlayHitSound();
+    if (hit_target->radius_at_kill.has_value()) {
+      float radius_diff =
+          hit_target->radius_at_kill->start_radius - hit_target->radius_at_kill->end_radius;
+      float health_percent = hit_target->GetHealthPercent();
+      hit_target->radius = hit_target->radius_at_kill->end_radius + health_percent * radius_diff;
+    }
+
+    is_kill = hit_target->click_count >= hit_target->health_clicks;
+  }
+
+  if (is_kill) {
+    stats_.num_kills++;
+    PlayKillSound();
+    data->force_render = true;
+    auto hit_target_id = *maybe_hit_target_id;
+    AddNewTarget(hit_target_id);
   }
 }
 
 void BaseScenario::DrawAdditionalUiElements() {
   if (ShouldLimitShotRate()) {
     // See if a shot would be allowed
-    i64 shot_rate_micros = def_.shot_type().click_rate_seconds() * 1000000;
+    i64 shot_rate_micros = SecondsToMicros(def_.shot_type().click_rate_seconds());
     i64 now_micros = timer_.GetElapsedMicros();
     i64 time_since_last_shot = now_micros - last_shot_time_micros_;
     if (time_since_last_shot < shot_rate_micros) {
@@ -488,7 +519,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
       break;
     }
     case ShotType::kTrackingProximity: {
-      float total_micros = def_.duration_seconds() * 1000000;
+      float total_micros = SecondsToMicros(def_.duration_seconds());
       num_shots = def_.duration_seconds();
       num_hits = (stats_.proximity.hit_micros_map[100] / total_micros) * num_shots;
 
