@@ -137,11 +137,11 @@ message ReloadInfo {
 }
 
 enum AccuracyPenalty {
-    // will default to sqrt
-    ACCURACY_PENALTY_UNKNOWN = 0;
-    // hits * sqrt(hit_percent)
-    ACCURACY_PENALTY_SQRT = 1;
-    ACCURACY_PENALTY_NONE = 2;
+  // will default to sqrt
+  ACCURACY_PENALTY_UNKNOWN = 0;
+  // hits * sqrt(hit_percent)
+  ACCURACY_PENALTY_SQRT = 1;
+  ACCURACY_PENALTY_NONE = 2;
 }
 
 message ShotType {
