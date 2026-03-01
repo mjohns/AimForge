@@ -124,10 +124,8 @@ class ScenarioEditorScreen : public UiScreen {
 
  protected:
   void DrawTopBar() {
-    float width = char_x_ * 70;
     float middle = app_.screen_info().width / 2.0;
-    ImGui::SetNextWindowPos(ImVec2(middle - width / 2.0, char_x_ / 3.0));
-    ImGui::SetNextWindowSize(ImVec2(width, -1));
+    ImGui::SetNextWindowPos(ImVec2(middle, char_x_ / 3.0), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
     if (!ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
       ImGui::End();
       return;
@@ -159,9 +157,43 @@ class ScenarioEditorScreen : public UiScreen {
       }
     }
     ImGui::SameLine();
-    ImGui::SetButtonCursorAtRight("Cancel");
     if (ImGui::Button("Cancel")) {
       PopSelf();
+    }
+
+    const char* advanced_menu_id = "advanced_menu";
+    if (ImGui::BeginPopupContextItem(advanced_menu_id)) {
+      if (!is_new_scenario_) {
+        if (ImGui::Selectable("Make new copy")) {
+          is_new_scenario_ = true;
+          MakeRelativeNameUniqueInBundle();
+        }
+        ImGui::SameLine();
+        ImGui::HelpMarker(
+            "Save the current changes in a new copy of the scenario leaving the original "
+            "unchanged.");
+      }
+
+      if (ImGui::Selectable("Import Json")) {
+        import_from_json_dialog_.NotifyOpen("");
+      }
+
+      if (ImGui::Selectable("View Json")) {
+        view_json_dialog_.NotifyOpen(MessageToJson(def_));
+      }
+
+      if (ImGui::Selectable("Compare")) {
+        comparison_window_open_ = !comparison_window_open_;
+      }
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "Open a window displaying values from another scenario. Useful if you want to copy the "
+          "strafe patterns from another scenario.");
+      ImGui::EndPopup();
+    }
+    ImGui::SameLine();
+    if (ImGui::SelectableButton(icons::kMoreVert)) {
+      ImGui::OpenPopup(advanced_menu_id);
     }
 
     ImGui::End();
@@ -216,6 +248,7 @@ class ScenarioEditorScreen : public UiScreen {
 
     DrawTopBar();
 
+    view_json_dialog_.Draw();
     auto imported_json = import_from_json_dialog_.Draw();
     if (imported_json) {
       std::string_view json = absl::StripAsciiWhitespace(*imported_json);
@@ -268,22 +301,21 @@ class ScenarioEditorScreen : public UiScreen {
     float editor_start_y = ImGui::GetCursorPosY() + ImGui::GetTextLineHeight() * 1;
     float editor_end_y = app_.screen_info().height - padding;
 
+    if (comparison_window_open_) {
+      if (ImGui::Begin("Compare", &comparison_window_open_)) {
+        DrawComparisonWindow();
+      }
+      ImGui::End();
+    }
+
     if (def_.has_reference_def()) {
       if (BeginMainWindow("ReferenceEditor", 0.6)) {
         DrawReferenceEditor();
       }
       ImGui::End();
-      return;
-    }
-
-    if (BeginMainWindow("MainEditor", 0.9)) {
-      DrawMainEditor();
-    }
-    ImGui::End();
-
-    if (comparison_window_open_) {
-      if (ImGui::Begin("Compare", &comparison_window_open_)) {
-        DrawComparisonWindow();
+    } else {
+      if (BeginMainWindow("MainEditor", 0.9)) {
+        DrawMainEditor();
       }
       ImGui::End();
     }
@@ -386,41 +418,6 @@ class ScenarioEditorScreen : public UiScreen {
     ImGui::SameLine();
     if (ImGui::Button(std::format("{} Description", icons::kEdit))) {
       description_dialog_.NotifyOpen(def_.description());
-    }
-
-    const char* advanced_menu_id = "advanced_menu";
-    if (ImGui::BeginPopupContextItem(advanced_menu_id)) {
-      if (!is_new_scenario_) {
-        if (ImGui::Selectable("Make new copy")) {
-          is_new_scenario_ = true;
-          MakeRelativeNameUniqueInBundle();
-        }
-        ImGui::SameLine();
-        ImGui::HelpMarker(
-            "Save the current changes in a new copy of the scenario leaving the original "
-            "unchanged.");
-      }
-
-      if (ImGui::Selectable("Import Json")) {
-        import_from_json_dialog_.NotifyOpen("");
-      }
-
-      if (ImGui::Selectable("View Json")) {
-        SetErrorMessage(MessageToJson(def_));
-      }
-
-      if (ImGui::Selectable("Compare")) {
-        comparison_window_open_ = !comparison_window_open_;
-      }
-      ImGui::SameLine();
-      ImGui::HelpMarker(
-          "Open a window displaying values from another scenario. Useful if you want to copy the "
-          "strafe patterns from another scenario.");
-      ImGui::EndPopup();
-    }
-    ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
-      ImGui::OpenPopup(advanced_menu_id);
     }
   }
 
@@ -625,6 +622,7 @@ class ScenarioEditorScreen : public UiScreen {
   ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionDialog"};
   ImGui::MultilineTextEntryDialog reference_description_dialog_{"ReferenceDescriptionDialog"};
   ImGui::MultilineTextEntryDialog import_from_json_dialog_{"ImportFromJsonDialog"};
+  ImGui::MultilineTextEntryDialog view_json_dialog_{"ViewJsonDialog"};
   CameraUpdates camera_updates_;
 };
 
