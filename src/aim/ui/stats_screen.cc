@@ -195,6 +195,7 @@ struct HistoryRow {
   std::string timestamp;
   float score;
   i64 stats_id;
+  float cm_per_360 = 0;
 };
 
 std::string GetHitPercentageString(const StatsDbRow& stats) {
@@ -980,6 +981,7 @@ class StatsScreen : public UiScreen {
         row.stats_id = stats.stats_id;
         row.run_number = run_number;
         row.score = stats.score;
+        row.cm_per_360 = stats.mm_per_360 / 10.0f;
 
         i64 time_micros = stats.epoch_seconds * 1000000;
         if (time_micros > 0) {
@@ -1005,6 +1007,7 @@ class StatsScreen : public UiScreen {
     if (ImGui::BeginTable("HistoryTable", 5, flags, ImVec2(0, remaining_height))) {
       ImGui::TableSetupColumn("Run", ImGuiTableColumnFlags_WidthFixed, char_x_ * 4);
       ImGui::TableSetupColumn("Score", ImGuiTableColumnFlags_WidthFixed, char_x_ * 8);
+      ImGui::TableSetupColumn("CM", ImGuiTableColumnFlags_WidthFixed, char_x_ * 5);
       ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed, char_x_ * 12);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
       ImGui::TableHeadersRow();
@@ -1021,6 +1024,10 @@ class StatsScreen : public UiScreen {
         ImGui::TableNextColumn();
         ImGui::AlignTextToFramePadding();
         ImGui::TextFmt("{}", MaybeIntToString(row.score, 2));
+
+        ImGui::TableNextColumn();
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextFmt("{}", MaybeIntToString(row.cm_per_360, 1));
 
         ImGui::TableNextColumn();
         if (row.time_ago.size() > 0) {
@@ -1089,6 +1096,7 @@ class StatsScreen : public UiScreen {
     bool found_stats = false;
     details_.min_score = 1000000;
 
+    i64 average_mm_per_360 = 0;
     float average_runs_count = 0;
     for (int i = 0; i < all_stats.size(); ++i) {
       StatsDbRow& stats = all_stats[i];
@@ -1104,7 +1112,8 @@ class StatsScreen : public UiScreen {
       {
         // Sum values for calculating the average. This will not include the current run.
         details_.average_stats.score += stats.score;
-        details_.average_stats.mm_per_360 += stats.mm_per_360;
+        // This will overflow if done directly with the mm_per_360 i16.
+        average_mm_per_360 += stats.mm_per_360;
         StatsInfo& info = details_.average_stats.info;
         info.set_num_hits(info.num_hits() + stats.info.num_hits());
         info.set_num_shots(info.num_shots() + stats.info.num_shots());
@@ -1127,7 +1136,7 @@ class StatsScreen : public UiScreen {
                                                average_runs_count);
       details_.average_stats.info.set_num_shots(details_.average_stats.info.num_shots() /
                                                 average_runs_count);
-      details_.average_stats.mm_per_360 /= average_runs_count;
+      details_.average_stats.mm_per_360 = average_mm_per_360 / average_runs_count;
     }
 
     if (!found_stats) {
