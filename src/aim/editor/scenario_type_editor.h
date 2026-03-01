@@ -22,4 +22,6 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
 // be the primary details for the scenario type.
 void DrawSecondaryScenarioTypeEditor(ScenarioDef& def);
 
+void DrawShotTypeEditor(ShotType& s);
+
 }  // namespace aim

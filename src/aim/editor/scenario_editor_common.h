@@ -110,18 +110,6 @@ inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
 };
 extern const std::unordered_map<ShotType::TypeCase, std::string> kShotTypeDisplayNameMap;
 
-inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kSingleTargetTrackingShotTypes{
-    {ShotType::kTrackingInvincible, "Tracking"},
-    {ShotType::kTrackingProximity, "Proximity tracking"},
-};
-
-inline const std::vector<ScenarioDef::TypeCase> kSingleTargetTrackingTypes{
-    ScenarioDef::kCenteringDef,
-    ScenarioDef::kWallArcDef,
-    ScenarioDef::kCircleDef,
-    ScenarioDef::kSineDef,
-};
-
 inline const std::vector<std::pair<ScenarioDef::TypeCase, std::string>> kScenarioTypes{
     {ScenarioDef::kStaticDef, "Static"},
     {ScenarioDef::kStrafeDef, "Strafe"},

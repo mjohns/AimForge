@@ -798,138 +798,6 @@ void DrawWaypointEditor(WaypointScenarioDef& d) {
   DrawTargetPlacementStrategyEditor("Placement", d.mutable_target_placement_strategy());
 }
 
-void DrawShotTypeEditor(ShotType& s, bool is_single_target_tracking) {
-  float char_x = ImGui::GetDefaultCharSizeX();
-  ImGui::IdGuard cid("ShotTypeEditor");
-
-  if (s.type_case() == ShotType::TYPE_NOT_SET) {
-    s.set_click_single(true);
-  }
-  ShotType::TypeCase type = s.type_case();
-
-  auto* shot_types = &kShotTypes;
-  if (is_single_target_tracking) {
-    shot_types = &kSingleTargetTrackingShotTypes;
-  }
-  if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, *shot_types, char_x * 15)) {
-    s.Clear();
-    if (type == ShotType::kClickSingle) {
-      s.set_click_single(true);
-    }
-    if (type == ShotType::kClickMulti) {
-      s.set_click_multi(true);
-      s.set_health_clicks(3);
-    }
-    if (type == ShotType::kTrackingInvincible) {
-      s.set_tracking_invincible(true);
-    }
-    if (type == ShotType::kTrackingProximity) {
-      s.set_tracking_proximity(true);
-    }
-    if (type == ShotType::kTrackingKill) {
-      s.set_tracking_kill(true);
-      s.set_health_seconds(0.4);
-    }
-    if (type == ShotType::kPoke) {
-      s.set_poke(true);
-    }
-  }
-
-  if (type == ShotType::kPoke) {
-    ImGui::InputFloat(ImGui::InputFloatParams("PokeKillTime")
-                          .set_label("Poke kill time")
-                          .set_step(0.01, 0.1)
-                          .set_min(0.01)
-                          .set_default(0.1)
-                          .set_is_optional()
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, poke_kill_time_seconds));
-  }
-
-  if (type == ShotType::kClickMulti) {
-    ImGui::InputInt(ImGui::InputIntParams("ClickCount")
-                        .set_label("Clicks to kill")
-                        .set_step(1, 2)
-                        .set_min(2)
-                        .set_default(3)
-                        .set_width(char_x * 10),
-                    PROTO_INT_FIELD(ShotType, &s, health_clicks));
-  }
-
-  if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
-    ImGui::InputBool("Remove on miss", PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
-
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
-                          .set_is_optional()
-                          .set_step(0.01, 0.25)
-                          .set_min(0)
-                          .set_default(1)
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, accuracy_penalty_multiplier));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "0 means no penalty for missed shots. Default (1) is score-sqrt(accuracy%). 0.5 is half "
-        "the default penalty.");
-
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
-                          .set_is_optional()
-                          .set_step(0.05, 0.2)
-                          .set_min(0.05)
-                          .set_default(0.5)
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, click_rate_seconds));
-    ImGui::SameLine();
-    ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
-  } else {
-    // Not clicking.
-    s.clear_click_rate_seconds();
-    s.clear_accuracy_penalty_multiplier();
-    s.clear_remove_closest_on_miss();
-  }
-
-  if (type == ShotType::kTrackingKill) {
-    ImGui::InputFloat(ImGui::InputFloatParams("HealthSeconds")
-                          .set_label("Health time")
-                          .set_step(0.01, 0.1)
-                          .set_min(0.01)
-                          .set_default(0.4)
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, health_seconds));
-    ImGui::SameLine();
-    ImGui::HelpMarker("The amount of time in seconds to kill the target.");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("HealthRegenRate")
-                          .set_label("Health regen rate")
-                          .set_step(0.1, 0.5)
-                          .set_min(0.1)
-                          .set_default(1)
-                          .set_is_optional()
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, health_regen_rate));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "The rate health is regenerated if you switch off target before killing. 1 means regen "
-        "at same rate as health is taken away for hits.");
-
-    ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthSeconds")
-                          .set_label("Remove if below remaining health seconds")
-                          .set_step(0.01, 0.05)
-                          .set_min(0.01)
-                          .set_max(5)
-                          .set_default(0.10)
-                          .set_is_optional()
-                          .set_width(char_x * 10),
-                      PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_seconds));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "If the target has less than the specified health time remaining and you are not on "
-        "target, remove the target and  receive partial score. The kill sound will  be played "
-        "early based on this time.");
-
-    ImGui::InputBool("No partial kills", PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
-  }
-}
-
 void DrawReferenceEditor(ScenarioDef& def,
                          Application* app,
                          std::string* error_message_out,
@@ -1066,7 +934,7 @@ void DrawReferenceEditor(ScenarioDef& def,
   ImGui::Checkbox("##OverrideShotType", &has_shot_type);
   if (has_shot_type) {
     ImGui::Indent();
-    DrawShotTypeEditor(*def.mutable_reference_def()->mutable_shot_type(), false);
+    DrawShotTypeEditor(*def.mutable_reference_def()->mutable_shot_type());
     ImGui::Unindent();
   } else {
     def.mutable_reference_def()->clear_shot_type();
@@ -1183,23 +1051,7 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
       "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x * 15);
   InitializeScenarioType(def, scenario_type);
 
-  bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, scenario_type);
-  if (is_single_target_tracking) {
-    if (is_new_type) {
-      def.mutable_shot_type()->set_tracking_invincible(true);
-      def.clear_target_def();
-    }
-  }
-
   ImGui::SpacedSeparator();
-
-  if (scenario_type != ScenarioDef::kReferenceDef) {
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Shot type");
-    ImGui::SameLine();
-    DrawShotTypeEditor(*def.mutable_shot_type(), is_single_target_tracking);
-    ImGui::SpacedSeparator();
-  }
 
   if (scenario_type == ScenarioDef::kReferenceDef) {
     DrawReferenceEditor(def, app, error_message_out, editing_room, description_dialog);
@@ -1281,6 +1133,134 @@ void DrawSecondaryScenarioTypeEditor(ScenarioDef& def) {
     ImGui::Unindent();
   } else if (changed) {
     strat->clear();
+  }
+}
+
+void DrawShotTypeEditor(ShotType& s) {
+  float char_x = ImGui::GetDefaultCharSizeX();
+  ImGui::IdGuard cid("ShotTypeEditor");
+
+  if (s.type_case() == ShotType::TYPE_NOT_SET) {
+    s.set_click_single(true);
+  }
+  ShotType::TypeCase type = s.type_case();
+
+  if (ImGui::SimpleTypeDropdown("ShotTypeDropdown", &type, kShotTypes, char_x * 15)) {
+    s.Clear();
+    if (type == ShotType::kClickSingle) {
+      s.set_click_single(true);
+    }
+    if (type == ShotType::kClickMulti) {
+      s.set_click_multi(true);
+      s.set_health_clicks(3);
+    }
+    if (type == ShotType::kTrackingInvincible) {
+      s.set_tracking_invincible(true);
+    }
+    if (type == ShotType::kTrackingProximity) {
+      s.set_tracking_proximity(true);
+    }
+    if (type == ShotType::kTrackingKill) {
+      s.set_tracking_kill(true);
+      s.set_health_seconds(0.4);
+    }
+    if (type == ShotType::kPoke) {
+      s.set_poke(true);
+    }
+  }
+
+  if (type == ShotType::kPoke) {
+    ImGui::InputFloat(ImGui::InputFloatParams("PokeKillTime")
+                          .set_label("Poke kill time")
+                          .set_step(0.01, 0.1)
+                          .set_min(0.01)
+                          .set_default(0.1)
+                          .set_is_optional()
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, poke_kill_time_seconds));
+  }
+
+  if (type == ShotType::kClickMulti) {
+    ImGui::InputInt(ImGui::InputIntParams("ClickCount")
+                        .set_label("Clicks to kill")
+                        .set_step(1, 2)
+                        .set_min(2)
+                        .set_default(3)
+                        .set_width(char_x * 10),
+                    PROTO_INT_FIELD(ShotType, &s, health_clicks));
+  }
+
+  if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
+    ImGui::InputBool("Remove on miss", PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Accuracy penalty multiplier")
+                          .set_is_optional()
+                          .set_step(0.01, 0.25)
+                          .set_min(0)
+                          .set_default(1)
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, accuracy_penalty_multiplier));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "0 means no penalty for missed shots. Default (1) is score-sqrt(accuracy%). 0.5 is half "
+        "the default penalty.");
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0.05)
+                          .set_default(0.5)
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, click_rate_seconds));
+    ImGui::SameLine();
+    ImGui::HelpMarker("The amount of time in seconds after shooting before you can shoot again");
+  } else {
+    // Not clicking.
+    s.clear_click_rate_seconds();
+    s.clear_accuracy_penalty_multiplier();
+    s.clear_remove_closest_on_miss();
+  }
+
+  if (type == ShotType::kTrackingKill) {
+    ImGui::InputFloat(ImGui::InputFloatParams("HealthSeconds")
+                          .set_label("Health time")
+                          .set_step(0.01, 0.1)
+                          .set_min(0.01)
+                          .set_default(0.4)
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, health_seconds));
+    ImGui::SameLine();
+    ImGui::HelpMarker("The amount of time in seconds to kill the target.");
+
+    ImGui::InputFloat(ImGui::InputFloatParams("HealthRegenRate")
+                          .set_label("Health regen rate")
+                          .set_step(0.1, 0.5)
+                          .set_min(0.1)
+                          .set_default(1)
+                          .set_is_optional()
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, health_regen_rate));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The rate health is regenerated if you switch off target before killing. 1 means regen "
+        "at same rate as health is taken away for hits.");
+
+    ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthSeconds")
+                          .set_label("Remove if below remaining health seconds")
+                          .set_step(0.01, 0.05)
+                          .set_min(0.01)
+                          .set_max(5)
+                          .set_default(0.10)
+                          .set_is_optional()
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_seconds));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "If the target has less than the specified health time remaining and you are not on "
+        "target, remove the target and  receive partial score. The kill sound will  be played "
+        "early based on this time.");
+
+    ImGui::InputBool("No partial kills", PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
   }
 }
 

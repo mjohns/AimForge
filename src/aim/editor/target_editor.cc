@@ -159,27 +159,6 @@ void DrawTargetEditor(ScenarioDef& def) {
 
   float char_x = ImGui::GetDefaultCharSizeX();
 
-  bool is_single_target_tracking = VectorContains(kSingleTargetTrackingTypes, def.type_case());
-  if (is_single_target_tracking) {
-    if (t->profiles_size() == 0) {
-      t->add_profiles()->set_speed(40);
-    }
-    if (t->profiles_size() > 1) {
-      TargetProfile first_profile = t->profiles(0);
-      t->clear_profiles();
-      *t->add_profiles() = first_profile;
-    }
-
-    TargetProfile p = t->profiles(0);
-
-    t->Clear();
-    *t->add_profiles() = p;
-    t->set_num_targets(1);
-
-    DrawTargetProfile(char_x, def, t->mutable_profiles(0));
-    return;
-  }
-
   int num_targets = t->num_targets();
   if (num_targets <= 0) {
     num_targets = 1;

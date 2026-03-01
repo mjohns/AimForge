@@ -194,6 +194,13 @@ class ScenarioEditorScreen : public UiScreen {
 
       ImGui::TableNextColumn();
       ImGui::BeginChild("ThirdColumnContainer", ImVec2(0, 0));
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Shot type");
+      ImGui::SameLine();
+      DrawShotTypeEditor(*def_.mutable_shot_type());
+      ImGui::SpacedSeparator();
+
       DrawTargetEditor(def_);
       ImGui::EndChild();
 
@@ -310,6 +317,11 @@ class ScenarioEditorScreen : public UiScreen {
     }
     if (ImGui::BeginTabItem("Targets")) {
       ImGui::Spacing();
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Shot type");
+      ImGui::SameLine();
+      DrawShotTypeEditor(*compare_def.mutable_shot_type());
+      ImGui::SpacedSeparator();
       DrawTargetEditor(compare_def);
       ImGui::EndTabItem();
     }
