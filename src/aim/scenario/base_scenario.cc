@@ -589,8 +589,7 @@ float BaseScenario::CalculateScore(float current_time) {
       if (stats_.num_shots <= 0) {
         return 0;
       }
-      if (def_.shot_type().has_reload()) {
-        // No accuracy penalty.
+      if (def_.shot_type().accuracy_penalty() == AccuracyPenalty::ACCURACY_PENALTY_NONE) {
         return stats_.num_hits * time_normalized_multiplier;
       }
       float hit_percent = stats_.num_hits / stats_.num_shots;

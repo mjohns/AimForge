@@ -1213,6 +1213,7 @@ void DrawShotTypeEditor(ShotType& s) {
         "There is no accuracy penalty but you will have to reload if you miss too many consecutive "
         "shots");
     if (has_reload) {
+      s.set_accuracy_penalty(AccuracyPenalty::ACCURACY_PENALTY_NONE);
       ImGui::Indent();
       ImGui::InputInt(ImGui::InputIntParams::WithLabelAsId("Max shots")
                           .set_step(1, 1)
@@ -1239,12 +1240,14 @@ void DrawShotTypeEditor(ShotType& s) {
 
     } else {
       s.clear_reload();
+      s.set_accuracy_penalty(AccuracyPenalty::ACCURACY_PENALTY_SQRT);
     }
   } else {
     // Not clicking.
     s.clear_click_rate_seconds();
     s.clear_remove_closest_on_miss();
     s.clear_reload();
+    s.clear_accuracy_penalty();
   }
 
   if (type == ShotType::kTrackingKill) {

@@ -3467,7 +3467,8 @@
       "maxShots": 3,
       "numToReloadOnHit": 3,
       "reloadTime": 0.5
-     }
+     },
+     "accuracyPenalty": "ACCURACY_PENALTY_NONE"
     },
     "targetDef": {
      "numTargets": 4,
@@ -3642,6 +3643,18 @@
    }
   },
   {
+   "name": "Static3 Poke",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF Static3",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
    "name": "Static3 Poke Ladder",
    "def": {
     "overrides": {},
@@ -3650,6 +3663,20 @@
      "shotType": {
       "poke": true
      }
+    }
+   }
+  },
+  {
+   "name": "Static3 SlowPoke",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF Static3",
+     "shotType": {
+      "poke": true,
+      "pokeKillTimeSeconds": 0.4
+     },
+     "description": "Static3 Poke but you need to stop fully on the target and work on stabilizing"
     }
    }
   },

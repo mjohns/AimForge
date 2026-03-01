@@ -136,6 +136,14 @@ message ReloadInfo {
   float reload_time = 3;
 }
 
+enum AccuracyPenalty {
+    // will default to sqrt
+    ACCURACY_PENALTY_UNKNOWN = 0;
+    // hits * sqrt(hit_percent)
+    ACCURACY_PENALTY_SQRT = 1;
+    ACCURACY_PENALTY_NONE = 2;
+}
+
 message ShotType {
   oneof type {
     // Targets are killed after being "tracked"" consistently for a short duration. Typical for
@@ -181,6 +189,7 @@ message ShotType {
 
   // Disables accuracy penalty but you will need to reload if you miss too many consecutive shots.
   ReloadInfo reload = 20;
+  AccuracyPenalty accuracy_penalty = 21;
 }
 
 // Defines the range of target scores. Will gain "ranks" incrementally between the two scores.

@@ -55,6 +55,8 @@ extern "C" {
 extern const ::google::protobuf::internal::DescriptorTable descriptor_table_scenario_2eproto;
 }  // extern "C"
 namespace aim {
+enum AccuracyPenalty : int;
+extern const uint32_t AccuracyPenalty_internal_data_[];
 enum Direction : int;
 extern const uint32_t Direction_internal_data_[];
 class AngleStrafeProfile;
@@ -217,12 +219,52 @@ extern const ::google::protobuf::internal::ClassDataFull WaypointScenarioDef_cla
 namespace google {
 namespace protobuf {
 template <>
+internal::EnumTraitsT<::aim::AccuracyPenalty_internal_data_>
+    internal::EnumTraitsImpl::value<::aim::AccuracyPenalty>;
+template <>
 internal::EnumTraitsT<::aim::Direction_internal_data_>
     internal::EnumTraitsImpl::value<::aim::Direction>;
 }  // namespace protobuf
 }  // namespace google
 
 namespace aim {
+enum AccuracyPenalty : int {
+  ACCURACY_PENALTY_UNKNOWN = 0,
+  ACCURACY_PENALTY_SQRT = 1,
+  ACCURACY_PENALTY_NONE = 2,
+  AccuracyPenalty_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  AccuracyPenalty_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t AccuracyPenalty_internal_data_[];
+inline constexpr AccuracyPenalty AccuracyPenalty_MIN =
+    static_cast<AccuracyPenalty>(0);
+inline constexpr AccuracyPenalty AccuracyPenalty_MAX =
+    static_cast<AccuracyPenalty>(2);
+inline bool AccuracyPenalty_IsValid(int value) {
+  return 0 <= value && value <= 2;
+}
+inline constexpr int AccuracyPenalty_ARRAYSIZE = 2 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL AccuracyPenalty_descriptor();
+template <typename T>
+const ::std::string& AccuracyPenalty_Name(T value) {
+  static_assert(::std::is_same<T, AccuracyPenalty>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to AccuracyPenalty_Name().");
+  return AccuracyPenalty_Name(static_cast<AccuracyPenalty>(value));
+}
+template <>
+inline const ::std::string& AccuracyPenalty_Name(AccuracyPenalty value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<AccuracyPenalty_descriptor, 0, 2>(
+      static_cast<int>(value));
+}
+inline bool AccuracyPenalty_Parse(
+    ::absl::string_view name, AccuracyPenalty* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<AccuracyPenalty>(AccuracyPenalty_descriptor(), name,
+                                           value);
+}
 enum Direction : int {
   DIRECTION_RANDOM = 0,
   DIRECTION_POSITIVE = 1,
@@ -4145,6 +4187,7 @@ class ShotType final : public ::google::protobuf::Message
     kRemoveClosestOnMissFieldNumber = 19,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
+    kAccuracyPenaltyFieldNumber = 21,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
     kTrackingInvincibleFieldNumber = 3,
@@ -4253,6 +4296,17 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_click_rate_seconds(float value);
 
   public:
+  // .aim.AccuracyPenalty accuracy_penalty = 21;
+  bool has_accuracy_penalty() const;
+  void clear_accuracy_penalty() ;
+  ::aim::AccuracyPenalty accuracy_penalty() const;
+  void set_accuracy_penalty(::aim::AccuracyPenalty value);
+
+  private:
+  ::aim::AccuracyPenalty _internal_accuracy_penalty() const;
+  void _internal_set_accuracy_penalty(::aim::AccuracyPenalty value);
+
+  public:
   // bool poke = 1;
   bool has_poke() const;
   void clear_poke() ;
@@ -4333,7 +4387,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
+  static const ::google::protobuf::internal::TcParseTable<4, 16,
                                    1, 0,
                                    2>
       _table_;
@@ -4364,6 +4418,7 @@ class ShotType final : public ::google::protobuf::Message
     bool remove_closest_on_miss_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
+    int accuracy_penalty_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
       ::google::protobuf::internal::ConstantInitialized _constinit_;
@@ -15289,6 +15344,35 @@ inline void ShotType::set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE 
   // @@protoc_insertion_point(field_set_allocated:aim.ShotType.reload)
 }
 
+// .aim.AccuracyPenalty accuracy_penalty = 21;
+inline bool ShotType::has_accuracy_penalty() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void ShotType::clear_accuracy_penalty() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline ::aim::AccuracyPenalty ShotType::accuracy_penalty() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty)
+  return _internal_accuracy_penalty();
+}
+inline void ShotType::set_accuracy_penalty(::aim::AccuracyPenalty value) {
+  _internal_set_accuracy_penalty(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty)
+}
+inline ::aim::AccuracyPenalty ShotType::_internal_accuracy_penalty() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::AccuracyPenalty>(_impl_.accuracy_penalty_);
+}
+inline void ShotType::_internal_set_accuracy_penalty(::aim::AccuracyPenalty value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.accuracy_penalty_ = value;
+}
+
 inline bool ShotType::has_type() const {
   return type_case() != TYPE_NOT_SET;
 }
@@ -25458,6 +25542,12 @@ inline TargetProfile::TypeCase TargetProfile::type_case() const {
 namespace google {
 namespace protobuf {
 
+template <>
+struct is_proto_enum<::aim::AccuracyPenalty> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::aim::AccuracyPenalty>() {
+  return ::aim::AccuracyPenalty_descriptor();
+}
 template <>
 struct is_proto_enum<::aim::Direction> : std::true_type {};
 template <>
