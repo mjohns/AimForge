@@ -118,7 +118,8 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
   bool requires_per_frame_target_data = RequiresPerFrameTargetData(def_);
   u16 replay_fps = requires_per_frame_target_data ? kReplayFps : kStaticReplayFps;
   timer_ = ScenarioTimer(replay_fps);
-  if (ShouldRecordReplay(def_, requires_per_frame_target_data, settings_)) {
+  if (!from_scenario_editor_ &&
+      ShouldRecordReplay(def_, requires_per_frame_target_data, settings_)) {
     replay_ = std::make_unique<ReplayRecorder>(scenario_name_,
                                                def_.room(),
                                                replay_fps,
