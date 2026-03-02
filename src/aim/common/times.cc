@@ -7,6 +7,7 @@
 
 #include "absl/time/time.h"
 #include "aim/common/log.h"
+#include "aim/common/util.h"
 
 namespace aim {
 
@@ -98,33 +99,35 @@ std::string GetHowLongAgoStringFromEpochMicros(i64 start, i64 end) {
   i64 duration_micros = start > end ? start - end : end - start;
   auto duration = std::chrono::microseconds(duration_micros);
 
-  {
-    int weeks = std::chrono::duration_cast<std::chrono::weeks>(duration).count();
-    if (weeks > 0) {
-      return weeks == 1 ? std::format("{} week ago", weeks) : std::format("{} weeks ago", weeks);
+  int weeks = std::chrono::duration_cast<std::chrono::weeks>(duration).count();
+
+  if (weeks >= 10) {
+    int months = std::chrono::duration_cast<std::chrono::months>(duration).count();
+    if (months >= 12) {
+      std::string year_str = MaybeIntToString(months / 12.0f, 1);
+      return year_str == "1" ? "1 year ago" : std::format("{} years ago", year_str);
     }
+    return months == 1 ? std::format("{} month ago", months) : std::format("{} months ago", months);
   }
 
-  {
-    int days = std::chrono::duration_cast<std::chrono::days>(duration).count();
-    if (days > 0) {
-      return days == 1 ? std::format("{} day ago", days) : std::format("{} days ago", days);
-    }
+  if (weeks > 0) {
+    return weeks == 1 ? std::format("{} week ago", weeks) : std::format("{} weeks ago", weeks);
   }
 
-  {
-    int hours = std::chrono::duration_cast<std::chrono::hours>(duration).count();
-    if (hours > 0) {
-      return hours == 1 ? std::format("{} hour ago", hours) : std::format("{} hours ago", hours);
-    }
+  int days = std::chrono::duration_cast<std::chrono::days>(duration).count();
+  if (days > 0) {
+    return days == 1 ? std::format("{} day ago", days) : std::format("{} days ago", days);
   }
 
-  {
-    int minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
-    if (minutes > 0) {
-      return minutes == 1 ? std::format("{} minute ago", minutes)
-                          : std::format("{} minutes ago", minutes);
-    }
+  int hours = std::chrono::duration_cast<std::chrono::hours>(duration).count();
+  if (hours > 0) {
+    return hours == 1 ? std::format("{} hour ago", hours) : std::format("{} hours ago", hours);
+  }
+
+  int minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+  if (minutes > 0) {
+    return minutes == 1 ? std::format("{} minute ago", minutes)
+                        : std::format("{} minutes ago", minutes);
   }
 
   return "Just now";
