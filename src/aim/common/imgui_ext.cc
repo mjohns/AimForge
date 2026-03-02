@@ -120,6 +120,16 @@ void HelpTooltip(const std::string& text) {
   }
 }
 
+void HelpTooltip(std::function<std::string()> get_text) {
+  if (ImGui::BeginItemTooltip()) {
+    std::string text = get_text();
+    ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+    ImGui::Text(text);
+    ImGui::PopTextWrapPos();
+    ImGui::EndTooltip();
+  }
+}
+
 void DrawItemBounds() {
   ImVec2 rect_min = ImGui::GetItemRectMin();
   ImVec2 rect_max = ImGui::GetItemRectMax();

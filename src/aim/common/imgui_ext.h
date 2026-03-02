@@ -1,6 +1,7 @@
 #pragma once
 
 #include <format>
+#include <functional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -130,6 +131,7 @@ bool SimpleTypeDropdown(const std::string& id,
 void HelpMarker(const std::string& text);
 void InfoMarker(const std::string& text);
 void HelpTooltip(const std::string& text);
+void HelpTooltip(std::function<std::string()> get_text);
 
 void DrawItemBounds();
 void SetCursorAtBottom(float item_height = -1);

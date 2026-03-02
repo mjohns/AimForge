@@ -522,11 +522,11 @@ class StatsScreen : public UiScreen {
     // time
     ImGui::TableNextColumn();
     std::string time_ago;
-    if (comparison_stats.epoch_seconds > 0) {
-      ImGui::Text(GetHowLongAgoStringFromEpochSeconds(comparison_stats.epoch_seconds,
-                                                      GetNowEpochSeconds()));
+    i64 epoch_seconds = comparison_stats.epoch_seconds;
+    if (epoch_seconds > 0) {
+      ImGui::Text(GetHowLongAgoStringFromEpochSeconds(epoch_seconds, GetNowEpochSeconds()));
     }
-    //    ImGui::HelpTooltip(comparison_stats.timestamp);
+    ImGui::HelpTooltip([epoch_seconds]() { return EpochSecondsToString(epoch_seconds); });
   }
 
   bool BeginMainWindow(const std::string& name, float width_multiple) {

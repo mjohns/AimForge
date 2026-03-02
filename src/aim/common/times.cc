@@ -16,6 +16,12 @@ std::string GetNowString() {
   return std::format("{:%FT%TZ}", now);
 }
 
+std::string EpochSecondsToString(i64 epoch_seconds) {
+  auto tp = std::chrono::system_clock::from_time_t(epoch_seconds);
+  std::chrono::zoned_time local_time{std::chrono::current_zone(), tp};
+  return std::format("{:%Y-%m-%d %I:%M %p}", local_time);
+}
+
 void Stopwatch::Start() {
   if (running_) {
     return;
