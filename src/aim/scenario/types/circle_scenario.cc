@@ -93,7 +93,7 @@ class CircleScenario : public BaseScenario {
     float delta_seconds = now_seconds - last_update_time_;
     last_update_time_ = now_seconds;
 
-    if (radius_change_rate_ > 0) {
+    if (radius_change_rate_ != 0) {
       bool is_positive = direction_count_ % 2 == 0;
       if (is_positive) {
         radius_ += (radius_change_rate_ * delta_seconds);

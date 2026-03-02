@@ -601,6 +601,11 @@ void Scenario::OnRunningTick() {
 }
 
 void Scenario::HandleScenarioDone() {
+  if (from_scenario_editor_) {
+    PopSelf();
+    return;
+  }
+
   run_state_ = ScenarioRunState::DONE;
   OnScenarioDone();
 

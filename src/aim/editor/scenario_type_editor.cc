@@ -80,7 +80,7 @@ void DrawCircleEditor(CircleScenarioDef& d) {
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Radius");
   ImGui::SameLine();
-  DrawRegionLengthEditor("Radius", RegionLength::kXPercentValue, d.mutable_radius(), 50);
+  DrawRegionLengthEditor("Radius", RegionLength::kXPercentValue, d.mutable_radius(), 30);
 
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Final radius");
@@ -88,7 +88,7 @@ void DrawCircleEditor(CircleScenarioDef& d) {
   DrawOptionalRegionLengthEditor("FinalRadius",
                                  RegionLength::kXPercentValue,
                                  PROTO_PTR_FIELD(RegionLength, CircleScenarioDef, &d, final_radius),
-                                 50);
+                                 10);
   ImGui::SameLine();
   ImGui::HelpMarker(
       "The radius will change to this value over the duration of the scenario (or until "
