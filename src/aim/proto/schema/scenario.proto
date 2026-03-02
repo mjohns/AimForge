@@ -243,6 +243,8 @@ message ReferenceScenarioDef {
   // a ladder playlist. This will update the radius in the first profile and all other profiles will
   // keep their relative size based on the new radius.
   float explicit_target_radius = 7;
+
+  float horizontal_fov = 8;
 }
 
 message StaticScenarioDef {

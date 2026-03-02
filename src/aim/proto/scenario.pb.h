@@ -7723,6 +7723,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     kDurationSecondsFieldNumber = 3,
     kNumTargetsFieldNumber = 4,
     kExplicitTargetRadiusFieldNumber = 7,
+    kHorizontalFovFieldNumber = 8,
   };
   // string scenario_name = 1;
   bool has_scenario_name() const;
@@ -7819,12 +7820,23 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_explicit_target_radius(float value);
 
   public:
+  // float horizontal_fov = 8;
+  bool has_horizontal_fov() const;
+  void clear_horizontal_fov() ;
+  float horizontal_fov() const;
+  void set_horizontal_fov(float value);
+
+  private:
+  float _internal_horizontal_fov() const;
+  void _internal_set_horizontal_fov(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ReferenceScenarioDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
-                                   2, 57,
+  static const ::google::protobuf::internal::TcParseTable<3, 8,
+                                   2, 65,
                                    2>
       _table_;
 
@@ -7852,6 +7864,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     ::int32_t duration_seconds_;
     ::int32_t num_targets_;
     float explicit_target_radius_;
+    float horizontal_fov_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -17636,6 +17649,35 @@ inline float ReferenceScenarioDef::_internal_explicit_target_radius() const {
 inline void ReferenceScenarioDef::_internal_set_explicit_target_radius(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.explicit_target_radius_ = value;
+}
+
+// float horizontal_fov = 8;
+inline bool ReferenceScenarioDef::has_horizontal_fov() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  return value;
+}
+inline void ReferenceScenarioDef::clear_horizontal_fov() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.horizontal_fov_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline float ReferenceScenarioDef::horizontal_fov() const {
+  // @@protoc_insertion_point(field_get:aim.ReferenceScenarioDef.horizontal_fov)
+  return _internal_horizontal_fov();
+}
+inline void ReferenceScenarioDef::set_horizontal_fov(float value) {
+  _internal_set_horizontal_fov(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:aim.ReferenceScenarioDef.horizontal_fov)
+}
+inline float ReferenceScenarioDef::_internal_horizontal_fov() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.horizontal_fov_;
+}
+inline void ReferenceScenarioDef::_internal_set_horizontal_fov(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.horizontal_fov_ = value;
 }
 
 // -------------------------------------------------------------------

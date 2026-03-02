@@ -183,6 +183,10 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   if (ref.reference_def().has_room()) {
     *def->mutable_room() = ref.reference_def().room();
   }
+  if (ref.reference_def().horizontal_fov() > 0) {
+    // Important to keep this after the room override has maybe been set.
+    def->mutable_room()->set_horizontal_fov(ref.reference_def().horizontal_fov());
+  }
   if (!ref.reference_def().description().empty()) {
     def->set_description(ref.reference_def().description());
   }

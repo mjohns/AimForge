@@ -925,6 +925,14 @@ void DrawReferenceEditor(ScenarioDef& def,
     }
   }
 
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Horizontal FOV")
+                        .set_is_optional()
+                        .set_step(1, 5)
+                        .set_min(1)
+                        .set_default(103)
+                        .set_width(char_x * 10),
+                    PROTO_FLOAT_FIELD(ReferenceScenarioDef, &r, horizontal_fov));
+
   ImGui::SpacedSeparator();
 
   bool has_shot_type = def.reference_def().has_shot_type();

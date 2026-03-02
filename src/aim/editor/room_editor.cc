@@ -159,7 +159,7 @@ void DrawRoomEditorInputs(Room& room, CameraUpdates* camera_updates) {
       room.mutable_camera_position());
   ImGui::Unindent();
 
-  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Horizontal Fov")
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Horizontal FOV")
                         .set_is_optional()
                         .set_step(1, 5)
                         .set_min(1)
