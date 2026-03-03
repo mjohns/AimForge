@@ -1026,6 +1026,7 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
       def.mutable_sine_def();
       break;
     case ScenarioDef::kReferenceDef:
+      def.clear_level_overrides();
       def.mutable_reference_def();
       break;
     case ScenarioDef::TYPE_NOT_SET:

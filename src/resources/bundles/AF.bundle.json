@@ -1945,7 +1945,13 @@
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "reload": {
+      "maxShots": 3,
+      "numToReloadOnHit": 3,
+      "reloadTime": 0.5
+     },
+     "accuracyPenalty": "ACCURACY_PENALTY_NONE"
     },
     "targetDef": {
      "numTargets": 5,
@@ -1956,7 +1962,7 @@
        "acceleration": 120
       }
      ],
-     "staggerInitialTargetsSeconds": 0.0500000082
+     "staggerInitialTargetsSeconds": 0.05
     },
     "room": {
      "cameraPosition": {
@@ -1979,15 +1985,15 @@
      "bounceProfiles": [
       {
        "height": {
-        "yPercentValue": 0.569999933
+        "yPercentValue": 0.569999874
        },
        "heightJitter": {
-        "yPercentValue": 0.0900000259
+        "yPercentValue": 0.09
        },
        "delaySeconds": 0.15,
        "delaySecondsJitter": 0.1,
        "speedMultiplier": 1,
-       "speedMultiplierJitter": 0.049999997
+       "speedMultiplierJitter": 0.05
       }
      ],
      "leftRightProfiles": [
@@ -1998,7 +2004,7 @@
        "distanceJitter": {
         "xPercentValue": 0
        },
-       "speedMultiplier": 0.699999928,
+       "speedMultiplier": 0.7,
        "speedMultiplierJitter": 0.15
       }
      ],
