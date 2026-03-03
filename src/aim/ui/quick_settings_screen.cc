@@ -176,21 +176,12 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
     }
 
-    ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
-
     if (type_ == QuickSettingsType::DEFAULT) {
-      ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp;
-      for (int i = 10; i <= 90; i += 10) {
-        std::string sens1 = std::format("{}", i);
-        std::string sens2 = std::format("{}", i + 5);
-        if (ImGui::Button(sens1.c_str(), button_sz)) {
-          updater_.settings.set_cm_per_360(i);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button(sens2.c_str(), button_sz)) {
-          updater_.settings.set_cm_per_360(i + 5);
-        }
-      }
+      int start_value = 10;
+      int num_rows = 9;
+      DrawCenterTable("SensTable", start_value, num_rows, [&](float val) {
+        updater_.settings.set_cm_per_360(val);
+      });
 
       ImGui::Spacing();
       ImGui::Spacing();
