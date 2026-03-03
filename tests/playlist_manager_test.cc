@@ -113,6 +113,22 @@ TEST(PlaylistManagerTest, GetLevelsPlaylistItems_Cm360Suffix) {
                           EqualsProto(MakeItem("Base Scenario L5 25cm"))));
 }
 
+TEST(PlaylistManagerTest, GetLevelsPlaylistItems_MultipleSuffix) {
+  PlaylistDef playlist;
+  auto& levels = *playlist.mutable_levels();
+
+  // No base name
+  levels.set_max_level(5);
+  levels.set_base_scenario("Base Scenario 120fov 40s 25cm");
+
+  EXPECT_THAT(GetPlaylistItems(playlist),
+              ElementsAre(EqualsProto(MakeItem("Base Scenario L1 120fov 40s 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L2 120fov 40s 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L3 120fov 40s 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L4 120fov 40s 25cm")),
+                          EqualsProto(MakeItem("Base Scenario L5 120fov 40s 25cm"))));
+}
+
 TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone) {
   PlaylistDef def;
   auto item1 = MakeItem("S1", 1);

@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "aim/common/name_util.h"
 #include "aim/common/random.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
@@ -34,6 +35,7 @@ struct PlaylistItemProgress {
 
 struct Playlist {
   std::string name;
+  NameInfo playlist_name_info;
   std::optional<float> cm_per_360;
   std::optional<float> level;
 

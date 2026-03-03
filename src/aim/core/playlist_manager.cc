@@ -203,9 +203,8 @@ class PlaylistManagerImpl : public PlaylistManager {
     if (name_info.HasDynamicSuffix()) {
       auto playlist = GetPlaylist(name_info.base_name);
       if (playlist) {
-        playlist->cm_per_360 = name_info.cm_per_360;
-        playlist->level = name_info.level;
         playlist->name = playlist_name;
+        playlist->playlist_name_info = name_info;
         return playlist;
       }
     }
@@ -564,22 +563,28 @@ std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
 
 std::vector<PlaylistItem> Playlist::items() const {
   auto item_list = GetPlaylistItemsNoSuffix(def_);
-  if (cm_per_360) {
-    for (auto& item : item_list) {
-      NameInfo name_info = GetScenarioNameInfo(item.scenario());
-      name_info.cm_per_360 = cm_per_360;
-      item.set_scenario(name_info.GetFullName());
+  for (auto& item : item_list) {
+    NameInfo scenario_name_info = GetScenarioNameInfo(item.scenario());
+    if (playlist_name_info.cm_per_360) {
+      scenario_name_info.cm_per_360 = playlist_name_info.cm_per_360;
     }
+    if (playlist_name_info.duration) {
+      scenario_name_info.duration = playlist_name_info.duration;
+    }
+    if (playlist_name_info.fov) {
+      scenario_name_info.fov = playlist_name_info.fov;
+    }
+    item.set_scenario(scenario_name_info.GetFullName());
   }
-  if (level) {
+  if (playlist_name_info.level) {
     for (auto& item : item_list) {
-      NameInfo name_info = GetScenarioNameInfo(item.scenario());
-      if (name_info.level) {
-        name_info.level = *name_info.level + *level;
+      NameInfo scenario_name_info = GetScenarioNameInfo(item.scenario());
+      if (scenario_name_info.level) {
+        scenario_name_info.level = *playlist_name_info.level + *level;
       } else {
-        name_info.level = level;
+        scenario_name_info.level = level;
       }
-      item.set_scenario(name_info.GetFullName());
+      item.set_scenario(scenario_name_info.GetFullName());
     }
   }
   return item_list;
