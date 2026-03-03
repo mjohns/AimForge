@@ -1027,6 +1027,8 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
       break;
     case ScenarioDef::kReferenceDef:
       def.clear_level_overrides();
+      def.clear_score_targets();
+      def.clear_overrides();
       def.mutable_reference_def();
       break;
     case ScenarioDef::TYPE_NOT_SET:
