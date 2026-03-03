@@ -10,8 +10,34 @@
 using namespace aim;
 
 using ::testing::Eq;
+using ::testing::IsEmpty;
 using ::testing::Optional;
 using ::testing::StrEq;
+
+void ExpectParsedFloatValueSuffix(std::string str,
+                                  std::string expected_suffix,
+                                  float expected_value) {
+  std::string_view suffix;
+  float value;
+  ASSERT_TRUE(ParseFloatValueSuffix(str, &suffix, &value)) << str;
+  EXPECT_THAT(suffix, StrEq(expected_suffix));
+  EXPECT_THAT(value, Eq(expected_value));
+}
+
+TEST(NameUtilTest, ParseFloatValueSuffix) {
+  ExpectParsedFloatValueSuffix("25cm", "cm", 25);
+  ExpectParsedFloatValueSuffix("-25s", "s", -25);
+  ExpectParsedFloatValueSuffix("25s", "s", 25);
+  ExpectParsedFloatValueSuffix("1s", "s", 1);
+
+  std::string_view suffix;
+  float value;
+  EXPECT_FALSE(ParseFloatValueSuffix("1", &suffix, &value));
+  EXPECT_FALSE(ParseFloatValueSuffix("cm12", &suffix, &value));
+  EXPECT_FALSE(ParseFloatValueSuffix("cm", &suffix, &value));
+  EXPECT_FALSE(ParseFloatValueSuffix("", &suffix, &value));
+  EXPECT_FALSE(ParseFloatValueSuffix("a", &suffix, &value));
+}
 
 TEST(NameUtilTest, StripLevelSuffix) {
   EXPECT_FALSE(StripLevelSuffix("Scenario No Suffix 1").has_value());
@@ -102,6 +128,28 @@ TEST(NameUtilTest, GetScenarioNameInfo_NoSuffix) {
   EXPECT_THAT(info.GetFullName(), StrEq("Scenario One"));
 }
 
+TEST(NameUtilTest, GetScenarioNameInfo_Empty) {
+  NameInfo info = GetScenarioNameInfo("");
+  EXPECT_THAT(info.base_name, IsEmpty());
+}
+
+TEST(NameUtilTest, GetScenarioNameInfo_SingleChar) {
+  NameInfo info = GetScenarioNameInfo("a");
+  EXPECT_THAT(info.base_name, StrEq("a"));
+
+  info = GetScenarioNameInfo("1");
+  EXPECT_THAT(info.base_name, StrEq("1"));
+
+  info = GetScenarioNameInfo("-");
+  EXPECT_THAT(info.base_name, StrEq("-"));
+}
+
+TEST(NameUtilTest, GetScenarioNameInfo_TrailingWhitespace) {
+  // TODO: Should this strip? We really don't want trailing whitespace in the system.
+  NameInfo info = GetScenarioNameInfo("ab ");
+  EXPECT_THAT(info.base_name, StrEq("ab "));
+}
+
 TEST(NameUtilTest, GetScenarioNameInfo_StripCm360) {
   NameInfo info = GetScenarioNameInfo("Scenario 25cm");
   EXPECT_THAT(info.base_name, StrEq("Scenario"));
@@ -120,12 +168,29 @@ TEST(NameUtilTest, GetScenarioNameInfo_StripLevel) {
 }
 
 TEST(NameUtilTest, GetScenarioNameInfo_StripAll) {
-  NameInfo info = GetScenarioNameInfo("Scenario L1.5 35cm");
+  NameInfo info = GetScenarioNameInfo("Scenario L1.5 35cm 40s");
   EXPECT_THAT(info.base_name, StrEq("Scenario"));
   EXPECT_THAT(info.level, Optional(1.5));
   EXPECT_THAT(info.cm_per_360, Optional(35));
+  EXPECT_THAT(info.duration, Optional(40));
 
-  EXPECT_THAT(info.GetFullName(), StrEq("Scenario L1.5 35cm"));
+  EXPECT_THAT(info.GetFullName(), StrEq("Scenario L1.5 40s 35cm"));
+}
+
+TEST(NameUtilTest, GetScenarioNameInfo_NoSuffixMatch) {
+  NameInfo info = GetScenarioNameInfo("SERF ww5t Int -1Bot");
+
+  EXPECT_THAT(info.base_name, StrEq("SERF ww5t Int -1Bot"));
+
+  EXPECT_THAT(info.GetFullName(), StrEq("SERF ww5t Int -1Bot"));
+}
+
+TEST(NameUtilTest, GetScenarioNameInfo_NoSuffixMatch_HasDynamicSuffixToo) {
+  NameInfo info = GetScenarioNameInfo("SERF ww5t Int -1Bot 120fov");
+
+  EXPECT_THAT(info.base_name, StrEq("SERF ww5t Int -1Bot"));
+
+  EXPECT_THAT(info.GetFullName(), StrEq("SERF ww5t Int -1Bot 120fov"));
 }
 
 TEST(NameUtilTest, GetSortedLevelNames) {

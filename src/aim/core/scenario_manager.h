@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "aim/common/name_util.h"
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"
 #include "aim/core/screen.h"
@@ -16,12 +17,10 @@ namespace aim {
 
 struct ScenarioItem {
   std::string name;
+  std::optional<NameInfo> name_info;
 
   // References have not been evaluated.
   ScenarioDef unevaluated_def;
-
-  std::optional<float> forced_cm_per_360{};
-  std::optional<float> level{};
 };
 
 class ScenarioManager {

@@ -219,32 +219,23 @@ TEST_F(BundleFunctionalTest, GetLevelScenario) {
   ASSERT_TRUE(base_scenario.has_value());
   EXPECT_THAT(base_scenario->unevaluated_def, EqualsProto(def));
   EXPECT_THAT(base_scenario->name, StrEq("Bundle Scenario"));
-  EXPECT_FALSE(base_scenario->level.has_value());
 
   std::optional<ScenarioItem> scenario_l1 = scenario_manager_->GetScenario("Bundle Scenario L1");
   ASSERT_TRUE(scenario_l1.has_value());
   EXPECT_THAT(scenario_l1->unevaluated_def, EqualsProto(def));
   EXPECT_THAT(scenario_l1->name, StrEq("Bundle Scenario L1"));
-  ASSERT_TRUE(scenario_l1->level.has_value());
-  EXPECT_THAT(*scenario_l1->level, Eq(1));
 
   std::optional<ScenarioItem> scenario_l1_with_cm =
       scenario_manager_->GetScenario("Bundle Scenario L1 25cm");
   ASSERT_TRUE(scenario_l1_with_cm.has_value());
   EXPECT_THAT(scenario_l1_with_cm->unevaluated_def, EqualsProto(def));
   EXPECT_THAT(scenario_l1_with_cm->name, StrEq("Bundle Scenario L1 25cm"));
-  ASSERT_TRUE(scenario_l1_with_cm->level.has_value());
-  EXPECT_THAT(*scenario_l1_with_cm->level, Eq(1));
-  ASSERT_TRUE(scenario_l1_with_cm->forced_cm_per_360.has_value());
-  EXPECT_THAT(*scenario_l1_with_cm->forced_cm_per_360, Eq(25));
 
   std::optional<ScenarioItem> scenario_neg_l1 =
       scenario_manager_->GetScenario("Bundle Scenario L-1");
   ASSERT_TRUE(scenario_neg_l1.has_value());
   EXPECT_THAT(scenario_neg_l1->unevaluated_def, EqualsProto(def));
   EXPECT_THAT(scenario_neg_l1->name, StrEq("Bundle Scenario L-1"));
-  ASSERT_TRUE(scenario_neg_l1->level.has_value());
-  EXPECT_THAT(*scenario_neg_l1->level, Eq(-1));
 
   bundle_manager_->SaveDirtyBundles();
   bundle_manager_->LoadBundlesFromDisk();
@@ -285,6 +276,11 @@ TEST_F(BundleFunctionalTest, GetEvaluatedLevelScenario) {
 
   scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L2");
   EXPECT_THAT(scenario, Optional(EqualsProto(create_evaluated_def(12))));
+
+  scenario = scenario_manager_->GetEvaluatedScenarioDef("Bundle Scenario L1 40s");
+  ScenarioDef expected_duration_def = create_evaluated_def(6);
+  expected_duration_def.set_duration_seconds(40);
+  EXPECT_THAT(scenario, Optional(EqualsProto(expected_duration_def)));
 
   ScenarioDef ref;
   ref.mutable_overrides()->set_speed_multiplier(0.5);

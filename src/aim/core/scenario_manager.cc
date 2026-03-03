@@ -69,43 +69,35 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   std::optional<ScenarioItem> GetScenario(const std::string& scenario_name) override {
+    std::unordered_set<std::string> visited;
+    return GetScenarioInternal(scenario_name, 0, &visited);
+  }
+
+  std::optional<ScenarioItem> GetScenarioInternal(const std::string& scenario_name,
+                                                  int depth,
+                                                  std::unordered_set<std::string>* visited) {
     auto it = scenario_map_.find(scenario_name);
-    if (it == scenario_map_.end()) {
-      // See if it should be an automatic cm/360 version of a scenario.
-      float cm_per_360;
-      std::optional<std::string> base_scenario_name = StripCmSuffix(scenario_name, &cm_per_360);
-      if (base_scenario_name && cm_per_360 > 0) {
-        auto base_scenario = GetScenario(*base_scenario_name);
-        if (!base_scenario) {
-          return {};
-        }
-        ScenarioItem item = *base_scenario;
-        item.name = scenario_name;
-        item.forced_cm_per_360 = cm_per_360;
-        return item;
-      }
+    if (it != scenario_map_.end()) {
+      ScenarioItem item;
+      item.name = it->second.name;
+      item.unevaluated_def = it->second.def;
+      return item;
+    }
 
-      // Now check if it is a level scenario.
-      float level = 0;
-      base_scenario_name = StripLevelSuffix(scenario_name, &level);
-      if (base_scenario_name) {
-        auto base_scenario = GetScenario(*base_scenario_name);
-        if (!base_scenario) {
-          return {};
-        }
-        ScenarioItem item = *base_scenario;
-        item.name = scenario_name;
-        item.level = level;
-        return item;
-      }
+    if (depth > 300 || visited->contains(scenario_name)) {
+      return {};
+    }
+    visited->insert(scenario_name);
 
+    NameInfo name_info = GetScenarioNameInfo(scenario_name);
+    auto base_scenario = GetScenarioInternal(name_info.base_name, depth + 1, visited);
+    if (!base_scenario) {
       return {};
     }
 
-    ScenarioItem item;
-    item.name = it->second.name;
-    item.unevaluated_def = it->second.def;
-
+    ScenarioItem item = *base_scenario;
+    item.name = scenario_name;
+    item.name_info = name_info;
     return item;
   }
 
@@ -257,9 +249,25 @@ class ScenarioManagerImpl : public ScenarioManager {
     }
 
     ScenarioDef& def = scenario->unevaluated_def;
+
+    auto get_evaluated_def = [](const ScenarioDef& def, std::optional<NameInfo> name_info) {
+      bool has_level = name_info && name_info->level;
+
+      ScenarioDef result = has_level ? ApplyScenarioLevelOverrides(def, *name_info->level)
+                                     : ApplyScenarioOverrides(def);
+      if (name_info) {
+        if (name_info->duration) {
+          result.set_duration_seconds(*name_info->duration);
+        }
+        if (name_info->fov) {
+          result.mutable_room()->set_horizontal_fov(*name_info->fov);
+        }
+      }
+      return result;
+    };
+
     if (!def.has_reference_def()) {
-      return scenario->level.has_value() ? ApplyScenarioLevelOverrides(def, *scenario->level)
-                                         : ApplyScenarioOverrides(def);
+      return get_evaluated_def(def, scenario->name_info);
     }
 
     auto referenced =
@@ -270,8 +278,7 @@ class ScenarioManagerImpl : public ScenarioManager {
 
     ApplyReferenceFieldOverrides(def, &(*referenced));
 
-    return scenario->level.has_value() ? ApplyScenarioLevelOverrides(*referenced, *scenario->level)
-                                       : ApplyScenarioOverrides(*referenced);
+    return get_evaluated_def(*referenced, scenario->name_info);
   }
 
   void StartReload() override {

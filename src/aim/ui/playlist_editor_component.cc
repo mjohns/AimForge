@@ -285,23 +285,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
           editing_i_ = i;
           focus_editor_ = true;
         }
-        if (ImGui::Selectable("Add levels")) {
-          NameInfo name_info = GetScenarioNameInfo(item.scenario());
-          std::string cm_suffix =
-              name_info.cm_per_360
-                  ? std::format(" {}cm", MaybeIntToString(*name_info.cm_per_360, 1))
-                  : "";
-          float current_level = name_info.level ? *name_info.level : 0;
-          for (int n = 0; n < 5; ++n) {
-            current_level += 1.0f;
-            PlaylistItem new_item;
-            new_item.set_num_plays(item.num_plays());
-            std::string new_name = AddLevelSuffix(name_info.base_name, current_level);
-            new_item.set_scenario(std::format(
-                "{} L{}{}", name_info.base_name, MaybeIntToString(current_level, 2), cm_suffix));
-            items_to_add.push_back(new_item);
-          }
-        }
         ImGui::EndPopup();
       }
       ImGui::OpenPopupOnItemClick(item_menu, ImGuiPopupFlags_MouseButtonRight);

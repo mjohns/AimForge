@@ -15,12 +15,14 @@ struct NameInfo {
   std::string base_name;
   std::optional<float> cm_per_360;
   std::optional<float> level;
+  std::optional<float> duration;
+  std::optional<float> fov;
 
   // Combines the base name and suffixes into the final name.
   std::string GetFullName() const;
 
   bool HasDynamicSuffix() const {
-    return cm_per_360 || level;
+    return cm_per_360 || level || duration || fov;
   }
 };
 
@@ -50,5 +52,7 @@ std::vector<std::string> GetSortedLevelNames(const NameInfo& name,
                                              const std::vector<NameInfo>& candidates);
 std::vector<std::string> GetSortedCm360Names(const NameInfo& name,
                                              const std::vector<NameInfo>& candidates);
+
+bool ParseFloatValueSuffix(std::string_view word, std::string_view* suffix, float* value);
 
 }  // namespace aim

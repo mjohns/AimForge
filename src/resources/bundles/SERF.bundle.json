@@ -147,99 +147,6 @@
    }
   },
   {
-   "name": "LOCK 115 Tile Frenzy 40s",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF Tile Frenzy",
-     "durationSeconds": 40,
-     "horizontalFov": 115
-    }
-   }
-  },
-  {
-   "name": "LOCK 65 Tile Frenzy 40s",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF Tile Frenzy",
-     "durationSeconds": 40,
-     "horizontalFov": 65
-    }
-   }
-  },
-  {
-   "name": "LOCK 90 Tile Frenzy 40s",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF Tile Frenzy",
-     "durationSeconds": 40,
-     "horizontalFov": 90
-    }
-   }
-  },
-  {
-   "name": "Lock 120 ww5t Int",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5",
-     "horizontalFov": 120
-    }
-   }
-  },
-  {
-   "name": "Lock 120 ww5t Int +1Bot",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5 +1Bot",
-     "horizontalFov": 120
-    }
-   }
-  },
-  {
-   "name": "Lock 120 ww5t Int -1Bot",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5 -1Bot",
-     "horizontalFov": 120
-    }
-   }
-  },
-  {
-   "name": "Lock 85 ww5t Int",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5",
-     "horizontalFov": 85
-    }
-   }
-  },
-  {
-   "name": "Lock 85 ww5t Int +1Bot",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5 +1Bot",
-     "horizontalFov": 85
-    }
-   }
-  },
-  {
-   "name": "Lock 85 ww5t Int -1Bot",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "SERF VT ww5t Intermediate S5 -1Bot",
-     "horizontalFov": 85
-    }
-   }
-  },
-  {
    "name": "Pokeball Frenzy Auto Wide Wall 4 Targets Small",
    "def": {
     "durationSeconds": 60,
@@ -819,15 +726,15 @@
       "numPlays": 1
      },
      {
-      "scenario": "SERF LOCK 65 Tile Frenzy 40s",
+      "scenario": "SERF Tile Frenzy 65fov 40s",
       "numPlays": 1
      },
      {
-      "scenario": "SERF LOCK 90 Tile Frenzy 40s",
+      "scenario": "SERF Tile Frenzy 90fov 40s",
       "numPlays": 1
      },
      {
-      "scenario": "SERF LOCK 115 Tile Frenzy 40s",
+      "scenario": "SERF Tile Frenzy 115fov 40s",
       "numPlays": 1
      },
      {
@@ -835,27 +742,27 @@
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 120 ww5t Int +1Bot",
+      "scenario": "SERF VT ww5t Intermediate S5 +1Bot 120fov",
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 120 ww5t Int",
+      "scenario": "SERF VT ww5t Intermdediate S5 120fov",
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 120 ww5t Int -1Bot",
+      "scenario": "SERF VT ww5t Intermediate S5 -1Bot 120fov",
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 85 ww5t Int +1Bot",
+      "scenario": "SERF VT ww5t Intermediate S5 +1Bot 85fov",
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 85 ww5t Int",
+      "scenario": "SERF VT ww5t Intermediate S5 85fov",
       "numPlays": 1
      },
      {
-      "scenario": "SERF Lock 85 ww5t Int -1Bot",
+      "scenario": "SERF VT ww5t Intermediate S5 -1Bot 85fov",
       "numPlays": 1
      },
      {
