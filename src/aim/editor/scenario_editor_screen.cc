@@ -126,7 +126,10 @@ class ScenarioEditorScreen : public UiScreen {
   void DrawTopBar() {
     float middle = app_.screen_info().width / 2.0;
     ImGui::SetNextWindowPos(ImVec2(middle, char_x_ / 3.0), ImGuiCond_Always, ImVec2(0.5f, 0.0f));
-    if (!ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove)) {
+    if (!ImGui::Begin("TopBar",
+                      nullptr,
+                      ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
+                          ImGuiWindowFlags_AlwaysAutoResize)) {
       ImGui::End();
       return;
     }

@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include "absl/time/clock.h"
 #include "absl/time/time.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
@@ -17,9 +18,9 @@ std::string GetNowString() {
 }
 
 std::string EpochSecondsToString(i64 epoch_seconds) {
-  auto tp = std::chrono::system_clock::from_time_t(epoch_seconds);
-  std::chrono::zoned_time local_time{std::chrono::current_zone(), tp};
-  return std::format("{:%Y-%m-%d %I:%M %p}", local_time);
+  absl::Time t = absl::FromUnixSeconds(epoch_seconds);
+  absl::TimeZone local_tz = absl::LocalTimeZone();
+  return absl::FormatTime("%Y-%m-%d %I:%M %p", t, local_tz);
 }
 
 void Stopwatch::Start() {
