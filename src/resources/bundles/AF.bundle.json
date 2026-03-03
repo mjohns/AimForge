@@ -3377,7 +3377,8 @@
     "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 2,
@@ -3394,8 +3395,8 @@
       "z": 0
      },
      "simpleRoom": {
-      "height": 185,
-      "width": 209
+      "height": 173,
+      "width": 202
      }
     },
     "overrides": {},
@@ -3403,35 +3404,13 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 75,
-     "end": 100
+     "start": 55,
+     "end": 80
     },
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.6
-         },
-         "yDiameter": {
-          "yPercentValue": 0.32
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
         "depth": {
          "value": 0
         },
@@ -3440,16 +3419,16 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.65
+          "xPercentValue": 0.85
          },
          "yLength": {
-          "yPercentValue": 0.55
+          "yPercentValue": 0.85
          }
         }
        }
       ],
       "minDistance": {
-       "xPercentValue": 0.28
+       "xPercentValue": 0.3
       }
      }
     }

@@ -150,7 +150,7 @@ class QuickSettingsScreen : public UiScreen {
 
       ImGui::InputFloat(ImGui::InputFloatParams("CmPer360")
                             .set_label("cm/360")
-                            .set_step(1, 5)
+                            .set_step(1, 10)
                             .set_width(char_size.x * 9)
                             .set_min(1)
                             .set_default(35),
@@ -220,7 +220,7 @@ class QuickSettingsScreen : public UiScreen {
                             .set_label("BPM")
                             .set_min(0)
                             .set_zero_is_unset()
-                            .set_step(1, 5)
+                            .set_step(1, 10)
                             .set_width(char_size.x * 9),
                         PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
 

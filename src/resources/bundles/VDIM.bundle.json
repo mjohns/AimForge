@@ -10908,13 +10908,14 @@
    "def": {
     "durationSeconds": 60,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 5,
      "profiles": [
       {
-       "targetRadius": 2.8
+       "targetRadius": 3
       }
      ]
     },
@@ -10977,7 +10978,7 @@
        }
       ],
       "minDistance": {
-       "value": 27
+       "value": 24
       }
      }
     }
@@ -10986,80 +10987,10 @@
   {
    "name": "VT ww5t Intermediate S5 Clusters",
    "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "clickSingle": true
-    },
-    "targetDef": {
-     "numTargets": 12,
-     "profiles": [
-      {
-       "targetRadius": 2.8
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 250,
-      "radius": 200,
-      "width": 390,
-      "sideAngleDegrees": 14
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.96
-    },
-    "staticDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "weight": 2
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.73
-         },
-         "yDiameter": {
-          "yPercentValue": 0.4
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "xPercentValue": 0.66
-         },
-         "yLength": {
-          "yPercentValue": 0.460000128
-         }
-        }
-       }
-      ],
-      "minDistance": {
-       "value": 27
-      }
-     }
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "VDIM VT ww5t Intermediate S5",
+     "numTargets": 12
     }
    }
   },
@@ -11067,7 +10998,7 @@
    "name": "VT ww5t Intermediate S5 Hard",
    "def": {
     "overrides": {
-     "targetRadiusMultiplier": 0.9
+     "targetRadiusMultiplier": 0.8
     },
     "referenceDef": {
      "scenarioName": "VDIM VT ww5t Intermediate S5"

@@ -194,6 +194,27 @@ std::vector<std::string> GetSortedLevelNames(const NameInfo& name,
   return GetFullNames(names);
 }
 
+std::vector<std::string> GetSortedCm360Names(const NameInfo& name,
+                                             const std::vector<NameInfo>& candidates) {
+  std::vector<NameInfo> names;
+  for (const NameInfo& candidate : candidates) {
+    if (candidate.base_name != name.base_name || candidate.level != name.level) {
+      continue;
+    }
+    if (candidate.cm_per_360 != name.cm_per_360) {
+      names.push_back(candidate);
+    }
+  }
+
+  std::sort(names.begin(), names.end(), [](const NameInfo& lhs, const NameInfo& rhs) {
+    float left = lhs.cm_per_360.value_or(0.0f);
+    float right = rhs.cm_per_360.value_or(0.0f);
+    return left < right;
+  });
+
+  return GetFullNames(names);
+}
+
 std::string GetBundleName(const std::string& name) {
   size_t first_space = name.find(' ');
   if (first_space == std::string::npos) {

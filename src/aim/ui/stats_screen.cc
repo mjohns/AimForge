@@ -1076,6 +1076,8 @@ class StatsScreen : public UiScreen {
         result.push_back(reference_scenario_name_);
       }
     }
+
+    PushBackAll(&result, GetSortedCm360Names(name_info, candidate_scenarios));
     return result;
   }
 
