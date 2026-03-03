@@ -183,32 +183,56 @@ class QuickSettingsScreen : public UiScreen {
 
     if (type_ == QuickSettingsType::METRONOME) {
       float original_bpm = updater_.settings.metronome_bpm();
-      button_sz.x /= 2.0;
-      for (int i = 70; i <= 260; i += 20) {
-        std::string bpm1 = std::format("{}", i);
-        std::string bpm2 = std::format("{}", i + 5);
-        std::string bpm3 = std::format("{}", i + 10);
-        std::string bpm4 = std::format("{}", i + 15);
 
-        if (ImGui::Button(bpm1.c_str(), button_sz)) {
-          updater_.settings.set_metronome_bpm(i);
-          updater_.settings.set_enable_metronome(true);
+      ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp;
+      if (ImGui::BeginTable("MetronomeTable", 5, flags)) {
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_size.x);
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+
+        int start_value = 70;
+        int num_rows = 10;
+        ImGui::TableNextRow();
+        for (int i = 0; i < num_rows; ++i) {
+          int bpm1_val = start_value + (10 * i);
+          int bpm2_val = bpm1_val + 5;
+          int bpm3_val = bpm1_val + (num_rows * 10);
+          int bpm4_val = bpm3_val + 5;
+
+          std::string bpm1 = std::format("{}", bpm1_val);
+          std::string bpm2 = std::format("{}", bpm2_val);
+          std::string bpm3 = std::format("{}", bpm3_val);
+          std::string bpm4 = std::format("{}", bpm4_val);
+
+          ImVec2 button_sz(-1, 0);
+          ImGui::TableNextColumn();
+          if (ImGui::Button(bpm1.c_str(), button_sz)) {
+            updater_.settings.set_metronome_bpm(bpm1_val);
+            updater_.settings.set_enable_metronome(true);
+          }
+          ImGui::TableNextColumn();
+          if (ImGui::Button(bpm2.c_str(), button_sz)) {
+            updater_.settings.set_metronome_bpm(bpm2_val);
+            updater_.settings.set_enable_metronome(true);
+          }
+
+          ImGui::TableNextColumn();
+
+          ImGui::TableNextColumn();
+          if (ImGui::Button(bpm3.c_str(), button_sz)) {
+            updater_.settings.set_metronome_bpm(bpm3_val);
+            updater_.settings.set_enable_metronome(true);
+          }
+          ImGui::TableNextColumn();
+          if (ImGui::Button(bpm4.c_str(), button_sz)) {
+            updater_.settings.set_metronome_bpm(bpm4_val);
+            updater_.settings.set_enable_metronome(true);
+          }
         }
-        ImGui::SameLine();
-        if (ImGui::Button(bpm2.c_str(), button_sz)) {
-          updater_.settings.set_metronome_bpm(i + 5);
-          updater_.settings.set_enable_metronome(true);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button(bpm3.c_str(), button_sz)) {
-          updater_.settings.set_metronome_bpm(i + 10);
-          updater_.settings.set_enable_metronome(true);
-        }
-        ImGui::SameLine();
-        if (ImGui::Button(bpm4.c_str(), button_sz)) {
-          updater_.settings.set_metronome_bpm(i + 15);
-          updater_.settings.set_enable_metronome(true);
-        }
+
+        ImGui::EndTable();
       }
 
       ImGui::Spacing();
