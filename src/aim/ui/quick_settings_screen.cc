@@ -1,18 +1,64 @@
 #include "quick_settings_screen.h"
 
-#include <backends/imgui_impl_sdl3.h>
-#include <misc/cpp/imgui_stdlib.h>
-
 #include <format>
+#include <functional>
 #include <optional>
 
 #include "aim/common/util.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/ui_screen.h"
+#include "backends/imgui_impl_sdl3.h"
+#include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {
+
+void DrawCenterTable(const std::string& name,
+                     int start_value,
+                     int num_rows,
+                     std::function<void(float)> value_setter) {
+  ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp;
+  if (ImGui::BeginTable(name.c_str(), 5, flags)) {
+    float char_x = ImGui::GetDefaultCharSizeX();
+
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x);
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+
+    ImGui::TableNextRow();
+    for (int i = 0; i < num_rows; ++i) {
+      int val1 = start_value + (10 * i);
+      int val2 = val1 + 5;
+      int val3 = val1 + (num_rows * 10);
+      int val4 = val3 + 5;
+
+      ImVec2 button_sz(-1, 0);
+      ImGui::TableNextColumn();
+      if (ImGui::Button(std::format("{}", val1), button_sz)) {
+        value_setter(val1);
+      }
+      ImGui::TableNextColumn();
+      if (ImGui::Button(std::format("{}", val2), button_sz)) {
+        value_setter(val2);
+      }
+
+      ImGui::TableNextColumn();
+
+      ImGui::TableNextColumn();
+      if (ImGui::Button(std::format("{}", val3), button_sz)) {
+        value_setter(val3);
+      }
+      ImGui::TableNextColumn();
+      if (ImGui::Button(std::format("{}", val4), button_sz)) {
+        value_setter(val4);
+      }
+    }
+    ImGui::EndTable();
+  }
+}
 
 class QuickSettingsScreen : public UiScreen {
  public:
@@ -133,6 +179,7 @@ class QuickSettingsScreen : public UiScreen {
     ImVec2 button_sz = ImVec2((width - center_gap) / 2.0, 40);
 
     if (type_ == QuickSettingsType::DEFAULT) {
+      ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp;
       for (int i = 10; i <= 90; i += 10) {
         std::string sens1 = std::format("{}", i);
         std::string sens2 = std::format("{}", i + 5);
@@ -184,56 +231,12 @@ class QuickSettingsScreen : public UiScreen {
     if (type_ == QuickSettingsType::METRONOME) {
       float original_bpm = updater_.settings.metronome_bpm();
 
-      ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp;
-      if (ImGui::BeginTable("MetronomeTable", 5, flags)) {
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_size.x);
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
-
-        int start_value = 70;
-        int num_rows = 10;
-        ImGui::TableNextRow();
-        for (int i = 0; i < num_rows; ++i) {
-          int bpm1_val = start_value + (10 * i);
-          int bpm2_val = bpm1_val + 5;
-          int bpm3_val = bpm1_val + (num_rows * 10);
-          int bpm4_val = bpm3_val + 5;
-
-          std::string bpm1 = std::format("{}", bpm1_val);
-          std::string bpm2 = std::format("{}", bpm2_val);
-          std::string bpm3 = std::format("{}", bpm3_val);
-          std::string bpm4 = std::format("{}", bpm4_val);
-
-          ImVec2 button_sz(-1, 0);
-          ImGui::TableNextColumn();
-          if (ImGui::Button(bpm1.c_str(), button_sz)) {
-            updater_.settings.set_metronome_bpm(bpm1_val);
-            updater_.settings.set_enable_metronome(true);
-          }
-          ImGui::TableNextColumn();
-          if (ImGui::Button(bpm2.c_str(), button_sz)) {
-            updater_.settings.set_metronome_bpm(bpm2_val);
-            updater_.settings.set_enable_metronome(true);
-          }
-
-          ImGui::TableNextColumn();
-
-          ImGui::TableNextColumn();
-          if (ImGui::Button(bpm3.c_str(), button_sz)) {
-            updater_.settings.set_metronome_bpm(bpm3_val);
-            updater_.settings.set_enable_metronome(true);
-          }
-          ImGui::TableNextColumn();
-          if (ImGui::Button(bpm4.c_str(), button_sz)) {
-            updater_.settings.set_metronome_bpm(bpm4_val);
-            updater_.settings.set_enable_metronome(true);
-          }
-        }
-
-        ImGui::EndTable();
-      }
+      int start_value = 70;
+      int num_rows = 10;
+      DrawCenterTable("MetronomeTable", start_value, num_rows, [&](float val) {
+        updater_.settings.set_metronome_bpm(val);
+        updater_.settings.set_enable_metronome(true);
+      });
 
       ImGui::Spacing();
 
