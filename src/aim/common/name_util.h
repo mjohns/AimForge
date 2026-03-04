@@ -29,6 +29,8 @@ struct NameInfo {
 
   // Returns whether the suffix was a valid dynamic suffix.
   bool SetDynamicSuffixValue(std::string_view word);
+
+  void MergeDynamicSuffixes(const NameInfo& to_merge_in);
 };
 
 NameInfo GetPlaylistNameInfo(const std::string& name);

@@ -242,4 +242,29 @@ std::string NameInfo::GetFullName() const {
   return result;
 }
 
+void NameInfo::MergeDynamicSuffixes(const NameInfo& other) {
+  if (other.level) {
+    if (level) {
+      level = *other.level + *level;
+    } else {
+      level = other.level;
+    }
+  }
+  if (other.cm_per_360) {
+    cm_per_360 = other.cm_per_360;
+  }
+  if (other.duration) {
+    duration = other.duration;
+  }
+  if (other.fov) {
+    fov = other.fov;
+  }
+  if (other.radius_smaller) {
+    radius_smaller = other.radius_smaller;
+  }
+  if (other.radius_larger) {
+    radius_larger = other.radius_larger;
+  }
+}
+
 }  // namespace aim

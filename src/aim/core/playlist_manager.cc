@@ -564,26 +564,9 @@ std::vector<PlaylistItem> GetPlaylistItems(const PlaylistDef& def) {
 std::vector<PlaylistItem> Playlist::items() const {
   auto item_list = GetPlaylistItemsNoSuffix(def_);
   for (auto& item : item_list) {
-    NameInfo scenario_name_info = GetScenarioNameInfo(item.scenario());
-    if (playlist_name_info.cm_per_360) {
-      scenario_name_info.cm_per_360 = playlist_name_info.cm_per_360;
-    }
-    if (playlist_name_info.duration) {
-      scenario_name_info.duration = playlist_name_info.duration;
-    }
-    if (playlist_name_info.fov) {
-      scenario_name_info.fov = playlist_name_info.fov;
-    }
-    item.set_scenario(scenario_name_info.GetFullName());
-  }
-  if (playlist_name_info.level) {
-    for (auto& item : item_list) {
+    if (playlist_name_info.HasDynamicSuffix()) {
       NameInfo scenario_name_info = GetScenarioNameInfo(item.scenario());
-      if (scenario_name_info.level) {
-        scenario_name_info.level = *playlist_name_info.level + *level;
-      } else {
-        scenario_name_info.level = level;
-      }
+      scenario_name_info.MergeDynamicSuffixes(playlist_name_info);
       item.set_scenario(scenario_name_info.GetFullName());
     }
   }
