@@ -229,6 +229,7 @@ class HomeScreen : public UiScreen {
         if (app_screen_ == AppScreen::BUNDLES) {
           DrawBundlesScreen();
         }
+        last_app_screen_ = app_screen_;
       }
       ImGui::EndChild();
 
@@ -371,10 +372,13 @@ class HomeScreen : public UiScreen {
     if (run == nullptr) {
       return;
     }
-    playlist_component_->Show(run);
+    bool was_on_playlists_last_time =
+        last_app_screen_.has_value() && *last_app_screen_ == AppScreen::PLAYLISTS;
+    playlist_component_->Show(run, !was_on_playlists_last_time);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
+  std::optional<AppScreen> last_app_screen_;
 
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;

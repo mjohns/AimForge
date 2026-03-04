@@ -88,7 +88,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
  public:
   explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
 
-  void Show(std::shared_ptr<PlaylistRun> run) override {
+  void Show(std::shared_ptr<PlaylistRun> run, bool is_new_page_display) override {
     ImGui::IdGuard cid("PlaylistComponent");
 
     const std::string& playlist_name = run->playlist.name;
@@ -102,7 +102,16 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
-      ResetForNewCurrentPlaylist(*run);
+      ResetForNewCurrentPlaylist();
+    }
+
+    {
+      // Make sure the current scenario to run matches the current index in the playlist.
+      int i = run->current_index;
+      if (is_new_page_display && IsValidIndex(run->progress_list, i)) {
+        const auto& item = run->progress_list[i];
+        app_.scenario_manager().SetCurrentScenario(item.item.scenario());
+      }
     }
 
     if (showing_editor_) {
@@ -210,16 +219,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
   }
 
  private:
-  void ResetForNewCurrentPlaylist(const PlaylistRun& run) {
+  void ResetForNewCurrentPlaylist() {
     editor_component_ = {};
     showing_editor_ = false;
-
-    // Make sure the current scenario to run matches the current index in the playlist.
-    int i = run.current_index;
-    if (IsValidIndex(run.progress_list, i)) {
-      const auto& item = run.progress_list[i];
-      app_.scenario_manager().SetCurrentScenario(item.item.scenario());
-    }
   }
 
   bool showing_editor_ = false;
