@@ -18,9 +18,9 @@ std::string GetNowString() {
 }
 
 std::string EpochSecondsToString(i64 epoch_seconds) {
-  absl::Time t = absl::FromUnixSeconds(epoch_seconds);
-  absl::TimeZone local_tz = absl::LocalTimeZone();
-  return absl::FormatTime("%Y-%m-%d %I:%M %p", t, local_tz);
+  std::chrono::sys_seconds tp{std::chrono::seconds(epoch_seconds)};
+  std::chrono::zoned_time local_time{std::chrono::current_zone(), tp};
+  return std::format("{:%Y-%m-%d %I:%M %p}", local_time);
 }
 
 void Stopwatch::Start() {
