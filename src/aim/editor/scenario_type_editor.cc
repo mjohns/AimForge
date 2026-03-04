@@ -1213,6 +1213,17 @@ void DrawShotTypeEditor(ShotType& s) {
     ImGui::SameLine();
     ImGui::HelpMarker(
         "The closest target will become a ghost on miss and be removed after the specified time");
+    if (s.has_ghost_closest_on_miss()) {
+      ImGui::Indent();
+      ImGui::InputBool("Unghost instead of remove",
+                       PROTO_BOOL_FIELD(ShotType, &s, unghost_miss_on_expiration));
+      ImGui::SameLine();
+      ImGui::HelpMarker(
+          "When the time expires the target will become clickable agazin instead of being removed");
+      ImGui::Unindent();
+    } else {
+      s.clear_unghost_miss_on_expiration();
+    }
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
                           .set_is_optional()

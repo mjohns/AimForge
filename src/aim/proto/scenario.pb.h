@@ -4183,10 +4183,11 @@ class ShotType final : public ::google::protobuf::Message
     kHealthSecondsFieldNumber = 12,
     kHealthRegenRateFieldNumber = 13,
     kRemoveIfBelowHealthSecondsFieldNumber = 14,
-    kNoPartialKillsFieldNumber = 11,
-    kRemoveClosestOnMissFieldNumber = 19,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
+    kNoPartialKillsFieldNumber = 11,
+    kRemoveClosestOnMissFieldNumber = 19,
+    kUnghostMissOnExpirationFieldNumber = 22,
     kGhostClosestOnMissFieldNumber = 18,
     kAccuracyPenaltyFieldNumber = 21,
     kPokeFieldNumber = 1,
@@ -4255,26 +4256,6 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_remove_if_below_health_seconds(float value);
 
   public:
-  // bool no_partial_kills = 11 [features = {
-  void clear_no_partial_kills() ;
-  bool no_partial_kills() const;
-  void set_no_partial_kills(bool value);
-
-  private:
-  bool _internal_no_partial_kills() const;
-  void _internal_set_no_partial_kills(bool value);
-
-  public:
-  // bool remove_closest_on_miss = 19 [features = {
-  void clear_remove_closest_on_miss() ;
-  bool remove_closest_on_miss() const;
-  void set_remove_closest_on_miss(bool value);
-
-  private:
-  bool _internal_remove_closest_on_miss() const;
-  void _internal_set_remove_closest_on_miss(bool value);
-
-  public:
   // int32 health_clicks = 16;
   bool has_health_clicks() const;
   void clear_health_clicks() ;
@@ -4295,6 +4276,36 @@ class ShotType final : public ::google::protobuf::Message
   private:
   float _internal_click_rate_seconds() const;
   void _internal_set_click_rate_seconds(float value);
+
+  public:
+  // bool no_partial_kills = 11 [features = {
+  void clear_no_partial_kills() ;
+  bool no_partial_kills() const;
+  void set_no_partial_kills(bool value);
+
+  private:
+  bool _internal_no_partial_kills() const;
+  void _internal_set_no_partial_kills(bool value);
+
+  public:
+  // bool remove_closest_on_miss = 19 [features = {
+  void clear_remove_closest_on_miss() ;
+  bool remove_closest_on_miss() const;
+  void set_remove_closest_on_miss(bool value);
+
+  private:
+  bool _internal_remove_closest_on_miss() const;
+  void _internal_set_remove_closest_on_miss(bool value);
+
+  public:
+  // bool unghost_miss_on_expiration = 22 [features = {
+  void clear_unghost_miss_on_expiration() ;
+  bool unghost_miss_on_expiration() const;
+  void set_unghost_miss_on_expiration(bool value);
+
+  private:
+  bool _internal_unghost_miss_on_expiration() const;
+  void _internal_set_unghost_miss_on_expiration(bool value);
 
   public:
   // float ghost_closest_on_miss = 18;
@@ -4399,7 +4410,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 17,
+  static const ::google::protobuf::internal::TcParseTable<4, 18,
                                    1, 0,
                                    2>
       _table_;
@@ -4426,10 +4437,11 @@ class ShotType final : public ::google::protobuf::Message
     float health_seconds_;
     float health_regen_rate_;
     float remove_if_below_health_seconds_;
-    bool no_partial_kills_;
-    bool remove_closest_on_miss_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
+    bool no_partial_kills_;
+    bool remove_closest_on_miss_;
+    bool unghost_miss_on_expiration_;
     float ghost_closest_on_miss_;
     int accuracy_penalty_;
     union TypeUnion {
@@ -15081,7 +15093,7 @@ inline void ShotType::clear_no_partial_kills() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.no_partial_kills_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000080U);
 }
 inline bool ShotType::no_partial_kills() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.no_partial_kills)
@@ -15089,7 +15101,7 @@ inline bool ShotType::no_partial_kills() const {
 }
 inline void ShotType::set_no_partial_kills(bool value) {
   _internal_set_no_partial_kills(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.ShotType.no_partial_kills)
 }
 inline bool ShotType::_internal_no_partial_kills() const {
@@ -15190,14 +15202,14 @@ inline void ShotType::_internal_set_remove_if_below_health_seconds(float value) 
 
 // int32 health_clicks = 16;
 inline bool ShotType::has_health_clicks() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void ShotType::clear_health_clicks() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.health_clicks_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000020U);
 }
 inline ::int32_t ShotType::health_clicks() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.health_clicks)
@@ -15205,7 +15217,7 @@ inline ::int32_t ShotType::health_clicks() const {
 }
 inline void ShotType::set_health_clicks(::int32_t value) {
   _internal_set_health_clicks(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.ShotType.health_clicks)
 }
 inline ::int32_t ShotType::_internal_health_clicks() const {
@@ -15219,14 +15231,14 @@ inline void ShotType::_internal_set_health_clicks(::int32_t value) {
 
 // float click_rate_seconds = 17;
 inline bool ShotType::has_click_rate_seconds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void ShotType::clear_click_rate_seconds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.click_rate_seconds_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000040U);
 }
 inline float ShotType::click_rate_seconds() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.click_rate_seconds)
@@ -15234,7 +15246,7 @@ inline float ShotType::click_rate_seconds() const {
 }
 inline void ShotType::set_click_rate_seconds(float value) {
   _internal_set_click_rate_seconds(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.ShotType.click_rate_seconds)
 }
 inline float ShotType::_internal_click_rate_seconds() const {
@@ -15248,14 +15260,14 @@ inline void ShotType::_internal_set_click_rate_seconds(float value) {
 
 // float ghost_closest_on_miss = 18;
 inline bool ShotType::has_ghost_closest_on_miss() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void ShotType::clear_ghost_closest_on_miss() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.ghost_closest_on_miss_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000400U);
 }
 inline float ShotType::ghost_closest_on_miss() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.ghost_closest_on_miss)
@@ -15263,7 +15275,7 @@ inline float ShotType::ghost_closest_on_miss() const {
 }
 inline void ShotType::set_ghost_closest_on_miss(float value) {
   _internal_set_ghost_closest_on_miss(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.ShotType.ghost_closest_on_miss)
 }
 inline float ShotType::_internal_ghost_closest_on_miss() const {
@@ -15275,12 +15287,37 @@ inline void ShotType::_internal_set_ghost_closest_on_miss(float value) {
   _impl_.ghost_closest_on_miss_ = value;
 }
 
+// bool unghost_miss_on_expiration = 22 [features = {
+inline void ShotType::clear_unghost_miss_on_expiration() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.unghost_miss_on_expiration_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline bool ShotType::unghost_miss_on_expiration() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.unghost_miss_on_expiration)
+  return _internal_unghost_miss_on_expiration();
+}
+inline void ShotType::set_unghost_miss_on_expiration(bool value) {
+  _internal_set_unghost_miss_on_expiration(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.ShotType.unghost_miss_on_expiration)
+}
+inline bool ShotType::_internal_unghost_miss_on_expiration() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.unghost_miss_on_expiration_;
+}
+inline void ShotType::_internal_set_unghost_miss_on_expiration(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.unghost_miss_on_expiration_ = value;
+}
+
 // bool remove_closest_on_miss = 19 [features = {
 inline void ShotType::clear_remove_closest_on_miss() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_closest_on_miss_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000100U);
 }
 inline bool ShotType::remove_closest_on_miss() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.remove_closest_on_miss)
@@ -15288,7 +15325,7 @@ inline bool ShotType::remove_closest_on_miss() const {
 }
 inline void ShotType::set_remove_closest_on_miss(bool value) {
   _internal_set_remove_closest_on_miss(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.ShotType.remove_closest_on_miss)
 }
 inline bool ShotType::_internal_remove_closest_on_miss() const {
@@ -15401,14 +15438,14 @@ inline void ShotType::set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE 
 
 // .aim.AccuracyPenalty accuracy_penalty = 21;
 inline bool ShotType::has_accuracy_penalty() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
   return value;
 }
 inline void ShotType::clear_accuracy_penalty() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000800U);
 }
 inline ::aim::AccuracyPenalty ShotType::accuracy_penalty() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty)
@@ -15416,7 +15453,7 @@ inline ::aim::AccuracyPenalty ShotType::accuracy_penalty() const {
 }
 inline void ShotType::set_accuracy_penalty(::aim::AccuracyPenalty value) {
   _internal_set_accuracy_penalty(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty)
 }
 inline ::aim::AccuracyPenalty ShotType::_internal_accuracy_penalty() const {

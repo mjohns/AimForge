@@ -382,11 +382,20 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
           target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
       if (target_id_to_ghost.has_value()) {
         float time_to_wait = def_.shot_type().ghost_closest_on_miss();
-        target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = true;
+        bool unghost = def_.shot_type().unghost_miss_on_expiration();
         if (time_to_wait > 0) {
-          RunAfterSeconds(time_to_wait, [=]() { AddNewTarget(*target_id_to_ghost); });
+          target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = true;
+          RunAfterSeconds(time_to_wait, [=]() {
+            if (unghost) {
+              target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = false;
+            } else {
+              AddNewTarget(*target_id_to_ghost);
+            }
+          });
         } else {
-          AddNewTarget(*target_id_to_ghost);
+          if (!unghost) {
+            AddNewTarget(*target_id_to_ghost);
+          }
         }
       }
     }

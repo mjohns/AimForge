@@ -186,6 +186,8 @@ message ShotType {
 
   // Target will become a ghost on miss and be removed after the specified amount of time.
   float ghost_closest_on_miss = 18;
+  // The target won't be removed after the time is up. It will just become clickable again.
+  bool unghost_miss_on_expiration = 22 [features.field_presence = IMPLICIT];
 
   // For clicking scenarios, remove the target if you miss it.
   bool remove_closest_on_miss = 19 [features.field_presence = IMPLICIT];
