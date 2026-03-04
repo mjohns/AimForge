@@ -3612,6 +3612,20 @@
    }
   },
   {
+   "name": "Static3 Ghost Ladder",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF Static3 Ladder",
+     "shotType": {
+      "clickSingle": true,
+      "ghostClosestOnMiss": 0.3,
+      "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+     }
+    }
+   }
+  },
+  {
    "name": "Static3 Ladder",
    "def": {
     "overrides": {
@@ -4891,6 +4905,17 @@
     "description": "",
     "levels": {
      "baseScenario": "AF Static Speed Ladder",
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
+   "name": "Static3 Ghost Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Static3 Ghost Ladder",
      "maxLevel": 40,
      "numPlaysPerLevel": 1
     }

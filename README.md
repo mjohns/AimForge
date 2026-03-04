@@ -3,7 +3,7 @@
 FpsAimForge is an open source aim trainer focused on simplicity, focus, and self improvement.
 
 * [All releases](https://github.com/mjohns/FpsAimForge/releases)
-* [Download latest](https://github.com/mjohns/FpsAimForge/releases/download/v0.4.6/FpsAimForge-v0.4.6.zip)
+* [Download latest](https://github.com/mjohns/FpsAimForge/releases/download/v0.5.0/FpsAimForge-v0.5.0.zip)
 
 Major goals:
 * Creating and editing scenarios is actually simple.
@@ -23,6 +23,7 @@ Prebuilt binaries can be found under the [releases](https://github.com/mjohns/Fp
 * Adjust crosshair size by holding "c" and using the scroll wheel.
 * View replays of your last run from the stats screen.
 * Simplified and consistent scoring. Tracking scenarios are score directly on hit percent which is calculated at the microsecond level and with granularity based on update/second.
+* Every scenario automatically has x%Smaller, x%Faster type versions available. Version selector dialog helps construct these dynamically generated scenarios.
 
 # Interesting scenario types
 * Proximity tracking. Tracking variation where score is based on how close to the center you are.
