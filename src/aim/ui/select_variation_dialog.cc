@@ -82,21 +82,26 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
                       CreateOptionalFloatField(&name_info_.level));
     ImGui::SpacedSeparator();
 
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Larger")
-                          .set_is_optional()
-                          .set_step(1, 5)
-                          .set_min(1)
-                          .set_default(10)
-                          .set_width(char_x * 10),
+    const auto default_percent_param = ImGui::InputFloatParams("BaseId")
+                                           .set_is_optional()
+                                           .set_step(1, 5)
+                                           .set_min(1)
+                                           .set_default(10)
+                                           .set_width(char_x * 10);
+
+    ImGui::InputFloat(default_percent_param.clone().set_id_and_label("Larger"),
                       CreateOptionalFloatField(&name_info_.radius_larger));
 
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Smaller")
-                          .set_is_optional()
-                          .set_step(1, 5)
-                          .set_min(1)
-                          .set_default(10)
-                          .set_width(char_x * 10),
+    ImGui::InputFloat(default_percent_param.clone().set_max(99).set_id_and_label("Smaller"),
                       CreateOptionalFloatField(&name_info_.radius_smaller));
+
+    ImGui::SpacedSeparator();
+
+    ImGui::InputFloat(default_percent_param.clone().set_id_and_label("Faster"),
+                      CreateOptionalFloatField(&name_info_.faster));
+
+    ImGui::InputFloat(default_percent_param.clone().set_max(99).set_id_and_label("Slower"),
+                      CreateOptionalFloatField(&name_info_.slower));
 
     ImGui::SpacedSeparator();
 

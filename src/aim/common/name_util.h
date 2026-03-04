@@ -19,12 +19,15 @@ struct NameInfo {
   std::optional<float> fov;
   std::optional<float> radius_smaller;
   std::optional<float> radius_larger;
+  std::optional<float> faster;
+  std::optional<float> slower;
 
   // Combines the base name and suffixes into the final name.
   std::string GetFullName() const;
 
   bool HasDynamicSuffix() const {
-    return cm_per_360 || level || duration || fov || radius_smaller || radius_larger;
+    return cm_per_360 || level || duration || fov || radius_smaller || radius_larger || faster ||
+           slower;
   }
 
   // Returns whether the suffix was a valid dynamic suffix.

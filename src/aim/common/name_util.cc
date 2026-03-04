@@ -215,6 +215,14 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
     radius_larger = value;
     return true;
   }
+  if (suffix == "%Slower") {
+    slower = value;
+    return true;
+  }
+  if (suffix == "%Faster") {
+    faster = value;
+    return true;
+  }
 
   return false;
 }
@@ -229,6 +237,12 @@ std::string NameInfo::GetFullName() const {
   }
   if (radius_larger) {
     result = std::format("{} {}%Larger", result, MaybeIntToString(*radius_larger, 2));
+  }
+  if (faster) {
+    result = std::format("{} {}%Faster", result, MaybeIntToString(*faster, 2));
+  }
+  if (slower) {
+    result = std::format("{} {}%Slower", result, MaybeIntToString(*slower, 2));
   }
   if (fov) {
     result = std::format("{} {}fov", result, MaybeIntToString(*fov, 0));
@@ -264,6 +278,12 @@ void NameInfo::MergeDynamicSuffixes(const NameInfo& other) {
   }
   if (other.radius_larger) {
     radius_larger = other.radius_larger;
+  }
+  if (other.faster) {
+    faster = other.faster;
+  }
+  if (other.slower) {
+    slower = other.slower;
   }
 }
 

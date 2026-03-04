@@ -221,6 +221,24 @@ void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
       MultiplyTargetRadiusValues(&profile, mult);
     }
   }
+  if (name_info.faster) {
+    float mult = 1 + (*name_info.faster / 100.0f);
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      profile.set_speed(profile.speed() * mult);
+    }
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      profile.set_acceleration(profile.acceleration() * mult);
+    }
+  }
+  if (name_info.slower) {
+    float mult = 1 - (*name_info.slower / 100.0f);
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      profile.set_speed(profile.speed() * mult);
+    }
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      profile.set_acceleration(profile.acceleration() * mult);
+    }
+  }
 }
 
 }  // namespace aim
