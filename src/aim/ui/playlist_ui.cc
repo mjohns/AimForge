@@ -88,7 +88,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
  public:
   explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
 
-  bool Show(const std::string& playlist_name, std::string* scenario_to_start) override {
+  void Show(const std::string& playlist_name) override {
     ImGui::IdGuard cid("PlaylistComponent");
 
     auto playlist_to_delete = delete_confirmation_dialog_.Draw("Delete");
@@ -113,12 +113,12 @@ class PlaylistComponentImpl : public PlaylistComponent {
         editor_component_ = {};
         showing_editor_ = false;
       }
-      return false;
+      return;
     }
 
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
     if (!run) {
-      return false;
+      return;
     }
 
     std::string updated_playlist_variation_name;
@@ -210,7 +210,6 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::Spacing();
     ImGui::Spacing();
     PlaylistRunComponent("PlaylistRun", run, screen_);
-    return false;
   }
 
  private:

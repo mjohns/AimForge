@@ -371,12 +371,7 @@ class HomeScreen : public UiScreen {
     if (run == nullptr) {
       return;
     }
-    std::string scenario_id;
-    if (playlist_component_->Show(run->playlist.name, &scenario_id)) {
-      if (app_.scenario_manager().SetCurrentScenario(scenario_id)) {
-        state_.scenario_run_option = ScenarioRunOption::START_CURRENT;
-      }
-    }
+    playlist_component_->Show(run->playlist.name);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
