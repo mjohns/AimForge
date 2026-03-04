@@ -1,7 +1,7 @@
 #pragma once
 
-#include "aim/proto/scenario.pb.h"
 #include "aim/common/name_util.h"
+#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
