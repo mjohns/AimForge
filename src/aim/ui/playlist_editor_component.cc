@@ -10,6 +10,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/search_selector.h"
+#include "aim/ui/select_variation_dialog.h"
 #include "imgui.h"
 
 namespace aim {
@@ -194,6 +195,13 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   }
 
   void DrawPlaylistScenariosEditor(EditorResult* result) {
+    std::string updated_item_name;
+    if (select_variation_dialog_.Draw(&updated_item_name)) {
+      if (IsValidIndex(scenario_items_, editing_variation_i_)) {
+        scenario_items_[editing_variation_i_].set_scenario(updated_item_name);
+      }
+    }
+
     int remove_i = -1;
     bool still_dragging = false;
     std::vector<PlaylistItem> items_to_add;
@@ -278,12 +286,17 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
         if (ImGui::Selectable("Copy")) {
           items_to_add.push_back(item);
         }
-        if (ImGui::Selectable("Delete")) {
-          remove_i = i;
+        if (ImGui::Selectable("Edit variation")) {
+          editing_variation_i_ = i;
+          select_variation_dialog_.NotifyOpen(item.scenario());
         }
-        if (ImGui::Selectable("Edit")) {
+        if (ImGui::Selectable("Edit name")) {
           editing_i_ = i;
           focus_editor_ = true;
+        }
+        ImGui::SpacedSeparator();
+        if (ImGui::Selectable("Delete")) {
+          remove_i = i;
         }
         ImGui::EndPopup();
       }
@@ -395,6 +408,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
   int editing_i_ = -1;
+  int editing_variation_i_ = -1;
   bool focus_editor_ = false;
   std::string original_playlist_name_;
   std::string bundle_name_;
@@ -408,6 +422,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   ImGui::NotificationPopup notification_popup_{"Notification"};
   std::string description_;
   ImGui::MultilineTextEntryDialog description_dialog_{"DescriptionEditor"};
+  SelectVariationDialog select_variation_dialog_ =
+      SelectVariationDialog::ForScenarios("SelectScenarioVariation");
 };
 
 }  // namespace
