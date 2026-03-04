@@ -209,6 +209,18 @@ void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
   if (name_info.fov) {
     def->mutable_room()->set_horizontal_fov(*name_info.fov);
   }
+  if (name_info.radius_smaller) {
+    float mult = 1 - (*name_info.radius_smaller / 100.0f);
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      MultiplyTargetRadiusValues(&profile, mult);
+    }
+  }
+  if (name_info.radius_larger) {
+    float mult = 1 + (*name_info.radius_larger / 100.0f);
+    for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
+      MultiplyTargetRadiusValues(&profile, mult);
+    }
+  }
 }
 
 }  // namespace aim

@@ -82,6 +82,24 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
                       CreateOptionalFloatField(&name_info_.level));
     ImGui::SpacedSeparator();
 
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Larger")
+                          .set_is_optional()
+                          .set_step(1, 5)
+                          .set_min(1)
+                          .set_default(10)
+                          .set_width(char_x * 10),
+                      CreateOptionalFloatField(&name_info_.radius_larger));
+
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Smaller")
+                          .set_is_optional()
+                          .set_step(1, 5)
+                          .set_min(1)
+                          .set_default(10)
+                          .set_width(char_x * 10),
+                      CreateOptionalFloatField(&name_info_.radius_smaller));
+
+    ImGui::SpacedSeparator();
+
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Duration")
                           .set_is_optional()
                           .set_step(5, 10)

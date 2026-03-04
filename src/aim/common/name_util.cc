@@ -100,23 +100,6 @@ std::optional<float> GetLevelFromWord(const std::string_view& word) {
   return level;
 }
 
-std::string NameInfo::GetFullName() const {
-  std::string result = base_name;
-  if (level) {
-    result = std::format("{} L{}", base_name, MaybeIntToString(*level, 2));
-  }
-  if (fov) {
-    result = std::format("{} {}fov", result, MaybeIntToString(*fov, 0));
-  }
-  if (duration) {
-    result = std::format("{} {}s", result, MaybeIntToString(*duration, 0));
-  }
-  if (cm_per_360) {
-    result = std::format("{} {}cm", result, MaybeIntToString(*cm_per_360, 1));
-  }
-  return result;
-}
-
 NameInfo GetScenarioNameInfo(const std::string& name) {
   return GetNameInfo(name, true);
 }
@@ -178,7 +161,9 @@ std::string GetBundleName(const std::string& name) {
 bool ParseFloatValueSuffix(std::string_view word, std::string_view* suffix, float* value) {
   int maybe_end_of_float = 0;
   for (int i = word.size() - 1; i >= 0; --i) {
-    if (!std::isalpha(word[i])) {
+    char c = word[i];
+    bool is_suffix_char = std::isalpha(c) || c == '%';
+    if (!is_suffix_char) {
       break;
     }
     maybe_end_of_float = i;
@@ -222,8 +207,39 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
     fov = value;
     return true;
   }
+  if (suffix == "%Smaller") {
+    radius_smaller = value;
+    return true;
+  }
+  if (suffix == "%Larger") {
+    radius_larger = value;
+    return true;
+  }
 
   return false;
+}
+
+std::string NameInfo::GetFullName() const {
+  std::string result = base_name;
+  if (level) {
+    result = std::format("{} L{}", base_name, MaybeIntToString(*level, 2));
+  }
+  if (radius_smaller) {
+    result = std::format("{} {}%Smaller", result, MaybeIntToString(*radius_smaller, 2));
+  }
+  if (radius_larger) {
+    result = std::format("{} {}%Larger", result, MaybeIntToString(*radius_larger, 2));
+  }
+  if (fov) {
+    result = std::format("{} {}fov", result, MaybeIntToString(*fov, 0));
+  }
+  if (duration) {
+    result = std::format("{} {}s", result, MaybeIntToString(*duration, 0));
+  }
+  if (cm_per_360) {
+    result = std::format("{} {}cm", result, MaybeIntToString(*cm_per_360, 1));
+  }
+  return result;
 }
 
 }  // namespace aim
