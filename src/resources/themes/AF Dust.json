@@ -1,0 +1,68 @@
+{
+ "name": "AF Dust",
+ "roofAppearance": {
+  "color": {
+   "r": 205,
+   "g": 186,
+   "b": 153,
+   "multiplier": 0.9
+  }
+ },
+ "sideAppearance": {
+  "color": {
+   "r": 205,
+   "g": 186,
+   "b": 153,
+   "multiplier": 0.96
+  }
+ },
+ "frontAppearance": {
+  "color": {
+   "r": 205,
+   "g": 186,
+   "b": 153
+  }
+ },
+ "floorAppearance": {
+  "color": {
+   "r": 205,
+   "g": 186,
+   "b": 153,
+   "multiplier": 0.92
+  }
+ },
+ "crosshair": {
+  "color": {
+   "hex": "#34fb45"
+  },
+  "outlineColor": {
+   "hex": "#000000"
+  }
+ },
+ "targetColor": {
+  "r": 6,
+  "g": 64,
+  "b": 70
+ },
+ "ghostTargetColor": {
+  "r": 205,
+  "g": 186,
+  "b": 153,
+  "multiplier": 0.8
+ },
+ "healthBar": {
+  "healthColor": {
+   "r": 52,
+   "g": 152,
+   "b": 193
+  },
+  "backgroundColor": {
+   "r": 205,
+   "g": 186,
+   "b": 153,
+   "multiplier": 0.7
+  },
+  "backgroundAlpha": 0.65
+ }
+}
+
