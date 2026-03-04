@@ -256,12 +256,7 @@ class ScenarioManagerImpl : public ScenarioManager {
       ScenarioDef result = has_level ? ApplyScenarioLevelOverrides(def, *name_info->level)
                                      : ApplyScenarioOverrides(def);
       if (name_info) {
-        if (name_info->duration) {
-          result.set_duration_seconds(*name_info->duration);
-        }
-        if (name_info->fov) {
-          result.mutable_room()->set_horizontal_fov(*name_info->fov);
-        }
+        ApplyDynamicSuffixOverrides(*name_info, &result);
       }
       return result;
     };

@@ -202,4 +202,13 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
   }
 }
 
+void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
+  if (name_info.duration) {
+    def->set_duration_seconds(*name_info.duration);
+  }
+  if (name_info.fov) {
+    def->mutable_room()->set_horizontal_fov(*name_info.fov);
+  }
+}
+
 }  // namespace aim
