@@ -9,7 +9,6 @@
 
 namespace aim {
 
-std::string GetNowString();
 std::string EpochSecondsToString(i64 epoch_seconds);
 
 i64 GetNowEpochMicros();

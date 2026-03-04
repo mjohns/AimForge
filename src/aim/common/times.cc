@@ -5,17 +5,11 @@
 #include <iomanip>
 #include <sstream>
 
-#include "absl/time/clock.h"
 #include "absl/time/time.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
 
 namespace aim {
-
-std::string GetNowString() {
-  auto now = std::chrono::system_clock::now();
-  return std::format("{:%FT%TZ}", now);
-}
 
 std::string EpochSecondsToString(i64 epoch_seconds) {
   std::chrono::sys_seconds tp{std::chrono::seconds(epoch_seconds)};

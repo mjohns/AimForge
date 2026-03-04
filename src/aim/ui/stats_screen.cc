@@ -1077,7 +1077,14 @@ class StatsScreen : public UiScreen {
       }
     }
 
-    PushBackAll(&result, GetSortedCm360Names(name_info, candidate_scenarios));
+    for (const auto& candidate : candidate_scenarios) {
+      if (candidate.base_name == name_info.base_name) {
+        std::string name = candidate.GetFullName();
+        if (!VectorContains(result, name)) {
+          result.push_back(name);
+        }
+      }
+    }
     return result;
   }
 
