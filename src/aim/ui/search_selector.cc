@@ -27,11 +27,10 @@ std::optional<std::string> SearchSelector(const std::string& search_text,
     const std::string& item = items[i];
     if (StringMatchesSearch(item, query.search_words, options.empty_search_text_matches_all)) {
       std::string actual_name = item;
-      if (query.level) {
-        actual_name = std::format("{} L{}", actual_name, MaybeIntToString(*query.level, 2));
-      }
-      if (query.cm_per_360) {
-        actual_name = std::format("{} {}cm", actual_name, MaybeIntToString(*query.cm_per_360, 1));
+      if (query.name_info.HasDynamicSuffix()) {
+        NameInfo actual_info = query.name_info;
+        actual_info.base_name = actual_name;
+        actual_name = actual_info.GetFullName();
       }
       if (options.additional_predicate) {
         bool matches = options.additional_predicate(actual_name);

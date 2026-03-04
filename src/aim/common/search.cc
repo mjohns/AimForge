@@ -51,19 +51,13 @@ SearchQuery GetSearchQuery(const std::string& text) {
   if (text.size() == 0) {
     return {};
   }
-  std::vector<std::string_view> search_words = absl::StrSplit(text, ' ');
+  std::vector<std::string_view> search_words =
+      absl::StrSplit(text, absl::ByAnyChar(" \t\n\r\f\v"), absl::SkipEmpty());
   std::vector<std::string> result;
-  for (auto& part : search_words) {
-    std::optional<float> cm_per_360 = GetCmFromWord(part);
-    if (cm_per_360) {
-      query.cm_per_360 = cm_per_360;
-    } else {
-      std::optional<float> level = GetLevelFromWord(part);
-      if (level) {
-        query.level = level;
-      } else {
-        query.search_words.push_back(absl::AsciiStrToLower(part));
-      }
+  for (std::string_view part : search_words) {
+    bool is_dynamic_suffix = query.name_info.SetDynamicSuffixValue(part);
+    if (!is_dynamic_suffix) {
+      query.search_words.push_back(absl::AsciiStrToLower(part));
     }
   }
   return query;

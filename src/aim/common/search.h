@@ -4,12 +4,13 @@
 #include <string>
 #include <vector>
 
+#include "aim/common/name_util.h"
+
 namespace aim {
 
 struct SearchQuery {
   std::vector<std::string> search_words{};
-  std::optional<float> cm_per_360{};
-  std::optional<float> level{};
+  NameInfo name_info;
 };
 
 SearchQuery GetSearchQuery(const std::string& text);

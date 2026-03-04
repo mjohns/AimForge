@@ -36,25 +36,8 @@ NameInfo GetNameInfo(const std::string& name, bool support_levels = true) {
   std::optional<std::string_view> last_dynamic_word;
 
   for (std::string_view word : std::views::reverse(words)) {
-    std::optional<float> level = GetLevelFromWord(word);
-    if (level) {
-      info.level = level;
-      last_dynamic_word = word;
-      continue;
-    }
-    std::string_view suffix;
-    float value = 0;
-    if (!ParseFloatValueSuffix(word, &suffix, &value)) {
-      break;
-    }
-
-    if (suffix == "cm") {
-      info.cm_per_360 = value;
-    } else if (suffix == "s") {
-      info.duration = value;
-    } else if (suffix == "fov") {
-      info.fov = value;
-    } else {
+    bool is_dynamic_suffix = info.SetDynamicSuffixValue(word);
+    if (!is_dynamic_suffix) {
       break;
     }
     last_dynamic_word = word;
@@ -275,6 +258,35 @@ bool ParseFloatValueSuffix(std::string_view word, std::string_view* suffix, floa
 
   *suffix = word.substr(maybe_end_of_float, word.size() - maybe_end_of_float);
   return true;
+}
+
+bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
+  std::optional<float> parsed_level = GetLevelFromWord(word);
+  if (parsed_level) {
+    level = parsed_level;
+    return true;
+  }
+
+  std::string_view suffix;
+  float value = 0;
+  if (!ParseFloatValueSuffix(word, &suffix, &value)) {
+    return false;
+  }
+
+  if (suffix == "cm") {
+    cm_per_360 = value;
+    return true;
+  }
+  if (suffix == "s") {
+    duration = value;
+    return true;
+  }
+  if (suffix == "fov") {
+    fov = value;
+    return true;
+  }
+
+  return false;
 }
 
 }  // namespace aim

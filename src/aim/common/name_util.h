@@ -24,6 +24,9 @@ struct NameInfo {
   bool HasDynamicSuffix() const {
     return cm_per_360 || level || duration || fov;
   }
+
+  // Returns whether the suffix was a valid dynamic suffix.
+  bool SetDynamicSuffixValue(std::string_view word);
 };
 
 NameInfo GetPlaylistNameInfo(const std::string& name);
