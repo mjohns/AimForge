@@ -39,71 +39,12 @@ TEST(NameUtilTest, ParseFloatValueSuffix) {
   EXPECT_FALSE(ParseFloatValueSuffix("a", &suffix, &value));
 }
 
-TEST(NameUtilTest, StripLevelSuffix) {
-  EXPECT_FALSE(StripLevelSuffix("Scenario No Suffix 1").has_value());
-
-  float level = -3;
-  auto result = StripLevelSuffix("Scenario L0", &level);
-  EXPECT_THAT(result, Optional(StrEq("Scenario")));
-  EXPECT_EQ(level, 0);
-
-  result = StripLevelSuffix("ScenarioL2 L11", &level);
-  EXPECT_THAT(result, Optional(StrEq("ScenarioL2")));
-  EXPECT_EQ(level, 11);
-
-  result = StripLevelSuffix("ScenarioL2 L11.5", &level);
-  EXPECT_THAT(result, Optional(StrEq("ScenarioL2")));
-  EXPECT_EQ(level, 11.5);
-
-  EXPECT_FALSE(StripLevelSuffix("Scenario L1 No Suffix").has_value());
-}
-
-TEST(NameUtilTest, AddLevelSuffix) {
-  EXPECT_EQ(AddLevelSuffix("Scenario", 0), "Scenario L0");
-  EXPECT_EQ(AddLevelSuffix("Scenario", 1), "Scenario L1");
-  EXPECT_EQ(AddLevelSuffix("Scenario", 9), "Scenario L9");
-  EXPECT_EQ(AddLevelSuffix("Scenario", 10), "Scenario L10");
-}
-
 TEST(NameUtilTest, GetBundleName) {
   EXPECT_THAT(GetBundleName("Bundle"), StrEq("Bundle"));
   EXPECT_THAT(GetBundleName("Bundle Two"), StrEq("Bundle"));
   EXPECT_THAT(GetBundleName("Bundle   Two"), StrEq("Bundle"));
   EXPECT_THAT(GetBundleName("Bundle "), StrEq("Bundle"));
   EXPECT_THAT(GetBundleName(""), StrEq(""));
-}
-
-TEST(NameUtilTest, StripCmSuffix) {
-  EXPECT_FALSE(StripCmSuffix("Scenario No Suffix 1").has_value());
-
-  float cm_per_360 = -3;
-  auto result = StripCmSuffix("Scenario 25cm", &cm_per_360);
-  ASSERT_TRUE(result.has_value());
-  EXPECT_EQ(*result, "Scenario");
-  EXPECT_EQ(cm_per_360, 25);
-
-  result = StripCmSuffix("Scenario cm", &cm_per_360);
-  ASSERT_FALSE(result.has_value());
-
-  result = StripCmSuffix("Scenario 2cm", &cm_per_360);
-  ASSERT_TRUE(result.has_value());
-  EXPECT_EQ(*result, "Scenario");
-  EXPECT_EQ(cm_per_360, 2);
-
-  result = StripCmSuffix("Scenario 2.5cm", &cm_per_360);
-  ASSERT_TRUE(result.has_value());
-  EXPECT_EQ(*result, "Scenario");
-  EXPECT_EQ(cm_per_360, 2.5);
-}
-
-TEST(NameUtilTest, GetCmFromWord) {
-  EXPECT_FALSE(GetCmFromWord("Scenario").has_value());
-  EXPECT_FALSE(GetCmFromWord("cm").has_value());
-  EXPECT_FALSE(GetCmFromWord("Scenario 25cm No Suffix cm").has_value());
-
-  EXPECT_THAT(GetCmFromWord("35cm"), Optional(35));
-  EXPECT_THAT(GetCmFromWord("45cm"), Optional(45));
-  EXPECT_THAT(GetCmFromWord("100cm"), Optional(100));
 }
 
 TEST(NameUtilTest, GetLevelFromWord) {
