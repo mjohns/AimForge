@@ -19,7 +19,7 @@ class PlaylistComponent {
  public:
   virtual ~PlaylistComponent() {}
 
-  virtual void Show(const std::string& playlist_name) = 0;
+  virtual void Show(std::shared_ptr<PlaylistRun> run) = 0;
 };
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen);

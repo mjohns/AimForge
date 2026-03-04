@@ -371,7 +371,7 @@ class HomeScreen : public UiScreen {
     if (run == nullptr) {
       return;
     }
-    playlist_component_->Show(run->playlist.name);
+    playlist_component_->Show(run);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;
