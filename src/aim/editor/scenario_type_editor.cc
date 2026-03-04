@@ -1203,6 +1203,16 @@ void DrawShotTypeEditor(ShotType& s) {
 
   if (type == ShotType::kClickMulti || type == ShotType::kClickSingle) {
     ImGui::InputBool("Remove on miss", PROTO_BOOL_FIELD(ShotType, &s, remove_closest_on_miss));
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Ghost on miss")
+                          .set_is_optional()
+                          .set_step(0.05, 0.2)
+                          .set_min(0.05)
+                          .set_default(1)
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ShotType, &s, ghost_closest_on_miss));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "The closest target will become a ghost on miss and be removed after the specified time");
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Click rate")
                           .set_is_optional()

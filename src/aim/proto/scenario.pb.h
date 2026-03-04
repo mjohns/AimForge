@@ -4187,6 +4187,7 @@ class ShotType final : public ::google::protobuf::Message
     kRemoveClosestOnMissFieldNumber = 19,
     kHealthClicksFieldNumber = 16,
     kClickRateSecondsFieldNumber = 17,
+    kGhostClosestOnMissFieldNumber = 18,
     kAccuracyPenaltyFieldNumber = 21,
     kPokeFieldNumber = 1,
     kTrackingKillFieldNumber = 2,
@@ -4296,6 +4297,17 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_click_rate_seconds(float value);
 
   public:
+  // float ghost_closest_on_miss = 18;
+  bool has_ghost_closest_on_miss() const;
+  void clear_ghost_closest_on_miss() ;
+  float ghost_closest_on_miss() const;
+  void set_ghost_closest_on_miss(float value);
+
+  private:
+  float _internal_ghost_closest_on_miss() const;
+  void _internal_set_ghost_closest_on_miss(float value);
+
+  public:
   // .aim.AccuracyPenalty accuracy_penalty = 21;
   bool has_accuracy_penalty() const;
   void clear_accuracy_penalty() ;
@@ -4387,7 +4399,7 @@ class ShotType final : public ::google::protobuf::Message
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 16,
+  static const ::google::protobuf::internal::TcParseTable<4, 17,
                                    1, 0,
                                    2>
       _table_;
@@ -4418,6 +4430,7 @@ class ShotType final : public ::google::protobuf::Message
     bool remove_closest_on_miss_;
     ::int32_t health_clicks_;
     float click_rate_seconds_;
+    float ghost_closest_on_miss_;
     int accuracy_penalty_;
     union TypeUnion {
       constexpr TypeUnion() : _constinit_{} {}
@@ -15233,6 +15246,35 @@ inline void ShotType::_internal_set_click_rate_seconds(float value) {
   _impl_.click_rate_seconds_ = value;
 }
 
+// float ghost_closest_on_miss = 18;
+inline bool ShotType::has_ghost_closest_on_miss() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void ShotType::clear_ghost_closest_on_miss() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.ghost_closest_on_miss_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline float ShotType::ghost_closest_on_miss() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.ghost_closest_on_miss)
+  return _internal_ghost_closest_on_miss();
+}
+inline void ShotType::set_ghost_closest_on_miss(float value) {
+  _internal_set_ghost_closest_on_miss(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.ShotType.ghost_closest_on_miss)
+}
+inline float ShotType::_internal_ghost_closest_on_miss() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.ghost_closest_on_miss_;
+}
+inline void ShotType::_internal_set_ghost_closest_on_miss(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.ghost_closest_on_miss_ = value;
+}
+
 // bool remove_closest_on_miss = 19 [features = {
 inline void ShotType::clear_remove_closest_on_miss() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
@@ -15359,14 +15401,14 @@ inline void ShotType::set_allocated_reload(::aim::ReloadInfo* PROTOBUF_NULLABLE 
 
 // .aim.AccuracyPenalty accuracy_penalty = 21;
 inline bool ShotType::has_accuracy_penalty() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void ShotType::clear_accuracy_penalty() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.accuracy_penalty_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000400U);
 }
 inline ::aim::AccuracyPenalty ShotType::accuracy_penalty() const {
   // @@protoc_insertion_point(field_get:aim.ShotType.accuracy_penalty)
@@ -15374,7 +15416,7 @@ inline ::aim::AccuracyPenalty ShotType::accuracy_penalty() const {
 }
 inline void ShotType::set_accuracy_penalty(::aim::AccuracyPenalty value) {
   _internal_set_accuracy_penalty(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.ShotType.accuracy_penalty)
 }
 inline ::aim::AccuracyPenalty ShotType::_internal_accuracy_penalty() const {

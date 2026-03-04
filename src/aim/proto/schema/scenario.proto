@@ -184,6 +184,9 @@ message ShotType {
   // If specified, you can only click at the given rate.
   float click_rate_seconds = 17;
 
+  // Target will become a ghost on miss and be removed after the specified amount of time.
+  float ghost_closest_on_miss = 18;
+
   // For clicking scenarios, remove the target if you miss it.
   bool remove_closest_on_miss = 19 [features.field_presence = IMPLICIT];
 

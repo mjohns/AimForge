@@ -377,6 +377,19 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
         AddNewTarget(*target_id_to_remove);
       }
     }
+    if (def_.shot_type().has_ghost_closest_on_miss()) {
+      std::optional<u16> target_id_to_ghost =
+          target_manager_.GetNearestTargetOnMiss(camera_, look_at_.front);
+      if (target_id_to_ghost.has_value()) {
+        float time_to_wait = def_.shot_type().ghost_closest_on_miss();
+        target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = true;
+        if (time_to_wait > 0) {
+          RunAfterSeconds(time_to_wait, [=]() { AddNewTarget(*target_id_to_ghost); });
+        } else {
+          AddNewTarget(*target_id_to_ghost);
+        }
+      }
+    }
 
     if (def_.shot_type().has_reload()) {
       available_shots_ = std::max<int>(0, available_shots_ - 1);
