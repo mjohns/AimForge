@@ -3269,13 +3269,14 @@
    "def": {
     "durationSeconds": 60,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 3,
      "profiles": [
       {
-       "targetRadius": 1.69999981
+       "targetRadius": 1.7
       }
      ],
      "newestTargetIsGhost": true
@@ -3287,12 +3288,12 @@
       "z": 0
      },
      "simpleRoom": {
-      "height": 150,
-      "width": 170
+      "height": 183,
+      "width": 221
      }
     },
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
+     "targetRadiusMultiplier": 0.95
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3301,37 +3302,12 @@
         "info": {
          "weight": 1
         },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.6
-         },
-         "yDiameter": {
-          "yPercentValue": 0.32
-         }
-        }
-       },
-       {
-        "info": {
-         "weight": 1
-        },
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.65
+          "xPercentValue": 0.9
          },
          "yLength": {
-          "yPercentValue": 0.55
+          "yPercentValue": 0.9
          }
         }
        },
@@ -3352,7 +3328,7 @@
       ],
       "regionsInfo": {
        "startOrder": [
-        2
+        1
        ]
       },
       "minDistance": {
@@ -3360,8 +3336,25 @@
       },
       "fixedDistanceFromLastTarget": {
        "value": 10
+      },
+      "fixedDistanceFromLastTargetJitter": {
+       "value": 0
       }
      }
+    }
+   }
+  },
+  {
+   "name": "SnakeClick Distance",
+   "def": {
+    "overrides": {},
+    "levelOverrides": {
+     "fixedDistanceFromLastTargetMultiplier": 1.05,
+     "minDistanceMultiplier": 1.05
+    },
+    "referenceDef": {
+     "scenarioName": "AF SnakeClick",
+     "description": "Leveled version of SnakeClick where at each level the distance between targets gets 5% larger."
     }
    }
   },
@@ -4874,6 +4867,15 @@
      "baseScenario": "AF SmoothSwerve Precision Ladder",
      "maxLevel": 40,
      "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
+   "name": "SnakeClick Distance",
+   "def": {
+    "levels": {
+     "baseScenario": "AF SnakeClick Distance",
+     "maxLevel": 30
     }
    }
   },

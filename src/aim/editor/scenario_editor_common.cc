@@ -186,69 +186,6 @@ float GetRegionLengthValue(RegionLength* length) {
   return 0;
 }
 
-TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def) {
-  if (def.has_static_def()) {
-    return def.static_def().target_placement_strategy();
-  }
-  if (def.has_waypoint_def()) {
-    return def.waypoint_def().target_placement_strategy();
-  }
-  if (def.has_linear_def()) {
-    return def.linear_def().target_placement_strategy();
-  }
-  if (def.has_wall_wander_def()) {
-    return def.wall_wander_def().target_placement_strategy();
-  }
-  if (def.has_angle_strafe_def()) {
-    return def.angle_strafe_def().target_placement_strategy();
-  }
-  if (def.has_strafe_def()) {
-    return def.strafe_def().target_placement_strategy();
-  }
-  if (def.has_bounce_def()) {
-    return def.bounce_def().target_placement_strategy();
-  }
-  if (def.has_barrel_def()) {
-    return def.barrel_def().target_placement_strategy();
-  }
-  return {};
-}
-
-void SetTargetPlacementStrategy(const TargetPlacementStrategy& strat, ScenarioDef* def) {
-  auto get_mutable = [&]() {
-    if (def->has_static_def()) {
-      return def->mutable_static_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_waypoint_def()) {
-      return def->mutable_waypoint_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_linear_def()) {
-      return def->mutable_linear_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_wall_wander_def()) {
-      return def->mutable_wall_wander_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_angle_strafe_def()) {
-      return def->mutable_angle_strafe_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_strafe_def()) {
-      return def->mutable_strafe_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_bounce_def()) {
-      return def->mutable_bounce_def()->mutable_target_placement_strategy();
-    }
-    if (def->has_barrel_def()) {
-      return def->mutable_barrel_def()->mutable_target_placement_strategy();
-    }
-    return (TargetPlacementStrategy*)nullptr;
-  };
-
-  TargetPlacementStrategy* mutable_strat = get_mutable();
-  if (mutable_strat != nullptr) {
-    *mutable_strat = strat;
-  }
-}
-
 void DrawRegionLengthEditor(const std::string& id,
                             RegionLength::TypeCase default_type,
                             RegionLength* length,
@@ -507,6 +444,12 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
   ImGui::InputFloat(
       default_params.clone().set_id_and_label("Remove after time multiplier"),
       PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, remove_target_after_seconds_multiplier));
+  ImGui::InputFloat(
+      default_params.clone().set_id_and_label("Min distance between targets multiplier"),
+      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, min_distance_multiplier));
+  ImGui::InputFloat(
+      default_params.clone().set_id_and_label("Fixed distance from last target multiplier"),
+      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, fixed_distance_from_last_target_multiplier));
 }
 
 ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label) {

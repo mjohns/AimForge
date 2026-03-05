@@ -880,6 +880,8 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     kDistanceMultiplierFieldNumber = 7,
     kGrowthTimeMultiplierFieldNumber = 8,
     kRemoveTargetAfterSecondsMultiplierFieldNumber = 9,
+    kFixedDistanceFromLastTargetMultiplierFieldNumber = 10,
+    kMinDistanceMultiplierFieldNumber = 11,
   };
   // float target_radius_multiplier = 3;
   bool has_target_radius_multiplier() const;
@@ -958,11 +960,33 @@ class ScenarioOverrides final : public ::google::protobuf::Message
   void _internal_set_remove_target_after_seconds_multiplier(float value);
 
   public:
+  // float fixed_distance_from_last_target_multiplier = 10;
+  bool has_fixed_distance_from_last_target_multiplier() const;
+  void clear_fixed_distance_from_last_target_multiplier() ;
+  float fixed_distance_from_last_target_multiplier() const;
+  void set_fixed_distance_from_last_target_multiplier(float value);
+
+  private:
+  float _internal_fixed_distance_from_last_target_multiplier() const;
+  void _internal_set_fixed_distance_from_last_target_multiplier(float value);
+
+  public:
+  // float min_distance_multiplier = 11;
+  bool has_min_distance_multiplier() const;
+  void clear_min_distance_multiplier() ;
+  float min_distance_multiplier() const;
+  void set_min_distance_multiplier(float value);
+
+  private:
+  float _internal_min_distance_multiplier() const;
+  void _internal_set_min_distance_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 7,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    0, 0,
                                    2>
       _table_;
@@ -991,6 +1015,8 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     float distance_multiplier_;
     float growth_time_multiplier_;
     float remove_target_after_seconds_multiplier_;
+    float fixed_distance_from_last_target_multiplier_;
+    float min_distance_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14996,6 +15022,64 @@ inline float ScenarioOverrides::_internal_remove_target_after_seconds_multiplier
 inline void ScenarioOverrides::_internal_set_remove_target_after_seconds_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.remove_target_after_seconds_multiplier_ = value;
+}
+
+// float fixed_distance_from_last_target_multiplier = 10;
+inline bool ScenarioOverrides::has_fixed_distance_from_last_target_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  return value;
+}
+inline void ScenarioOverrides::clear_fixed_distance_from_last_target_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_from_last_target_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline float ScenarioOverrides::fixed_distance_from_last_target_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.fixed_distance_from_last_target_multiplier)
+  return _internal_fixed_distance_from_last_target_multiplier();
+}
+inline void ScenarioOverrides::set_fixed_distance_from_last_target_multiplier(float value) {
+  _internal_set_fixed_distance_from_last_target_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.fixed_distance_from_last_target_multiplier)
+}
+inline float ScenarioOverrides::_internal_fixed_distance_from_last_target_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.fixed_distance_from_last_target_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_fixed_distance_from_last_target_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.fixed_distance_from_last_target_multiplier_ = value;
+}
+
+// float min_distance_multiplier = 11;
+inline bool ScenarioOverrides::has_min_distance_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void ScenarioOverrides::clear_min_distance_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_distance_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline float ScenarioOverrides::min_distance_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.min_distance_multiplier)
+  return _internal_min_distance_multiplier();
+}
+inline void ScenarioOverrides::set_min_distance_multiplier(float value) {
+  _internal_set_min_distance_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.min_distance_multiplier)
+}
+inline float ScenarioOverrides::_internal_min_distance_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.min_distance_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_min_distance_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.min_distance_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------

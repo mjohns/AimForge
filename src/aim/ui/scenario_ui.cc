@@ -622,7 +622,8 @@ class ScenariosComponentImpl : public ScenariosComponent {
       }
     }
 
-    std::string description = item.unevaluated_def.description();
+    std::string description = FirstNonEmpty(item.unevaluated_def.description(),
+                                            item.unevaluated_def.reference_def().description());
     if (description.size() > 0) {
       ImGui::SpacedSeparator();
       ImGui::TextWrapped(description);

@@ -131,6 +131,8 @@ message ScenarioOverrides {
   float distance_multiplier = 7;
   float growth_time_multiplier = 8;
   float remove_target_after_seconds_multiplier = 9;
+  float fixed_distance_from_last_target_multiplier = 10;
+  float min_distance_multiplier = 11;
 }
 
 message ReloadInfo {

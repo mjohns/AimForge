@@ -8,6 +8,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/scenario/scenario_util.h"
 #include "aim/ui/ui_screen.h"
 
 namespace aim {
@@ -17,9 +18,6 @@ struct BoundsDimensions {
   bool draw_height = true;
   bool draw_depth = true;
 };
-
-TargetPlacementStrategy GetTargetPlacementStrategy(const ScenarioDef& def);
-void SetTargetPlacementStrategy(const TargetPlacementStrategy& strat, ScenarioDef* def);
 
 ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label);
 

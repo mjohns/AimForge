@@ -1036,7 +1036,10 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
   }
 
   if (target_placement.regions_size() > 0) {
-    SetTargetPlacementStrategy(target_placement, &def);
+    auto maybe_strat = GetTargetPlacementStrategyField(&def);
+    if (maybe_strat) {
+      *maybe_strat->get_mutable() = target_placement;
+    }
   }
 }
 
@@ -1054,13 +1057,15 @@ void DrawScenarioTypeEditor(ScenarioDef& def,
   ImGui::SameLine();
 
   if (def.type_case() == ScenarioDef::TYPE_NOT_SET) {
-    def.mutable_static_def();
+    InitializeScenarioType(def, ScenarioDef::kStaticDef);
   }
 
   auto scenario_type = def.type_case();
   bool is_new_type = ImGui::SimpleTypeDropdown(
       "ScenarioTypeDropdown", &scenario_type, kScenarioTypes, char_x * 15);
-  InitializeScenarioType(def, scenario_type);
+  if (is_new_type) {
+    InitializeScenarioType(def, scenario_type);
+  }
 
   ImGui::SpacedSeparator();
 

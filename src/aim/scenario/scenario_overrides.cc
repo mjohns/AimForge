@@ -1,6 +1,8 @@
 #include "scenario_overrides.h"
 
+#include "aim/common/field.h"
 #include "aim/common/util.h"
+#include "aim/scenario/scenario_util.h"
 
 namespace aim {
 namespace {
@@ -195,6 +197,37 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
         if (profile.has_turn_time_jitter()) {
           profile.set_turn_time_jitter(profile.turn_time_jitter() * mult);
         }
+      }
+    }
+  }
+  if (overrides.has_fixed_distance_from_last_target_multiplier()) {
+    std::optional<PtrField<TargetPlacementStrategy>> maybe_strat =
+        GetTargetPlacementStrategyField(&result);
+    if (maybe_strat && maybe_strat->has()) {
+      float mult = get_multiplier(overrides.fixed_distance_from_last_target_multiplier());
+      TargetPlacementStrategy* strat = maybe_strat->get_mutable();
+      if (strat->has_fixed_distance_from_last_target()) {
+        MultiplyRegionLength(strat->mutable_fixed_distance_from_last_target(), mult);
+      }
+      if (strat->has_fixed_distance_from_last_target_jitter()) {
+        MultiplyRegionLength(strat->mutable_fixed_distance_from_last_target_jitter(), mult);
+      }
+    }
+  }
+  if (overrides.has_min_distance_multiplier()) {
+    std::optional<PtrField<TargetPlacementStrategy>> maybe_strat =
+        GetTargetPlacementStrategyField(&result);
+    if (maybe_strat && maybe_strat->has()) {
+      float mult = get_multiplier(overrides.min_distance_multiplier());
+      TargetPlacementStrategy* strat = maybe_strat->get_mutable();
+      if (strat->has_min_distance()) {
+        MultiplyRegionLength(strat->mutable_min_distance(), mult);
+      }
+      if (strat->has_min_x_distance()) {
+        MultiplyRegionLength(strat->mutable_min_x_distance(), mult);
+      }
+      if (strat->has_min_y_distance()) {
+        MultiplyRegionLength(strat->mutable_min_y_distance(), mult);
       }
     }
   }
