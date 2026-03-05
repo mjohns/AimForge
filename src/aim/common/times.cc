@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 
+#include "absl/time/clock.h"
 #include "absl/time/time.h"
 #include "aim/common/log.h"
 #include "aim/common/util.h"
@@ -12,9 +13,15 @@
 namespace aim {
 
 std::string EpochSecondsToString(i64 epoch_seconds) {
+#ifdef _WIN32
   std::chrono::sys_seconds tp{std::chrono::seconds(epoch_seconds)};
   std::chrono::zoned_time local_time{std::chrono::current_zone(), tp};
   return std::format("{:%Y-%m-%d %I:%M %p}", local_time);
+#else
+  absl::Time t = absl::FromUnixSeconds(epoch_seconds);
+  absl::TimeZone local_tz = absl::LocalTimeZone();
+  return absl::FormatTime("%Y-%m-%d %I:%M %p", t, local_tz);
+#endif
 }
 
 void Stopwatch::Start() {
