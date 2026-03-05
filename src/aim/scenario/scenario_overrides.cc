@@ -15,6 +15,66 @@ void MultiplyTargetRadiusValues(TargetProfile* profile, float mult) {
   }
 }
 
+void MultiplyRoomWidth(Room* room, float mult) {
+  if (room->has_simple_room()) {
+    room->mutable_simple_room()->set_width(mult * room->simple_room().width());
+  }
+  if (room->has_barrel_room()) {
+    room->mutable_barrel_room()->set_radius(mult * room->barrel_room().radius());
+  }
+  if (room->has_cylinder_room()) {
+    CylinderRoom& c = *room->mutable_cylinder_room();
+    if (c.has_width()) {
+      c.set_width(c.width() * mult);
+    }
+    if (c.has_width_perimeter_percent()) {
+      c.set_width_perimeter_percent(c.width_perimeter_percent() * mult);
+    }
+    if (c.has_width_degrees()) {
+      c.set_width_degrees(c.width_degrees() * mult);
+    }
+  }
+}
+
+void MultiplyRoomHeight(Room* room, float mult) {
+  if (room->has_simple_room()) {
+    room->mutable_simple_room()->set_height(mult * room->simple_room().height());
+  }
+  if (room->has_barrel_room()) {
+    room->mutable_barrel_room()->set_radius(mult * room->barrel_room().radius());
+  }
+  if (room->has_cylinder_room()) {
+    CylinderRoom& c = *room->mutable_cylinder_room();
+    if (c.has_height()) {
+      c.set_height(c.height() * mult);
+    }
+  }
+}
+
+void MultiplyRoomWidth(ScenarioDef* def, float mult) {
+  if (def->has_room()) {
+    MultiplyRoomWidth(def->mutable_room(), mult);
+  }
+  if (def->has_reference_def()) {
+    auto* r = def->mutable_reference_def();
+    if (r->has_room()) {
+      MultiplyRoomWidth(r->mutable_room(), mult);
+    }
+  }
+}
+
+void MultiplyRoomHeight(ScenarioDef* def, float mult) {
+  if (def->has_room()) {
+    MultiplyRoomHeight(def->mutable_room(), mult);
+  }
+  if (def->has_reference_def()) {
+    auto* r = def->mutable_reference_def();
+    if (r->has_room()) {
+      MultiplyRoomHeight(r->mutable_room(), mult);
+    }
+  }
+}
+
 void MultiplyRegionLength(RegionLength* l, float mult) {
   if (l->has_depth_percent_value()) {
     l->set_depth_percent_value(l->depth_percent_value() * mult);
@@ -238,6 +298,14 @@ void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
     for (auto& profile : *def->mutable_target_def()->mutable_profiles()) {
       profile.set_acceleration(profile.acceleration() * mult);
     }
+  }
+  if (name_info.wider) {
+    float mult = 1 + (*name_info.wider / 100.0f);
+    MultiplyRoomWidth(def, mult);
+  }
+  if (name_info.taller) {
+    float mult = 1 + (*name_info.taller / 100.0f);
+    MultiplyRoomHeight(def, mult);
   }
 }
 

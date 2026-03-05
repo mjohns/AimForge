@@ -105,6 +105,14 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
 
     ImGui::SpacedSeparator();
 
+    ImGui::InputFloat(default_percent_param.clone().set_min(-99).set_id_and_label("Wider"),
+                      CreateOptionalFloatField(&name_info_.wider));
+
+    ImGui::InputFloat(default_percent_param.clone().set_min(-99).set_id_and_label("Taller"),
+                      CreateOptionalFloatField(&name_info_.taller));
+
+    ImGui::SpacedSeparator();
+
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Duration")
                           .set_is_optional()
                           .set_step(5, 10)

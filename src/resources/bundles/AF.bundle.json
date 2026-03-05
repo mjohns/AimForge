@@ -3680,17 +3680,6 @@
    }
   },
   {
-   "name": "Static3 Sprint Ladder",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF Static3 Ladder",
-     "durationSeconds": 30,
-     "description": "Version of AF Static3 Ladder with a shorter duration to allow \"sprinting\" with maximum effort and less focus on endurance."
-    }
-   }
-  },
-  {
    "name": "Static5",
    "def": {
     "durationSeconds": 60,
@@ -4960,7 +4949,7 @@
    "def": {
     "description": "",
     "levels": {
-     "baseScenario": "AF Static3 Sprint Ladder",
+     "baseScenario": "AF Static3 Ladder 30s",
      "maxLevel": 40,
      "numPlaysPerLevel": 1
     }

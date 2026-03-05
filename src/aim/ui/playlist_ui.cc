@@ -140,7 +140,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::Text(current_playlist_name_);
 
     bool is_readonly = app_.bundle_manager().IsBundleReadonly(GetBundleName(run->playlist.name));
-    bool has_dynamic_suffix = run->playlist.cm_per_360 || run->playlist.level;
+    bool has_dynamic_suffix = run->playlist.playlist_name_info.HasDynamicSuffix();
     if (!has_dynamic_suffix && !is_readonly) {
       ImGui::SameLine();
       if (ImGui::Button(icons::kEdit)) {
@@ -155,7 +155,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::EndDisabled();
       if (has_dynamic_suffix) {
         // TODO: Support editing and switching to edit the base version by default.
-        ImGui::HelpTooltip("Cannot edit playlist with cm/360 or level suffix");
+        ImGui::HelpTooltip("Cannot edit playlist with dynamic suffix like 25cm or 5%Faster.");
       } else {
         ImGui::HelpTooltip(
             std::format("Bundle \"{}\" is readonly.", GetBundleName(run->playlist.name)));
