@@ -118,6 +118,9 @@ message TargetPlacementStrategy {
   RegionLength fixed_distance_from_last_target = 4;
   // If using fixed distance allow the distance to vary by this amount. i.e. +/- jitter.
   RegionLength fixed_distance_from_last_target_jitter = 5;
+
+  RegionLength min_x_distance = 6;
+  RegionLength min_y_distance = 7;
 }
 
 message ScenarioOverrides {

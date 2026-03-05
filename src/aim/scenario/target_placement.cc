@@ -1,5 +1,6 @@
 #include "target_placement.h"
 
+#include <cassert>
 #include <optional>
 #include <random>
 
@@ -32,6 +33,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       return candidate_pos;
     }
     float min_distance = wall_.GetRegionLength(strategy_.min_distance());
+    float min_x_distance = wall_.GetRegionLength(strategy_.min_x_distance());
+    float min_y_distance = wall_.GetRegionLength(strategy_.min_y_distance());
     ProfileSelectionContext original_context = *context;
     for (int i = 0; i < 200; ++i) {
       // Reset this so that the counter only increments once even if the candidates are invalid.
@@ -42,12 +45,15 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
         candidate_pos = glm::vec3(GetFixedDistanceAdjustedPoint(candidate_pos), candidate_pos.z);
       }
       // TODO: consider also checking wall_.IsPointInBounds
-      if (AreNoneWithinDistanceOnWall(candidate_pos, min_distance)) {
+      if (AreNoneWithinDistanceOnWall(
+              candidate_pos, min_distance, min_x_distance, min_y_distance)) {
         return candidate_pos;
       }
 
       if (i == 100 || i == 150 || i == 175 || i == 190) {
         min_distance *= 0.5;
+        min_x_distance *= 0.5;
+        min_y_distance *= 0.5;
       }
     }
 
@@ -60,11 +66,33 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
   }
 
  private:
-  bool AreNoneWithinDistanceOnWall(const glm::vec2& p, float min_distance) {
+  bool AreNoneWithinDistanceOnWall(const glm::vec2& p,
+                                   float min_distance,
+                                   float min_x_distance,
+                                   float min_y_distance) {
     auto is_too_close = [=](const Target& target) {
+      if (!target.wall_position) {
+        assert(false && "Should not be calling target placement without wall position set");
+        return false;
+      }
       float distance = glm::length(p - *target.wall_position);
       float actual_min_distance = min_distance > 0 ? min_distance : target.radius * 2;
-      return distance < actual_min_distance;
+      if (distance < actual_min_distance) {
+        return true;
+      }
+      if (min_x_distance > 0) {
+        float x_distance = std::abs(p.x - target.wall_position->x);
+        if (x_distance < min_x_distance) {
+          return true;
+        }
+      }
+      if (min_y_distance > 0) {
+        float y_distance = std::abs(p.y - target.wall_position->y);
+        if (y_distance < min_y_distance) {
+          return true;
+        }
+      }
+      return false;
     };
     for (auto& target : target_manager_->GetTargets()) {
       if (target.ShouldDraw()) {

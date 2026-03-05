@@ -8792,8 +8792,8 @@
         }
        }
       ],
-      "minDistance": {
-       "value": 25
+      "minXDistance": {
+       "value": 20
       }
      },
      "leftRightInitialDirection": "DIRECTION_IN",

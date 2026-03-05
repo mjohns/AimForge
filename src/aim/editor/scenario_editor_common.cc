@@ -409,6 +409,28 @@ void DrawTargetPlacementStrategyEditor(const std::string& id,
   ImGui::HelpMarker("Minimum distance between targets.");
 
   ImGui::AlignTextToFramePadding();
+  ImGui::Text("Min distance X");
+  ImGui::SameLine();
+  DrawOptionalRegionLengthEditor(
+      "MinDistanceXInput",
+      RegionLength::kXPercentValue,
+      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, min_x_distance),
+      1);
+  ImGui::SameLine();
+  ImGui::HelpMarker("Minimum horizontal distance between targets along the x axis.");
+
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Min distance Y");
+  ImGui::SameLine();
+  DrawOptionalRegionLengthEditor(
+      "MinDistanceYInput",
+      RegionLength::kYPercentValue,
+      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, min_y_distance),
+      1);
+  ImGui::SameLine();
+  ImGui::HelpMarker("Minimum vertical distance between targets along the y axis.");
+
+  ImGui::AlignTextToFramePadding();
   ImGui::Text("Fixed distance");
   ImGui::SameLine();
   DrawOptionalJitteredRegionLengthEditor(
