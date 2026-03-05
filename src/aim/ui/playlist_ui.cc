@@ -6,6 +6,7 @@
 #include "aim/common/search.h"
 #include "aim/common/times.h"
 #include "aim/core/bundle_manager.h"
+#include "aim/core/history_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/editor/scenario_editor_screen.h"
 #include "aim/ui/copy_playlist_dialog.h"
@@ -365,6 +366,11 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
           copy_dialog_.NotifyOpen(*playlist);
         }
       }
+      if (ImGui::Selectable("Remove from recents")) {
+        app_.history_manager().DeleteRecentView(ObjectType::PLAYLIST, playlist_name);
+      }
+
+      ImGui::SpacedSeparator();
       if (ImGui::Selectable("Delete")) {
         auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
         if (playlist) {

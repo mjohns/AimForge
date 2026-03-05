@@ -105,6 +105,8 @@ struct ScenarioDialogs {
   CreateLevelsPlaylistDialog create_levels_playlist_dialog;
   SelectVariationDialog select_variation_dialog =
       SelectVariationDialog::ForScenarios("SelectScenarioVariation");
+  // TODO: This should not be in dialogs. Maybe use events to communicate somehow?
+  bool update_filtered_scenarios = false;
 };
 
 void DrawScenarioRightClickMenu(const char* popup_id,
@@ -126,6 +128,10 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     }
     if (ImGui::Selectable("Select variation")) {
       dialogs->select_variation_dialog.NotifyOpen(scenario_name);
+    }
+    if (ImGui::Selectable("Remove from recents")) {
+      app.history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
+      dialogs->update_filtered_scenarios = true;
     }
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
@@ -215,6 +221,10 @@ class ScenarioBrowserComponent {
   }
 
   void Show(ScenarioDialogs* dialogs) {
+    if (dialogs->update_filtered_scenarios) {
+      UpdateFilteredScenarios();
+      dialogs->update_filtered_scenarios = false;
+    }
     float char_x = ImGui::GetDefaultCharSizeX();
     ImGui::IdGuard cid(id_);
 
