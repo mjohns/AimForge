@@ -240,39 +240,42 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
 }
 
 std::string NameInfo::GetFullName() const {
-  std::string result = base_name;
+  std::string result;
+  result.reserve(base_name.size() + 30);
+  result.append(base_name);
+
   if (is_poke) {
     result.append(" Poke");
   }
   if (level && *level != 0) {
-    result.append(std::format(" L{}", base_name, MaybeIntToString(*level, 2)));
+    result.append(std::format(" L{}", MaybeIntToString(*level, 2)));
   }
   if (radius_smaller) {
-    result = std::format("{} {}%Smaller", result, MaybeIntToString(*radius_smaller, 2));
+    result.append(std::format(" {}%Smaller", MaybeIntToString(*radius_smaller, 2)));
   }
   if (radius_larger) {
-    result = std::format("{} {}%Larger", result, MaybeIntToString(*radius_larger, 2));
+    result.append(std::format(" {}%Larger", MaybeIntToString(*radius_larger, 2)));
   }
   if (faster) {
-    result = std::format("{} {}%Faster", result, MaybeIntToString(*faster, 2));
+    result.append(std::format(" {}%Faster", MaybeIntToString(*faster, 2)));
   }
   if (slower) {
-    result = std::format("{} {}%Slower", result, MaybeIntToString(*slower, 2));
+    result.append(std::format(" {}%Slower", MaybeIntToString(*slower, 2)));
   }
   if (fov) {
-    result = std::format("{} {}fov", result, MaybeIntToString(*fov, 0));
+    result.append(std::format(" {}fov", MaybeIntToString(*fov, 0)));
   }
   if (wider) {
-    result = std::format("{} {}%Wider", result, MaybeIntToString(*wider, 2));
+    result.append(std::format(" {}%Wider", MaybeIntToString(*wider, 2)));
   }
   if (taller) {
-    result = std::format("{} {}%Taller", result, MaybeIntToString(*taller, 2));
+    result.append(std::format(" {}%Taller", MaybeIntToString(*taller, 2)));
   }
   if (duration) {
-    result = std::format("{} {}s", result, MaybeIntToString(*duration, 0));
+    result.append(std::format(" {}s", MaybeIntToString(*duration, 0)));
   }
   if (cm_per_360) {
-    result = std::format("{} {}cm", result, MaybeIntToString(*cm_per_360, 1));
+    result.append(std::format(" {}cm", MaybeIntToString(*cm_per_360, 1)));
   }
   return result;
 }
