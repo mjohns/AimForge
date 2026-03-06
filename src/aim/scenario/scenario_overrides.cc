@@ -231,6 +231,14 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
       }
     }
   }
+  if (overrides.has_wall_width_multiplier()) {
+    float mult = get_multiplier(overrides.wall_width_multiplier());
+    MultiplyRoomWidth(&result, mult);
+  }
+  if (overrides.has_wall_height_multiplier()) {
+    float mult = get_multiplier(overrides.wall_height_multiplier());
+    MultiplyRoomHeight(&result, mult);
+  }
   return result;
 }
 

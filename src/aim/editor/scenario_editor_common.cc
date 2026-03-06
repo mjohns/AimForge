@@ -450,6 +450,10 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
   ImGui::InputFloat(
       default_params.clone().set_id_and_label("Fixed distance from last target multiplier"),
       PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, fixed_distance_from_last_target_multiplier));
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Wall width multiplier"),
+                    PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, wall_width_multiplier));
+  ImGui::InputFloat(default_params.clone().set_id_and_label("Wall height multiplier"),
+                    PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, wall_height_multiplier));
 }
 
 ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label) {

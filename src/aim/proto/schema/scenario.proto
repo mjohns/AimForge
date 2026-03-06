@@ -133,6 +133,8 @@ message ScenarioOverrides {
   float remove_target_after_seconds_multiplier = 9;
   float fixed_distance_from_last_target_multiplier = 10;
   float min_distance_multiplier = 11;
+  float wall_width_multiplier = 12;
+  float wall_height_multiplier = 13;
 }
 
 message ReloadInfo {

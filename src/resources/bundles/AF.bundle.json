@@ -1940,6 +1940,166 @@
    }
   },
   {
+   "name": "OmniFlick Close",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "removeClosestOnMiss": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 2,
+     "profiles": [
+      {
+       "targetRadius": 2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 100,
+      "width": 100
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "circle": {
+         "diameter": {
+          "xPercentValue": 0.9
+         },
+         "innerDiameter": {
+          "xPercentValue": 0.8
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "xPercentValue": 0.25
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "OmniFlick CloseMid",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.15,
+     "wallHeightMultiplier": 1.15
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Close"
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Far",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.3,
+     "wallHeightMultiplier": 1.3
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Mid"
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Mid",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.3,
+     "wallHeightMultiplier": 1.3
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Close"
+    }
+   }
+  },
+  {
+   "name": "OmniFlick MidFar",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.15,
+     "wallHeightMultiplier": 1.15
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Mid"
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Poke Close",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Close",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Poke CloseMid",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick CloseMid",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Poke Far",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Far",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Poke Mid",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Mid",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
+   "name": "OmniFlick Poke MidFar",
+   "def": {
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick MidFar",
+     "shotType": {
+      "poke": true
+     }
+    }
+   }
+  },
+  {
    "name": "Popcorn",
    "def": {
     "durationSeconds": 60,
@@ -4854,6 +5014,54 @@
      },
      {
       "scenario": "AF Smooth Horizontal Strafe Mixed 35cm",
+      "numPlays": 1
+     }
+    ]
+   }
+  },
+  {
+   "name": "OmniFlick",
+   "def": {
+    "description": "Practice flicks at increasingly far distances. Targets are placed around the outside edges of the wall.",
+    "items": [
+     {
+      "scenario": "AF OmniFlick Close",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick CloseMid",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Mid",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick MidFar",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Far",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Poke Close",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Poke CloseMid",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Poke Mid",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Poke MidFar",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick Poke Far",
       "numPlays": 1
      }
     ]

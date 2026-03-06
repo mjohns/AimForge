@@ -895,6 +895,8 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     kRemoveTargetAfterSecondsMultiplierFieldNumber = 9,
     kFixedDistanceFromLastTargetMultiplierFieldNumber = 10,
     kMinDistanceMultiplierFieldNumber = 11,
+    kWallWidthMultiplierFieldNumber = 12,
+    kWallHeightMultiplierFieldNumber = 13,
   };
   // float target_radius_multiplier = 3;
   bool has_target_radius_multiplier() const;
@@ -995,11 +997,33 @@ class ScenarioOverrides final : public ::google::protobuf::Message
   void _internal_set_min_distance_multiplier(float value);
 
   public:
+  // float wall_width_multiplier = 12;
+  bool has_wall_width_multiplier() const;
+  void clear_wall_width_multiplier() ;
+  float wall_width_multiplier() const;
+  void set_wall_width_multiplier(float value);
+
+  private:
+  float _internal_wall_width_multiplier() const;
+  void _internal_set_wall_width_multiplier(float value);
+
+  public:
+  // float wall_height_multiplier = 13;
+  bool has_wall_height_multiplier() const;
+  void clear_wall_height_multiplier() ;
+  float wall_height_multiplier() const;
+  void set_wall_height_multiplier(float value);
+
+  private:
+  float _internal_wall_height_multiplier() const;
+  void _internal_set_wall_height_multiplier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 9,
+  static const ::google::protobuf::internal::TcParseTable<4, 11,
                                    0, 0,
                                    2>
       _table_;
@@ -1030,6 +1054,8 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     float remove_target_after_seconds_multiplier_;
     float fixed_distance_from_last_target_multiplier_;
     float min_distance_multiplier_;
+    float wall_width_multiplier_;
+    float wall_height_multiplier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -15106,6 +15132,64 @@ inline float ScenarioOverrides::_internal_min_distance_multiplier() const {
 inline void ScenarioOverrides::_internal_set_min_distance_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.min_distance_multiplier_ = value;
+}
+
+// float wall_width_multiplier = 12;
+inline bool ScenarioOverrides::has_wall_width_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  return value;
+}
+inline void ScenarioOverrides::clear_wall_width_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.wall_width_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000200U);
+}
+inline float ScenarioOverrides::wall_width_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.wall_width_multiplier)
+  return _internal_wall_width_multiplier();
+}
+inline void ScenarioOverrides::set_wall_width_multiplier(float value) {
+  _internal_set_wall_width_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.wall_width_multiplier)
+}
+inline float ScenarioOverrides::_internal_wall_width_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.wall_width_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_wall_width_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.wall_width_multiplier_ = value;
+}
+
+// float wall_height_multiplier = 13;
+inline bool ScenarioOverrides::has_wall_height_multiplier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
+  return value;
+}
+inline void ScenarioOverrides::clear_wall_height_multiplier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.wall_height_multiplier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000400U);
+}
+inline float ScenarioOverrides::wall_height_multiplier() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.wall_height_multiplier)
+  return _internal_wall_height_multiplier();
+}
+inline void ScenarioOverrides::set_wall_height_multiplier(float value) {
+  _internal_set_wall_height_multiplier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.wall_height_multiplier)
+}
+inline float ScenarioOverrides::_internal_wall_height_multiplier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.wall_height_multiplier_;
+}
+inline void ScenarioOverrides::_internal_set_wall_height_multiplier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.wall_height_multiplier_ = value;
 }
 
 // -------------------------------------------------------------------
