@@ -254,9 +254,6 @@ class StatsScreen : public UiScreen {
     screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_name);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
-    if (evaluated_scenario_def_) {
-      score_target_ = evaluated_scenario_def_->score_targets().end();
-    }
     if (scenario_) {
       reference_scenario_name_ = scenario_->unevaluated_def.reference_def().scenario_name();
     }
@@ -337,6 +334,10 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawScreenInternal() {
+    if (evaluated_scenario_def_) {
+      score_target_ = GetTargetScore(evaluated_scenario_def_->score_targets(), playlist_run_.get());
+    }
+
     DrawTopBar(this);
     ImGui::Spacing();
     ImGui::Spacing();
@@ -665,7 +666,14 @@ class StatsScreen : public UiScreen {
           "{}: {} ({})", prefix, MaybeIntToString(previous_high_score, 2), high_score_time));
     }
     if (evaluated_scenario_def_) {
-      float score_level = GetScenarioScoreLevel(stats.score, *evaluated_scenario_def_);
+      ScoreTargets score_targets = evaluated_scenario_def_->score_targets();
+      if (playlist_run_) {
+        float override_target_score = playlist_run_->playlist.def().levels().target_score();
+        if (override_target_score > 0) {
+          score_targets.set_target_score(override_target_score);
+        }
+      }
+      float score_level = GetScenarioScoreLevel(stats.score, score_target_);
       if (score_level > 0) {
         auto font1 = app_.font_manager().UseLarge();
         ImGui::SameLine();

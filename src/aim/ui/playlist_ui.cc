@@ -488,7 +488,8 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
       auto scenario_def =
           screen.app().scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
       if (scenario_def) {
-        level = GetScenarioScoreLevel(stats.high_score_stats.score, *scenario_def);
+        level = GetScenarioScoreLevel(stats.high_score_stats.score,
+                                      GetTargetScore(scenario_def->score_targets(), run.get()));
         if (level > 0) {
           has_score_level = true;
         }

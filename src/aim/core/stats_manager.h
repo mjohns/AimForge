@@ -13,7 +13,10 @@
 
 namespace aim {
 
-float GetScenarioScoreLevel(float score, const ScenarioDef& def);
+class PlaylistRun;
+
+float GetTargetScore(const ScoreTargets& targets, PlaylistRun* playlist_run);
+float GetScenarioScoreLevel(float score, float target_score);
 
 struct AggregateScenarioStats {
   StatsDbRow high_score_stats;

@@ -434,6 +434,7 @@ class LevelsPlaylistDef final : public ::google::protobuf::Message
     kMaxLevelFieldNumber = 3,
     kLevelStepFieldNumber = 4,
     kNumPlaysPerLevelFieldNumber = 5,
+    kTargetScoreFieldNumber = 6,
   };
   // string base_scenario = 1;
   bool has_base_scenario() const;
@@ -495,11 +496,22 @@ class LevelsPlaylistDef final : public ::google::protobuf::Message
   void _internal_set_num_plays_per_level(::int32_t value);
 
   public:
+  // float target_score = 6;
+  bool has_target_score() const;
+  void clear_target_score() ;
+  float target_score() const;
+  void set_target_score(float value);
+
+  private:
+  float _internal_target_score() const;
+  void _internal_set_target_score(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.LevelsPlaylistDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
+  static const ::google::protobuf::internal::TcParseTable<3, 6,
                                    0, 43,
                                    2>
       _table_;
@@ -526,6 +538,7 @@ class LevelsPlaylistDef final : public ::google::protobuf::Message
     float max_level_;
     float level_step_;
     ::int32_t num_plays_per_level_;
+    float target_score_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1193,6 +1206,35 @@ inline ::int32_t LevelsPlaylistDef::_internal_num_plays_per_level() const {
 inline void LevelsPlaylistDef::_internal_set_num_plays_per_level(::int32_t value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.num_plays_per_level_ = value;
+}
+
+// float target_score = 6;
+inline bool LevelsPlaylistDef::has_target_score() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  return value;
+}
+inline void LevelsPlaylistDef::clear_target_score() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_score_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000020U);
+}
+inline float LevelsPlaylistDef::target_score() const {
+  // @@protoc_insertion_point(field_get:aim.LevelsPlaylistDef.target_score)
+  return _internal_target_score();
+}
+inline void LevelsPlaylistDef::set_target_score(float value) {
+  _internal_set_target_score(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  // @@protoc_insertion_point(field_set:aim.LevelsPlaylistDef.target_score)
+}
+inline float LevelsPlaylistDef::_internal_target_score() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.target_score_;
+}
+inline void LevelsPlaylistDef::_internal_set_target_score(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.target_score_ = value;
 }
 
 // -------------------------------------------------------------------

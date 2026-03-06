@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "aim/common/util.h"
+#include "aim/core/playlist_manager.h"
 #include "glm/ext/scalar_common.hpp"
 
 namespace aim {
@@ -106,9 +107,17 @@ class StatsManagerImpl : public StatsManager {
 
 }  // namespace
 
-float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
-  float target_score = def.score_targets().has_target_score() ? def.score_targets().target_score()
-                                                              : def.score_targets().end();
+float GetTargetScore(const ScoreTargets& score_targets, PlaylistRun* playlist_run) {
+  if (playlist_run != nullptr) {
+    float target_score = playlist_run->playlist.def().levels().target_score();
+    if (target_score > 0) {
+      return target_score;
+    }
+  }
+  return score_targets.has_target_score() ? score_targets.target_score() : score_targets.end();
+}
+
+float GetScenarioScoreLevel(float score, float target_score) {
   if (target_score <= 0 || score <= 0) {
     return 0;
   }
