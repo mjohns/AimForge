@@ -2177,14 +2177,14 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.19999981,
+       "targetRadius": 1.2,
        "speed": 107.999992,
-       "acceleration": 200,
        "pill": {
         "height": 20
        }
       }
-     ]
+     ],
+     "ghostBorderPercent": 0.25
     },
     "room": {
      "cameraPosition": {
@@ -2198,7 +2198,7 @@
      }
     },
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
+     "targetRadiusMultiplier": 0.95
     },
     "strafeDef": {
      "bounds": {
@@ -2213,7 +2213,8 @@
        },
        "distanceJitter": {
         "xPercentValue": 0
-       }
+       },
+       "pauseTime": 0.05
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
@@ -2225,56 +2226,11 @@
   {
    "name": "SYW Thin",
    "def": {
-    "durationSeconds": 30,
-    "shotType": {
-     "trackingInvincible": true
+    "overrides": {
+     "targetRadiusMultiplier": 0.6
     },
-    "targetDef": {
-     "numTargets": 1,
-     "profiles": [
-      {
-       "targetRadius": 0.699999869,
-       "speed": 107.999992,
-       "acceleration": 200,
-       "pill": {
-        "height": 20
-       }
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -200,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 102,
-      "width": 203
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
-    },
-    "strafeDef": {
-     "bounds": {
-      "width": {
-       "xPercentValue": 0.965
-      }
-     },
-     "leftRightProfiles": [
-      {
-       "distance": {
-        "xPercentValue": 1.1
-       },
-       "distanceJitter": {
-        "xPercentValue": 0
-       }
-      }
-     ],
-     "leftRightInitialDirection": "DIRECTION_POSITIVE",
-     "upDownInitialDirection": "DIRECTION_RANDOM",
-     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    "referenceDef": {
+     "scenarioName": "TSK SYW"
     }
    }
   },

@@ -1311,8 +1311,7 @@ void DrawShotTypeEditor(ShotType& s) {
         "The rate health is regenerated if you switch off target before killing. 1 means regen "
         "at same rate as health is taken away for hits.");
 
-    ImGui::InputFloat(ImGui::InputFloatParams("RemoveIfBelowHealthSeconds")
-                          .set_label("Remove if below remaining health seconds")
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Health forgiveness time")
                           .set_step(0.01, 0.05)
                           .set_min(0.01)
                           .set_max(5)
@@ -1322,9 +1321,9 @@ void DrawShotTypeEditor(ShotType& s) {
                       PROTO_FLOAT_FIELD(ShotType, &s, remove_if_below_health_seconds));
     ImGui::SameLine();
     ImGui::HelpMarker(
-        "If the target has less than the specified health time remaining and you are not on "
-        "target, remove the target and  receive partial score. The kill sound will  be played "
-        "early based on this time.");
+        "If the target has less than the specified amount of health left (in seconds) and you move "
+        "off the target, it will be removed and you will get partial points. The kill sound is "
+        "played when this threshold is passed.");
 
     ImGui::InputBool("No partial kills", PROTO_BOOL_FIELD(ShotType, &s, no_partial_kills));
   }

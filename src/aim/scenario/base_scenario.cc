@@ -50,6 +50,46 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
   auto shot_type = GetShotType();
   float now_seconds = timer_.GetElapsedSeconds();
   std::vector<u16> targets_to_remove;
+
+  // Ghost bounds.
+  float ghost_border_percent = def_.target_def().ghost_border_percent();
+  if (ghost_border_percent > 0) {
+    if (def_.room().has_barrel_room()) {
+      float good_radius = def_.room().barrel_room().radius() * (1 - ghost_border_percent);
+      for (Target& target : target_manager_.GetMutableTargets()) {
+        if (target.wall_position) {
+          float radial_distance = glm::length(*target.wall_position);
+          bool in_bounds = radial_distance < good_radius;
+          if (in_bounds) {
+            target.is_ghost = false;
+          } else {
+            target.is_ghost = true;
+          }
+        }
+      }
+    } else {
+      // Normal width/height room
+      Wall wall = Wall::ForRoom(def_.room());
+      float x_max = 0.5 * wall.width * (1 - ghost_border_percent);
+      float x_min = -1 * x_max;
+
+      float y_max = 0.5 * wall.height * (1 - ghost_border_percent);
+      float y_min = -1 * y_max;
+
+      for (Target& target : target_manager_.GetMutableTargets()) {
+        if (target.wall_position) {
+          const glm::vec2& p = *target.wall_position;
+          bool in_bounds = p.x > x_min && p.x < x_max && p.y < y_max && p.y > y_min;
+          if (in_bounds) {
+            target.is_ghost = false;
+          } else {
+            target.is_ghost = true;
+          }
+        }
+      }
+    }
+  }
+
   if (shot_type == ShotType::kTrackingKill || shot_type == ShotType::kTrackingInvincible) {
     HandleTrackingHits(data, &targets_to_remove);
   } else if (shot_type == ShotType::kTrackingProximity) {

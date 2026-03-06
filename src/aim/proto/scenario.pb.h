@@ -7477,6 +7477,7 @@ class TargetDef final : public ::google::protobuf::Message
     kNewTargetDelaySecondsFieldNumber = 6,
     kRemoveTargetAfterSecondsFieldNumber = 7,
     kStaggerInitialTargetsSecondsFieldNumber = 8,
+    kGhostBorderPercentFieldNumber = 10,
   };
   // repeated .aim.TargetProfile profiles = 2;
   int profiles_size() const;
@@ -7582,11 +7583,22 @@ class TargetDef final : public ::google::protobuf::Message
   void _internal_set_stagger_initial_targets_seconds(float value);
 
   public:
+  // float ghost_border_percent = 10;
+  bool has_ghost_border_percent() const;
+  void clear_ghost_border_percent() ;
+  float ghost_border_percent() const;
+  void set_ghost_border_percent(float value);
+
+  private:
+  float _internal_ghost_border_percent() const;
+  void _internal_set_ghost_border_percent(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.TargetDef)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    2, 0,
                                    2>
       _table_;
@@ -7616,6 +7628,7 @@ class TargetDef final : public ::google::protobuf::Message
     float new_target_delay_seconds_;
     float remove_target_after_seconds_;
     float stagger_initial_targets_seconds_;
+    float ghost_border_percent_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -25449,6 +25462,35 @@ inline ::google::protobuf::RepeatedField<float>* PROTOBUF_NONNULL
 TargetDef::_internal_mutable_delayed_target_times() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.delayed_target_times_;
+}
+
+// float ghost_border_percent = 10;
+inline bool TargetDef::has_ghost_border_percent() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void TargetDef::clear_ghost_border_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.ghost_border_percent_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline float TargetDef::ghost_border_percent() const {
+  // @@protoc_insertion_point(field_get:aim.TargetDef.ghost_border_percent)
+  return _internal_ghost_border_percent();
+}
+inline void TargetDef::set_ghost_border_percent(float value) {
+  _internal_set_ghost_border_percent(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.TargetDef.ghost_border_percent)
+}
+inline float TargetDef::_internal_ghost_border_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.ghost_border_percent_;
+}
+inline void TargetDef::_internal_set_ghost_border_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.ghost_border_percent_ = value;
 }
 
 // -------------------------------------------------------------------

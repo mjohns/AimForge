@@ -3316,12 +3316,12 @@
          "description": "Start center",
          "weight": 0
         },
-        "rectangle": {
-         "xLength": {
-          "value": 10
+        "point": {
+         "x": {
+          "xPercentValue": 0
          },
-         "yLength": {
-          "value": 10
+         "y": {
+          "yPercentValue": 0
          }
         }
        }

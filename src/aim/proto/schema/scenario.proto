@@ -549,6 +549,11 @@ message TargetDef {
 
   // A list of delays in seconds for targets to be initially added.
   repeated float delayed_target_times = 9;
+
+  // If targets get within x% distance from the edge of the wall, they will become a ghost until
+  // they return towards the center. This allows producing a smooth your wrist like no hit portion
+  // at the end of the strafes.
+  float ghost_border_percent = 10;
 }
 
 message PillTargetDef {

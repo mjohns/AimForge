@@ -192,6 +192,18 @@ void DrawTargetEditor(ScenarioDef& def) {
   ImGui::SameLine();
   ImGui::HelpMarker("Ghost targets are unkillable and drawn in a different color.");
 
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Ghost wall border")
+                        .set_is_optional()
+                        .set_default(15)
+                        .set_min(1)
+                        .set_step(1, 5)
+                        .set_width(char_x * 10),
+                    PROTO_PERCENT_FIELD(TargetDef, t, ghost_border_percent));
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "If the target gets within the specified percent distance from the wall, it will become a "
+      "ghost.");
+
   ImGui::InputFloat(ImGui::InputFloatParams("NewTargetDelaySeconds")
                         .set_label("New target delay")
                         .set_is_optional()
