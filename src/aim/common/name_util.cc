@@ -237,7 +237,7 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
 
 std::string NameInfo::GetFullName() const {
   std::string result = base_name;
-  if (level) {
+  if (level && *level != 0) {
     result = std::format("{} L{}", base_name, MaybeIntToString(*level, 2));
   }
   if (radius_smaller) {
