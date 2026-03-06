@@ -905,18 +905,6 @@
    }
   },
   {
-   "name": "AlternateClick WideTall Poke",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF AlternateClick WideTall",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
    "name": "BarrelClick",
    "def": {
     "durationSeconds": 60,
@@ -2036,66 +2024,6 @@
     },
     "referenceDef": {
      "scenarioName": "AF OmniFlick Mid"
-    }
-   }
-  },
-  {
-   "name": "OmniFlick Poke Close",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick Close",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
-   "name": "OmniFlick Poke CloseMid",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick CloseMid",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
-   "name": "OmniFlick Poke Far",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick Far",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
-   "name": "OmniFlick Poke Mid",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick Mid",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
-   "name": "OmniFlick Poke MidFar",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick MidFar",
-     "shotType": {
-      "poke": true
-     }
     }
    }
   },
@@ -3795,30 +3723,6 @@
    }
   },
   {
-   "name": "Static3 Poke",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF Static3",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
-   "name": "Static3 Poke Ladder",
-   "def": {
-    "overrides": {},
-    "referenceDef": {
-     "scenarioName": "AF Static3 Ladder",
-     "shotType": {
-      "poke": true
-     }
-    }
-   }
-  },
-  {
    "name": "Static3 SlowPoke",
    "def": {
     "overrides": {},
@@ -5045,23 +4949,23 @@
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick Poke Close",
+      "scenario": "AF OmniFlick Close Poke",
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick Poke CloseMid",
+      "scenario": "AF OmniFlick CloseMid Poke",
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick Poke Mid",
+      "scenario": "AF OmniFlick Mid Poke",
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick Poke MidFar",
+      "scenario": "AF OmniFlick MidFar Poke",
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick Poke Far",
+      "scenario": "AF OmniFlick Far Poke",
       "numPlays": 1
      }
     ]
@@ -5148,7 +5052,7 @@
    "def": {
     "description": "",
     "levels": {
-     "baseScenario": "AF Static3 Poke Ladder",
+     "baseScenario": "AF Static3 Ladder Poke",
      "maxLevel": 40,
      "numPlaysPerLevel": 1
     }

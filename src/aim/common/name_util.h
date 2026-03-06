@@ -23,13 +23,14 @@ struct NameInfo {
   std::optional<float> slower;
   std::optional<float> wider;
   std::optional<float> taller;
+  bool is_poke = false;
 
   // Combines the base name and suffixes into the final name.
   std::string GetFullName() const;
 
   bool HasDynamicSuffix() const {
     return cm_per_360 || level || duration || fov || radius_smaller || radius_larger || faster ||
-           slower || wider || taller;
+           slower || wider || taller || is_poke;
   }
 
   // Returns whether the suffix was a valid dynamic suffix.

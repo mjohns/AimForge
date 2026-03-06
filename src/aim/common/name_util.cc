@@ -183,6 +183,10 @@ bool ParseFloatValueSuffix(std::string_view word, std::string_view* suffix, floa
 }
 
 bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
+  if (word == "Poke") {
+    is_poke = true;
+    return true;
+  }
   std::optional<float> parsed_level = GetLevelFromWord(word);
   if (parsed_level) {
     level = parsed_level;
@@ -237,8 +241,11 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
 
 std::string NameInfo::GetFullName() const {
   std::string result = base_name;
+  if (is_poke) {
+    result.append(" Poke");
+  }
   if (level && *level != 0) {
-    result = std::format("{} L{}", base_name, MaybeIntToString(*level, 2));
+    result.append(std::format(" L{}", base_name, MaybeIntToString(*level, 2)));
   }
   if (radius_smaller) {
     result = std::format("{} {}%Smaller", result, MaybeIntToString(*radius_smaller, 2));
@@ -304,6 +311,9 @@ void NameInfo::MergeDynamicSuffixes(const NameInfo& other) {
   }
   if (other.taller) {
     taller = other.taller;
+  }
+  if (other.is_poke) {
+    is_poke = true;
   }
 }
 

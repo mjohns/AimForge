@@ -195,13 +195,24 @@ class PlaylistManagerImpl : public PlaylistManager {
   }
 
   std::optional<Playlist> GetPlaylist(const std::string& playlist_name) const override {
+    std::unordered_set<std::string> visited;
+    return GetPlaylistInternal(playlist_name, 0, &visited);
+  }
+
+  std::optional<Playlist> GetPlaylistInternal(const std::string& playlist_name,
+                                              int depth,
+                                              std::unordered_set<std::string>* visited) const {
     auto it = playlist_map_.find(playlist_name);
     if (it != playlist_map_.end()) {
       return it->second;
     }
+    if (depth > 300 || visited->contains(playlist_name)) {
+      return {};
+    }
+    visited->insert(playlist_name);
     NameInfo name_info = GetPlaylistNameInfo(playlist_name);
     if (name_info.HasDynamicSuffix()) {
-      auto playlist = GetPlaylist(name_info.base_name);
+      auto playlist = GetPlaylistInternal(name_info.base_name, depth + 1, visited);
       if (playlist) {
         playlist->name = playlist_name;
         playlist->playlist_name_info = name_info;

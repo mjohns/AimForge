@@ -58,6 +58,14 @@ static Field<float> CreateFloatField(float* value) {
   return Field<float>(get, set, clear, has);
 }
 
+static Field<bool> CreateBoolField(bool* value) {
+  std::function<bool()> has = []() { return true; };
+  std::function<void()> clear = [=]() {};
+  std::function<bool()> get = [=]() { return *value; };
+  std::function<void(bool)> set = [=](bool set_value) { *value = set_value; };
+  return Field<bool>(get, set, clear, has);
+}
+
 template <typename T>
 Field<bool> CreateBoolField(T* instance,
                             std::function<bool(T*)> get,

@@ -304,6 +304,10 @@ void ApplyReferenceFieldOverrides(const ScenarioDef& ref, ScenarioDef* def) {
 }
 
 void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
+  if (name_info.is_poke) {
+    def->clear_shot_type();
+    def->mutable_shot_type()->set_poke(true);
+  }
   if (name_info.duration) {
     def->set_duration_seconds(*name_info.duration);
   }

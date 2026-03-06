@@ -113,13 +113,14 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
 
     ImGui::SpacedSeparator();
 
+    ImGui::InputBool("Poke", CreateBoolField(&name_info_.is_poke));
+
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Duration")
                           .set_is_optional()
                           .set_step(5, 10)
                           .set_default(45)
                           .set_width(char_x * 10),
                       CreateOptionalFloatField(&name_info_.duration));
-    ImGui::SpacedSeparator();
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("FOV")
                           .set_is_optional()
