@@ -107,19 +107,21 @@ class StatsManagerImpl : public StatsManager {
 }  // namespace
 
 float GetScenarioScoreLevel(float score, const ScenarioDef& def) {
-  float start_score = def.score_targets().start();
-  float end_score = def.score_targets().end();
-  if (start_score <= 0) {
+  float target_score = def.score_targets().has_target_score() ? def.score_targets().target_score()
+                                                              : def.score_targets().end();
+  if (target_score <= 0 || score <= 0) {
     return 0;
   }
-  if (score >= end_score) {
+
+  float start_score = target_score * 0.8;  // 1 is assigned at 80% of target
+  if (score >= target_score) {
     return 5;
   }
   if (score < start_score) {
     return score / start_score;
   }
 
-  float percent_complete = (score - start_score) / (end_score - start_score);
+  float percent_complete = (score - start_score) / (target_score - start_score);
   return 1.0 + 4.0 * percent_complete;
 }
 

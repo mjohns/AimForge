@@ -202,11 +202,13 @@ message ShotType {
   AccuracyPenalty accuracy_penalty = 21;
 }
 
-// Defines the range of target scores. Will gain "ranks" incrementally between the two scores.
-// A score at start will have a level of 1 and end is 5.
+// Defines the target score and optional ranks associated with levels (TODO).
+// You get a score of 5 if you hit the target score. 4 for 95% of target. 3=90%, 2=85%, 1=80%.
+// 0-1 is proportionally scored from 0 up to 80%. So a 40% score would get 0.5.
 message ScoreTargets {
-  float start = 1;
+  float start = 1 [deprecated = true];
   float end = 2;
+  float target_score = 3;
 }
 
 message ScenarioDef {
