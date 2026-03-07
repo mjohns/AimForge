@@ -762,6 +762,828 @@
    }
   },
   {
+   "name": "ClickTrack 3t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "top"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.06
+         },
+         "y": {
+          "yPercentValue": -0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.06
+         },
+         "y": {
+          "yPercentValue": -0.03
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        2
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack 5t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "top"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.06
+         },
+         "y": {
+          "yPercentValue": -0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.06
+         },
+         "y": {
+          "yPercentValue": -0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "top left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.12
+         },
+         "y": {
+          "yPercentValue": 0.03
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "top right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.12
+         },
+         "y": {
+          "yPercentValue": 0.03
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        2,
+        4,
+        2,
+        0,
+        1,
+        3,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack AntiDiagonal 2t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.11
+         },
+         "y": {
+          "yPercentValue": -0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.11
+         },
+         "y": {
+          "yPercentValue": 0.11
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        1,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack AntiDiagonal 3t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.11
+         },
+         "y": {
+          "yPercentValue": -0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.11
+         },
+         "y": {
+          "yPercentValue": 0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "middle"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        2,
+        1,
+        2,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Diagonal 2t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.11
+         },
+         "y": {
+          "yPercentValue": 0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.11
+         },
+         "y": {
+          "yPercentValue": -0.11
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        1,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Diagonal 3t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.11
+         },
+         "y": {
+          "yPercentValue": 0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.11
+         },
+         "y": {
+          "yPercentValue": -0.11
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "middle"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        2,
+        1,
+        2,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Horizontal 2t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.12
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.12
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        1,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Horizontal 3t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "left"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": -0.12
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "right"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0.12
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "middle"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        2,
+        1,
+        2,
+        0
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Vertical 2t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "top"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0.13
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "bottom"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": -0.13
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        0,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "ClickTrack Vertical 3t",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 1.2
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 160,
+      "width": 160
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "info": {
+         "description": "top"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0.13
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "bottom"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": -0.13
+         }
+        }
+       },
+       {
+        "info": {
+         "description": "middle"
+        },
+        "point": {
+         "x": {
+          "xPercentValue": 0
+         },
+         "y": {
+          "yPercentValue": 0
+         }
+        }
+       }
+      ],
+      "regionsInfo": {
+       "explicitOrder": [
+        2,
+        0,
+        2,
+        1
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
    "name": "DVD Tracking",
    "def": {
     "durationSeconds": 30,
@@ -2648,6 +3470,54 @@
      {
       "scenario": "TSK VSTP Soft",
       "numPlays": 5
+     }
+    ]
+   }
+  },
+  {
+   "name": "Static Benchmarks - ClickTrack",
+   "def": {
+    "description": "",
+    "items": [
+     {
+      "scenario": "TSK ClickTrack 3t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack 5t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Horizontal 2t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Horizontal 3t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Diagonal 2t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Diagonal 3t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack AntiDiagonal 2t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack AntiDiagonal 3t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Vertical 2t",
+      "numPlays": 1
+     },
+     {
+      "scenario": "TSK ClickTrack Vertical 3t",
+      "numPlays": 1
      }
     ]
    }
