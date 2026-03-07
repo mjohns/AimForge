@@ -1016,9 +1016,18 @@ void InitializeScenarioType(ScenarioDef& def, ScenarioDef::TypeCase scenario_typ
       }
       break;
     }
-    case ScenarioDef::kWallArcDef:
+    case ScenarioDef::kWallArcDef: {
       def.mutable_wall_arc_def();
+      def.clear_target_def();
+      def.mutable_target_def()->set_num_targets(1);
+      auto* p = def.mutable_target_def()->add_profiles();
+      p->set_speed(100);
+      p->set_acceleration(160);
+
+      def.clear_shot_type();
+      def.mutable_shot_type()->set_tracking_invincible(true);
       break;
+    }
     case ScenarioDef::kCircleDef:
       def.mutable_circle_def();
       break;

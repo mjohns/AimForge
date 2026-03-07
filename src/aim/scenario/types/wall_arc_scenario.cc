@@ -137,7 +137,7 @@ class WallArcScenario : public BaseScenario {
                                       wall_.GetRegionLength(def_.wall_arc_def().height_jitter()));
     acceleration_ = acceleration;
     if (acceleration_ <= 0) {
-      acceleration_ = 1;
+      acceleration_ = 1000000;
     }
 
     max_speed_ = speed;
