@@ -1,6 +1,70 @@
 {
  "scenarios": [
   {
+   "name": "1w3ts",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "clickSingle": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
+    },
+    "targetDef": {
+     "numTargets": 3,
+     "profiles": [
+      {
+       "targetRadius": 1.74
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 180,
+      "width": 200
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96
+    },
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.9
+         },
+         "yLength": {
+          "yPercentValue": 0.9
+         }
+        }
+       }
+      ],
+      "minDistance": {
+       "value": 20
+      }
+     }
+    }
+   }
+  },
+  {
+   "name": "1w3ts Ladder",
+   "def": {
+    "overrides": {},
+    "scoreTargets": {
+     "targetScore": 140
+    },
+    "referenceDef": {
+     "scenarioName": "AF 1w3ts",
+     "explicitTargetRadius": 5
+    }
+   }
+  },
+  {
    "name": "AlternateClick",
    "def": {
     "durationSeconds": 60,
@@ -4701,6 +4765,17 @@
   }
  ],
  "playlists": [
+  {
+   "name": "1w3ts Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF 1w3ts Ladder",
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
   {
    "name": "AlternateClick Vertical Ladder",
    "def": {

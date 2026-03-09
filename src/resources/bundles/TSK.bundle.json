@@ -773,7 +773,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -803,7 +803,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": 0.03
+          "yPercentValue": 0.06
          }
         }
        },
@@ -813,7 +813,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.06
+          "xPercentValue": -0.09
          },
          "y": {
           "yPercentValue": -0.03
@@ -826,7 +826,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.06
+          "xPercentValue": 0.09
          },
          "y": {
           "yPercentValue": -0.03
@@ -860,7 +860,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -890,7 +890,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": 0.03
+          "yPercentValue": 0.06
          }
         }
        },
@@ -900,7 +900,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.06
+          "xPercentValue": -0.09
          },
          "y": {
           "yPercentValue": -0.03
@@ -913,7 +913,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.06
+          "xPercentValue": 0.09
          },
          "y": {
           "yPercentValue": -0.03
@@ -926,10 +926,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.12
+          "xPercentValue": -0.18
          },
          "y": {
-          "yPercentValue": 0.03
+          "yPercentValue": 0.06
          }
         }
        },
@@ -939,10 +939,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.12
+          "xPercentValue": 0.18
          },
          "y": {
-          "yPercentValue": 0.03
+          "yPercentValue": 0.06
          }
         }
        }
@@ -975,7 +975,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1002,10 +1002,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.11
+          "xPercentValue": -0.14
          },
          "y": {
-          "yPercentValue": -0.11
+          "yPercentValue": -0.14
          }
         }
        },
@@ -1015,10 +1015,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.11
+          "xPercentValue": 0.14
          },
          "y": {
-          "yPercentValue": 0.11
+          "yPercentValue": 0.14
          }
         }
        }
@@ -1045,7 +1045,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1072,10 +1072,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.11
+          "xPercentValue": -0.14
          },
          "y": {
-          "yPercentValue": -0.11
+          "yPercentValue": -0.14
          }
         }
        },
@@ -1085,10 +1085,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.11
+          "xPercentValue": 0.14
          },
          "y": {
-          "yPercentValue": 0.11
+          "yPercentValue": 0.14
          }
         }
        },
@@ -1130,7 +1130,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1157,10 +1157,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.11
+          "xPercentValue": -0.14
          },
          "y": {
-          "yPercentValue": 0.11
+          "yPercentValue": 0.14
          }
         }
        },
@@ -1170,10 +1170,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.11
+          "xPercentValue": 0.14
          },
          "y": {
-          "yPercentValue": -0.11
+          "yPercentValue": -0.14
          }
         }
        }
@@ -1227,10 +1227,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.11
+          "xPercentValue": -0.14
          },
          "y": {
-          "yPercentValue": 0.11
+          "yPercentValue": 0.14
          }
         }
        },
@@ -1240,10 +1240,10 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.11
+          "xPercentValue": 0.14
          },
          "y": {
-          "yPercentValue": -0.11
+          "yPercentValue": -0.14
          }
         }
        },
@@ -1285,7 +1285,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1312,7 +1312,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.12
+          "xPercentValue": -0.18
          },
          "y": {
           "yPercentValue": 0
@@ -1325,7 +1325,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.12
+          "xPercentValue": 0.18
          },
          "y": {
           "yPercentValue": 0
@@ -1355,7 +1355,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1382,7 +1382,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": -0.12
+          "xPercentValue": -0.18
          },
          "y": {
           "yPercentValue": 0
@@ -1395,7 +1395,7 @@
         },
         "point": {
          "x": {
-          "xPercentValue": 0.12
+          "xPercentValue": 0.18
          },
          "y": {
           "yPercentValue": 0
@@ -1437,10 +1437,10 @@
      "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
-     "numTargets": 1,
+     "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1470,7 +1470,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": 0.13
+          "yPercentValue": 0.2
          }
         }
        },
@@ -1483,7 +1483,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": -0.13
+          "yPercentValue": -0.2
          }
         }
        }
@@ -1510,7 +1510,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1540,7 +1540,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": 0.13
+          "yPercentValue": 0.2
          }
         }
        },
@@ -1553,7 +1553,7 @@
           "xPercentValue": 0
          },
          "y": {
-          "yPercentValue": -0.13
+          "yPercentValue": -0.2
          }
         }
        },
