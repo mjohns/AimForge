@@ -111,6 +111,11 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
     ImGui::InputFloat(default_percent_param.clone().set_min(-99).set_id_and_label("Taller"),
                       CreateOptionalFloatField(&name_info_.taller));
 
+    ImGui::InputFloat(default_percent_param.clone().set_id_and_label("Wall larger"),
+                      CreateOptionalFloatField(&name_info_.wall_larger));
+    ImGui::InputFloat(default_percent_param.clone().set_min(-99).set_id_and_label("Wall smaller"),
+                      CreateOptionalFloatField(&name_info_.wall_smaller));
+
     ImGui::SpacedSeparator();
 
     ImGui::InputBool("Poke", CreateBoolField(&name_info_.is_poke));

@@ -235,6 +235,14 @@ bool NameInfo::SetDynamicSuffixValue(std::string_view word) {
     wider = value;
     return true;
   }
+  if (suffix == "%SmallerWall") {
+    wall_smaller = value;
+    return true;
+  }
+  if (suffix == "%LargerWall") {
+    wall_larger = value;
+    return true;
+  }
 
   return false;
 }
@@ -270,6 +278,12 @@ std::string NameInfo::GetFullName() const {
   }
   if (taller) {
     result.append(std::format(" {}%Taller", MaybeIntToString(*taller, 2)));
+  }
+  if (wall_smaller) {
+    result.append(std::format(" {}%SmallerWall", MaybeIntToString(*wall_smaller, 2)));
+  }
+  if (wall_larger) {
+    result.append(std::format(" {}%LargerWall", MaybeIntToString(*wall_larger, 2)));
   }
   if (duration) {
     result.append(std::format(" {}s", MaybeIntToString(*duration, 0)));
@@ -314,6 +328,12 @@ void NameInfo::MergeDynamicSuffixes(const NameInfo& other) {
   }
   if (other.taller) {
     taller = other.taller;
+  }
+  if (other.wall_larger) {
+    wall_larger = other.wall_larger;
+  }
+  if (other.wall_smaller) {
+    wall_smaller = other.wall_smaller;
   }
   if (other.is_poke) {
     is_poke = true;

@@ -53,6 +53,14 @@ void MultiplyRoomHeight(Room* room, float mult) {
   }
 }
 
+void MultiplyRoomSize(Room* room, float mult) {
+  MultiplyRoomWidth(room, mult);
+  if (!room->has_barrel_room()) {
+    // Barrel is different that height and width move together so don't double multiply.
+    MultiplyRoomHeight(room, mult);
+  }
+}
+
 void MultiplyRoomWidth(ScenarioDef* def, float mult) {
   if (def->has_room()) {
     MultiplyRoomWidth(def->mutable_room(), mult);
@@ -73,6 +81,18 @@ void MultiplyRoomHeight(ScenarioDef* def, float mult) {
     auto* r = def->mutable_reference_def();
     if (r->has_room()) {
       MultiplyRoomHeight(r->mutable_room(), mult);
+    }
+  }
+}
+
+void MultiplyRoomSize(ScenarioDef* def, float mult) {
+  if (def->has_room()) {
+    MultiplyRoomSize(def->mutable_room(), mult);
+  }
+  if (def->has_reference_def()) {
+    auto* r = def->mutable_reference_def();
+    if (r->has_room()) {
+      MultiplyRoomSize(r->mutable_room(), mult);
     }
   }
 }
@@ -351,6 +371,14 @@ void ApplyDynamicSuffixOverrides(const NameInfo& name_info, ScenarioDef* def) {
   if (name_info.taller) {
     float mult = 1 + (*name_info.taller / 100.0f);
     MultiplyRoomHeight(def, mult);
+  }
+  if (name_info.wall_smaller) {
+    float mult = 1 - (*name_info.wall_smaller / 100.0f);
+    MultiplyRoomSize(def, mult);
+  }
+  if (name_info.wall_larger) {
+    float mult = 1 + (*name_info.wall_larger / 100.0f);
+    MultiplyRoomSize(def, mult);
   }
 }
 
