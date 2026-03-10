@@ -783,6 +783,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": 0
+      },
+      "y": {
+       "yPercentValue": 0.06
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -870,6 +878,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.18
+      },
+      "y": {
+       "yPercentValue": 0.06
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -949,13 +965,13 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
+        3,
+        1,
         0,
         2,
         4,
         2,
         0,
-        1,
-        3,
         1
        ]
       }
@@ -984,6 +1000,14 @@
       "x": 0,
       "y": -200,
       "z": 0
+     },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": 0.14
+      },
+      "y": {
+       "yPercentValue": 0.14
+      }
      },
      "simpleRoom": {
       "height": 160,
@@ -1055,6 +1079,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.14
+      },
+      "y": {
+       "yPercentValue": -0.14
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -1108,10 +1140,10 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
+        0,
         2,
         1,
-        2,
-        0
+        2
        ]
       }
      }
@@ -1140,6 +1172,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.14
+      },
+      "y": {
+       "yPercentValue": 0.14
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -1180,8 +1220,8 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
-        1,
-        0
+        0,
+        1
        ]
       }
      }
@@ -1200,7 +1240,7 @@
      "numTargets": 1,
      "profiles": [
       {
-       "targetRadius": 1.2
+       "targetRadius": 1.5
       }
      ]
     },
@@ -1209,6 +1249,14 @@
       "x": 0,
       "y": -200,
       "z": 0
+     },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.14
+      },
+      "y": {
+       "yPercentValue": 0.14
+      }
      },
      "simpleRoom": {
       "height": 160,
@@ -1263,10 +1311,10 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
+        0,
         2,
         1,
-        2,
-        0
+        2
        ]
       }
      }
@@ -1295,6 +1343,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.18
+      },
+      "y": {
+       "yPercentValue": 0
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -1335,8 +1391,8 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
-        1,
-        0
+        0,
+        1
        ]
       }
      }
@@ -1364,6 +1420,14 @@
       "x": 0,
       "y": -200,
       "z": 0
+     },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": -0.18
+      },
+      "y": {
+       "yPercentValue": 0
+      }
      },
      "simpleRoom": {
       "height": 160,
@@ -1418,10 +1482,10 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
+        0,
         2,
         1,
-        2,
-        0
+        2
        ]
       }
      }
@@ -1437,7 +1501,7 @@
      "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
-     "numTargets": 2,
+     "numTargets": 1,
      "profiles": [
       {
        "targetRadius": 1.5
@@ -1449,6 +1513,14 @@
       "x": 0,
       "y": -200,
       "z": 0
+     },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": 0
+      },
+      "y": {
+       "yPercentValue": 0.2
+      }
      },
      "simpleRoom": {
       "height": 160,
@@ -1520,6 +1592,14 @@
       "y": -200,
       "z": 0
      },
+     "lookAtPoint": {
+      "x": {
+       "xPercentValue": 0
+      },
+      "y": {
+       "yPercentValue": 0.2
+      }
+     },
      "simpleRoom": {
       "height": 160,
       "width": 160
@@ -1573,10 +1653,10 @@
       ],
       "regionsInfo": {
        "explicitOrder": [
-        2,
         0,
         2,
-        1
+        1,
+        2
        ]
       }
      }

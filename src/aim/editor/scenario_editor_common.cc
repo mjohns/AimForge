@@ -303,6 +303,20 @@ void DrawRegionVec2Editor(const std::string& id, RegionVec2* v) {
   DrawRegionLengthPointEditor("Y" + id, RegionLength::kYPercentValue, v->mutable_y());
 }
 
+void DrawOptionalRegionVec2Editor(const std::string& id, PtrField<RegionVec2> field) {
+  ImGui::IdGuard cid(id);
+
+  bool has_value = field.has();
+  ImGui::Checkbox("##UseRegionVec2", &has_value);
+  if (has_value) {
+    ImGui::Indent();
+    DrawRegionVec2Editor("RegionVec2", field.get_mutable());
+    ImGui::Unindent();
+  } else {
+    field.clear();
+  }
+}
+
 void VectorEditor(ImGui::InputFloatParams params, StoredVec3* v) {
   ImGui::IdGuard cid(params.id);
 

@@ -37,8 +37,12 @@ message Room {
   StoredVec3 camera_up = 2;
   // Default to (0,1,0)
   StoredVec3 camera_front = 3;
+
   float start_pitch = 4;
   float start_yaw = 5;
+
+  // Initialize the camera to look at this point on the wall.
+  RegionVec2 look_at_point = 7;
 
   // Defaults to 103
   float horizontal_fov = 6;

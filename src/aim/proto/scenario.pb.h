@@ -4529,355 +4529,6 @@ class ShotType final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull ShotType_class_data_;
 // -------------------------------------------------------------------
 
-class Room final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.Room) */ {
- public:
-  inline Room() : Room(nullptr) {}
-  ~Room() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(Room* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(Room));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR Room(::google::protobuf::internal::ConstantInitialized);
-
-  inline Room(const Room& from) : Room(nullptr, from) {}
-  inline Room(Room&& from) noexcept
-      : Room(nullptr, ::std::move(from)) {}
-  inline Room& operator=(const Room& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline Room& operator=(Room&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const Room& default_instance() {
-    return *reinterpret_cast<const Room*>(
-        &_Room_default_instance_);
-  }
-  enum TypeCase {
-    kSimpleRoom = 21,
-    kCylinderRoom = 22,
-    kBarrelRoom = 23,
-    TYPE_NOT_SET = 0,
-  };
-  static constexpr int kIndexInFileMessages = 3;
-  friend void swap(Room& a, Room& b) { a.Swap(&b); }
-  inline void Swap(Room* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(Room* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  Room* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<Room>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const Room& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const Room& from) { Room::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
-                        const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(Room* PROTOBUF_NONNULL other);
- private:
-  template <typename T>
-  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.Room"; }
-
-  explicit Room(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  Room(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Room& from);
-  Room(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, Room&& from) noexcept
-      : Room(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
-  static void* PROTOBUF_NONNULL PlacementNew_(
-      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static constexpr auto InternalNewImpl_();
-
- public:
-  static constexpr auto InternalGenerateClassData_();
-
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kCameraPositionFieldNumber = 1,
-    kCameraUpFieldNumber = 2,
-    kCameraFrontFieldNumber = 3,
-    kStartPitchFieldNumber = 4,
-    kStartYawFieldNumber = 5,
-    kHorizontalFovFieldNumber = 6,
-    kSimpleRoomFieldNumber = 21,
-    kCylinderRoomFieldNumber = 22,
-    kBarrelRoomFieldNumber = 23,
-  };
-  // .aim.StoredVec3 camera_position = 1;
-  bool has_camera_position() const;
-  void clear_camera_position() ;
-  const ::aim::StoredVec3& camera_position() const;
-  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_position();
-  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_position();
-  void set_allocated_camera_position(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_position();
-
-  private:
-  const ::aim::StoredVec3& _internal_camera_position() const;
-  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_position();
-
-  public:
-  // .aim.StoredVec3 camera_up = 2;
-  bool has_camera_up() const;
-  void clear_camera_up() ;
-  const ::aim::StoredVec3& camera_up() const;
-  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_up();
-  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_up();
-  void set_allocated_camera_up(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_camera_up(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_up();
-
-  private:
-  const ::aim::StoredVec3& _internal_camera_up() const;
-  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_up();
-
-  public:
-  // .aim.StoredVec3 camera_front = 3;
-  bool has_camera_front() const;
-  void clear_camera_front() ;
-  const ::aim::StoredVec3& camera_front() const;
-  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_front();
-  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_front();
-  void set_allocated_camera_front(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_camera_front(::aim::StoredVec3* PROTOBUF_NULLABLE value);
-  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_front();
-
-  private:
-  const ::aim::StoredVec3& _internal_camera_front() const;
-  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_front();
-
-  public:
-  // float start_pitch = 4;
-  bool has_start_pitch() const;
-  void clear_start_pitch() ;
-  float start_pitch() const;
-  void set_start_pitch(float value);
-
-  private:
-  float _internal_start_pitch() const;
-  void _internal_set_start_pitch(float value);
-
-  public:
-  // float start_yaw = 5;
-  bool has_start_yaw() const;
-  void clear_start_yaw() ;
-  float start_yaw() const;
-  void set_start_yaw(float value);
-
-  private:
-  float _internal_start_yaw() const;
-  void _internal_set_start_yaw(float value);
-
-  public:
-  // float horizontal_fov = 6;
-  bool has_horizontal_fov() const;
-  void clear_horizontal_fov() ;
-  float horizontal_fov() const;
-  void set_horizontal_fov(float value);
-
-  private:
-  float _internal_horizontal_fov() const;
-  void _internal_set_horizontal_fov(float value);
-
-  public:
-  // .aim.SimpleRoom simple_room = 21;
-  bool has_simple_room() const;
-  private:
-  bool _internal_has_simple_room() const;
-
-  public:
-  void clear_simple_room() ;
-  const ::aim::SimpleRoom& simple_room() const;
-  [[nodiscard]] ::aim::SimpleRoom* PROTOBUF_NULLABLE release_simple_room();
-  ::aim::SimpleRoom* PROTOBUF_NONNULL mutable_simple_room();
-  void set_allocated_simple_room(::aim::SimpleRoom* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_simple_room(::aim::SimpleRoom* PROTOBUF_NULLABLE value);
-  ::aim::SimpleRoom* PROTOBUF_NULLABLE unsafe_arena_release_simple_room();
-
-  private:
-  const ::aim::SimpleRoom& _internal_simple_room() const;
-  ::aim::SimpleRoom* PROTOBUF_NONNULL _internal_mutable_simple_room();
-
-  public:
-  // .aim.CylinderRoom cylinder_room = 22;
-  bool has_cylinder_room() const;
-  private:
-  bool _internal_has_cylinder_room() const;
-
-  public:
-  void clear_cylinder_room() ;
-  const ::aim::CylinderRoom& cylinder_room() const;
-  [[nodiscard]] ::aim::CylinderRoom* PROTOBUF_NULLABLE release_cylinder_room();
-  ::aim::CylinderRoom* PROTOBUF_NONNULL mutable_cylinder_room();
-  void set_allocated_cylinder_room(::aim::CylinderRoom* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_cylinder_room(::aim::CylinderRoom* PROTOBUF_NULLABLE value);
-  ::aim::CylinderRoom* PROTOBUF_NULLABLE unsafe_arena_release_cylinder_room();
-
-  private:
-  const ::aim::CylinderRoom& _internal_cylinder_room() const;
-  ::aim::CylinderRoom* PROTOBUF_NONNULL _internal_mutable_cylinder_room();
-
-  public:
-  // .aim.BarrelRoom barrel_room = 23;
-  bool has_barrel_room() const;
-  private:
-  bool _internal_has_barrel_room() const;
-
-  public:
-  void clear_barrel_room() ;
-  const ::aim::BarrelRoom& barrel_room() const;
-  [[nodiscard]] ::aim::BarrelRoom* PROTOBUF_NULLABLE release_barrel_room();
-  ::aim::BarrelRoom* PROTOBUF_NONNULL mutable_barrel_room();
-  void set_allocated_barrel_room(::aim::BarrelRoom* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_barrel_room(::aim::BarrelRoom* PROTOBUF_NULLABLE value);
-  ::aim::BarrelRoom* PROTOBUF_NULLABLE unsafe_arena_release_barrel_room();
-
-  private:
-  const ::aim::BarrelRoom& _internal_barrel_room() const;
-  ::aim::BarrelRoom* PROTOBUF_NONNULL _internal_mutable_barrel_room();
-
-  public:
-  void clear_type();
-  TypeCase type_case() const;
-  // @@protoc_insertion_point(class_scope:aim.Room)
- private:
-  class _Internal;
-  void set_has_simple_room();
-  void set_has_cylinder_room();
-  void set_has_barrel_room();
-  inline bool has_type() const;
-  inline void clear_has_type();
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 9,
-                                   6, 0,
-                                   2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const Room& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_position_;
-    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_up_;
-    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_front_;
-    float start_pitch_;
-    float start_yaw_;
-    float horizontal_fov_;
-    union TypeUnion {
-      constexpr TypeUnion() : _constinit_{} {}
-      ::google::protobuf::internal::ConstantInitialized _constinit_;
-      ::google::protobuf::Message* PROTOBUF_NULLABLE simple_room_;
-      ::google::protobuf::Message* PROTOBUF_NULLABLE cylinder_room_;
-      ::google::protobuf::Message* PROTOBUF_NULLABLE barrel_room_;
-    } type_;
-    ::uint32_t _oneof_case_[1];
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_scenario_2eproto;
-};
-
-extern const ::google::protobuf::internal::ClassDataFull Room_class_data_;
-// -------------------------------------------------------------------
-
 class RegionVec2 final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.RegionVec2) */ {
  public:
@@ -7677,30 +7328,30 @@ class TargetDef final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull TargetDef_class_data_;
 // -------------------------------------------------------------------
 
-class ReferenceScenarioDef final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:aim.ReferenceScenarioDef) */ {
+class Room final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.Room) */ {
  public:
-  inline ReferenceScenarioDef() : ReferenceScenarioDef(nullptr) {}
-  ~ReferenceScenarioDef() PROTOBUF_FINAL;
+  inline Room() : Room(nullptr) {}
+  ~Room() PROTOBUF_FINAL;
 
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(ReferenceScenarioDef* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+  void operator delete(Room* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
     SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(ReferenceScenarioDef));
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(Room));
   }
 #endif
 
   template <typename = void>
-  explicit PROTOBUF_CONSTEXPR ReferenceScenarioDef(::google::protobuf::internal::ConstantInitialized);
+  explicit PROTOBUF_CONSTEXPR Room(::google::protobuf::internal::ConstantInitialized);
 
-  inline ReferenceScenarioDef(const ReferenceScenarioDef& from) : ReferenceScenarioDef(nullptr, from) {}
-  inline ReferenceScenarioDef(ReferenceScenarioDef&& from) noexcept
-      : ReferenceScenarioDef(nullptr, ::std::move(from)) {}
-  inline ReferenceScenarioDef& operator=(const ReferenceScenarioDef& from) {
+  inline Room(const Room& from) : Room(nullptr, from) {}
+  inline Room(Room&& from) noexcept
+      : Room(nullptr, ::std::move(from)) {}
+  inline Room& operator=(const Room& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ReferenceScenarioDef& operator=(ReferenceScenarioDef&& from) noexcept {
+  inline Room& operator=(Room&& from) noexcept {
     if (this == &from) return *this;
     if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
       InternalSwap(&from);
@@ -7728,13 +7379,19 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ReferenceScenarioDef& default_instance() {
-    return *reinterpret_cast<const ReferenceScenarioDef*>(
-        &_ReferenceScenarioDef_default_instance_);
+  static const Room& default_instance() {
+    return *reinterpret_cast<const Room*>(
+        &_Room_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 16;
-  friend void swap(ReferenceScenarioDef& a, ReferenceScenarioDef& b) { a.Swap(&b); }
-  inline void Swap(ReferenceScenarioDef* PROTOBUF_NONNULL other) {
+  enum TypeCase {
+    kSimpleRoom = 21,
+    kCylinderRoom = 22,
+    kBarrelRoom = 23,
+    TYPE_NOT_SET = 0,
+  };
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(Room& a, Room& b) { a.Swap(&b); }
+  inline void Swap(Room* PROTOBUF_NONNULL other) {
     if (other == this) return;
     if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
       InternalSwap(other);
@@ -7742,7 +7399,7 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
       ::google::protobuf::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ReferenceScenarioDef* PROTOBUF_NONNULL other) {
+  void UnsafeArenaSwap(Room* PROTOBUF_NONNULL other) {
     if (other == this) return;
     ABSL_DCHECK(GetArena() == other->GetArena());
     InternalSwap(other);
@@ -7750,13 +7407,13 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
 
   // implements Message ----------------------------------------------
 
-  ReferenceScenarioDef* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<ReferenceScenarioDef>(arena);
+  Room* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<Room>(arena);
   }
   using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const ReferenceScenarioDef& from);
+  void CopyFrom(const Room& from);
   using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const ReferenceScenarioDef& from) { ReferenceScenarioDef::MergeImpl(*this, from); }
+  void MergeFrom(const Room& from) { Room::MergeImpl(*this, from); }
 
   private:
   static void MergeImpl(::google::protobuf::MessageLite& to_msg,
@@ -7792,17 +7449,17 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   private:
   void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
   static void SharedDtor(MessageLite& self);
-  void InternalSwap(ReferenceScenarioDef* PROTOBUF_NONNULL other);
+  void InternalSwap(Room* PROTOBUF_NONNULL other);
  private:
   template <typename T>
   friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "aim.ReferenceScenarioDef"; }
+  static ::absl::string_view FullMessageName() { return "aim.Room"; }
 
-  explicit ReferenceScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  ReferenceScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ReferenceScenarioDef& from);
-  ReferenceScenarioDef(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, ReferenceScenarioDef&& from) noexcept
-      : ReferenceScenarioDef(arena) {
+  explicit Room(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  Room(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Room& from);
+  Room(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, Room&& from) noexcept
+      : Room(arena) {
     *this = ::std::move(from);
   }
   const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
@@ -7819,111 +7476,100 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kScenarioNameFieldNumber = 1,
-    kDescriptionFieldNumber = 6,
-    kShotTypeFieldNumber = 2,
-    kRoomFieldNumber = 5,
-    kDurationSecondsFieldNumber = 3,
-    kNumTargetsFieldNumber = 4,
-    kExplicitTargetRadiusFieldNumber = 7,
-    kHorizontalFovFieldNumber = 8,
+    kCameraPositionFieldNumber = 1,
+    kCameraUpFieldNumber = 2,
+    kCameraFrontFieldNumber = 3,
+    kLookAtPointFieldNumber = 7,
+    kStartPitchFieldNumber = 4,
+    kStartYawFieldNumber = 5,
+    kHorizontalFovFieldNumber = 6,
+    kSimpleRoomFieldNumber = 21,
+    kCylinderRoomFieldNumber = 22,
+    kBarrelRoomFieldNumber = 23,
   };
-  // string scenario_name = 1;
-  bool has_scenario_name() const;
-  void clear_scenario_name() ;
-  const ::std::string& scenario_name() const;
-  template <typename Arg_ = const ::std::string&, typename... Args_>
-  void set_scenario_name(Arg_&& arg, Args_... args);
-  ::std::string* PROTOBUF_NONNULL mutable_scenario_name();
-  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_scenario_name();
-  void set_allocated_scenario_name(::std::string* PROTOBUF_NULLABLE value);
+  // .aim.StoredVec3 camera_position = 1;
+  bool has_camera_position() const;
+  void clear_camera_position() ;
+  const ::aim::StoredVec3& camera_position() const;
+  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_position();
+  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_position();
+  void set_allocated_camera_position(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_camera_position(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_position();
 
   private:
-  const ::std::string& _internal_scenario_name() const;
-  PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_name(const ::std::string& value);
-  ::std::string* PROTOBUF_NONNULL _internal_mutable_scenario_name();
+  const ::aim::StoredVec3& _internal_camera_position() const;
+  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_position();
 
   public:
-  // string description = 6;
-  bool has_description() const;
-  void clear_description() ;
-  const ::std::string& description() const;
-  template <typename Arg_ = const ::std::string&, typename... Args_>
-  void set_description(Arg_&& arg, Args_... args);
-  ::std::string* PROTOBUF_NONNULL mutable_description();
-  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_description();
-  void set_allocated_description(::std::string* PROTOBUF_NULLABLE value);
+  // .aim.StoredVec3 camera_up = 2;
+  bool has_camera_up() const;
+  void clear_camera_up() ;
+  const ::aim::StoredVec3& camera_up() const;
+  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_up();
+  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_up();
+  void set_allocated_camera_up(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_camera_up(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_up();
 
   private:
-  const ::std::string& _internal_description() const;
-  PROTOBUF_ALWAYS_INLINE void _internal_set_description(const ::std::string& value);
-  ::std::string* PROTOBUF_NONNULL _internal_mutable_description();
+  const ::aim::StoredVec3& _internal_camera_up() const;
+  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_up();
 
   public:
-  // .aim.ShotType shot_type = 2;
-  bool has_shot_type() const;
-  void clear_shot_type() ;
-  const ::aim::ShotType& shot_type() const;
-  [[nodiscard]] ::aim::ShotType* PROTOBUF_NULLABLE release_shot_type();
-  ::aim::ShotType* PROTOBUF_NONNULL mutable_shot_type();
-  void set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
-  ::aim::ShotType* PROTOBUF_NULLABLE unsafe_arena_release_shot_type();
+  // .aim.StoredVec3 camera_front = 3;
+  bool has_camera_front() const;
+  void clear_camera_front() ;
+  const ::aim::StoredVec3& camera_front() const;
+  [[nodiscard]] ::aim::StoredVec3* PROTOBUF_NULLABLE release_camera_front();
+  ::aim::StoredVec3* PROTOBUF_NONNULL mutable_camera_front();
+  void set_allocated_camera_front(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_camera_front(::aim::StoredVec3* PROTOBUF_NULLABLE value);
+  ::aim::StoredVec3* PROTOBUF_NULLABLE unsafe_arena_release_camera_front();
 
   private:
-  const ::aim::ShotType& _internal_shot_type() const;
-  ::aim::ShotType* PROTOBUF_NONNULL _internal_mutable_shot_type();
+  const ::aim::StoredVec3& _internal_camera_front() const;
+  ::aim::StoredVec3* PROTOBUF_NONNULL _internal_mutable_camera_front();
 
   public:
-  // .aim.Room room = 5;
-  bool has_room() const;
-  void clear_room() ;
-  const ::aim::Room& room() const;
-  [[nodiscard]] ::aim::Room* PROTOBUF_NULLABLE release_room();
-  ::aim::Room* PROTOBUF_NONNULL mutable_room();
-  void set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
-  void unsafe_arena_set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
-  ::aim::Room* PROTOBUF_NULLABLE unsafe_arena_release_room();
+  // .aim.RegionVec2 look_at_point = 7;
+  bool has_look_at_point() const;
+  void clear_look_at_point() ;
+  const ::aim::RegionVec2& look_at_point() const;
+  [[nodiscard]] ::aim::RegionVec2* PROTOBUF_NULLABLE release_look_at_point();
+  ::aim::RegionVec2* PROTOBUF_NONNULL mutable_look_at_point();
+  void set_allocated_look_at_point(::aim::RegionVec2* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_look_at_point(::aim::RegionVec2* PROTOBUF_NULLABLE value);
+  ::aim::RegionVec2* PROTOBUF_NULLABLE unsafe_arena_release_look_at_point();
 
   private:
-  const ::aim::Room& _internal_room() const;
-  ::aim::Room* PROTOBUF_NONNULL _internal_mutable_room();
+  const ::aim::RegionVec2& _internal_look_at_point() const;
+  ::aim::RegionVec2* PROTOBUF_NONNULL _internal_mutable_look_at_point();
 
   public:
-  // int32 duration_seconds = 3;
-  bool has_duration_seconds() const;
-  void clear_duration_seconds() ;
-  ::int32_t duration_seconds() const;
-  void set_duration_seconds(::int32_t value);
+  // float start_pitch = 4;
+  bool has_start_pitch() const;
+  void clear_start_pitch() ;
+  float start_pitch() const;
+  void set_start_pitch(float value);
 
   private:
-  ::int32_t _internal_duration_seconds() const;
-  void _internal_set_duration_seconds(::int32_t value);
+  float _internal_start_pitch() const;
+  void _internal_set_start_pitch(float value);
 
   public:
-  // int32 num_targets = 4;
-  bool has_num_targets() const;
-  void clear_num_targets() ;
-  ::int32_t num_targets() const;
-  void set_num_targets(::int32_t value);
+  // float start_yaw = 5;
+  bool has_start_yaw() const;
+  void clear_start_yaw() ;
+  float start_yaw() const;
+  void set_start_yaw(float value);
 
   private:
-  ::int32_t _internal_num_targets() const;
-  void _internal_set_num_targets(::int32_t value);
+  float _internal_start_yaw() const;
+  void _internal_set_start_yaw(float value);
 
   public:
-  // float explicit_target_radius = 7;
-  bool has_explicit_target_radius() const;
-  void clear_explicit_target_radius() ;
-  float explicit_target_radius() const;
-  void set_explicit_target_radius(float value);
-
-  private:
-  float _internal_explicit_target_radius() const;
-  void _internal_set_explicit_target_radius(float value);
-
-  public:
-  // float horizontal_fov = 8;
+  // float horizontal_fov = 6;
   bool has_horizontal_fov() const;
   void clear_horizontal_fov() ;
   float horizontal_fov() const;
@@ -7934,12 +7580,76 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
   void _internal_set_horizontal_fov(float value);
 
   public:
-  // @@protoc_insertion_point(class_scope:aim.ReferenceScenarioDef)
+  // .aim.SimpleRoom simple_room = 21;
+  bool has_simple_room() const;
+  private:
+  bool _internal_has_simple_room() const;
+
+  public:
+  void clear_simple_room() ;
+  const ::aim::SimpleRoom& simple_room() const;
+  [[nodiscard]] ::aim::SimpleRoom* PROTOBUF_NULLABLE release_simple_room();
+  ::aim::SimpleRoom* PROTOBUF_NONNULL mutable_simple_room();
+  void set_allocated_simple_room(::aim::SimpleRoom* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_simple_room(::aim::SimpleRoom* PROTOBUF_NULLABLE value);
+  ::aim::SimpleRoom* PROTOBUF_NULLABLE unsafe_arena_release_simple_room();
+
+  private:
+  const ::aim::SimpleRoom& _internal_simple_room() const;
+  ::aim::SimpleRoom* PROTOBUF_NONNULL _internal_mutable_simple_room();
+
+  public:
+  // .aim.CylinderRoom cylinder_room = 22;
+  bool has_cylinder_room() const;
+  private:
+  bool _internal_has_cylinder_room() const;
+
+  public:
+  void clear_cylinder_room() ;
+  const ::aim::CylinderRoom& cylinder_room() const;
+  [[nodiscard]] ::aim::CylinderRoom* PROTOBUF_NULLABLE release_cylinder_room();
+  ::aim::CylinderRoom* PROTOBUF_NONNULL mutable_cylinder_room();
+  void set_allocated_cylinder_room(::aim::CylinderRoom* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_cylinder_room(::aim::CylinderRoom* PROTOBUF_NULLABLE value);
+  ::aim::CylinderRoom* PROTOBUF_NULLABLE unsafe_arena_release_cylinder_room();
+
+  private:
+  const ::aim::CylinderRoom& _internal_cylinder_room() const;
+  ::aim::CylinderRoom* PROTOBUF_NONNULL _internal_mutable_cylinder_room();
+
+  public:
+  // .aim.BarrelRoom barrel_room = 23;
+  bool has_barrel_room() const;
+  private:
+  bool _internal_has_barrel_room() const;
+
+  public:
+  void clear_barrel_room() ;
+  const ::aim::BarrelRoom& barrel_room() const;
+  [[nodiscard]] ::aim::BarrelRoom* PROTOBUF_NULLABLE release_barrel_room();
+  ::aim::BarrelRoom* PROTOBUF_NONNULL mutable_barrel_room();
+  void set_allocated_barrel_room(::aim::BarrelRoom* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_barrel_room(::aim::BarrelRoom* PROTOBUF_NULLABLE value);
+  ::aim::BarrelRoom* PROTOBUF_NULLABLE unsafe_arena_release_barrel_room();
+
+  private:
+  const ::aim::BarrelRoom& _internal_barrel_room() const;
+  ::aim::BarrelRoom* PROTOBUF_NONNULL _internal_mutable_barrel_room();
+
+  public:
+  void clear_type();
+  TypeCase type_case() const;
+  // @@protoc_insertion_point(class_scope:aim.Room)
  private:
   class _Internal;
+  void set_has_simple_room();
+  void set_has_cylinder_room();
+  void set_has_barrel_room();
+  inline bool has_type() const;
+  inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
-                                   2, 65,
+  static const ::google::protobuf::internal::TcParseTable<3, 10,
+                                   7, 0,
                                    2>
       _table_;
 
@@ -7957,24 +7667,31 @@ class ReferenceScenarioDef final : public ::google::protobuf::Message
     inline explicit Impl_(
         ::google::protobuf::internal::InternalVisibility visibility,
         ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const ReferenceScenarioDef& from_msg);
+        const Room& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr scenario_name_;
-    ::google::protobuf::internal::ArenaStringPtr description_;
-    ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
-    ::aim::Room* PROTOBUF_NULLABLE room_;
-    ::int32_t duration_seconds_;
-    ::int32_t num_targets_;
-    float explicit_target_radius_;
+    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_position_;
+    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_up_;
+    ::aim::StoredVec3* PROTOBUF_NULLABLE camera_front_;
+    ::aim::RegionVec2* PROTOBUF_NULLABLE look_at_point_;
+    float start_pitch_;
+    float start_yaw_;
     float horizontal_fov_;
+    union TypeUnion {
+      constexpr TypeUnion() : _constinit_{} {}
+      ::google::protobuf::internal::ConstantInitialized _constinit_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE simple_room_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE cylinder_room_;
+      ::google::protobuf::Message* PROTOBUF_NULLABLE barrel_room_;
+    } type_;
+    ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
   friend struct ::TableStruct_scenario_2eproto;
 };
 
-extern const ::google::protobuf::internal::ClassDataFull ReferenceScenarioDef_class_data_;
+extern const ::google::protobuf::internal::ClassDataFull Room_class_data_;
 // -------------------------------------------------------------------
 
 class CenteringScenarioDef final : public ::google::protobuf::Message
@@ -8514,6 +8231,306 @@ class TargetPlacementStrategy final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull TargetPlacementStrategy_class_data_;
+// -------------------------------------------------------------------
+
+class ReferenceScenarioDef final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.ReferenceScenarioDef) */ {
+ public:
+  inline ReferenceScenarioDef() : ReferenceScenarioDef(nullptr) {}
+  ~ReferenceScenarioDef() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(ReferenceScenarioDef* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(ReferenceScenarioDef));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR ReferenceScenarioDef(::google::protobuf::internal::ConstantInitialized);
+
+  inline ReferenceScenarioDef(const ReferenceScenarioDef& from) : ReferenceScenarioDef(nullptr, from) {}
+  inline ReferenceScenarioDef(ReferenceScenarioDef&& from) noexcept
+      : ReferenceScenarioDef(nullptr, ::std::move(from)) {}
+  inline ReferenceScenarioDef& operator=(const ReferenceScenarioDef& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ReferenceScenarioDef& operator=(ReferenceScenarioDef&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ReferenceScenarioDef& default_instance() {
+    return *reinterpret_cast<const ReferenceScenarioDef*>(
+        &_ReferenceScenarioDef_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 16;
+  friend void swap(ReferenceScenarioDef& a, ReferenceScenarioDef& b) { a.Swap(&b); }
+  inline void Swap(ReferenceScenarioDef* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ReferenceScenarioDef* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ReferenceScenarioDef* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<ReferenceScenarioDef>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const ReferenceScenarioDef& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const ReferenceScenarioDef& from) { ReferenceScenarioDef::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(ReferenceScenarioDef* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.ReferenceScenarioDef"; }
+
+  explicit ReferenceScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  ReferenceScenarioDef(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ReferenceScenarioDef& from);
+  ReferenceScenarioDef(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, ReferenceScenarioDef&& from) noexcept
+      : ReferenceScenarioDef(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kScenarioNameFieldNumber = 1,
+    kDescriptionFieldNumber = 6,
+    kShotTypeFieldNumber = 2,
+    kRoomFieldNumber = 5,
+    kDurationSecondsFieldNumber = 3,
+    kNumTargetsFieldNumber = 4,
+    kExplicitTargetRadiusFieldNumber = 7,
+    kHorizontalFovFieldNumber = 8,
+  };
+  // string scenario_name = 1;
+  bool has_scenario_name() const;
+  void clear_scenario_name() ;
+  const ::std::string& scenario_name() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_scenario_name(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_scenario_name();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_scenario_name();
+  void set_allocated_scenario_name(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_scenario_name() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_scenario_name(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_scenario_name();
+
+  public:
+  // string description = 6;
+  bool has_description() const;
+  void clear_description() ;
+  const ::std::string& description() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_description(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_description();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_description();
+  void set_allocated_description(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_description() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_description(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_description();
+
+  public:
+  // .aim.ShotType shot_type = 2;
+  bool has_shot_type() const;
+  void clear_shot_type() ;
+  const ::aim::ShotType& shot_type() const;
+  [[nodiscard]] ::aim::ShotType* PROTOBUF_NULLABLE release_shot_type();
+  ::aim::ShotType* PROTOBUF_NONNULL mutable_shot_type();
+  void set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_shot_type(::aim::ShotType* PROTOBUF_NULLABLE value);
+  ::aim::ShotType* PROTOBUF_NULLABLE unsafe_arena_release_shot_type();
+
+  private:
+  const ::aim::ShotType& _internal_shot_type() const;
+  ::aim::ShotType* PROTOBUF_NONNULL _internal_mutable_shot_type();
+
+  public:
+  // .aim.Room room = 5;
+  bool has_room() const;
+  void clear_room() ;
+  const ::aim::Room& room() const;
+  [[nodiscard]] ::aim::Room* PROTOBUF_NULLABLE release_room();
+  ::aim::Room* PROTOBUF_NONNULL mutable_room();
+  void set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_room(::aim::Room* PROTOBUF_NULLABLE value);
+  ::aim::Room* PROTOBUF_NULLABLE unsafe_arena_release_room();
+
+  private:
+  const ::aim::Room& _internal_room() const;
+  ::aim::Room* PROTOBUF_NONNULL _internal_mutable_room();
+
+  public:
+  // int32 duration_seconds = 3;
+  bool has_duration_seconds() const;
+  void clear_duration_seconds() ;
+  ::int32_t duration_seconds() const;
+  void set_duration_seconds(::int32_t value);
+
+  private:
+  ::int32_t _internal_duration_seconds() const;
+  void _internal_set_duration_seconds(::int32_t value);
+
+  public:
+  // int32 num_targets = 4;
+  bool has_num_targets() const;
+  void clear_num_targets() ;
+  ::int32_t num_targets() const;
+  void set_num_targets(::int32_t value);
+
+  private:
+  ::int32_t _internal_num_targets() const;
+  void _internal_set_num_targets(::int32_t value);
+
+  public:
+  // float explicit_target_radius = 7;
+  bool has_explicit_target_radius() const;
+  void clear_explicit_target_radius() ;
+  float explicit_target_radius() const;
+  void set_explicit_target_radius(float value);
+
+  private:
+  float _internal_explicit_target_radius() const;
+  void _internal_set_explicit_target_radius(float value);
+
+  public:
+  // float horizontal_fov = 8;
+  bool has_horizontal_fov() const;
+  void clear_horizontal_fov() ;
+  float horizontal_fov() const;
+  void set_horizontal_fov(float value);
+
+  private:
+  float _internal_horizontal_fov() const;
+  void _internal_set_horizontal_fov(float value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.ReferenceScenarioDef)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<3, 8,
+                                   2, 65,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const ReferenceScenarioDef& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr scenario_name_;
+    ::google::protobuf::internal::ArenaStringPtr description_;
+    ::aim::ShotType* PROTOBUF_NULLABLE shot_type_;
+    ::aim::Room* PROTOBUF_NULLABLE room_;
+    ::int32_t duration_seconds_;
+    ::int32_t num_targets_;
+    float explicit_target_radius_;
+    float horizontal_fov_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_scenario_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull ReferenceScenarioDef_class_data_;
 // -------------------------------------------------------------------
 
 class WaypointScenarioDef final : public ::google::protobuf::Message
@@ -11888,14 +11905,14 @@ inline void Room::set_allocated_camera_front(::aim::StoredVec3* PROTOBUF_NULLABL
 
 // float start_pitch = 4;
 inline bool Room::has_start_pitch() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   return value;
 }
 inline void Room::clear_start_pitch() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_pitch_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline float Room::start_pitch() const {
   // @@protoc_insertion_point(field_get:aim.Room.start_pitch)
@@ -11903,7 +11920,7 @@ inline float Room::start_pitch() const {
 }
 inline void Room::set_start_pitch(float value) {
   _internal_set_start_pitch(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:aim.Room.start_pitch)
 }
 inline float Room::_internal_start_pitch() const {
@@ -11917,14 +11934,14 @@ inline void Room::_internal_set_start_pitch(float value) {
 
 // float start_yaw = 5;
 inline bool Room::has_start_yaw() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   return value;
 }
 inline void Room::clear_start_yaw() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_yaw_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline float Room::start_yaw() const {
   // @@protoc_insertion_point(field_get:aim.Room.start_yaw)
@@ -11932,7 +11949,7 @@ inline float Room::start_yaw() const {
 }
 inline void Room::set_start_yaw(float value) {
   _internal_set_start_yaw(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:aim.Room.start_yaw)
 }
 inline float Room::_internal_start_yaw() const {
@@ -11944,16 +11961,115 @@ inline void Room::_internal_set_start_yaw(float value) {
   _impl_.start_yaw_ = value;
 }
 
+// .aim.RegionVec2 look_at_point = 7;
+inline bool Room::has_look_at_point() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  PROTOBUF_ASSUME(!value || _impl_.look_at_point_ != nullptr);
+  return value;
+}
+inline void Room::clear_look_at_point() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.look_at_point_ != nullptr) _impl_.look_at_point_->Clear();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000008U);
+}
+inline const ::aim::RegionVec2& Room::_internal_look_at_point() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::RegionVec2* p = _impl_.look_at_point_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::RegionVec2&>(::aim::_RegionVec2_default_instance_);
+}
+inline const ::aim::RegionVec2& Room::look_at_point() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Room.look_at_point)
+  return _internal_look_at_point();
+}
+inline void Room::unsafe_arena_set_allocated_look_at_point(
+    ::aim::RegionVec2* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.look_at_point_);
+  }
+  _impl_.look_at_point_ = reinterpret_cast<::aim::RegionVec2*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Room.look_at_point)
+}
+inline ::aim::RegionVec2* PROTOBUF_NULLABLE Room::release_look_at_point() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::RegionVec2* released = _impl_.look_at_point_;
+  _impl_.look_at_point_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::RegionVec2* PROTOBUF_NULLABLE Room::unsafe_arena_release_look_at_point() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Room.look_at_point)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::RegionVec2* temp = _impl_.look_at_point_;
+  _impl_.look_at_point_ = nullptr;
+  return temp;
+}
+inline ::aim::RegionVec2* PROTOBUF_NONNULL Room::_internal_mutable_look_at_point() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.look_at_point_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::RegionVec2>(GetArena());
+    _impl_.look_at_point_ = reinterpret_cast<::aim::RegionVec2*>(p);
+  }
+  return _impl_.look_at_point_;
+}
+inline ::aim::RegionVec2* PROTOBUF_NONNULL Room::mutable_look_at_point()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ::aim::RegionVec2* _msg = _internal_mutable_look_at_point();
+  // @@protoc_insertion_point(field_mutable:aim.Room.look_at_point)
+  return _msg;
+}
+inline void Room::set_allocated_look_at_point(::aim::RegionVec2* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.look_at_point_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = value->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  }
+
+  _impl_.look_at_point_ = reinterpret_cast<::aim::RegionVec2*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Room.look_at_point)
+}
+
 // float horizontal_fov = 6;
 inline bool Room::has_horizontal_fov() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   return value;
 }
 inline void Room::clear_horizontal_fov() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.horizontal_fov_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline float Room::horizontal_fov() const {
   // @@protoc_insertion_point(field_get:aim.Room.horizontal_fov)
@@ -11961,7 +12077,7 @@ inline float Room::horizontal_fov() const {
 }
 inline void Room::set_horizontal_fov(float value) {
   _internal_set_horizontal_fov(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:aim.Room.horizontal_fov)
 }
 inline float Room::_internal_horizontal_fov() const {

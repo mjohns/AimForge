@@ -6,6 +6,7 @@
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
+     "ghostClosestOnMiss": 0.3,
      "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {

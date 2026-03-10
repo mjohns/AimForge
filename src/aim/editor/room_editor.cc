@@ -208,6 +208,12 @@ void DrawRoomEditorInputs(Room& room, CameraUpdates* camera_updates) {
     room.clear_camera_front();
   }
 
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Look at point");
+  ImGui::SameLine();
+  DrawOptionalRegionVec2Editor("LookAtPoint",
+                               PROTO_PTR_FIELD(RegionVec2, Room, &room, look_at_point));
+
   ImGui::SpacedSeparator();
   ImGui::AlignTextToFramePadding();
   ImGui::Text("Look around");

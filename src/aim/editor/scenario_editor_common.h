@@ -43,7 +43,9 @@ void DrawOptionalRegionLengthEditor(const std::string& id,
                                     RegionLength::TypeCase default_type,
                                     PtrField<RegionLength> length,
                                     float default_value);
+
 void DrawRegionVec2Editor(const std::string& id, RegionVec2* v);
+void DrawOptionalRegionVec2Editor(const std::string& id, PtrField<RegionVec2> field);
 
 void DrawTargetPlacementStrategyEditor(const std::string& id,
                                        TargetPlacementStrategy* s,

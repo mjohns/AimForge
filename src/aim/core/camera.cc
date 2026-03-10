@@ -3,6 +3,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include "aim/common/geometry.h"
+#include "aim/common/wall.h"
+#include "aim/core/target.h"
 #include "glm/common.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtc/constants.hpp"
@@ -124,6 +126,26 @@ Camera::Camera(const CameraParams& params)
       pitch_(ClampPitch(params.pitch)),
       yaw_(params.yaw) {
   is_default_orientation_ = front_.y == 1 && up_.z == 1;
+  if (params.look_at_point.has_value()) {
+    SetPitchYawLookingAtPoint(*params.look_at_point);
+  }
+}
+
+CameraParams::CameraParams(const Room& room) {
+  pitch = room.start_pitch();
+  yaw = room.start_yaw();
+  position = ToVec3(room.camera_position());
+  if (room.has_camera_up()) {
+    up = ToVec3(room.camera_up());
+  }
+  if (room.has_camera_front()) {
+    front = ToVec3(room.camera_front());
+  }
+  if (room.has_look_at_point()) {
+    Wall wall = Wall::ForRoom(room);
+    glm::vec2 wall_pos = wall.GetRegionVec2(room.look_at_point());
+    look_at_point = WallPositionToWorldPosition(wall_pos, /*target_radius=*/1.3, room, /*depth=*/0);
+  }
 }
 
 float GetMaxPitch() {
