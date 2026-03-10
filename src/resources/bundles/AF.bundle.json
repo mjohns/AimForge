@@ -3423,6 +3423,7 @@
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
+     "removeClosestOnMiss": true,
      "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
