@@ -1995,7 +1995,7 @@
   {
    "name": "OmniFlick Close",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
      "removeClosestOnMiss": true,
@@ -2089,6 +2089,18 @@
     },
     "referenceDef": {
      "scenarioName": "AF OmniFlick Mid"
+    }
+   }
+  },
+  {
+   "name": "OmniFlick VeryFar",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.3,
+     "wallHeightMultiplier": 1.3
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Far"
     }
    }
   },
@@ -5026,6 +5038,10 @@
       "numPlays": 1
      },
      {
+      "scenario": "AF OmniFlick VeryFar",
+      "numPlays": 1
+     },
+     {
       "scenario": "AF OmniFlick Close Poke",
       "numPlays": 1
      },
@@ -5043,6 +5059,10 @@
      },
      {
       "scenario": "AF OmniFlick Far Poke",
+      "numPlays": 1
+     },
+     {
+      "scenario": "AF OmniFlick VeryFar Poke",
       "numPlays": 1
      }
     ]

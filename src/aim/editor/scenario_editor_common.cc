@@ -37,12 +37,12 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Width");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 50);
+    DrawRegionLengthEditor("Width", RegionLength::kXPercentValue, t->mutable_x_length(), 90);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Height");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, t->mutable_y_length(), 50);
+    DrawRegionLengthEditor("Height", RegionLength::kYPercentValue, t->mutable_y_length(), 90);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Exclude inner rectangle");
@@ -77,7 +77,7 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Diameter");
     ImGui::SameLine();
-    DrawRegionLengthEditor("Diameter", RegionLength::kXPercentValue, t->mutable_diameter(), 50);
+    DrawRegionLengthEditor("Diameter", RegionLength::kXPercentValue, t->mutable_diameter(), 90);
 
     // TODO: Optional region length
     ImGui::AlignTextToFramePadding();
@@ -95,12 +95,12 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("X diameter");
     ImGui::SameLine();
-    DrawRegionLengthEditor("XDiameter", RegionLength::kXPercentValue, t->mutable_x_diameter(), 50);
+    DrawRegionLengthEditor("XDiameter", RegionLength::kXPercentValue, t->mutable_x_diameter(), 90);
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Y diameter");
     ImGui::SameLine();
-    DrawRegionLengthEditor("YDiameter", RegionLength::kYPercentValue, t->mutable_y_diameter(), 50);
+    DrawRegionLengthEditor("YDiameter", RegionLength::kYPercentValue, t->mutable_y_diameter(), 90);
   }
 
   if (support_depth) {
