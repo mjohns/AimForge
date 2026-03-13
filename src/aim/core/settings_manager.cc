@@ -246,7 +246,6 @@ class SettingsManagerImpl : public SettingsManager {
           *theme.mutable_health_bar() = GetDefaultHealthBarAppearance();
         }
         ThemeCacheEntry entry;
-        theme.set_name(theme_name);
         entry.theme = theme;
         entry.file_path = path;
         entry.last_modified_time = std::filesystem::last_write_time(path);
@@ -536,7 +535,6 @@ void SettingsUpdater::SaveIfChangesMade(const std::string& scenario_name) {
 
 Theme GetDefaultTheme() {
   Theme t;
-  t.set_name("default");
   *(t.mutable_crosshair()->mutable_color()) = ToStoredColor("#FFAC1C");
   *(t.mutable_crosshair()->mutable_outline_color()) = ToStoredColor("#000000");
 
@@ -563,7 +561,6 @@ HealthBarAppearance GetDefaultHealthBarAppearance() {
 
 Crosshair GetDefaultCrosshair() {
   Crosshair crosshair;
-  crosshair.set_name("Dot");
   crosshair.add_layers()->mutable_dot()->set_outline_thickness(1);
   return crosshair;
 }

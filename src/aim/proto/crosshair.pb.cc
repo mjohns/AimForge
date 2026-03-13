@@ -195,10 +195,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr Crosshair::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        layers_{},
-        name_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
+        layers_{} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR Crosshair::Crosshair(::_pbi::ConstantInitialized)
@@ -295,10 +292,8 @@ const ::uint32_t
         ~0u,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_._has_bits_),
-        5, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_.name_),
+        4, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::Crosshair, _impl_.layers_),
-        1,
         0,
 };
 
@@ -343,8 +338,8 @@ const char descriptor_table_protodef_crosshair_2eproto[] ABSL_ATTRIBUTE_SECTION_
     "ge\030\014 \001(\0132\023.aim.ImageCrosshairH\000\022&\n\006circl"
     "e\030\r \001(\0132\024.aim.CircleCrosshairH\000\022(\n\007diamo"
     "nd\030\016 \001(\0132\025.aim.DiamondCrosshairH\000B\006\n\004typ"
-    "e\">\n\tCrosshair\022\014\n\004name\030\001 \001(\t\022#\n\006layers\030\002"
-    " \003(\0132\023.aim.CrosshairLayerb\010editionsp\350\007"
+    "e\"0\n\tCrosshair\022#\n\006layers\030\001 \003(\0132\023.aim.Cro"
+    "sshairLayerb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_crosshair_2eproto_deps[1] = {
@@ -354,7 +349,7 @@ static ::absl::once_flag descriptor_table_crosshair_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_crosshair_2eproto = {
     false,
     false,
-    878,
+    864,
     descriptor_table_protodef_crosshair_2eproto,
     "crosshair.proto",
     &descriptor_table_crosshair_2eproto_once,
@@ -2469,8 +2464,7 @@ PROTOBUF_NDEBUG_INLINE Crosshair::Impl_::Impl_(
     [[maybe_unused]] const ::aim::Crosshair& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        layers_{visibility, arena, from.layers_},
-        name_(arena, from.name_) {}
+        layers_{visibility, arena, from.layers_} {}
 
 Crosshair::Crosshair(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -2492,8 +2486,7 @@ PROTOBUF_NDEBUG_INLINE Crosshair::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
-        layers_{visibility, arena},
-        name_(arena) {}
+        layers_{visibility, arena} {}
 
 inline void Crosshair::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -2509,7 +2502,6 @@ inline void Crosshair::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.name_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -2526,7 +2518,7 @@ constexpr auto Crosshair::InternalNewImpl_() {
                   ::google::protobuf::Message::internal_visibility()),
   });
   if (arena_bits.has_value()) {
-    return ::google::protobuf::internal::MessageCreator::CopyInit(
+    return ::google::protobuf::internal::MessageCreator::ZeroInit(
         sizeof(Crosshair), alignof(Crosshair), *arena_bits);
   } else {
     return ::google::protobuf::internal::MessageCreator(&Crosshair::PlacementNew_,
@@ -2568,16 +2560,16 @@ Crosshair::GetClassData() const {
   return Crosshair_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 26, 2>
+const ::_pbi::TcParseTable<0, 1, 1, 0, 2>
 Crosshair::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Crosshair, _impl_._has_bits_),
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    1, 0,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    1,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     Crosshair_class_data_.base(),
@@ -2587,29 +2579,20 @@ Crosshair::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::Crosshair>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // repeated .aim.CrosshairLayer layers = 2;
+    // repeated .aim.CrosshairLayer layers = 1;
     {::_pbi::TcParser::FastMtR1,
-     {18, 0, 0,
+     {10, 0, 0,
       PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.layers_)}},
-    // string name = 1;
-    {::_pbi::TcParser::FastUS1,
-     {10, 1, 0,
-      PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.name_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string name = 1;
-    {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.name_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // repeated .aim.CrosshairLayer layers = 2;
+    // repeated .aim.CrosshairLayer layers = 1;
     {PROTOBUF_FIELD_OFFSET(Crosshair, _impl_.layers_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::CrosshairLayer>()},
   }},
   {{
-    "\15\4\0\0\0\0\0\0"
-    "aim.Crosshair"
-    "name"
   }},
 };
 PROTOBUF_NOINLINE void Crosshair::Clear() {
@@ -2620,13 +2603,8 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
-      _impl_.layers_.Clear();
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      _impl_.name_.ClearNonDefaultToEmpty();
-    }
+  if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+    _impl_.layers_.Clear();
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -2651,15 +2629,7 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // string name = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-    const ::std::string& _s = this_._internal_name();
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "aim.Crosshair.name");
-    target = stream->WriteStringMaybeAliased(1, _s, target);
-  }
-
-  // repeated .aim.CrosshairLayer layers = 2;
+  // repeated .aim.CrosshairLayer layers = 1;
   if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
     for (unsigned i = 0, n = static_cast<unsigned>(
                              this_._internal_layers_size());
@@ -2667,7 +2637,7 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
       const auto& repfield = this_._internal_layers().Get(i);
       target =
           ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-              2, repfield, repfield.GetCachedSize(),
+              1, repfield, repfield.GetCachedSize(),
               target, stream);
     }
   }
@@ -2696,19 +2666,14 @@ PROTOBUF_NOINLINE void Crosshair::Clear() {
   (void)cached_has_bits;
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
-  cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    // repeated .aim.CrosshairLayer layers = 2;
+   {
+    // repeated .aim.CrosshairLayer layers = 1;
+    cached_has_bits = this_._impl_._has_bits_[0];
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       total_size += 1UL * this_._internal_layers_size();
       for (const auto& msg : this_._internal_layers()) {
         total_size += ::google::protobuf::internal::WireFormatLite::MessageSize(msg);
       }
-    }
-    // string name = 1;
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                      this_._internal_name());
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -2730,15 +2695,10 @@ void Crosshair::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
-    if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
-      _this->_internal_mutable_layers()->InternalMergeFromWithArena(
-          ::google::protobuf::MessageLite::internal_visibility(), arena,
-          from._internal_layers());
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      _this->_internal_set_name(from._internal_name());
-    }
+  if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
+    _this->_internal_mutable_layers()->InternalMergeFromWithArena(
+        ::google::protobuf::MessageLite::internal_visibility(), arena,
+        from._internal_layers());
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
@@ -2755,12 +2715,9 @@ void Crosshair::CopyFrom(const Crosshair& from) {
 
 void Crosshair::InternalSwap(Crosshair* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   _impl_.layers_.InternalSwap(&other->_impl_.layers_);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
 }
 
 ::google::protobuf::Metadata Crosshair::GetMetadata() const {

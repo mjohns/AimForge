@@ -55,6 +55,5 @@ message CrosshairLayer {
 }
 
 message Crosshair {
-  string name = 1;
-  repeated CrosshairLayer layers = 2;
+  repeated CrosshairLayer layers = 1;
 }

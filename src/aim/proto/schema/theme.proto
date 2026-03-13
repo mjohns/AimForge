@@ -33,12 +33,10 @@ message HealthBarAppearance {
 }
 
 message Theme {
-  string name = 1;
-
   // This theme is a reference to another theme. No other fields should be set when this value is
   // used. Useful for defining a DefaultStatic theme that can be changed to point to different
   // themes whenever you want.
-  string reference = 10;
+  string reference = 1;
 
   WallAppearance roof_appearance = 2;
   WallAppearance side_appearance = 3;

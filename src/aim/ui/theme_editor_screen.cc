@@ -91,11 +91,9 @@ class ThemeEditor {
     ImGui::SpacedSeparator();
 
     if (is_reference) {
-      std::string original_name = current_theme_.name();
       std::string original_reference = current_theme_.reference();
 
       current_theme_.Clear();
-      current_theme_.set_name(original_name);
       current_theme_.set_reference(original_reference);
 
       std::string* reference = current_theme_.mutable_reference();
