@@ -357,7 +357,7 @@ class SettingsScreen : public UiScreen {
   }
 
   void DrawSounds() {
-    SoundSettings& s = *updater_.settings.mutable_sound();
+    SoundSettings& s = *updater_.settings.mutable_sounds();
 
     sound_input_dialog_.Draw(app_);
 
@@ -377,13 +377,15 @@ class SettingsScreen : public UiScreen {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-      auto sound_input = [this](const std::string& label, std::string* sound_name) {
+      auto sound_input = [this](const std::string& label, SoundItem* item) {
         ImGui::IdGuard cid(label);
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text(label);
+
+        std::string* sound_name = item->mutable_name();
 
         ImGui::TableNextColumn();
         if (ImGui::Button(icons::kPlayArrow)) {

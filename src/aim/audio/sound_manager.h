@@ -17,6 +17,7 @@ class SoundManager {
   SoundManager(MIX_Mixer* mixer, const std::vector<std::filesystem::path>& sound_dirs);
 
   bool PlayLoadedSound(const std::string& name);
+  bool PlayLoadedSound(const SoundItem& item);
 
   bool LoadAndPlaySound(const std::string& name);
 

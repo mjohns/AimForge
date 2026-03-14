@@ -39,21 +39,27 @@ message Settings {
   // Vsync, immediate, mailbox
   PresentMode present_mode = 15;
 
-  SoundSettings sound = 16;
+  SoundSettings sounds = 16;
 
   // Time in seconds for a start countdown at the beginning of scenarios.
   float start_countdown_time = 17;
+}
+
+message SoundItem {
+    string name = 1;
+    // Optional. Specific volume level for the sound.
+    float volume_level = 2;
 }
 
 message SoundSettings {
   // Percent value from 0 to 1.
   float master_volume_level = 1;
 
-  string hit = 10;
-  string kill = 11;
-  string metronome = 12;
-  string shoot = 13;
-  string reload = 14;
+  SoundItem hit = 10;
+  SoundItem kill = 11;
+  SoundItem metronome = 12;
+  SoundItem shoot = 13;
+  SoundItem reload = 14;
 }
 
 message ScenarioSettings {

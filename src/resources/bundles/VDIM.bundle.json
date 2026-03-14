@@ -4285,14 +4285,13 @@
     "durationSeconds": 60,
     "shotType": {
      "trackingKill": true,
-     "healthSeconds": 0.25
+     "healthSeconds": 0.26
     },
     "targetDef": {
      "numTargets": 5,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.19999981,
+       "targetRadius": 2.2,
        "targetRadiusJitter": 0.25
       }
      ]
@@ -4308,6 +4307,7 @@
       "width": 210
      }
     },
+    "levelOverrides": {},
     "staticDef": {
      "targetPlacementStrategy": {
       "regions": [
@@ -4323,10 +4323,10 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.789999843
+          "xPercentValue": 0.789999783
          },
          "yLength": {
-          "yPercentValue": 0.679999828
+          "yPercentValue": 0.679999769
          }
         }
        },
@@ -4343,7 +4343,7 @@
         },
         "ellipse": {
          "xDiameter": {
-          "xPercentValue": 0.739999831
+          "xPercentValue": 0.739999771
          },
          "yDiameter": {
           "yPercentValue": 0.5

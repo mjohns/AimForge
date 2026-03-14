@@ -415,7 +415,7 @@ class ReplayViewerScreen : public Screen {
     float duration_seconds = replay.GetDurationSeconds();
 
     i64 now_micros = GetNowMicros();
-    replay_view_->SeekForwardToTimeMicros(now_micros, settings_.sound());
+    replay_view_->SeekForwardToTimeMicros(now_micros, settings_.sounds());
 
     bool do_render = timer_.LastFrameRenderStartedMicrosAgo() > 2000;
     if (!do_render) {
@@ -581,7 +581,7 @@ class ReplayViewerScreen : public Screen {
       replay_view_ = std::make_unique<ReplayView>(replay_, app_);
     }
     replay_view_->SeekForwardToTimeMicros(
-        now_micros, play_sounds ? settings_.sound() : std::optional<SoundSettings>{});
+        now_micros, play_sounds ? settings_.sounds() : std::optional<SoundSettings>{});
     playback_start_time_micros_ = now_micros;
     playback_stopwatch_ = Stopwatch();
   }

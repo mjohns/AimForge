@@ -139,7 +139,7 @@ void Scenario::RefreshState() {
   float dpi = app_.settings_manager().GetDpi();
   metronome_ =
       std::make_unique<Metronome>(settings_.enable_metronome() ? settings_.metronome_bpm() : 0,
-                                  settings_.sound().metronome(),
+                                  settings_.sounds().metronome().name(),
                                   &app_);
 
   effective_cm_per_360_ = settings_.cm_per_360();
@@ -684,35 +684,35 @@ void Scenario::AddRemoveTargetEvent(u16 target_id) {
 }
 
 void Scenario::PlayShootSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayReloadSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sound().reload());
+  app_.sound_manager()->PlayLoadedSound(settings_.sounds().reload());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::RELOAD);
   }
 }
 
 void Scenario::PlayHitSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::HIT);
   }
 }
 
 void Scenario::PlayMissSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sound().shoot());
+  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayKillSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sound().kill());
+  app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::KILL);
   }

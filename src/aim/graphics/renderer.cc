@@ -509,6 +509,12 @@ class DrawDataBuilder {
 
       AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
 
+      /*
+      glm::vec3 small_position =
+          target.position + glm::normalize(look_at.position - target.position) * target.radius;
+      AddDrawSphere(view_projection, small_position, target.radius * 0.2, color * 0.8f, draw_data);
+      */
+
       if (health_bar_settings.show() && target.HasHealth()) {
         bool is_damaged = target.GetHealthPercent() < 1;
         if (!health_bar_settings.only_damaged() || is_damaged) {

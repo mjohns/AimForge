@@ -51,23 +51,23 @@ SoundManager::SoundManager(MIX_Mixer* mixer, const std::vector<std::filesystem::
     : mixer_(mixer), sound_dirs_(sound_dirs) {}
 
 void SoundManager::LoadSounds(const Settings& settings) {
-  const SoundSettings& s = settings.sound();
+  const SoundSettings& s = settings.sounds();
   if (s.has_master_volume_level()) {
     float level = glm::clamp<float>(s.master_volume_level(), 0, 2);
     MIX_SetMixerGain(mixer_, level);
   }
-  std::vector<std::string> sounds{
+  std::vector<SoundItem> sounds{
       s.hit(),
       s.kill(),
       s.metronome(),
       s.shoot(),
       s.reload(),
   };
-  for (const std::string& name : sounds) {
-    if (name.size() == 0) {
+  for (const SoundItem& item : sounds) {
+    if (item.name().size() == 0) {
       continue;
     }
-    MaybeLoadSound(name);
+    MaybeLoadSound(item.name());
   }
 }
 
@@ -85,6 +85,10 @@ void SoundManager::MaybeLoadSound(const std::string& sound_name) {
     std::unique_ptr<Sound> sound = LoadSound(mixer_, sound_dirs_, sound_name);
     sound_cache_[sound_name] = std::move(sound);
   }
+}
+
+bool SoundManager::PlayLoadedSound(const SoundItem& item) {
+  return PlayLoadedSound(item.name());
 }
 
 bool SoundManager::PlayLoadedSound(const std::string& name) {

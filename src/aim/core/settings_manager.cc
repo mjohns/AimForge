@@ -20,6 +20,16 @@ namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 800;
 
+SoundSettings GetDefaultSoundSettings() {
+  SoundSettings sounds;
+  sounds.mutable_hit()->set_name("AF Hit.ogg");
+  sounds.mutable_metronome()->set_name("AF Metronome.ogg");
+  sounds.mutable_shoot()->set_name("AF Shoot.ogg");
+  sounds.mutable_kill()->set_name("AF Kill.ogg");
+  sounds.mutable_reload()->set_name("AF Reload.ogg");
+  return sounds;
+}
+
 Settings GetDefaultSettings() {
   Settings settings;
   settings.set_cm_per_360(45);
@@ -37,12 +47,8 @@ Settings GetDefaultSettings() {
   binds->mutable_quick_settings()->set_mapping1("S");
   binds->mutable_edit_scenario()->set_mapping1("U");
 
-  SoundSettings* sounds = settings.mutable_sound();
-  sounds->set_hit("AF Hit.ogg");
-  sounds->set_metronome("AF Metronome.ogg");
-  sounds->set_shoot("AF Shoot.ogg");
-  sounds->set_kill("AF Kill.ogg");
-  sounds->set_reload("AF Reload.ogg");
+  SoundSettings* sounds = settings.mutable_sounds();
+  *sounds = GetDefaultSoundSettings();
 
   return settings;
 }
@@ -78,9 +84,12 @@ class SettingsManagerImpl : public SettingsManager {
       opts.case_insensitive_enum_parsing = true;
       std::string json = *maybe_content;
       auto status = google::protobuf::util::JsonStringToMessage(json, &settings_, opts);
-      if (settings_.sound().reload().empty()) {
-        settings_.mutable_sound()->set_reload("AF Reload.ogg");
+      if (status.ok()) {
+        if (!settings_.has_sounds()) {
+          *settings_.mutable_sounds() = GetDefaultSoundSettings();
+        }
       }
+
       return status;
     }
 
