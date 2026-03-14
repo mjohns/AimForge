@@ -54,6 +54,38 @@ struct SoundItemDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SoundItemDefaultTypeInternal _SoundItem_default_instance_;
 
+inline constexpr ScenarioSettingsConfig::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        cm_per_360_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        theme_name_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        metronome_bpm_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        crosshair_size_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        crosshair_name_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        auto_hold_tracking_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        health_bar_{static_cast< ::aim::ScenarioSettingsStoreType >(0)},
+        enable_metronome_{static_cast< ::aim::ScenarioSettingsStoreType >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ScenarioSettingsConfig::ScenarioSettingsConfig(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(ScenarioSettingsConfig_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct ScenarioSettingsConfigDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ScenarioSettingsConfigDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ScenarioSettingsConfigDefaultTypeInternal() {}
+  union {
+    ScenarioSettingsConfig _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ScenarioSettingsConfigDefaultTypeInternal _ScenarioSettingsConfig_default_instance_;
+
 inline constexpr KeyMapping::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -162,7 +194,6 @@ inline constexpr ScenarioSettings::Impl_::Impl_(
         cm_per_360_{0},
         metronome_bpm_{0},
         crosshair_size_{0},
-        cm_per_360_jitter_{0},
         auto_hold_tracking_{false},
         enable_metronome_{false} {}
 
@@ -229,6 +260,7 @@ inline constexpr Settings::Impl_::Impl_(
         keybinds_{nullptr},
         health_bar_{nullptr},
         sounds_{nullptr},
+        scenario_settings_config_{nullptr},
         dpi_{0},
         cm_per_360_{0},
         metronome_bpm_{0},
@@ -261,8 +293,8 @@ struct SettingsDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SettingsDefaultTypeInternal _Settings_default_instance_;
 }  // namespace aim
-static constexpr const ::_pb::EnumDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
-    file_level_enum_descriptors_settings_2eproto = nullptr;
+static const ::_pb::EnumDescriptor* PROTOBUF_NONNULL
+    file_level_enum_descriptors_settings_2eproto[1];
 static constexpr const ::_pb::ServiceDescriptor* PROTOBUF_NONNULL* PROTOBUF_NULLABLE
     file_level_service_descriptors_settings_2eproto = nullptr;
 const ::uint32_t
@@ -283,7 +315,7 @@ const ::uint32_t
         4,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_._has_bits_),
-        19, // hasbit index offset
+        20, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.dpi_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.cm_per_360_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.theme_name_),
@@ -300,22 +332,24 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.present_mode_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.sounds_),
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.start_countdown_time_),
-        5,
+        PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_.scenario_settings_config_),
         6,
-        0,
-        9,
         7,
-        8,
-        1,
+        0,
         10,
-        2,
+        8,
+        9,
+        1,
         11,
-        3,
+        2,
         12,
+        3,
         13,
         14,
-        4,
         15,
+        4,
+        16,
+        5,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::SoundItem, _impl_._has_bits_),
         5, // hasbit index offset
@@ -340,9 +374,8 @@ const ::uint32_t
         4,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
-        12, // hasbit index offset
+        11, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.cm_per_360_),
-        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.cm_per_360_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.theme_name_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.metronome_bpm_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.crosshair_size_),
@@ -351,14 +384,32 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.health_bar_),
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_.enable_metronome_),
         3,
-        6,
         0,
         4,
         5,
         1,
-        7,
+        6,
         2,
-        8,
+        7,
+        0x081, // bitmap
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_._has_bits_),
+        11, // hasbit index offset
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.cm_per_360_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.theme_name_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.metronome_bpm_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.crosshair_size_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.crosshair_name_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.auto_hold_tracking_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.health_bar_),
+        PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettingsConfig, _impl_.enable_metronome_),
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::KeyMapping, _impl_._has_bits_),
         7, // hasbit index offset
@@ -393,11 +444,12 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::aim::HealthBarSettings)},
         {13, sizeof(::aim::Settings)},
-        {48, sizeof(::aim::SoundItem)},
-        {55, sizeof(::aim::SoundSettings)},
-        {70, sizeof(::aim::ScenarioSettings)},
-        {91, sizeof(::aim::KeyMapping)},
-        {102, sizeof(::aim::Keybinds)},
+        {50, sizeof(::aim::SoundItem)},
+        {57, sizeof(::aim::SoundSettings)},
+        {72, sizeof(::aim::ScenarioSettings)},
+        {91, sizeof(::aim::ScenarioSettingsConfig)},
+        {110, sizeof(::aim::KeyMapping)},
+        {121, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_HealthBarSettings_default_instance_._instance,
@@ -405,6 +457,7 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_SoundItem_default_instance_._instance,
     &::aim::_SoundSettings_default_instance_._instance,
     &::aim::_ScenarioSettings_default_instance_._instance,
+    &::aim::_ScenarioSettingsConfig_default_instance_._instance,
     &::aim::_KeyMapping_default_instance_._instance,
     &::aim::_Keybinds_default_instance_._instance,
 };
@@ -414,7 +467,7 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "HealthBarSettings\022\023\n\004show\030\001 \001(\010B\005\252\001\002\010\002\022\033"
     "\n\014only_damaged\030\002 \001(\010B\005\252\001\002\010\002\022\016\n\006height\030\003 "
     "\001(\002\022\r\n\005width\030\004 \001(\002\022\033\n\023height_above_targe"
-    "t\030\005 \001(\002\"\366\003\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_"
+    "t\030\005 \001(\002\"\265\004\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_"
     "per_360\030\002 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\037\n\020ena"
     "ble_metronome\030\003 \001(\010B\005\252\001\002\010\002\022\025\n\rmetronome_"
     "bpm\030\005 \001(\002\022\026\n\016crosshair_size\030\006 \001(\002\022\036\n\026cur"
@@ -426,30 +479,46 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "_settings\030\r \001(\010B\005\252\001\002\010\002\022\026\n\016max_render_fps"
     "\030\016 \001(\002\022&\n\014present_mode\030\017 \001(\0162\020.aim.Prese"
     "ntMode\022\"\n\006sounds\030\020 \001(\0132\022.aim.SoundSettin"
-    "gs\022\034\n\024start_countdown_time\030\021 \001(\002\"/\n\tSoun"
-    "dItem\022\014\n\004name\030\001 \001(\t\022\024\n\014volume_level\030\002 \001("
-    "\002\"\311\001\n\rSoundSettings\022\033\n\023master_volume_lev"
-    "el\030\001 \001(\002\022\033\n\003hit\030\n \001(\0132\016.aim.SoundItem\022\034\n"
-    "\004kill\030\013 \001(\0132\016.aim.SoundItem\022!\n\tmetronome"
-    "\030\014 \001(\0132\016.aim.SoundItem\022\035\n\005shoot\030\r \001(\0132\016."
-    "aim.SoundItem\022\036\n\006reload\030\016 \001(\0132\016.aim.Soun"
-    "dItem\"\214\002\n\020ScenarioSettings\022\022\n\ncm_per_360"
-    "\030\001 \001(\002\022\031\n\021cm_per_360_jitter\030\006 \001(\002\022\022\n\nthe"
-    "me_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016"
-    "crosshair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005"
-    " \001(\t\022!\n\022auto_hold_tracking\030\007 \001(\010B\005\252\001\002\010\002\022"
-    "*\n\nhealth_bar\030\010 \001(\0132\026.aim.HealthBarSetti"
-    "ngs\022\037\n\020enable_metronome\030\t \001(\010B\005\252\001\002\010\002\"T\n\n"
-    "KeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2"
-    "\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001"
-    "(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyM"
-    "apping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim.K"
-    "eyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim.K"
-    "eyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim."
-    "KeyMapping\022.\n\025adjust_crosshair_size\030\005 \001("
-    "\0132\017.aim.KeyMapping\022(\n\017quick_metronome\030\006 "
-    "\001(\0132\017.aim.KeyMapping\022&\n\redit_scenario\030\007 "
-    "\001(\0132\017.aim.KeyMappingb\010editionsp\350\007"
+    "gs\022\034\n\024start_countdown_time\030\021 \001(\002\022=\n\030scen"
+    "ario_settings_config\030\022 \001(\0132\033.aim.Scenari"
+    "oSettingsConfig\"/\n\tSoundItem\022\014\n\004name\030\001 \001"
+    "(\t\022\024\n\014volume_level\030\002 \001(\002\"\311\001\n\rSoundSettin"
+    "gs\022\033\n\023master_volume_level\030\001 \001(\002\022\033\n\003hit\030\n"
+    " \001(\0132\016.aim.SoundItem\022\034\n\004kill\030\013 \001(\0132\016.aim"
+    ".SoundItem\022!\n\tmetronome\030\014 \001(\0132\016.aim.Soun"
+    "dItem\022\035\n\005shoot\030\r \001(\0132\016.aim.SoundItem\022\036\n\006"
+    "reload\030\016 \001(\0132\016.aim.SoundItem\"\367\001\n\020Scenari"
+    "oSettings\022\022\n\ncm_per_360\030\001 \001(\002\022\022\n\ntheme_n"
+    "ame\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016cros"
+    "shair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t"
+    "\022!\n\022auto_hold_tracking\030\007 \001(\010B\005\252\001\002\010\002\022*\n\nh"
+    "ealth_bar\030\010 \001(\0132\026.aim.HealthBarSettings\022"
+    "\037\n\020enable_metronome\030\t \001(\010B\005\252\001\002\010\002J\004\010\006\020\007\"\321"
+    "\003\n\026ScenarioSettingsConfig\0222\n\ncm_per_360\030"
+    "\001 \001(\0162\036.aim.ScenarioSettingsStoreType\0222\n"
+    "\ntheme_name\030\002 \001(\0162\036.aim.ScenarioSettings"
+    "StoreType\0225\n\rmetronome_bpm\030\003 \001(\0162\036.aim.S"
+    "cenarioSettingsStoreType\0226\n\016crosshair_si"
+    "ze\030\004 \001(\0162\036.aim.ScenarioSettingsStoreType"
+    "\0226\n\016crosshair_name\030\005 \001(\0162\036.aim.ScenarioS"
+    "ettingsStoreType\022:\n\022auto_hold_tracking\030\006"
+    " \001(\0162\036.aim.ScenarioSettingsStoreType\0222\n\n"
+    "health_bar\030\007 \001(\0162\036.aim.ScenarioSettingsS"
+    "toreType\0228\n\020enable_metronome\030\010 \001(\0162\036.aim"
+    ".ScenarioSettingsStoreType\"T\n\nKeyMapping"
+    "\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010"
+    "mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Key"
+    "binds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020"
+    "restart_scenario\030\002 \001(\0132\017.aim.KeyMapping\022"
+    "&\n\rnext_scenario\030\003 \001(\0132\017.aim.KeyMapping\022"
+    "\'\n\016quick_settings\030\004 \001(\0132\017.aim.KeyMapping"
+    "\022.\n\025adjust_crosshair_size\030\005 \001(\0132\017.aim.Ke"
+    "yMapping\022(\n\017quick_metronome\030\006 \001(\0132\017.aim."
+    "KeyMapping\022&\n\redit_scenario\030\007 \001(\0132\017.aim."
+    "KeyMapping*q\n\031ScenarioSettingsStoreType\022"
+    "(\n$SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN\020"
+    "\000\022\026\n\022STORE_PER_SCENARIO\020\001\022\022\n\016STORE_GLOBA"
+    "LLY\020\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_settings_2eproto_deps[1] = {
@@ -459,13 +528,13 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    1593,
+    2218,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
     descriptor_table_settings_2eproto_deps,
     1,
-    7,
+    8,
     schemas,
     file_default_instances,
     TableStruct_settings_2eproto::offsets,
@@ -473,6 +542,12 @@ PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2epro
     file_level_service_descriptors_settings_2eproto,
 };
 namespace aim {
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ScenarioSettingsStoreType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&descriptor_table_settings_2eproto);
+  return file_level_enum_descriptors_settings_2eproto[0];
+}
+PROTOBUF_CONSTINIT const uint32_t ScenarioSettingsStoreType_internal_data_[] = {
+    196608u, 0u, };
 // ===================================================================
 
 class HealthBarSettings::_Internal {
@@ -867,6 +942,9 @@ Settings::Settings(
   _impl_.sounds_ = (CheckHasBit(cached_has_bits, 0x00000010U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.sounds_)
                 : nullptr;
+  _impl_.scenario_settings_config_ = (CheckHasBit(cached_has_bits, 0x00000020U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.scenario_settings_config_)
+                : nullptr;
   ::memcpy(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, dpi_),
            reinterpret_cast<const char*>(&from._impl_) +
@@ -909,6 +987,7 @@ inline void Settings::SharedDtor(MessageLite& self) {
   delete this_._impl_.keybinds_;
   delete this_._impl_.health_bar_;
   delete this_._impl_.sounds_;
+  delete this_._impl_.scenario_settings_config_;
   this_._impl_.~Impl_();
 }
 
@@ -955,17 +1034,17 @@ Settings::GetClassData() const {
   return Settings_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<5, 16, 3, 69, 2>
+const ::_pbi::TcParseTable<5, 17, 4, 69, 2>
 Settings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Settings, _impl_._has_bits_),
     0, // no _extensions_
-    17, 248,  // max_field_number, fast_idx_mask
+    18, 248,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294837248,  // skipmap
+    4294706176,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    16,  // num_field_entries
-    3,  // num_aux_entries
+    17,  // num_field_entries
+    4,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     Settings_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -977,15 +1056,15 @@ Settings::_table_ = {
     {::_pbi::TcParser::MiniParse, {}},
     // float dpi = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 5, 0,
+     {13, 6, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_)}},
     // float cm_per_360 = 2;
     {::_pbi::TcParser::FastF32S1,
-     {21, 6, 0,
+     {21, 7, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_)}},
     // bool enable_metronome = 3 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.enable_metronome_), 9>(),
-     {24, 9, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.enable_metronome_), 10>(),
+     {24, 10, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.enable_metronome_)}},
     // string theme_name = 4;
     {::_pbi::TcParser::FastUS1,
@@ -993,27 +1072,27 @@ Settings::_table_ = {
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_)}},
     // float metronome_bpm = 5;
     {::_pbi::TcParser::FastF32S1,
-     {45, 7, 0,
+     {45, 8, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_)}},
     // float crosshair_size = 6;
     {::_pbi::TcParser::FastF32S1,
-     {53, 8, 0,
+     {53, 9, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_)}},
     // string current_crosshair_name = 7;
     {::_pbi::TcParser::FastUS1,
      {58, 1, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.current_crosshair_name_)}},
     // bool disable_click_to_start = 8 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_click_to_start_), 10>(),
-     {64, 10, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_click_to_start_), 11>(),
+     {64, 11, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_)}},
     // .aim.Keybinds keybinds = 9;
     {::_pbi::TcParser::FastMtS1,
      {74, 2, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_)}},
     // bool auto_hold_tracking = 10 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.auto_hold_tracking_), 11>(),
-     {80, 11, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.auto_hold_tracking_), 12>(),
+     {80, 12, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.auto_hold_tracking_)}},
     {::_pbi::TcParser::MiniParse, {}},
     // .aim.HealthBarSettings health_bar = 12;
@@ -1021,16 +1100,16 @@ Settings::_table_ = {
      {98, 3, 1,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.health_bar_)}},
     // bool disable_per_scenario_settings = 13 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_per_scenario_settings_), 12>(),
-     {104, 12, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(Settings, _impl_.disable_per_scenario_settings_), 13>(),
+     {104, 13, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_)}},
     // float max_render_fps = 14;
     {::_pbi::TcParser::FastF32S1,
-     {117, 13, 0,
+     {117, 14, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_)}},
     // .aim.PresentMode present_mode = 15;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(Settings, _impl_.present_mode_), 14>(),
-     {120, 14, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(Settings, _impl_.present_mode_), 15>(),
+     {120, 15, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_)}},
     // .aim.SoundSettings sounds = 16;
     {::_pbi::TcParser::FastMtS2,
@@ -1038,9 +1117,12 @@ Settings::_table_ = {
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.sounds_)}},
     // float start_countdown_time = 17;
     {::_pbi::TcParser::FastF32S2,
-     {397, 15, 0,
+     {397, 16, 0,
       PROTOBUF_FIELD_OFFSET(Settings, _impl_.start_countdown_time_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.ScenarioSettingsConfig scenario_settings_config = 18;
+    {::_pbi::TcParser::FastMtS2,
+     {402, 5, 3,
+      PROTOBUF_FIELD_OFFSET(Settings, _impl_.scenario_settings_config_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
@@ -1058,42 +1140,45 @@ Settings::_table_ = {
     65535, 65535
   }}, {{
     // float dpi = 1;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.dpi_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float cm_per_360 = 2;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // bool enable_metronome = 3 [features = {
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.enable_metronome_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.enable_metronome_), _Internal::kHasBitsOffset + 10, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // string theme_name = 4;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.theme_name_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // float metronome_bpm = 5;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // float crosshair_size = 6;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 9, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // string current_crosshair_name = 7;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.current_crosshair_name_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
     // bool disable_click_to_start = 8 [features = {
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_), _Internal::kHasBitsOffset + 10, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_click_to_start_), _Internal::kHasBitsOffset + 11, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // .aim.Keybinds keybinds = 9;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.keybinds_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // bool auto_hold_tracking = 10 [features = {
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 11, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 12, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // .aim.HealthBarSettings health_bar = 12;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.health_bar_), _Internal::kHasBitsOffset + 3, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // bool disable_per_scenario_settings = 13 [features = {
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_), _Internal::kHasBitsOffset + 12, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.disable_per_scenario_settings_), _Internal::kHasBitsOffset + 13, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // float max_render_fps = 14;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_), _Internal::kHasBitsOffset + 13, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.max_render_fps_), _Internal::kHasBitsOffset + 14, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // .aim.PresentMode present_mode = 15;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_), _Internal::kHasBitsOffset + 14, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.present_mode_), _Internal::kHasBitsOffset + 15, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
     // .aim.SoundSettings sounds = 16;
     {PROTOBUF_FIELD_OFFSET(Settings, _impl_.sounds_), _Internal::kHasBitsOffset + 4, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // float start_countdown_time = 17;
-    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.start_countdown_time_), _Internal::kHasBitsOffset + 15, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.start_countdown_time_), _Internal::kHasBitsOffset + 16, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.ScenarioSettingsConfig scenario_settings_config = 18;
+    {PROTOBUF_FIELD_OFFSET(Settings, _impl_.scenario_settings_config_), _Internal::kHasBitsOffset + 5, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::Keybinds>()},
       {::_pbi::TcParser::GetTable<::aim::HealthBarSettings>()},
       {::_pbi::TcParser::GetTable<::aim::SoundSettings>()},
+      {::_pbi::TcParser::GetTable<::aim::ScenarioSettingsConfig>()},
   }},
   {{
     "\14\0\0\0\12\0\0\26\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -1110,7 +1195,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       _impl_.theme_name_.ClearNonDefaultToEmpty();
     }
@@ -1129,17 +1214,22 @@ PROTOBUF_NOINLINE void Settings::Clear() {
       ABSL_DCHECK(_impl_.sounds_ != nullptr);
       _impl_.sounds_->Clear();
     }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      ABSL_DCHECK(_impl_.scenario_settings_config_ != nullptr);
+      _impl_.scenario_settings_config_->Clear();
+    }
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x000000e0U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x000000c0U)) {
     ::memset(&_impl_.dpi_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.metronome_bpm_) -
-        reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.metronome_bpm_));
+        reinterpret_cast<char*>(&_impl_.cm_per_360_) -
+        reinterpret_cast<char*>(&_impl_.dpi_)) + sizeof(_impl_.cm_per_360_));
   }
   if (BatchCheckHasBit(cached_has_bits, 0x0000ff00U)) {
-    ::memset(&_impl_.crosshair_size_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.start_countdown_time_) -
-        reinterpret_cast<char*>(&_impl_.crosshair_size_)) + sizeof(_impl_.start_countdown_time_));
+    ::memset(&_impl_.metronome_bpm_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.present_mode_) -
+        reinterpret_cast<char*>(&_impl_.metronome_bpm_)) + sizeof(_impl_.present_mode_));
   }
+  _impl_.start_countdown_time_ = 0;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -1164,21 +1254,21 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
   cached_has_bits = this_._impl_._has_bits_[0];
   // float dpi = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         1, this_._internal_dpi(), target);
   }
 
   // float cm_per_360 = 2;
-  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         2, this_._internal_cm_per_360(), target);
   }
 
   // bool enable_metronome = 3 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000400U)) {
     if (this_._internal_enable_metronome() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -1195,14 +1285,14 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // float metronome_bpm = 5;
-  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         5, this_._internal_metronome_bpm(), target);
   }
 
   // float crosshair_size = 6;
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000200U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         6, this_._internal_crosshair_size(), target);
@@ -1217,7 +1307,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // bool disable_click_to_start = 8 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00000400U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000800U)) {
     if (this_._internal_disable_click_to_start() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -1233,7 +1323,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // bool auto_hold_tracking = 10 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00000800U)) {
+  if (CheckHasBit(cached_has_bits, 0x00001000U)) {
     if (this_._internal_auto_hold_tracking() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -1249,7 +1339,7 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // bool disable_per_scenario_settings = 13 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00001000U)) {
+  if (CheckHasBit(cached_has_bits, 0x00002000U)) {
     if (this_._internal_disable_per_scenario_settings() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -1258,14 +1348,14 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // float max_render_fps = 14;
-  if (CheckHasBit(cached_has_bits, 0x00002000U)) {
+  if (CheckHasBit(cached_has_bits, 0x00004000U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         14, this_._internal_max_render_fps(), target);
   }
 
   // .aim.PresentMode present_mode = 15;
-  if (CheckHasBit(cached_has_bits, 0x00004000U)) {
+  if (CheckHasBit(cached_has_bits, 0x00008000U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteEnumToArray(
         15, this_._internal_present_mode(), target);
@@ -1279,10 +1369,17 @@ PROTOBUF_NOINLINE void Settings::Clear() {
   }
 
   // float start_countdown_time = 17;
-  if (CheckHasBit(cached_has_bits, 0x00008000U)) {
+  if (CheckHasBit(cached_has_bits, 0x00010000U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         17, this_._internal_start_countdown_time(), target);
+  }
+
+  // .aim.ScenarioSettingsConfig scenario_settings_config = 18;
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        18, *this_._impl_.scenario_settings_config_, this_._impl_.scenario_settings_config_->GetCachedSize(), target,
+        stream);
   }
 
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1310,9 +1407,9 @@ PROTOBUF_NOINLINE void Settings::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += static_cast<bool>(0x00008000U & cached_has_bits) * 6;
-  total_size += ::absl::popcount(0x000021e0U & cached_has_bits) * 5;
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  total_size += static_cast<bool>(0x00010000U & cached_has_bits) * 6;
+  total_size += ::absl::popcount(0x000043c0U & cached_has_bits) * 5;
+  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
     // string theme_name = 4;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1338,34 +1435,39 @@ PROTOBUF_NOINLINE void Settings::Clear() {
       total_size += 2 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.sounds_);
     }
+    // .aim.ScenarioSettingsConfig scenario_settings_config = 18;
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      total_size += 2 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.scenario_settings_config_);
+    }
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x00005e00U)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000bc00U)) {
     // bool enable_metronome = 3 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000400U)) {
       if (this_._internal_enable_metronome() != 0) {
         total_size += 2;
       }
     }
     // bool disable_click_to_start = 8 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00000400U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000800U)) {
       if (this_._internal_disable_click_to_start() != 0) {
         total_size += 2;
       }
     }
     // bool auto_hold_tracking = 10 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00000800U)) {
+    if (CheckHasBit(cached_has_bits, 0x00001000U)) {
       if (this_._internal_auto_hold_tracking() != 0) {
         total_size += 2;
       }
     }
     // bool disable_per_scenario_settings = 13 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00001000U)) {
+    if (CheckHasBit(cached_has_bits, 0x00002000U)) {
       if (this_._internal_disable_per_scenario_settings() != 0) {
         total_size += 2;
       }
     }
     // .aim.PresentMode present_mode = 15;
-    if (CheckHasBit(cached_has_bits, 0x00004000U)) {
+    if (CheckHasBit(cached_has_bits, 0x00008000U)) {
       total_size += 1 +
                     ::_pbi::WireFormatLite::EnumSize(this_._internal_present_mode());
     }
@@ -1421,48 +1523,56 @@ void Settings::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-      _this->_impl_.dpi_ = from._impl_.dpi_;
+      ABSL_DCHECK(from._impl_.scenario_settings_config_ != nullptr);
+      if (_this->_impl_.scenario_settings_config_ == nullptr) {
+        _this->_impl_.scenario_settings_config_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.scenario_settings_config_);
+      } else {
+        _this->_impl_.scenario_settings_config_->MergeFrom(*from._impl_.scenario_settings_config_);
+      }
     }
     if (CheckHasBit(cached_has_bits, 0x00000040U)) {
-      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
+      _this->_impl_.dpi_ = from._impl_.dpi_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000080U)) {
-      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
+      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
     }
   }
   if (BatchCheckHasBit(cached_has_bits, 0x0000ff00U)) {
     if (CheckHasBit(cached_has_bits, 0x00000100U)) {
-      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000400U)) {
       if (from._internal_enable_metronome() != 0) {
         _this->_impl_.enable_metronome_ = from._impl_.enable_metronome_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000400U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000800U)) {
       if (from._internal_disable_click_to_start() != 0) {
         _this->_impl_.disable_click_to_start_ = from._impl_.disable_click_to_start_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000800U)) {
+    if (CheckHasBit(cached_has_bits, 0x00001000U)) {
       if (from._internal_auto_hold_tracking() != 0) {
         _this->_impl_.auto_hold_tracking_ = from._impl_.auto_hold_tracking_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00001000U)) {
+    if (CheckHasBit(cached_has_bits, 0x00002000U)) {
       if (from._internal_disable_per_scenario_settings() != 0) {
         _this->_impl_.disable_per_scenario_settings_ = from._impl_.disable_per_scenario_settings_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00002000U)) {
+    if (CheckHasBit(cached_has_bits, 0x00004000U)) {
       _this->_impl_.max_render_fps_ = from._impl_.max_render_fps_;
     }
-    if (CheckHasBit(cached_has_bits, 0x00004000U)) {
+    if (CheckHasBit(cached_has_bits, 0x00008000U)) {
       _this->_impl_.present_mode_ = from._impl_.present_mode_;
     }
-    if (CheckHasBit(cached_has_bits, 0x00008000U)) {
-      _this->_impl_.start_countdown_time_ = from._impl_.start_countdown_time_;
-    }
+  }
+  if (CheckHasBit(cached_has_bits, 0x00010000U)) {
+    _this->_impl_.start_countdown_time_ = from._impl_.start_countdown_time_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
@@ -2363,16 +2473,16 @@ ScenarioSettings::GetClassData() const {
   return ScenarioSettings_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 9, 1, 61, 2>
+const ::_pbi::TcParseTable<4, 8, 1, 61, 2>
 ScenarioSettings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_._has_bits_),
     0, // no _extensions_
     9, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294966784,  // skipmap
+    4294966816,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    9,  // num_field_entries
+    8,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     ScenarioSettings_class_data_.base(),
@@ -2403,21 +2513,18 @@ ScenarioSettings::_table_ = {
     {::_pbi::TcParser::FastUS1,
      {42, 1, 0,
       PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_name_)}},
-    // float cm_per_360_jitter = 6;
-    {::_pbi::TcParser::FastF32S1,
-     {53, 6, 0,
-      PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.cm_per_360_jitter_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // bool auto_hold_tracking = 7 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ScenarioSettings, _impl_.auto_hold_tracking_), 7>(),
-     {56, 7, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ScenarioSettings, _impl_.auto_hold_tracking_), 6>(),
+     {56, 6, 0,
       PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.auto_hold_tracking_)}},
     // .aim.HealthBarSettings health_bar = 8;
     {::_pbi::TcParser::FastMtS1,
      {66, 2, 0,
       PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.health_bar_)}},
     // bool enable_metronome = 9 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ScenarioSettings, _impl_.enable_metronome_), 8>(),
-     {72, 8, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ScenarioSettings, _impl_.enable_metronome_), 7>(),
+     {72, 7, 0,
       PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.enable_metronome_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
@@ -2438,14 +2545,12 @@ ScenarioSettings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // string crosshair_name = 5;
     {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.crosshair_name_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
-    // float cm_per_360_jitter = 6;
-    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.cm_per_360_jitter_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // bool auto_hold_tracking = 7 [features = {
-    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // .aim.HealthBarSettings health_bar = 8;
     {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.health_bar_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // bool enable_metronome = 9 [features = {
-    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.enable_metronome_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettings, _impl_.enable_metronome_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::HealthBarSettings>()},
@@ -2479,10 +2584,9 @@ PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
   }
   if (BatchCheckHasBit(cached_has_bits, 0x000000f8U)) {
     ::memset(&_impl_.cm_per_360_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.auto_hold_tracking_) -
-        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.auto_hold_tracking_));
+        reinterpret_cast<char*>(&_impl_.enable_metronome_) -
+        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.enable_metronome_));
   }
-  _impl_.enable_metronome_ = false;
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -2543,15 +2647,8 @@ PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
     target = stream->WriteStringMaybeAliased(5, _s, target);
   }
 
-  // float cm_per_360_jitter = 6;
-  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        6, this_._internal_cm_per_360_jitter(), target);
-  }
-
   // bool auto_hold_tracking = 7 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
     if (this_._internal_auto_hold_tracking() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -2567,7 +2664,7 @@ PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
   }
 
   // bool enable_metronome = 9 [features = {
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
     if (this_._internal_enable_metronome() != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteBoolToArray(
@@ -2600,8 +2697,8 @@ PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x00000078U & cached_has_bits) * 5;
-  if (BatchCheckHasBit(cached_has_bits, 0x00000087U)) {
+  total_size += ::absl::popcount(0x00000038U & cached_has_bits) * 5;
+  if (BatchCheckHasBit(cached_has_bits, 0x000000c7U)) {
     // string theme_name = 2;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -2618,15 +2715,13 @@ PROTOBUF_NOINLINE void ScenarioSettings::Clear() {
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.health_bar_);
     }
     // bool auto_hold_tracking = 7 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
       if (this_._internal_auto_hold_tracking() != 0) {
         total_size += 2;
       }
     }
-  }
-   {
     // bool enable_metronome = 9 [features = {
-    if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
       if (this_._internal_enable_metronome() != 0) {
         total_size += 2;
       }
@@ -2676,17 +2771,14 @@ void ScenarioSettings::MergeImpl(::google::protobuf::MessageLite& to_msg,
       _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
     }
     if (CheckHasBit(cached_has_bits, 0x00000040U)) {
-      _this->_impl_.cm_per_360_jitter_ = from._impl_.cm_per_360_jitter_;
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
       if (from._internal_auto_hold_tracking() != 0) {
         _this->_impl_.auto_hold_tracking_ = from._impl_.auto_hold_tracking_;
       }
     }
-  }
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
-    if (from._internal_enable_metronome() != 0) {
-      _this->_impl_.enable_metronome_ = from._impl_.enable_metronome_;
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      if (from._internal_enable_metronome() != 0) {
+        _this->_impl_.enable_metronome_ = from._impl_.enable_metronome_;
+      }
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -2719,6 +2811,413 @@ void ScenarioSettings::InternalSwap(ScenarioSettings* PROTOBUF_RESTRICT PROTOBUF
 }
 
 ::google::protobuf::Metadata ScenarioSettings::GetMetadata() const {
+  return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
+}
+// ===================================================================
+
+class ScenarioSettingsConfig::_Internal {
+ public:
+  using HasBits =
+      decltype(::std::declval<ScenarioSettingsConfig>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+      8 * PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_._has_bits_);
+};
+
+ScenarioSettingsConfig::ScenarioSettingsConfig(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, ScenarioSettingsConfig_class_data_.base()) {
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena) {
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:aim.ScenarioSettingsConfig)
+}
+ScenarioSettingsConfig::ScenarioSettingsConfig(
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const ScenarioSettingsConfig& from)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(arena, ScenarioSettingsConfig_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(arena),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(from._impl_) {
+  _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+PROTOBUF_NDEBUG_INLINE ScenarioSettingsConfig::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
+      : _cached_size_{0} {}
+
+inline void ScenarioSettingsConfig::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char*>(&_impl_) +
+               offsetof(Impl_, cm_per_360_),
+           0,
+           offsetof(Impl_, enable_metronome_) -
+               offsetof(Impl_, cm_per_360_) +
+               sizeof(Impl_::enable_metronome_));
+}
+ScenarioSettingsConfig::~ScenarioSettingsConfig() {
+  // @@protoc_insertion_point(destructor:aim.ScenarioSettingsConfig)
+  SharedDtor(*this);
+}
+inline void ScenarioSettingsConfig::SharedDtor(MessageLite& self) {
+  ScenarioSettingsConfig& this_ = static_cast<ScenarioSettingsConfig&>(self);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
+  ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.~Impl_();
+}
+
+inline void* PROTOBUF_NONNULL ScenarioSettingsConfig::PlacementNew_(
+    const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena) {
+  return ::new (mem) ScenarioSettingsConfig(arena);
+}
+constexpr auto ScenarioSettingsConfig::InternalNewImpl_() {
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(ScenarioSettingsConfig),
+                                            alignof(ScenarioSettingsConfig));
+}
+constexpr auto ScenarioSettingsConfig::InternalGenerateClassData_() {
+  return ::google::protobuf::internal::ClassDataFull{
+      ::google::protobuf::internal::ClassData{
+          &_ScenarioSettingsConfig_default_instance_._instance,
+          &_table_.header,
+          nullptr,  // OnDemandRegisterArenaDtor
+          nullptr,  // IsInitialized
+          &ScenarioSettingsConfig::MergeImpl,
+          ::google::protobuf::Message::GetNewImpl<ScenarioSettingsConfig>(),
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+          &ScenarioSettingsConfig::SharedDtor,
+          ::google::protobuf::Message::GetClearImpl<ScenarioSettingsConfig>(), &ScenarioSettingsConfig::ByteSizeLong,
+              &ScenarioSettingsConfig::_InternalSerialize,
+#endif  // PROTOBUF_CUSTOM_VTABLE
+          PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_._cached_size_),
+          false,
+      },
+      &ScenarioSettingsConfig::kDescriptorMethods,
+      &descriptor_table_settings_2eproto,
+      nullptr,  // tracker
+  };
+}
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 const
+    ::google::protobuf::internal::ClassDataFull ScenarioSettingsConfig_class_data_ =
+        ScenarioSettingsConfig::InternalGenerateClassData_();
+
+PROTOBUF_ATTRIBUTE_WEAK const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL
+ScenarioSettingsConfig::GetClassData() const {
+  ::google::protobuf::internal::PrefetchToLocalCache(&ScenarioSettingsConfig_class_data_);
+  ::google::protobuf::internal::PrefetchToLocalCache(ScenarioSettingsConfig_class_data_.tc_table);
+  return ScenarioSettingsConfig_class_data_.base();
+}
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 8, 0, 0, 2>
+ScenarioSettingsConfig::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_._has_bits_),
+    0, // no _extensions_
+    8, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967040,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    8,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    ScenarioSettingsConfig_class_data_.base(),
+    nullptr,  // post_loop_handler
+    ::_pbi::TcParser::GenericFallback,  // fallback
+    #ifdef PROTOBUF_PREFETCH_PARSE_TABLE
+    ::_pbi::TcParser::GetTable<::aim::ScenarioSettingsConfig>(),  // to_prefetch
+    #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
+  }, {{
+    // .aim.ScenarioSettingsStoreType enable_metronome = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.enable_metronome_), 7>(),
+     {64, 7, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.enable_metronome_)}},
+    // .aim.ScenarioSettingsStoreType cm_per_360 = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.cm_per_360_), 0>(),
+     {8, 0, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.cm_per_360_)}},
+    // .aim.ScenarioSettingsStoreType theme_name = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.theme_name_), 1>(),
+     {16, 1, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.theme_name_)}},
+    // .aim.ScenarioSettingsStoreType metronome_bpm = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.metronome_bpm_), 2>(),
+     {24, 2, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.metronome_bpm_)}},
+    // .aim.ScenarioSettingsStoreType crosshair_size = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.crosshair_size_), 3>(),
+     {32, 3, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.crosshair_size_)}},
+    // .aim.ScenarioSettingsStoreType crosshair_name = 5;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.crosshair_name_), 4>(),
+     {40, 4, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.crosshair_name_)}},
+    // .aim.ScenarioSettingsStoreType auto_hold_tracking = 6;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.auto_hold_tracking_), 5>(),
+     {48, 5, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.auto_hold_tracking_)}},
+    // .aim.ScenarioSettingsStoreType health_bar = 7;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(ScenarioSettingsConfig, _impl_.health_bar_), 6>(),
+     {56, 6, 0,
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.health_bar_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .aim.ScenarioSettingsStoreType cm_per_360 = 1;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.cm_per_360_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType theme_name = 2;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.theme_name_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType metronome_bpm = 3;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.metronome_bpm_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType crosshair_size = 4;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.crosshair_size_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType crosshair_name = 5;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.crosshair_name_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType auto_hold_tracking = 6;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.auto_hold_tracking_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType health_bar = 7;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.health_bar_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+    // .aim.ScenarioSettingsStoreType enable_metronome = 8;
+    {PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.enable_metronome_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kOpenEnum)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+PROTOBUF_NOINLINE void ScenarioSettingsConfig::Clear() {
+// @@protoc_insertion_point(message_clear_start:aim.ScenarioSettingsConfig)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
+    ::memset(&_impl_.cm_per_360_, 0, static_cast<::size_t>(
+        reinterpret_cast<char*>(&_impl_.enable_metronome_) -
+        reinterpret_cast<char*>(&_impl_.cm_per_360_)) + sizeof(_impl_.enable_metronome_));
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::uint8_t* PROTOBUF_NONNULL ScenarioSettingsConfig::_InternalSerialize(
+    const ::google::protobuf::MessageLite& base, ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) {
+  const ScenarioSettingsConfig& this_ = static_cast<const ScenarioSettingsConfig&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::uint8_t* PROTOBUF_NONNULL ScenarioSettingsConfig::_InternalSerialize(
+    ::uint8_t* PROTOBUF_NONNULL target,
+    ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+  const ScenarioSettingsConfig& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    this_.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(serialize_to_array_start:aim.ScenarioSettingsConfig)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = this_._impl_._has_bits_[0];
+  // .aim.ScenarioSettingsStoreType cm_per_360 = 1;
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        1, this_._internal_cm_per_360(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType theme_name = 2;
+  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        2, this_._internal_theme_name(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType metronome_bpm = 3;
+  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        3, this_._internal_metronome_bpm(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType crosshair_size = 4;
+  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        4, this_._internal_crosshair_size(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType crosshair_name = 5;
+  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        5, this_._internal_crosshair_name(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType auto_hold_tracking = 6;
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        6, this_._internal_auto_hold_tracking(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType health_bar = 7;
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        7, this_._internal_health_bar(), target);
+  }
+
+  // .aim.ScenarioSettingsStoreType enable_metronome = 8;
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        8, this_._internal_enable_metronome(), target);
+  }
+
+  if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            this_._internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:aim.ScenarioSettingsConfig)
+  return target;
+}
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+::size_t ScenarioSettingsConfig::ByteSizeLong(const MessageLite& base) {
+  const ScenarioSettingsConfig& this_ = static_cast<const ScenarioSettingsConfig&>(base);
+#else   // PROTOBUF_CUSTOM_VTABLE
+::size_t ScenarioSettingsConfig::ByteSizeLong() const {
+  const ScenarioSettingsConfig& this_ = *this;
+#endif  // PROTOBUF_CUSTOM_VTABLE
+  // @@protoc_insertion_point(message_byte_size_start:aim.ScenarioSettingsConfig)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void)cached_has_bits;
+
+  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+  cached_has_bits = this_._impl_._has_bits_[0];
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
+    // .aim.ScenarioSettingsStoreType cm_per_360 = 1;
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_cm_per_360());
+    }
+    // .aim.ScenarioSettingsStoreType theme_name = 2;
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_theme_name());
+    }
+    // .aim.ScenarioSettingsStoreType metronome_bpm = 3;
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_metronome_bpm());
+    }
+    // .aim.ScenarioSettingsStoreType crosshair_size = 4;
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_crosshair_size());
+    }
+    // .aim.ScenarioSettingsStoreType crosshair_name = 5;
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_crosshair_name());
+    }
+    // .aim.ScenarioSettingsStoreType auto_hold_tracking = 6;
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_auto_hold_tracking());
+    }
+    // .aim.ScenarioSettingsStoreType health_bar = 7;
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_health_bar());
+    }
+    // .aim.ScenarioSettingsStoreType enable_metronome = 8;
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      total_size += 1 +
+                    ::_pbi::WireFormatLite::EnumSize(this_._internal_enable_metronome());
+    }
+  }
+  return this_.MaybeComputeUnknownFieldsSize(total_size,
+                                             &this_._impl_._cached_size_);
+}
+
+void ScenarioSettingsConfig::MergeImpl(::google::protobuf::MessageLite& to_msg,
+                            const ::google::protobuf::MessageLite& from_msg) {
+   auto* const _this =
+      static_cast<ScenarioSettingsConfig*>(&to_msg);
+  auto& from = static_cast<const ScenarioSettingsConfig&>(from_msg);
+  if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
+    from.CheckHasBitConsistency();
+  }
+  // @@protoc_insertion_point(class_specific_merge_from_start:aim.ScenarioSettingsConfig)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      _this->_impl_.cm_per_360_ = from._impl_.cm_per_360_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      _this->_impl_.theme_name_ = from._impl_.theme_name_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      _this->_impl_.metronome_bpm_ = from._impl_.metronome_bpm_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+      _this->_impl_.crosshair_size_ = from._impl_.crosshair_size_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+      _this->_impl_.crosshair_name_ = from._impl_.crosshair_name_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      _this->_impl_.auto_hold_tracking_ = from._impl_.auto_hold_tracking_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      _this->_impl_.health_bar_ = from._impl_.health_bar_;
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      _this->_impl_.enable_metronome_ = from._impl_.enable_metronome_;
+    }
+  }
+  _this->_impl_._has_bits_[0] |= cached_has_bits;
+  _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
+      from._internal_metadata_);
+}
+
+void ScenarioSettingsConfig::CopyFrom(const ScenarioSettingsConfig& from) {
+  // @@protoc_insertion_point(class_specific_copy_from_start:aim.ScenarioSettingsConfig)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+
+void ScenarioSettingsConfig::InternalSwap(ScenarioSettingsConfig* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
+  using ::std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.enable_metronome_)
+      + sizeof(ScenarioSettingsConfig::_impl_.enable_metronome_)
+      - PROTOBUF_FIELD_OFFSET(ScenarioSettingsConfig, _impl_.cm_per_360_)>(
+          reinterpret_cast<char*>(&_impl_.cm_per_360_),
+          reinterpret_cast<char*>(&other->_impl_.cm_per_360_));
+}
+
+::google::protobuf::Metadata ScenarioSettingsConfig::GetMetadata() const {
   return ::google::protobuf::Message::GetMetadataImpl(GetClassData()->full());
 }
 // ===================================================================

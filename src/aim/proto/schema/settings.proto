@@ -43,12 +43,14 @@ message Settings {
 
   // Time in seconds for a start countdown at the beginning of scenarios.
   float start_countdown_time = 17;
+
+  ScenarioSettingsConfig scenario_settings_config = 18;
 }
 
 message SoundItem {
-    string name = 1;
-    // Optional. Specific volume level for the sound.
-    float volume_level = 2;
+  string name = 1;
+  // Optional. Specific volume level for the sound.
+  float volume_level = 2;
 }
 
 message SoundSettings {
@@ -63,8 +65,8 @@ message SoundSettings {
 }
 
 message ScenarioSettings {
+  reserved 6;
   float cm_per_360 = 1;
-  float cm_per_360_jitter = 6;
   string theme_name = 2;
   float metronome_bpm = 3;
   float crosshair_size = 4;
@@ -72,6 +74,26 @@ message ScenarioSettings {
   bool auto_hold_tracking = 7 [features.field_presence = IMPLICIT];
   HealthBarSettings health_bar = 8;
   bool enable_metronome = 9 [features.field_presence = IMPLICIT];
+}
+
+enum ScenarioSettingsStoreType {
+  SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN = 0;
+  // The setting is saved per scenario.
+  STORE_PER_SCENARIO = 1;
+  // The setting is used for all scenarios and comes from settings.json directly.
+  STORE_GLOBALLY = 2;
+}
+
+// Configures which settings fields get saved per scenario and at what level.
+message ScenarioSettingsConfig {
+  ScenarioSettingsStoreType cm_per_360 = 1;
+  ScenarioSettingsStoreType theme_name = 2;
+  ScenarioSettingsStoreType metronome_bpm = 3;
+  ScenarioSettingsStoreType crosshair_size = 4;
+  ScenarioSettingsStoreType crosshair_name = 5;
+  ScenarioSettingsStoreType auto_hold_tracking = 6;
+  ScenarioSettingsStoreType health_bar = 7;
+  ScenarioSettingsStoreType enable_metronome = 8;
 }
 
 message KeyMapping {

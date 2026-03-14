@@ -338,24 +338,34 @@ class SettingsManagerImpl : public SettingsManager {
       }
     }
 
-    if (scenario_settings.has_cm_per_360()) {
+    auto config = settings_.scenario_settings_config();
+    auto should_set = [](ScenarioSettingsStoreType type) {
+      return type == ScenarioSettingsStoreType::SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN ||
+             type == ScenarioSettingsStoreType::STORE_PER_SCENARIO;
+    };
+
+    if (scenario_settings.has_cm_per_360() && should_set(config.cm_per_360())) {
       settings_.set_cm_per_360(scenario_settings.cm_per_360());
     }
-    if (scenario_settings.has_theme_name()) {
+    if (scenario_settings.has_theme_name() && should_set(config.theme_name())) {
       settings_.set_theme_name(scenario_settings.theme_name());
     }
-    if (scenario_settings.has_metronome_bpm()) {
+    if (scenario_settings.has_metronome_bpm() && should_set(config.metronome_bpm())) {
       settings_.set_metronome_bpm(scenario_settings.metronome_bpm());
     }
-    settings_.set_enable_metronome(scenario_settings.enable_metronome());
-    if (scenario_settings.has_crosshair_size()) {
+    if (should_set(config.enable_metronome())) {
+      settings_.set_enable_metronome(scenario_settings.enable_metronome());
+    }
+    if (scenario_settings.has_crosshair_size() && should_set(config.crosshair_size())) {
       settings_.set_crosshair_size(scenario_settings.crosshair_size());
     }
-    if (scenario_settings.has_crosshair_name()) {
+    if (scenario_settings.has_crosshair_name() && should_set(config.crosshair_name())) {
       settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
     }
-    settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
-    if (scenario_settings.has_health_bar()) {
+    if (should_set(config.auto_hold_tracking())) {
+      settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
+    }
+    if (scenario_settings.has_health_bar() && should_set(config.health_bar())) {
       *settings_.mutable_health_bar() = scenario_settings.health_bar();
     }
 

@@ -19,6 +19,12 @@
 namespace aim {
 namespace {
 
+inline const std::vector<std::pair<ScenarioSettingsStoreType, std::string>>
+    kScenarioSettingsStoreTypes{
+        {ScenarioSettingsStoreType::STORE_GLOBALLY, "Global"},
+        {ScenarioSettingsStoreType::STORE_PER_SCENARIO, "Scenario"},
+    };
+
 class SoundInputDialog {
  public:
   void NotifyOpen(std::string* sound_name_out, Application& app) {
@@ -322,6 +328,12 @@ class SettingsScreen : public UiScreen {
       ImGui::EndTabItem();
     }
 
+    if (ImGui::BeginTabItem("Scenario Settings")) {
+      ImGui::Spacing();
+      DrawScenarioSettingsConfig();
+      ImGui::EndTabItem();
+    }
+
     ImGui::EndTabBar();
   }
 
@@ -354,6 +366,61 @@ class SettingsScreen : public UiScreen {
       }
       ImGui::EndTable();
     }
+  }
+
+  void DrawScenarioSettingsConfig() {
+    ImGui::InputBool("Save settings per scenario",
+                     InvertBoolField(PROTO_BOOL_FIELD(
+                         Settings, &updater_.settings, disable_per_scenario_settings)));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "If disabled, the config below will be ignored and the same settings will always be used "
+        "for every scenario.");
+    ImGui::SpacedSeparator();
+
+    ScenarioSettingsConfig& config = *updater_.settings.mutable_scenario_settings_config();
+
+    float char_x = ImGui::GetDefaultCharSizeX();
+    auto draw_item = [&](const std::string& name, Field<ScenarioSettingsStoreType> type_field) {
+      ImGui::IdGuard cid(name);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(name);
+      ImGui::SameLine();
+      auto type =
+          type_field.has() ? type_field.get() : ScenarioSettingsStoreType::STORE_PER_SCENARIO;
+      ImGui::SimpleTypeDropdown("##TypeSelector", &type, kScenarioSettingsStoreTypes, char_x * 12);
+      type_field.set(type);
+    };
+
+    ImGui::Text("Choose which fields are stored uniquely for each scenario");
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "\"Scenario\" means this setting will be saved per scenario. \"Global\" means that all "
+        "scenarios share the same value.");
+
+    ImGui::Indent();
+    draw_item("cm/360",
+              PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, cm_per_360));
+    draw_item("Theme",
+              PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, theme_name));
+    draw_item(
+        "Crosshair",
+        PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, crosshair_name));
+    draw_item(
+        "Crosshair size",
+        PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, crosshair_size));
+    draw_item("Auto hold tracking",
+              PROTO_FIELD(
+                  ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, auto_hold_tracking));
+    draw_item("Health bar",
+              PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, health_bar));
+    draw_item(
+        "Enable metronome",
+        PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, enable_metronome));
+    draw_item(
+        "Metronome BPM",
+        PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, enable_metronome));
+    ImGui::Unindent();
   }
 
   void DrawSounds() {
