@@ -1027,9 +1027,7 @@ class HealthBarSettings final : public ::google::protobuf::Message
   enum : int {
     kShowFieldNumber = 1,
     kOnlyDamagedFieldNumber = 2,
-    kHeightFieldNumber = 3,
-    kWidthFieldNumber = 4,
-    kHeightAboveTargetFieldNumber = 5,
+    kSizeFieldNumber = 6,
   };
   // bool show = 1 [features = {
   void clear_show() ;
@@ -1051,44 +1049,22 @@ class HealthBarSettings final : public ::google::protobuf::Message
   void _internal_set_only_damaged(bool value);
 
   public:
-  // float height = 3;
-  bool has_height() const;
-  void clear_height() ;
-  float height() const;
-  void set_height(float value);
+  // float size = 6;
+  bool has_size() const;
+  void clear_size() ;
+  float size() const;
+  void set_size(float value);
 
   private:
-  float _internal_height() const;
-  void _internal_set_height(float value);
-
-  public:
-  // float width = 4;
-  bool has_width() const;
-  void clear_width() ;
-  float width() const;
-  void set_width(float value);
-
-  private:
-  float _internal_width() const;
-  void _internal_set_width(float value);
-
-  public:
-  // float height_above_target = 5;
-  bool has_height_above_target() const;
-  void clear_height_above_target() ;
-  float height_above_target() const;
-  void set_height_above_target(float value);
-
-  private:
-  float _internal_height_above_target() const;
-  void _internal_set_height_above_target(float value);
+  float _internal_size() const;
+  void _internal_set_size(float value);
 
   public:
   // @@protoc_insertion_point(class_scope:aim.HealthBarSettings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 5,
+  static const ::google::protobuf::internal::TcParseTable<1, 3,
                                    0, 0,
                                    2>
       _table_;
@@ -1112,9 +1088,7 @@ class HealthBarSettings final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     bool show_;
     bool only_damaged_;
-    float height_;
-    float width_;
-    float height_above_target_;
+    float size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2477,91 +2451,33 @@ inline void HealthBarSettings::_internal_set_only_damaged(bool value) {
   _impl_.only_damaged_ = value;
 }
 
-// float height = 3;
-inline bool HealthBarSettings::has_height() const {
+// float size = 6;
+inline bool HealthBarSettings::has_size() const {
   bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
   return value;
 }
-inline void HealthBarSettings::clear_height() {
+inline void HealthBarSettings::clear_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.height_ = 0;
+  _impl_.size_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000004U);
 }
-inline float HealthBarSettings::height() const {
-  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.height)
-  return _internal_height();
+inline float HealthBarSettings::size() const {
+  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.size)
+  return _internal_size();
 }
-inline void HealthBarSettings::set_height(float value) {
-  _internal_set_height(value);
+inline void HealthBarSettings::set_size(float value) {
+  _internal_set_size(value);
   SetHasBit(_impl_._has_bits_[0], 0x00000004U);
-  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.height)
+  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.size)
 }
-inline float HealthBarSettings::_internal_height() const {
+inline float HealthBarSettings::_internal_size() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.height_;
+  return _impl_.size_;
 }
-inline void HealthBarSettings::_internal_set_height(float value) {
+inline void HealthBarSettings::_internal_set_size(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.height_ = value;
-}
-
-// float width = 4;
-inline bool HealthBarSettings::has_width() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
-  return value;
-}
-inline void HealthBarSettings::clear_width() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.width_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
-}
-inline float HealthBarSettings::width() const {
-  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.width)
-  return _internal_width();
-}
-inline void HealthBarSettings::set_width(float value) {
-  _internal_set_width(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
-  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.width)
-}
-inline float HealthBarSettings::_internal_width() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.width_;
-}
-inline void HealthBarSettings::_internal_set_width(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.width_ = value;
-}
-
-// float height_above_target = 5;
-inline bool HealthBarSettings::has_height_above_target() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
-  return value;
-}
-inline void HealthBarSettings::clear_height_above_target() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.height_above_target_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
-}
-inline float HealthBarSettings::height_above_target() const {
-  // @@protoc_insertion_point(field_get:aim.HealthBarSettings.height_above_target)
-  return _internal_height_above_target();
-}
-inline void HealthBarSettings::set_height_above_target(float value) {
-  _internal_set_height_above_target(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
-  // @@protoc_insertion_point(field_set:aim.HealthBarSettings.height_above_target)
-}
-inline float HealthBarSettings::_internal_height_above_target() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.height_above_target_;
-}
-inline void HealthBarSettings::_internal_set_height_above_target(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.height_above_target_ = value;
+  _impl_.size_ = value;
 }
 
 // -------------------------------------------------------------------

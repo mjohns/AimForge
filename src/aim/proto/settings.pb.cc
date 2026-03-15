@@ -127,9 +127,7 @@ inline constexpr HealthBarSettings::Impl_::Impl_(
       : _cached_size_{0},
         show_{false},
         only_damaged_{false},
-        height_{0},
-        width_{0},
-        height_above_target_{0} {}
+        size_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR HealthBarSettings::HealthBarSettings(::_pbi::ConstantInitialized)
@@ -302,17 +300,13 @@ const ::uint32_t
         protodesc_cold) = {
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_._has_bits_),
-        8, // hasbit index offset
+        6, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.show_),
         PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.only_damaged_),
-        PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.height_),
-        PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.width_),
-        PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.height_above_target_),
+        PROTOBUF_FIELD_OFFSET(::aim::HealthBarSettings, _impl_.size_),
         0,
         1,
         2,
-        3,
-        4,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::Settings, _impl_._has_bits_),
         20, // hasbit index offset
@@ -443,13 +437,13 @@ const ::uint32_t
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::aim::HealthBarSettings)},
-        {13, sizeof(::aim::Settings)},
-        {50, sizeof(::aim::SoundItem)},
-        {57, sizeof(::aim::SoundSettings)},
-        {72, sizeof(::aim::ScenarioSettings)},
-        {91, sizeof(::aim::ScenarioSettingsConfig)},
-        {110, sizeof(::aim::KeyMapping)},
-        {121, sizeof(::aim::Keybinds)},
+        {9, sizeof(::aim::Settings)},
+        {46, sizeof(::aim::SoundItem)},
+        {53, sizeof(::aim::SoundSettings)},
+        {68, sizeof(::aim::ScenarioSettings)},
+        {87, sizeof(::aim::ScenarioSettingsConfig)},
+        {106, sizeof(::aim::KeyMapping)},
+        {117, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_HealthBarSettings_default_instance_._instance,
@@ -463,62 +457,61 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
 };
 const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\016settings.proto\022\003aim\032\014common.proto\"\201\001\n\021"
-    "HealthBarSettings\022\023\n\004show\030\001 \001(\010B\005\252\001\002\010\002\022\033"
-    "\n\014only_damaged\030\002 \001(\010B\005\252\001\002\010\002\022\016\n\006height\030\003 "
-    "\001(\002\022\r\n\005width\030\004 \001(\002\022\033\n\023height_above_targe"
-    "t\030\005 \001(\002\"\265\004\n\010Settings\022\013\n\003dpi\030\001 \001(\002\022\022\n\ncm_"
-    "per_360\030\002 \001(\002\022\022\n\ntheme_name\030\004 \001(\t\022\037\n\020ena"
-    "ble_metronome\030\003 \001(\010B\005\252\001\002\010\002\022\025\n\rmetronome_"
-    "bpm\030\005 \001(\002\022\026\n\016crosshair_size\030\006 \001(\002\022\036\n\026cur"
-    "rent_crosshair_name\030\007 \001(\t\022%\n\026disable_cli"
-    "ck_to_start\030\010 \001(\010B\005\252\001\002\010\002\022\037\n\010keybinds\030\t \001"
-    "(\0132\r.aim.Keybinds\022!\n\022auto_hold_tracking\030"
-    "\n \001(\010B\005\252\001\002\010\002\022*\n\nhealth_bar\030\014 \001(\0132\026.aim.H"
-    "ealthBarSettings\022,\n\035disable_per_scenario"
-    "_settings\030\r \001(\010B\005\252\001\002\010\002\022\026\n\016max_render_fps"
-    "\030\016 \001(\002\022&\n\014present_mode\030\017 \001(\0162\020.aim.Prese"
-    "ntMode\022\"\n\006sounds\030\020 \001(\0132\022.aim.SoundSettin"
-    "gs\022\034\n\024start_countdown_time\030\021 \001(\002\022=\n\030scen"
-    "ario_settings_config\030\022 \001(\0132\033.aim.Scenari"
-    "oSettingsConfig\"/\n\tSoundItem\022\014\n\004name\030\001 \001"
-    "(\t\022\024\n\014volume_level\030\002 \001(\002\"\311\001\n\rSoundSettin"
-    "gs\022\033\n\023master_volume_level\030\001 \001(\002\022\033\n\003hit\030\n"
-    " \001(\0132\016.aim.SoundItem\022\034\n\004kill\030\013 \001(\0132\016.aim"
-    ".SoundItem\022!\n\tmetronome\030\014 \001(\0132\016.aim.Soun"
-    "dItem\022\035\n\005shoot\030\r \001(\0132\016.aim.SoundItem\022\036\n\006"
-    "reload\030\016 \001(\0132\016.aim.SoundItem\"\367\001\n\020Scenari"
-    "oSettings\022\022\n\ncm_per_360\030\001 \001(\002\022\022\n\ntheme_n"
-    "ame\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016cros"
-    "shair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001(\t"
-    "\022!\n\022auto_hold_tracking\030\007 \001(\010B\005\252\001\002\010\002\022*\n\nh"
-    "ealth_bar\030\010 \001(\0132\026.aim.HealthBarSettings\022"
-    "\037\n\020enable_metronome\030\t \001(\010B\005\252\001\002\010\002J\004\010\006\020\007\"\321"
-    "\003\n\026ScenarioSettingsConfig\0222\n\ncm_per_360\030"
-    "\001 \001(\0162\036.aim.ScenarioSettingsStoreType\0222\n"
-    "\ntheme_name\030\002 \001(\0162\036.aim.ScenarioSettings"
-    "StoreType\0225\n\rmetronome_bpm\030\003 \001(\0162\036.aim.S"
-    "cenarioSettingsStoreType\0226\n\016crosshair_si"
-    "ze\030\004 \001(\0162\036.aim.ScenarioSettingsStoreType"
-    "\0226\n\016crosshair_name\030\005 \001(\0162\036.aim.ScenarioS"
-    "ettingsStoreType\022:\n\022auto_hold_tracking\030\006"
-    " \001(\0162\036.aim.ScenarioSettingsStoreType\0222\n\n"
-    "health_bar\030\007 \001(\0162\036.aim.ScenarioSettingsS"
-    "toreType\0228\n\020enable_metronome\030\010 \001(\0162\036.aim"
-    ".ScenarioSettingsStoreType\"T\n\nKeyMapping"
-    "\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010"
-    "mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Key"
-    "binds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020"
-    "restart_scenario\030\002 \001(\0132\017.aim.KeyMapping\022"
-    "&\n\rnext_scenario\030\003 \001(\0132\017.aim.KeyMapping\022"
-    "\'\n\016quick_settings\030\004 \001(\0132\017.aim.KeyMapping"
-    "\022.\n\025adjust_crosshair_size\030\005 \001(\0132\017.aim.Ke"
-    "yMapping\022(\n\017quick_metronome\030\006 \001(\0132\017.aim."
-    "KeyMapping\022&\n\redit_scenario\030\007 \001(\0132\017.aim."
-    "KeyMapping*q\n\031ScenarioSettingsStoreType\022"
-    "(\n$SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN\020"
-    "\000\022\026\n\022STORE_PER_SCENARIO\020\001\022\022\n\016STORE_GLOBA"
-    "LLY\020\002b\010editionsp\350\007"
+    "\n\016settings.proto\022\003aim\032\014common.proto\"e\n\021H"
+    "ealthBarSettings\022\023\n\004show\030\001 \001(\010B\005\252\001\002\010\002\022\033\n"
+    "\014only_damaged\030\002 \001(\010B\005\252\001\002\010\002\022\014\n\004size\030\006 \001(\002"
+    "J\004\010\003\020\004J\004\010\004\020\005J\004\010\005\020\006\"\265\004\n\010Settings\022\013\n\003dpi\030\001"
+    " \001(\002\022\022\n\ncm_per_360\030\002 \001(\002\022\022\n\ntheme_name\030\004"
+    " \001(\t\022\037\n\020enable_metronome\030\003 \001(\010B\005\252\001\002\010\002\022\025\n"
+    "\rmetronome_bpm\030\005 \001(\002\022\026\n\016crosshair_size\030\006"
+    " \001(\002\022\036\n\026current_crosshair_name\030\007 \001(\t\022%\n\026"
+    "disable_click_to_start\030\010 \001(\010B\005\252\001\002\010\002\022\037\n\010k"
+    "eybinds\030\t \001(\0132\r.aim.Keybinds\022!\n\022auto_hol"
+    "d_tracking\030\n \001(\010B\005\252\001\002\010\002\022*\n\nhealth_bar\030\014 "
+    "\001(\0132\026.aim.HealthBarSettings\022,\n\035disable_p"
+    "er_scenario_settings\030\r \001(\010B\005\252\001\002\010\002\022\026\n\016max"
+    "_render_fps\030\016 \001(\002\022&\n\014present_mode\030\017 \001(\0162"
+    "\020.aim.PresentMode\022\"\n\006sounds\030\020 \001(\0132\022.aim."
+    "SoundSettings\022\034\n\024start_countdown_time\030\021 "
+    "\001(\002\022=\n\030scenario_settings_config\030\022 \001(\0132\033."
+    "aim.ScenarioSettingsConfig\"/\n\tSoundItem\022"
+    "\014\n\004name\030\001 \001(\t\022\024\n\014volume_level\030\002 \001(\002\"\311\001\n\r"
+    "SoundSettings\022\033\n\023master_volume_level\030\001 \001"
+    "(\002\022\033\n\003hit\030\n \001(\0132\016.aim.SoundItem\022\034\n\004kill\030"
+    "\013 \001(\0132\016.aim.SoundItem\022!\n\tmetronome\030\014 \001(\013"
+    "2\016.aim.SoundItem\022\035\n\005shoot\030\r \001(\0132\016.aim.So"
+    "undItem\022\036\n\006reload\030\016 \001(\0132\016.aim.SoundItem\""
+    "\367\001\n\020ScenarioSettings\022\022\n\ncm_per_360\030\001 \001(\002"
+    "\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 "
+    "\001(\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016crosshair"
+    "_name\030\005 \001(\t\022!\n\022auto_hold_tracking\030\007 \001(\010B"
+    "\005\252\001\002\010\002\022*\n\nhealth_bar\030\010 \001(\0132\026.aim.HealthB"
+    "arSettings\022\037\n\020enable_metronome\030\t \001(\010B\005\252\001"
+    "\002\010\002J\004\010\006\020\007\"\321\003\n\026ScenarioSettingsConfig\0222\n\n"
+    "cm_per_360\030\001 \001(\0162\036.aim.ScenarioSettingsS"
+    "toreType\0222\n\ntheme_name\030\002 \001(\0162\036.aim.Scena"
+    "rioSettingsStoreType\0225\n\rmetronome_bpm\030\003 "
+    "\001(\0162\036.aim.ScenarioSettingsStoreType\0226\n\016c"
+    "rosshair_size\030\004 \001(\0162\036.aim.ScenarioSettin"
+    "gsStoreType\0226\n\016crosshair_name\030\005 \001(\0162\036.ai"
+    "m.ScenarioSettingsStoreType\022:\n\022auto_hold"
+    "_tracking\030\006 \001(\0162\036.aim.ScenarioSettingsSt"
+    "oreType\0222\n\nhealth_bar\030\007 \001(\0162\036.aim.Scenar"
+    "ioSettingsStoreType\0228\n\020enable_metronome\030"
+    "\010 \001(\0162\036.aim.ScenarioSettingsStoreType\"T\n"
+    "\nKeyMapping\022\020\n\010mapping1\030\001 \001(\t\022\020\n\010mapping"
+    "2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020\n\010mapping4\030\004 "
+    "\001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 \001(\0132\017.aim.Key"
+    "Mapping\022)\n\020restart_scenario\030\002 \001(\0132\017.aim."
+    "KeyMapping\022&\n\rnext_scenario\030\003 \001(\0132\017.aim."
+    "KeyMapping\022\'\n\016quick_settings\030\004 \001(\0132\017.aim"
+    ".KeyMapping\022.\n\025adjust_crosshair_size\030\005 \001"
+    "(\0132\017.aim.KeyMapping\022(\n\017quick_metronome\030\006"
+    " \001(\0132\017.aim.KeyMapping\022&\n\redit_scenario\030\007"
+    " \001(\0132\017.aim.KeyMapping*q\n\031ScenarioSetting"
+    "sStoreType\022(\n$SCENARIO_SETTINGS_STORE_TY"
+    "PE_UNKNOWN\020\000\022\026\n\022STORE_PER_SCENARIO\020\001\022\022\n\016"
+    "STORE_GLOBALLY\020\002b\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_settings_2eproto_deps[1] = {
@@ -528,7 +521,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    2218,
+    2189,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -588,9 +581,9 @@ inline void HealthBarSettings::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena)
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, show_),
            0,
-           offsetof(Impl_, height_above_target_) -
+           offsetof(Impl_, size_) -
                offsetof(Impl_, show_) +
-               sizeof(Impl_::height_above_target_));
+               sizeof(Impl_::size_));
 }
 HealthBarSettings::~HealthBarSettings() {
   // @@protoc_insertion_point(destructor:aim.HealthBarSettings)
@@ -649,16 +642,16 @@ HealthBarSettings::GetClassData() const {
   return HealthBarSettings_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 5, 0, 0, 2>
+const ::_pbi::TcParseTable<1, 3, 0, 0, 2>
 HealthBarSettings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_._has_bits_),
     0, // no _extensions_
-    5, 56,  // max_field_number, fast_idx_mask
+    6, 8,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967264,  // skipmap
+    4294967260,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    5,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     HealthBarSettings_class_data_.base(),
@@ -668,29 +661,14 @@ HealthBarSettings::_table_ = {
     ::_pbi::TcParser::GetTable<::aim::HealthBarSettings>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
-    // bool show = 1 [features = {
-    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(HealthBarSettings, _impl_.show_), 0>(),
-     {8, 0, 0,
-      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.show_)}},
     // bool only_damaged = 2 [features = {
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(HealthBarSettings, _impl_.only_damaged_), 1>(),
      {16, 1, 0,
       PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.only_damaged_)}},
-    // float height = 3;
-    {::_pbi::TcParser::FastF32S1,
-     {29, 2, 0,
-      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.height_)}},
-    // float width = 4;
-    {::_pbi::TcParser::FastF32S1,
-     {37, 3, 0,
-      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.width_)}},
-    // float height_above_target = 5;
-    {::_pbi::TcParser::FastF32S1,
-     {45, 4, 0,
-      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.height_above_target_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // bool show = 1 [features = {
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(HealthBarSettings, _impl_.show_), 0>(),
+     {8, 0, 0,
+      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.show_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -698,12 +676,8 @@ HealthBarSettings::_table_ = {
     {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.show_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
     // bool only_damaged = 2 [features = {
     {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.only_damaged_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kBool)},
-    // float height = 3;
-    {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.height_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float width = 4;
-    {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.width_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // float height_above_target = 5;
-    {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.height_above_target_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // float size = 6;
+    {PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.size_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
   {{
@@ -717,10 +691,10 @@ PROTOBUF_NOINLINE void HealthBarSettings::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
     ::memset(&_impl_.show_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.height_above_target_) -
-        reinterpret_cast<char*>(&_impl_.show_)) + sizeof(_impl_.height_above_target_));
+        reinterpret_cast<char*>(&_impl_.size_) -
+        reinterpret_cast<char*>(&_impl_.show_)) + sizeof(_impl_.size_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -763,25 +737,11 @@ PROTOBUF_NOINLINE void HealthBarSettings::Clear() {
     }
   }
 
-  // float height = 3;
+  // float size = 6;
   if (CheckHasBit(cached_has_bits, 0x00000004U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        3, this_._internal_height(), target);
-  }
-
-  // float width = 4;
-  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        4, this_._internal_width(), target);
-  }
-
-  // float height_above_target = 5;
-  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        5, this_._internal_height_above_target(), target);
+        6, this_._internal_size(), target);
   }
 
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -809,7 +769,7 @@ PROTOBUF_NOINLINE void HealthBarSettings::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x0000001cU & cached_has_bits) * 5;
+  total_size += static_cast<bool>(0x00000004U & cached_has_bits) * 5;
   if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
     // bool show = 1 [features = {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
@@ -842,7 +802,7 @@ void HealthBarSettings::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       if (from._internal_show() != 0) {
         _this->_impl_.show_ = from._impl_.show_;
@@ -854,13 +814,7 @@ void HealthBarSettings::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
-      _this->_impl_.height_ = from._impl_.height_;
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      _this->_impl_.width_ = from._impl_.width_;
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-      _this->_impl_.height_above_target_ = from._impl_.height_above_target_;
+      _this->_impl_.size_ = from._impl_.size_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -881,8 +835,8 @@ void HealthBarSettings::InternalSwap(HealthBarSettings* PROTOBUF_RESTRICT PROTOB
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.height_above_target_)
-      + sizeof(HealthBarSettings::_impl_.height_above_target_)
+      PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.size_)
+      + sizeof(HealthBarSettings::_impl_.size_)
       - PROTOBUF_FIELD_OFFSET(HealthBarSettings, _impl_.show_)>(
           reinterpret_cast<char*>(&_impl_.show_),
           reinterpret_cast<char*>(&other->_impl_.show_));

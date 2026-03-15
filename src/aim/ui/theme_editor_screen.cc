@@ -532,8 +532,7 @@ class ThemeEditorScreen : public UiScreen {
     if (app_.StartRender(&ctx)) {
       HealthBarSettings health_bar;
       health_bar.set_show(true);
-      health_bar.set_width(8);
-      health_bar.set_height(2);
+      health_bar.set_size(1.5);
       app_.renderer()->DrawScenario(projection_,
                                     default_room_,
                                     theme_editor_->GetThemeToToRender(),

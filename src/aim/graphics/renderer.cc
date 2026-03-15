@@ -541,12 +541,16 @@ class DrawDataBuilder {
                         const glm::vec4& health_color,
                         const glm::vec4& health_background_color,
                         DrawData* draw_data) {
-    float width = FirstGreaterThanZero(health_bar_settings.width(), 6);
-    float height = FirstGreaterThanZero(health_bar_settings.height(), 1.5);
-    float height_above_target =
-        FirstGreaterThanZero(health_bar_settings.height_above_target(), 0.6);
+    float width = radius * 2.8;
+    if (health_bar_settings.has_size()) {
+      width *= health_bar_settings.size();
+    }
+
+    float height = width * 0.18;
+
+    float height_above_target = height * 0.35;
     glm::vec3 up = glm::vec3(0, 0, 1);
-    glm::vec3 health_bar_center = position + up * (height_above_target + radius + height / 2.0f);
+    glm::vec3 health_bar_center = position + up * (height_above_target + radius + (height / 2.0f));
 
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, health_bar_center);

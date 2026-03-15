@@ -278,30 +278,13 @@ class SettingsScreen : public UiScreen {
                 HealthBarSettings, updater_.settings.mutable_health_bar(), only_damaged));
 
         ImGui::InputFloat(
-            ImGui::InputFloatParams("HealthBarWidth")
-                .set_label("Width")
+            ImGui::InputFloatParams::WithLabelAsId("Size")
                 .set_min(0.1)
+                .set_max(3.0)
                 .set_step(0.1, 1)
-                .set_default(6)
+                .set_default(1)
                 .set_width(char_x_ * 9),
-            PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), width));
-        ImGui::InputFloat(
-            ImGui::InputFloatParams("HealthBarHeight")
-                .set_label("Height")
-                .set_min(0.1)
-                .set_step(0.1, 1)
-                .set_default(1.5)
-                .set_width(char_x_ * 9),
-            PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), height));
-        ImGui::InputFloat(
-            ImGui::InputFloatParams("HealthBarHeightAboveTarget")
-                .set_label("Height above target")
-                .set_min(0.1)
-                .set_step(0.1, 1)
-                .set_default(0.6)
-                .set_width(char_x_ * 9),
-            PROTO_FLOAT_FIELD(
-                HealthBarSettings, updater_.settings.mutable_health_bar(), height_above_target));
+            PROTO_FLOAT_FIELD(HealthBarSettings, updater_.settings.mutable_health_bar(), size));
 
         ImGui::Unindent();
       }

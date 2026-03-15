@@ -5,11 +5,11 @@ import "common.proto";
 package aim;
 
 message HealthBarSettings {
+  reserved 3, 4, 5;
   bool show = 1 [features.field_presence = IMPLICIT];
   bool only_damaged = 2 [features.field_presence = IMPLICIT];
-  float height = 3;
-  float width = 4;
-  float height_above_target = 5;
+  // 1.0 is a little larger than the target radius. Max value of 3.
+  float size = 6;
 }
 
 message Settings {
