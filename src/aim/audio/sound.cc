@@ -14,15 +14,24 @@ std::unique_ptr<Sound> Sound::Load(MIX_Mixer* mixer, const std::filesystem::path
   if (audio == nullptr) {
     return {};
   }
-  return std::unique_ptr<Sound>(new Sound(mixer, audio));
+  MIX_Track* track = MIX_CreateTrack(mixer);
+  if (track == nullptr) {
+    return {};
+  }
+  MIX_SetTrackAudio(track, audio);
+  return std::unique_ptr<Sound>(new Sound(mixer, audio, track));
 }
 
-Sound::Sound(MIX_Mixer* mixer, MIX_Audio* audio) : mixer_(mixer), audio_(audio) {}
+Sound::Sound(MIX_Mixer* mixer, MIX_Audio* audio, MIX_Track* track)
+    : mixer_(mixer), audio_(audio), track_(track) {}
 
 Sound::~Sound() {}
 
-void Sound::Play() {
-  MIX_PlayAudio(mixer_, audio_);
+void Sound::Play(float gain) {
+  // MIX_PlayAudio(mixer_, audio_);
+  auto options = SDL_CreateProperties();
+  MIX_SetTrackGain(track_, gain);
+  MIX_PlayTrack(track_, options);
 }
 
 }  // namespace aim

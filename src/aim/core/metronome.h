@@ -4,13 +4,15 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
-#include "aim/core/application.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 
+class Application;
+
 class Metronome {
  public:
-  Metronome(float target_bpm, const std::string& sound_name, Application* app);
+  Metronome(float target_bpm, const SoundItem& sound, Application* app);
   void DoTick(i64 time_micros);
 
  private:

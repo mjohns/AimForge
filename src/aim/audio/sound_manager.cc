@@ -7,10 +7,12 @@
 namespace aim {
 namespace {
 
-constexpr int kHitChannel = 1;
-constexpr int kShootChannel = 2;
-constexpr int kMetronomeChannel = 3;
-constexpr int kKillChannel = 4;
+constexpr const float kMaxGain = 2.0f;
+
+constexpr const int kHitChannel = 1;
+constexpr const int kShootChannel = 2;
+constexpr const int kMetronomeChannel = 3;
+constexpr const int kKillChannel = 4;
 
 std::unique_ptr<Sound> LoadSound(MIX_Mixer* mixer,
                                  const std::vector<std::filesystem::path>& sound_dirs,
@@ -53,7 +55,7 @@ SoundManager::SoundManager(MIX_Mixer* mixer, const std::vector<std::filesystem::
 void SoundManager::LoadSounds(const Settings& settings) {
   const SoundSettings& s = settings.sounds();
   if (s.has_master_volume_level()) {
-    float level = glm::clamp<float>(s.master_volume_level(), 0, 2);
+    float level = glm::clamp<float>(s.master_volume_level(), 0, kMaxGain);
     MIX_SetMixerGain(mixer_, level);
   }
   std::vector<SoundItem> sounds{
@@ -71,9 +73,9 @@ void SoundManager::LoadSounds(const Settings& settings) {
   }
 }
 
-bool SoundManager::LoadAndPlaySound(const std::string& name) {
-  MaybeLoadSound(name);
-  return PlayLoadedSound(name);
+bool SoundManager::LoadAndPlaySound(const SoundItem& item) {
+  MaybeLoadSound(item.name());
+  return PlayLoadedSound(item);
 }
 
 void SoundManager::MaybeLoadSound(const std::string& sound_name) {
@@ -88,18 +90,14 @@ void SoundManager::MaybeLoadSound(const std::string& sound_name) {
 }
 
 bool SoundManager::PlayLoadedSound(const SoundItem& item) {
-  return PlayLoadedSound(item.name());
-}
-
-bool SoundManager::PlayLoadedSound(const std::string& name) {
-  if (name.empty()) {
+  if (item.name().empty()) {
     return false;
   }
-  auto it = sound_cache_.find(name);
+  auto it = sound_cache_.find(item.name());
   if (it != sound_cache_.end()) {
     Sound* sound = it->second.get();
     if (sound != nullptr) {
-      sound->Play();
+      sound->Play(item.has_volume_level() ? item.volume_level() : 1.0f);
       return true;
     }
   }

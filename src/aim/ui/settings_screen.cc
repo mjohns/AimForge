@@ -57,7 +57,9 @@ class SoundInputDialog {
           auto lid = loop_id.Get();
 
           if (ImGui::Button(icons::kPlayArrow)) {
-            app.sound_manager()->LoadAndPlaySound(sound_name);
+            SoundItem item;
+            item.set_name(sound_name);
+            app.sound_manager()->LoadAndPlaySound(item);
           }
           ImGui::SameLine();
           if (ImGui::Button(sound_name)) {
@@ -411,17 +413,19 @@ class SettingsScreen : public UiScreen {
 
     sound_input_dialog_.Draw(app_);
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Volume level");
-    ImGui::SameLine();
-    float volume_level = 1;
-    if (s.has_master_volume_level()) {
-      volume_level = s.master_volume_level();
+    {
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Volume level");
+      ImGui::SameLine();
+      float volume_level = 1;
+      if (s.has_master_volume_level()) {
+        volume_level = s.master_volume_level();
+      }
+      ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 2, "%.2f");
+      s.set_master_volume_level(volume_level);
     }
-    ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 1, "%.2f");
-    s.set_master_volume_level(volume_level);
 
-    Line();
+    ImGui::SpacedSeparator();
 
     if (ImGui::BeginTable("SoundsColumns", 2)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
@@ -439,7 +443,7 @@ class SettingsScreen : public UiScreen {
 
         ImGui::TableNextColumn();
         if (ImGui::Button(icons::kPlayArrow)) {
-          app_.sound_manager()->LoadAndPlaySound(*sound_name);
+          app_.sound_manager()->LoadAndPlaySound(*item);
         }
         ImGui::SameLine();
         float char_x = ImGui::GetDefaultCharSizeX();
@@ -449,6 +453,23 @@ class SettingsScreen : public UiScreen {
         ImGui::SameLine();
         if (ImGui::Button(icons::kEdit)) {
           sound_input_dialog_.NotifyOpen(sound_name, app_);
+        }
+
+        ImGui::SameLine();
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Volume level");
+        ImGui::SameLine();
+
+        bool has_volume_level = item->has_volume_level();
+        ImGui::Checkbox("##VolumLevel", &has_volume_level);
+        if (has_volume_level) {
+          float volume_level = item->has_volume_level() ? item->volume_level() : 1.0f;
+          ImGui::SameLine();
+          ImGui::SetNextItemWidth(char_x * 16);
+          ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 2, "%.2f");
+          item->set_volume_level(volume_level);
+        } else {
+          item->clear_volume_level();
         }
       };
 

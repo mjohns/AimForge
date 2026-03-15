@@ -6,6 +6,7 @@
 
 struct MIX_Audio;
 struct MIX_Mixer;
+struct MIX_Track;
 
 namespace aim {
 
@@ -14,7 +15,7 @@ class Sound {
   static std::unique_ptr<Sound> Load(MIX_Mixer* mixer, const std::filesystem::path& sound_path);
   ~Sound();
 
-  void Play();
+  void Play(float gain = 1.0);
 
   Sound(const Sound&) = delete;
   Sound(Sound&&) = default;
@@ -22,10 +23,11 @@ class Sound {
   Sound& operator=(Sound&& other) = delete;
 
  private:
-  Sound(MIX_Mixer* mixer, MIX_Audio* audio);
+  Sound(MIX_Mixer* mixer, MIX_Audio* audio, MIX_Track* track);
 
   MIX_Audio* audio_;
   MIX_Mixer* mixer_;
+  MIX_Track* track_;
 };
 
 }  // namespace aim
