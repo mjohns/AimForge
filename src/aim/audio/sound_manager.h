@@ -12,11 +12,14 @@ struct MIX_Mixer;
 
 namespace aim {
 
+// Gain of the shoot sound when played with the hit. Allows the hit sound to be more prominent.
+inline constexpr const float kShootAndHitGainLevel = 0.7f;
+
 class SoundManager {
  public:
   SoundManager(MIX_Mixer* mixer, const std::vector<std::filesystem::path>& sound_dirs);
 
-  bool PlayLoadedSound(const SoundItem& item);
+  bool PlayLoadedSound(const SoundItem& item, float gain = 1.0f);
   bool LoadAndPlaySound(const SoundItem& item);
 
   void LoadSounds(const Settings& settings);

@@ -55,6 +55,10 @@ void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, Repla
     case ReplaySoundType::SHOOT:
       sound_manager->PlayLoadedSound(settings.shoot());
       break;
+    case ReplaySoundType::SHOOT_AND_HIT:
+      sound_manager->PlayLoadedSound(settings.shoot(), kShootAndHitGainLevel);
+      sound_manager->PlayLoadedSound(settings.hit());
+      break;
     case ReplaySoundType::RELOAD:
       sound_manager->PlayLoadedSound(settings.reload());
       break;

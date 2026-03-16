@@ -28,9 +28,10 @@ class TrackingSound {
     is_hitting_ = is_hitting;
     bool invoked = invoker_.MaybeInvoke(stopwatch_.GetElapsedMicros());
     if (invoked && replay) {
-      replay->PlaySound(now_micros, ReplaySoundType::SHOOT);
       if (is_hitting) {
-        replay->PlaySound(now_micros, ReplaySoundType::HIT);
+        replay->PlaySound(now_micros, ReplaySoundType::SHOOT_AND_HIT);
+      } else {
+        replay->PlaySound(now_micros, ReplaySoundType::SHOOT);
       }
     }
   }
@@ -38,7 +39,7 @@ class TrackingSound {
  private:
   void PlaySound() {
     if (is_hitting_) {
-      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot(), kShootAndHitGainLevel);
       app_->sound_manager()->PlayLoadedSound(settings_.hit());
     } else {
       app_->sound_manager()->PlayLoadedSound(settings_.shoot());
@@ -99,15 +100,16 @@ class ProximityTrackingSound {
  private:
   void PlaySound(bool is_hitting, i64 replay_now_micros, ReplayRecorder* replay) {
     if (is_hitting) {
-      app_->sound_manager()->PlayLoadedSound(settings_.shoot());
+      app_->sound_manager()->PlayLoadedSound(settings_.shoot(), kShootAndHitGainLevel);
       app_->sound_manager()->PlayLoadedSound(settings_.hit());
     } else {
       app_->sound_manager()->PlayLoadedSound(settings_.shoot());
     }
     if (replay) {
-      replay->PlaySound(replay_now_micros, ReplaySoundType::SHOOT);
       if (is_hitting) {
-        replay->PlaySound(replay_now_micros, ReplaySoundType::HIT);
+        replay->PlaySound(replay_now_micros, ReplaySoundType::SHOOT_AND_HIT);
+      } else {
+        replay->PlaySound(replay_now_micros, ReplaySoundType::SHOOT);
       }
     }
   }

@@ -89,7 +89,7 @@ void SoundManager::MaybeLoadSound(const std::string& sound_name) {
   }
 }
 
-bool SoundManager::PlayLoadedSound(const SoundItem& item) {
+bool SoundManager::PlayLoadedSound(const SoundItem& item, float gain) {
   if (item.name().empty()) {
     return false;
   }
@@ -97,7 +97,7 @@ bool SoundManager::PlayLoadedSound(const SoundItem& item) {
   if (it != sound_cache_.end()) {
     Sound* sound = it->second.get();
     if (sound != nullptr) {
-      sound->Play(item.has_volume_level() ? item.volume_level() : 1.0f);
+      sound->Play(gain * (item.has_volume_level() ? item.volume_level() : 1.0f));
       return true;
     }
   }
