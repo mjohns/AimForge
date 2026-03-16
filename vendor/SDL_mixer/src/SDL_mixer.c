@@ -2260,8 +2260,11 @@ bool MIX_PlayTag(MIX_Mixer *mixer, const char *tag, SDL_PropertiesID options)
     return retval;
 }
 
-bool MIX_PlayAudio(MIX_Mixer *mixer, MIX_Audio *audio)
-{
+bool MIX_PlayAudio(MIX_Mixer *mixer, MIX_Audio *audio) {
+    return MIX_PlayAudioWithGain(mixer, audio, -1.0f);
+}
+
+bool MIX_PlayAudioWithGain(MIX_Mixer *mixer, MIX_Audio *audio, float gain) {
     if (!CheckMixerParam(mixer)) {
         return false;
     } else if (!CheckAudioParam(audio)) {
@@ -2290,6 +2293,9 @@ bool MIX_PlayAudio(MIX_Mixer *mixer, MIX_Audio *audio)
         return false;
     }
 
+    if (gain >= 0) {
+        MIX_SetTrackGain(track, gain);
+    }
     const bool retval = MIX_PlayTrack(track, 0);
 
     // !!! FIXME: MIX_PlayTrack should only fail for things we already validated here...but if this assertion fires, we need to put this track back in the fire/forget pool.

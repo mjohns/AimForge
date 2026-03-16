@@ -6,7 +6,6 @@
 
 struct MIX_Audio;
 struct MIX_Mixer;
-struct MIX_Track;
 
 namespace aim {
 
@@ -23,11 +22,10 @@ class Sound {
   Sound& operator=(Sound&& other) = delete;
 
  private:
-  Sound(MIX_Mixer* mixer, MIX_Audio* audio, MIX_Track* track);
+  Sound(MIX_Mixer* mixer, MIX_Audio* audio);
 
   MIX_Audio* audio_;
   MIX_Mixer* mixer_;
-  MIX_Track* track_;
 };
 
 }  // namespace aim

@@ -1838,6 +1838,7 @@ extern SDL_DECLSPEC bool SDLCALL MIX_PlayTag(MIX_Mixer *mixer, const char *tag, 
  * \sa MIX_LoadAudio
  */
 extern SDL_DECLSPEC bool SDLCALL MIX_PlayAudio(MIX_Mixer *mixer, MIX_Audio *audio);
+extern SDL_DECLSPEC bool SDLCALL MIX_PlayAudioWithGain(MIX_Mixer *mixer, MIX_Audio *audio, float gain);
 
 /**
  * Halt a currently-playing track, possibly fading out over time.
