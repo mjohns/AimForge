@@ -343,6 +343,9 @@ class SettingsManagerImpl : public SettingsManager {
       return type == ScenarioSettingsStoreType::SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN ||
              type == ScenarioSettingsStoreType::STORE_PER_SCENARIO;
     };
+    auto should_set_default_global = [](ScenarioSettingsStoreType type) {
+      return type == ScenarioSettingsStoreType::STORE_PER_SCENARIO;
+    };
 
     if (scenario_settings.has_cm_per_360() && should_set(config.cm_per_360())) {
       settings_.set_cm_per_360(scenario_settings.cm_per_360());
@@ -362,7 +365,11 @@ class SettingsManagerImpl : public SettingsManager {
     if (scenario_settings.has_crosshair_name() && should_set(config.crosshair_name())) {
       settings_.set_current_crosshair_name(scenario_settings.crosshair_name());
     }
-    if (should_set(config.auto_hold_tracking())) {
+    if (scenario_settings.has_tracking_shots_per_second() &&
+        should_set_default_global(config.tracking_shots_per_second())) {
+      settings_.set_tracking_shots_per_second(scenario_settings.tracking_shots_per_second());
+    }
+    if (should_set_default_global(config.auto_hold_tracking())) {
       settings_.set_auto_hold_tracking(scenario_settings.auto_hold_tracking());
     }
     if (scenario_settings.has_health_bar() && should_set(config.health_bar())) {
@@ -416,6 +423,7 @@ class SettingsManagerImpl : public SettingsManager {
       ScenarioSettings scenario_settings;
       scenario_settings.set_crosshair_size(settings_.crosshair_size());
       scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
+      scenario_settings.set_tracking_shots_per_second(settings_.tracking_shots_per_second());
       scenario_settings.set_cm_per_360(settings_.cm_per_360());
       scenario_settings.set_metronome_bpm(settings_.metronome_bpm());
       scenario_settings.set_enable_metronome(settings_.enable_metronome());

@@ -45,6 +45,15 @@ message Settings {
   float start_countdown_time = 17;
 
   ScenarioSettingsConfig scenario_settings_config = 18;
+  
+  // This is purely for audio and not actual scoring.
+  float tracking_shots_per_second = 19;
+
+  // Shot rate when furthest from center.
+  float proximity_min_shots_per_second = 20;
+
+  // Shot rate when at center.
+  float proximity_max_shots_per_second = 21;
 }
 
 message SoundItem {
@@ -74,6 +83,7 @@ message ScenarioSettings {
   bool auto_hold_tracking = 7 [features.field_presence = IMPLICIT];
   HealthBarSettings health_bar = 8;
   bool enable_metronome = 9 [features.field_presence = IMPLICIT];
+  float tracking_shots_per_second = 10;
 }
 
 enum ScenarioSettingsStoreType {
@@ -94,6 +104,7 @@ message ScenarioSettingsConfig {
   ScenarioSettingsStoreType auto_hold_tracking = 6;
   ScenarioSettingsStoreType health_bar = 7;
   ScenarioSettingsStoreType enable_metronome = 8;
+  ScenarioSettingsStoreType tracking_shots_per_second = 9;
 }
 
 message KeyMapping {

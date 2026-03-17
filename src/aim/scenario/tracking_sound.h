@@ -6,20 +6,18 @@
 
 namespace aim {
 
-constexpr const float kDefaultHitSoundsPerSecond = 12;
+constexpr const float kDefaultHitSoundsPerSecond = 9;
 
 constexpr const float kDefaultSlowHitSoundsPerSecond = 8;
 constexpr const float kDefaultFastHitSoundsPerSecond = 15;
 
 class TrackingSound {
  public:
-  explicit TrackingSound(SoundSettings settings, Application* app)
-      : TrackingSound(settings, kDefaultHitSoundsPerSecond, app) {}
-
   TrackingSound(SoundSettings settings, float hits_per_second, Application* app)
       : app_(app),
         settings_(settings),
-        invoker_(TimedInvokerParams::TimesPerSecond(hits_per_second),
+        invoker_(TimedInvokerParams::TimesPerSecond(
+                     hits_per_second > 0 ? hits_per_second : kDefaultHitSoundsPerSecond),
                  std::bind(&TrackingSound::PlaySound, this)) {
     stopwatch_.Start();
   }

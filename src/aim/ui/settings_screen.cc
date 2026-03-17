@@ -366,13 +366,18 @@ class SettingsScreen : public UiScreen {
     ScenarioSettingsConfig& config = *updater_.settings.mutable_scenario_settings_config();
 
     float char_x = ImGui::GetDefaultCharSizeX();
-    auto draw_item = [&](const std::string& name, Field<ScenarioSettingsStoreType> type_field) {
+    auto draw_item = [&](const std::string& name,
+                         Field<ScenarioSettingsStoreType> type_field,
+                         bool default_global = false) {
       ImGui::IdGuard cid(name);
       ImGui::AlignTextToFramePadding();
       ImGui::Text(name);
       ImGui::SameLine();
-      auto type =
-          type_field.has() ? type_field.get() : ScenarioSettingsStoreType::STORE_PER_SCENARIO;
+      auto type = type_field.get();
+      if (!type_field.has()) {
+        type = default_global ? ScenarioSettingsStoreType::STORE_GLOBALLY
+                              : ScenarioSettingsStoreType::STORE_PER_SCENARIO;
+      }
       ImGui::SimpleTypeDropdown("##TypeSelector", &type, kScenarioSettingsStoreTypes, char_x * 12);
       type_field.set(type);
     };
@@ -394,9 +399,10 @@ class SettingsScreen : public UiScreen {
     draw_item(
         "Crosshair size",
         PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, crosshair_size));
-    draw_item("Auto hold tracking",
-              PROTO_FIELD(
-                  ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, auto_hold_tracking));
+    draw_item(
+        "Auto hold tracking",
+        PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, auto_hold_tracking),
+        /*default_global=*/true);
     draw_item("Health bar",
               PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, health_bar));
     draw_item(
@@ -405,6 +411,11 @@ class SettingsScreen : public UiScreen {
     draw_item(
         "Metronome BPM",
         PROTO_FIELD(ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, enable_metronome));
+    draw_item(
+        "Tracking shots per second",
+        PROTO_FIELD(
+            ScenarioSettingsStoreType, ScenarioSettingsConfig, &config, tracking_shots_per_second),
+        /*default_global=*/true);
     ImGui::Unindent();
   }
 
@@ -413,6 +424,17 @@ class SettingsScreen : public UiScreen {
 
     sound_input_dialog_.Draw(app_);
 
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Tracking shots per second")
+                          .set_step(0.5, 5)
+                          .set_width(char_x_ * 9)
+                          .set_is_optional()
+                          .set_min(0.1)
+                          .set_default(9),
+                      PROTO_FLOAT_FIELD(Settings, &updater_.settings, tracking_shots_per_second));
+
+    ImGui::SpacedSeparator();
+
+    float char_x = ImGui::GetDefaultCharSizeX();
     {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Volume level");
@@ -421,6 +443,7 @@ class SettingsScreen : public UiScreen {
       if (s.has_master_volume_level()) {
         volume_level = s.master_volume_level();
       }
+      ImGui::SetNextItemWidth(35 * char_x);
       ImGui::SliderFloat("##VolumeLevel", &volume_level, 0, 2, "%.2f");
       s.set_master_volume_level(volume_level);
     }
@@ -431,7 +454,7 @@ class SettingsScreen : public UiScreen {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 10);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
-      auto sound_input = [this](const std::string& label, SoundItem* item) {
+      auto sound_input = [this, char_x](const std::string& label, SoundItem* item) {
         ImGui::IdGuard cid(label);
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
@@ -446,7 +469,6 @@ class SettingsScreen : public UiScreen {
           app_.sound_manager()->LoadAndPlaySound(*item);
         }
         ImGui::SameLine();
-        float char_x = ImGui::GetDefaultCharSizeX();
         ImGui::SetNextItemWidth(25 * char_x);
         ImGui::InputText("##SoundNameInput", sound_name);
 

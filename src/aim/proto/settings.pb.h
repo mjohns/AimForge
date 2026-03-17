@@ -501,6 +501,7 @@ class ScenarioSettingsConfig final : public ::google::protobuf::Message
     kAutoHoldTrackingFieldNumber = 6,
     kHealthBarFieldNumber = 7,
     kEnableMetronomeFieldNumber = 8,
+    kTrackingShotsPerSecondFieldNumber = 9,
   };
   // .aim.ScenarioSettingsStoreType cm_per_360 = 1;
   bool has_cm_per_360() const;
@@ -590,11 +591,22 @@ class ScenarioSettingsConfig final : public ::google::protobuf::Message
   void _internal_set_enable_metronome(::aim::ScenarioSettingsStoreType value);
 
   public:
+  // .aim.ScenarioSettingsStoreType tracking_shots_per_second = 9;
+  bool has_tracking_shots_per_second() const;
+  void clear_tracking_shots_per_second() ;
+  ::aim::ScenarioSettingsStoreType tracking_shots_per_second() const;
+  void set_tracking_shots_per_second(::aim::ScenarioSettingsStoreType value);
+
+  private:
+  ::aim::ScenarioSettingsStoreType _internal_tracking_shots_per_second() const;
+  void _internal_set_tracking_shots_per_second(::aim::ScenarioSettingsStoreType value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioSettingsConfig)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<3, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    0, 0,
                                    2>
       _table_;
@@ -624,6 +636,7 @@ class ScenarioSettingsConfig final : public ::google::protobuf::Message
     int auto_hold_tracking_;
     int health_bar_;
     int enable_metronome_;
+    int tracking_shots_per_second_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1524,6 +1537,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
     kCrosshairSizeFieldNumber = 4,
     kAutoHoldTrackingFieldNumber = 7,
     kEnableMetronomeFieldNumber = 9,
+    kTrackingShotsPerSecondFieldNumber = 10,
   };
   // string theme_name = 2;
   bool has_theme_name() const;
@@ -1625,11 +1639,22 @@ class ScenarioSettings final : public ::google::protobuf::Message
   void _internal_set_enable_metronome(bool value);
 
   public:
+  // float tracking_shots_per_second = 10;
+  bool has_tracking_shots_per_second() const;
+  void clear_tracking_shots_per_second() ;
+  float tracking_shots_per_second() const;
+  void set_tracking_shots_per_second(float value);
+
+  private:
+  float _internal_tracking_shots_per_second() const;
+  void _internal_set_tracking_shots_per_second(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioSettings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 8,
+  static const ::google::protobuf::internal::TcParseTable<4, 9,
                                    1, 61,
                                    2>
       _table_;
@@ -1659,6 +1684,7 @@ class ScenarioSettings final : public ::google::protobuf::Message
     float crosshair_size_;
     bool auto_hold_tracking_;
     bool enable_metronome_;
+    float tracking_shots_per_second_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -2124,6 +2150,9 @@ class Settings final : public ::google::protobuf::Message
     kMaxRenderFpsFieldNumber = 14,
     kPresentModeFieldNumber = 15,
     kStartCountdownTimeFieldNumber = 17,
+    kTrackingShotsPerSecondFieldNumber = 19,
+    kProximityMinShotsPerSecondFieldNumber = 20,
+    kProximityMaxShotsPerSecondFieldNumber = 21,
   };
   // string theme_name = 4;
   bool has_theme_name() const;
@@ -2334,11 +2363,44 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_start_countdown_time(float value);
 
   public:
+  // float tracking_shots_per_second = 19;
+  bool has_tracking_shots_per_second() const;
+  void clear_tracking_shots_per_second() ;
+  float tracking_shots_per_second() const;
+  void set_tracking_shots_per_second(float value);
+
+  private:
+  float _internal_tracking_shots_per_second() const;
+  void _internal_set_tracking_shots_per_second(float value);
+
+  public:
+  // float proximity_min_shots_per_second = 20;
+  bool has_proximity_min_shots_per_second() const;
+  void clear_proximity_min_shots_per_second() ;
+  float proximity_min_shots_per_second() const;
+  void set_proximity_min_shots_per_second(float value);
+
+  private:
+  float _internal_proximity_min_shots_per_second() const;
+  void _internal_set_proximity_min_shots_per_second(float value);
+
+  public:
+  // float proximity_max_shots_per_second = 21;
+  bool has_proximity_max_shots_per_second() const;
+  void clear_proximity_max_shots_per_second() ;
+  float proximity_max_shots_per_second() const;
+  void set_proximity_max_shots_per_second(float value);
+
+  private:
+  float _internal_proximity_max_shots_per_second() const;
+  void _internal_set_proximity_max_shots_per_second(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<5, 17,
+  static const ::google::protobuf::internal::TcParseTable<5, 20,
                                    4, 69,
                                    2>
       _table_;
@@ -2377,6 +2439,9 @@ class Settings final : public ::google::protobuf::Message
     float max_render_fps_;
     int present_mode_;
     float start_countdown_time_;
+    float tracking_shots_per_second_;
+    float proximity_min_shots_per_second_;
+    float proximity_max_shots_per_second_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3319,6 +3384,93 @@ inline void Settings::set_allocated_scenario_settings_config(::aim::ScenarioSett
 
   _impl_.scenario_settings_config_ = reinterpret_cast<::aim::ScenarioSettingsConfig*>(value);
   // @@protoc_insertion_point(field_set_allocated:aim.Settings.scenario_settings_config)
+}
+
+// float tracking_shots_per_second = 19;
+inline bool Settings::has_tracking_shots_per_second() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00020000U);
+  return value;
+}
+inline void Settings::clear_tracking_shots_per_second() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00020000U);
+}
+inline float Settings::tracking_shots_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.tracking_shots_per_second)
+  return _internal_tracking_shots_per_second();
+}
+inline void Settings::set_tracking_shots_per_second(float value) {
+  _internal_set_tracking_shots_per_second(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00020000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.tracking_shots_per_second)
+}
+inline float Settings::_internal_tracking_shots_per_second() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.tracking_shots_per_second_;
+}
+inline void Settings::_internal_set_tracking_shots_per_second(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = value;
+}
+
+// float proximity_min_shots_per_second = 20;
+inline bool Settings::has_proximity_min_shots_per_second() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00040000U);
+  return value;
+}
+inline void Settings::clear_proximity_min_shots_per_second() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.proximity_min_shots_per_second_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00040000U);
+}
+inline float Settings::proximity_min_shots_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.proximity_min_shots_per_second)
+  return _internal_proximity_min_shots_per_second();
+}
+inline void Settings::set_proximity_min_shots_per_second(float value) {
+  _internal_set_proximity_min_shots_per_second(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00040000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.proximity_min_shots_per_second)
+}
+inline float Settings::_internal_proximity_min_shots_per_second() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.proximity_min_shots_per_second_;
+}
+inline void Settings::_internal_set_proximity_min_shots_per_second(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.proximity_min_shots_per_second_ = value;
+}
+
+// float proximity_max_shots_per_second = 21;
+inline bool Settings::has_proximity_max_shots_per_second() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00080000U);
+  return value;
+}
+inline void Settings::clear_proximity_max_shots_per_second() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.proximity_max_shots_per_second_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00080000U);
+}
+inline float Settings::proximity_max_shots_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.proximity_max_shots_per_second)
+  return _internal_proximity_max_shots_per_second();
+}
+inline void Settings::set_proximity_max_shots_per_second(float value) {
+  _internal_set_proximity_max_shots_per_second(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00080000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.proximity_max_shots_per_second)
+}
+inline float Settings::_internal_proximity_max_shots_per_second() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.proximity_max_shots_per_second_;
+}
+inline void Settings::_internal_set_proximity_max_shots_per_second(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.proximity_max_shots_per_second_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -4329,6 +4481,35 @@ inline void ScenarioSettings::_internal_set_enable_metronome(bool value) {
   _impl_.enable_metronome_ = value;
 }
 
+// float tracking_shots_per_second = 10;
+inline bool ScenarioSettings::has_tracking_shots_per_second() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void ScenarioSettings::clear_tracking_shots_per_second() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline float ScenarioSettings::tracking_shots_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettings.tracking_shots_per_second)
+  return _internal_tracking_shots_per_second();
+}
+inline void ScenarioSettings::set_tracking_shots_per_second(float value) {
+  _internal_set_tracking_shots_per_second(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettings.tracking_shots_per_second)
+}
+inline float ScenarioSettings::_internal_tracking_shots_per_second() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.tracking_shots_per_second_;
+}
+inline void ScenarioSettings::_internal_set_tracking_shots_per_second(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // ScenarioSettingsConfig
@@ -4563,6 +4744,35 @@ inline ::aim::ScenarioSettingsStoreType ScenarioSettingsConfig::_internal_enable
 inline void ScenarioSettingsConfig::_internal_set_enable_metronome(::aim::ScenarioSettingsStoreType value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.enable_metronome_ = value;
+}
+
+// .aim.ScenarioSettingsStoreType tracking_shots_per_second = 9;
+inline bool ScenarioSettingsConfig::has_tracking_shots_per_second() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  return value;
+}
+inline void ScenarioSettingsConfig::clear_tracking_shots_per_second() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
+inline ::aim::ScenarioSettingsStoreType ScenarioSettingsConfig::tracking_shots_per_second() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioSettingsConfig.tracking_shots_per_second)
+  return _internal_tracking_shots_per_second();
+}
+inline void ScenarioSettingsConfig::set_tracking_shots_per_second(::aim::ScenarioSettingsStoreType value) {
+  _internal_set_tracking_shots_per_second(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioSettingsConfig.tracking_shots_per_second)
+}
+inline ::aim::ScenarioSettingsStoreType ScenarioSettingsConfig::_internal_tracking_shots_per_second() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::ScenarioSettingsStoreType>(_impl_.tracking_shots_per_second_);
+}
+inline void ScenarioSettingsConfig::_internal_set_tracking_shots_per_second(::aim::ScenarioSettingsStoreType value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.tracking_shots_per_second_ = value;
 }
 
 // -------------------------------------------------------------------
