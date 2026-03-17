@@ -20,6 +20,16 @@ namespace aim {
 namespace {
 constexpr const float kDefaultDpi = 800;
 
+std::string GetBaseNameForScenarioSettings(const std::string& full_name) {
+  NameInfo name_info = GetScenarioNameInfo(full_name);
+
+  // Clear fields where the settings should be saved for the scenario.
+  name_info.level = std::nullopt;
+  name_info.cm_per_360 = std::nullopt;
+  name_info.duration = std::nullopt;
+  return name_info.GetFullName();
+}
+
 SoundSettings GetDefaultSoundSettings() {
   SoundSettings sounds;
   sounds.mutable_hit()->set_name("AF Hit.ogg");
@@ -320,8 +330,7 @@ class SettingsManagerImpl : public SettingsManager {
     }
     // Only store scenario settings for the base name and share for all levels / cm suffixes.
     // TODO: Add an option in settings to configure this behavior
-    NameInfo name_info = GetScenarioNameInfo(scenario_name_raw);
-    const std::string& scenario_name = name_info.base_name;
+    const std::string& scenario_name = GetBaseNameForScenarioSettings(scenario_name_raw);
 
     auto it = scenario_settings_cache_.find(scenario_name);
     ScenarioSettings scenario_settings;
@@ -418,8 +427,7 @@ class SettingsManagerImpl : public SettingsManager {
  private:
   void WriteScenarioSettings(const std::string& scenario_name_raw) {
     if (scenario_name_raw.size() > 0) {
-      NameInfo name_info = GetScenarioNameInfo(scenario_name_raw);
-      const std::string& scenario_name = name_info.base_name;
+      const std::string& scenario_name = GetBaseNameForScenarioSettings(scenario_name_raw);
       ScenarioSettings scenario_settings;
       scenario_settings.set_crosshair_size(settings_.crosshair_size());
       scenario_settings.set_crosshair_name(settings_.current_crosshair_name());
