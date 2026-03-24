@@ -970,6 +970,52 @@
    }
   },
   {
+   "name": "Ballsheet",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "poke": true,
+     "pokeKillTimeSeconds": 0.01
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 7
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 110,
+      "width": 120
+     }
+    },
+    "levelOverrides": {},
+    "staticDef": {
+     "targetPlacementStrategy": {
+      "regions": [
+       {
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.9
+         },
+         "yLength": {
+          "yPercentValue": 0.9
+         }
+        }
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
    "name": "BarrelClick",
    "def": {
     "durationSeconds": 60,

@@ -2,6 +2,6 @@
 
 namespace aim {
 
-inline constexpr const char* kAimForgeVersion = "v0.5.1";
+inline constexpr const char* kAimForgeVersion = "v0.5.2";
 
 }  // namespace aim
