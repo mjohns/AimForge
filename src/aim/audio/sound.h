@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <optional>
 
 struct MIX_Audio;
 struct MIX_Mixer;
@@ -11,12 +12,17 @@ struct MIX_Track;
 
 namespace aim {
 
+struct PlaySoundOptions {
+  std::optional<float> gain;
+  std::optional<float> pitch_modifier;
+};
+
 class Sound {
  public:
   static std::unique_ptr<Sound> Load(MIX_Mixer* mixer, const std::filesystem::path& sound_path);
   ~Sound();
 
-  void Play(float gain = 1.0);
+  void Play(PlaySoundOptions options = {});
 
   Sound(const Sound&) = delete;
   Sound(Sound&&) = default;

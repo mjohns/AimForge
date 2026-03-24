@@ -286,6 +286,7 @@ class SoundItem final : public ::google::protobuf::Message
   enum : int {
     kNameFieldNumber = 1,
     kVolumeLevelFieldNumber = 2,
+    kPitchModifierFieldNumber = 3,
   };
   // string name = 1;
   bool has_name() const;
@@ -314,11 +315,22 @@ class SoundItem final : public ::google::protobuf::Message
   void _internal_set_volume_level(float value);
 
   public:
+  // float pitch_modifier = 3;
+  bool has_pitch_modifier() const;
+  void clear_pitch_modifier() ;
+  float pitch_modifier() const;
+  void set_pitch_modifier(float value);
+
+  private:
+  float _internal_pitch_modifier() const;
+  void _internal_set_pitch_modifier(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.SoundItem)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<1, 2,
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
                                    0, 26,
                                    2>
       _table_;
@@ -342,6 +354,7 @@ class SoundItem final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr name_;
     float volume_level_;
+    float pitch_modifier_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3573,6 +3586,35 @@ inline float SoundItem::_internal_volume_level() const {
 inline void SoundItem::_internal_set_volume_level(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.volume_level_ = value;
+}
+
+// float pitch_modifier = 3;
+inline bool SoundItem::has_pitch_modifier() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  return value;
+}
+inline void SoundItem::clear_pitch_modifier() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pitch_modifier_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline float SoundItem::pitch_modifier() const {
+  // @@protoc_insertion_point(field_get:aim.SoundItem.pitch_modifier)
+  return _internal_pitch_modifier();
+}
+inline void SoundItem::set_pitch_modifier(float value) {
+  _internal_set_pitch_modifier(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:aim.SoundItem.pitch_modifier)
+}
+inline float SoundItem::_internal_pitch_modifier() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.pitch_modifier_;
+}
+inline void SoundItem::_internal_set_pitch_modifier(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.pitch_modifier_ = value;
 }
 
 // -------------------------------------------------------------------

@@ -60,6 +60,8 @@ message SoundItem {
   string name = 1;
   // Optional. Specific volume level for the sound.
   float volume_level = 2;
+  // Optional. Modify the pitch of the sound.
+  float pitch_modifier = 3;
 }
 
 message SoundSettings {

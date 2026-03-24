@@ -97,7 +97,12 @@ bool SoundManager::PlayLoadedSound(const SoundItem& item, float gain) {
   if (it != sound_cache_.end()) {
     Sound* sound = it->second.get();
     if (sound != nullptr) {
-      sound->Play(gain * (item.has_volume_level() ? item.volume_level() : 1.0f));
+      PlaySoundOptions opts;
+      opts.gain = gain * (item.has_volume_level() ? item.volume_level() : 1.0f);
+      if (item.has_pitch_modifier()) {
+        opts.pitch_modifier = item.pitch_modifier();
+      }
+      sound->Play(opts);
       return true;
     }
   }

@@ -493,6 +493,15 @@ class SettingsScreen : public UiScreen {
         } else {
           item->clear_volume_level();
         }
+
+        ImGui::SameLine();
+        ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Pitch modifier")
+                              .set_is_optional()
+                              .set_range(0.01, 100)
+                              .set_step(0.02, 0.2)
+                              .set_width(char_x * 12)
+                              .set_default(1),
+                          PROTO_FLOAT_FIELD(SoundItem, item, pitch_modifier));
       };
 
       sound_input("Shoot", s.mutable_shoot());

@@ -4,6 +4,7 @@
 
 #include "SDL3_mixer/SDL_mixer.h"
 #include "aim/common/util.h"
+#include "glm/common.hpp"
 
 namespace aim {
 namespace {
@@ -40,7 +41,7 @@ Sound::Sound(MIX_Mixer* mixer, MIX_Audio* audio, std::vector<MIX_Track*> track_q
 
 Sound::~Sound() {}
 
-void Sound::Play(float gain) {
+void Sound::Play(PlaySoundOptions options) {
   int i = current_track_queue_index_;
   if (!IsValidIndex(track_queue_, i)) {
     return;
@@ -51,8 +52,11 @@ void Sound::Play(float gain) {
   // hit sound being played in fast succession.
   MIX_Track* track = track_queue_[i];
 
-  if (gain >= 0) {
-    MIX_SetTrackGain(track, gain);
+  if (options.gain) {
+    MIX_SetTrackGain(track, *options.gain);
+  }
+  if (options.pitch_modifier) {
+    MIX_SetTrackFrequencyRatio(track, glm::clamp<float>(*options.pitch_modifier, 0.01f, 100.0f));
   }
   MIX_PlayTrack(track, 0);
 }
