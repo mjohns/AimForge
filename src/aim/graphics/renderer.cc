@@ -22,6 +22,23 @@ constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 1500.0f;
 constexpr const u32 kMaxSolidColorInstances = 1500;
 constexpr const float kCenterSphereSizeMultiplier = 0.25;
+constexpr const glm::vec3 kWorldUp = glm::vec3(0, 0, 1);
+
+glm::mat4 RotateTowardsCamera(const LookAtInfo& look_at,
+                              const glm::vec3& position,
+                              const glm::mat4& transform,
+                              bool rotate_z) {
+  // Rotate to face towards camera
+  glm::vec3 to_camera = look_at.position - position;
+  if (!rotate_z) {
+    to_camera.z = 0;
+  }
+  if (glm::length(to_camera) > 0.01) {
+    float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), kWorldUp);
+    return glm::rotate(transform, angle, kWorldUp);
+  }
+  return transform;
+}
 
 struct SolidColorInstanceData {
   glm::mat4 transform;
@@ -497,7 +514,9 @@ class DrawDataBuilder {
         c.up = target.pill_up;
         c.height = target.height - target.radius;
         c.position = target.position;
-        AddDrawCylinder(view_projection, c, color, draw_data);
+
+        // AddDrawCylinder(view_projection, c, color, draw_data);
+        AddDrawCylinderQuad(view_projection, c, color, look_at, draw_data);
 
         glm::vec3 top = c.position + c.up * (c.height * 0.5f);
         AddDrawSphere(view_projection, top, target.radius, color, draw_data);
@@ -506,8 +525,7 @@ class DrawDataBuilder {
         AddDrawSphere(view_projection, bottom, target.radius, color, draw_data);
 
         if (draw_center && !target.is_ghost) {
-          glm::vec3 small_position_translation =
-              look_at.position - target.position;
+          glm::vec3 small_position_translation = look_at.position - target.position;
 
           AddDrawSphere(view_projection,
                         top + small_position_translation,
@@ -576,13 +594,7 @@ class DrawDataBuilder {
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, health_bar_center);
 
-    // Rotate to face towards camera
-    glm::vec3 to_camera = look_at.position - position;
-    to_camera.z = 0;
-    if (glm::length(to_camera) > 0.01) {
-      float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), up);
-      transform = glm::rotate(transform, angle, up);
-    }
+    transform = RotateTowardsCamera(look_at, position, transform, /*rotate_z=*/false);
 
     transform = glm::scale(transform, glm::vec3(width, 1, height));
 
@@ -660,6 +672,30 @@ class DrawDataBuilder {
     data.transform = view_projection * model;
     data.color = glm::vec4(color, 1.0f);
   }
+
+  void AddDrawCylinderQuad(const glm::mat4& view_projection,
+                           const Cylinder& c,
+                           const glm::vec3& color,
+                           const LookAtInfo& look_at,
+                           DrawData* draw_data) {
+    draw_data->solid_quads.emplace_back();
+    SolidColorInstanceData& data = draw_data->solid_quads.back();
+
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, c.position);
+    if (c.up != glm::vec3(0, 0, 1) && c.up != glm::vec3(0, 0, -1)) {
+      glm::vec3 up = glm::vec3(0, 0, 1);
+      glm::vec3 rotate_axis = glm::normalize(glm::cross(up, c.up));
+      float angle = glm::acos(glm::dot(up, c.up));
+      model = glm::rotate(model, angle, rotate_axis);
+    }
+    model = RotateTowardsCamera(look_at, c.position, model, /*rotate_z=*/false);
+    model = glm::scale(model, glm::vec3(c.radius * 2, c.radius * 2, c.height));
+
+    data.transform = view_projection * model;
+    data.color = glm::vec4(color, 1.0f);
+  }
+
   TextureManager* texture_manager_;
 };
 
