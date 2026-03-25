@@ -1,9 +1,11 @@
 #include "shapes.h"
 
 #include <cmath>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
+
+#include "aim/common/geometry.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/vec3.hpp"
 
 namespace aim {
 namespace {
@@ -248,6 +250,27 @@ std::vector<VertexAndTexCoord> GenerateQuadVertices() {
       bottom_left,
       bottom_right,
   };
+  return vertices;
+}
+
+std::vector<glm::vec3> GenerateCircleVertices(int num_segments) {
+  float degrees_per_segment = 360.0f / num_segments;
+
+  std::vector<glm::vec3> vertices;
+  vertices.reserve(num_segments * 3);
+
+  glm::vec2 prev(1, 0);
+  for (int i = 0; i < num_segments; ++i) {
+    vertices.push_back(glm::vec3(prev.x, 0, prev.y));
+
+    glm::vec2 next = RotateDegrees(prev, degrees_per_segment);
+    vertices.push_back(glm::vec3(next.x, 0, next.y));
+
+    // Center
+    vertices.push_back(glm::vec3(0, 0, 0));
+
+    prev = next;
+  }
   return vertices;
 }
 

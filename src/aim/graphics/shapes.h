@@ -7,6 +7,7 @@
 namespace aim {
 
 std::vector<float> GenerateSphereVertices(int num_subdivisions);
+std::vector<glm::vec3> GenerateCircleVertices(int num_segments);
 
 struct VertexAndTexCoord {
   glm::vec3 vertex{};

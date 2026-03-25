@@ -1627,15 +1627,11 @@
      "numTargets": 1,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.80000019,
-       "targetRadiusJitter": 0,
+       "targetRadius": 1.8,
        "speed": 95,
-       "speedJitter": 0,
        "acceleration": 133,
-       "accelerationJitter": 0,
        "pill": {
-        "height": 8.59997559
+        "height": 8.59998
        }
       }
      ]
@@ -1667,32 +1663,10 @@
        "yPercentValue": 0.9
       }
      },
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 50
-         },
-         "yLength": {
-          "value": 50
-         }
-        }
-       }
-      ]
-     },
      "profiles": [
       {
-       "info": {},
        "distance": {
-        "xPercentValue": 0.669999838
+        "xPercentValue": 0.669999778
        },
        "distanceJitter": {
         "xPercentValue": 0

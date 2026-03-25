@@ -24,20 +24,39 @@ constexpr const u32 kMaxSolidColorInstances = 1500;
 constexpr const float kCenterSphereSizeMultiplier = 0.25;
 constexpr const glm::vec3 kWorldUp = glm::vec3(0, 0, 1);
 
-glm::mat4 RotateTowardsCamera(const LookAtInfo& look_at,
-                              const glm::vec3& position,
-                              const glm::mat4& transform,
-                              bool rotate_z) {
-  // Rotate to face towards camera
+glm::mat4 RotateTowardsCameraAroundZ(const LookAtInfo& look_at,
+                                     const glm::vec3& position,
+                                     const glm::mat4& transform) {
+  // Rotate to face towards camera along the z axis
   glm::vec3 to_camera = look_at.position - position;
-  if (!rotate_z) {
-    to_camera.z = 0;
-  }
-  if (glm::length(to_camera) > 0.01) {
+  to_camera.z = 0;
+  if (glm::length(to_camera) > 0.001) {
     float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), kWorldUp);
     return glm::rotate(transform, angle, kWorldUp);
   }
   return transform;
+}
+
+glm::mat4 RotateBasicShapeTowardsCamera(const LookAtInfo& look_at,
+                                        const glm::vec3& position,
+                                        const glm::mat4& transform,
+                                        bool rotate_z) {
+  if (look_at.position == position) {
+    return transform;
+  }
+  glm::vec3 to_camera = look_at.position - position;
+  if (!rotate_z) {
+    to_camera.z = 0;
+  }
+  // The quad/circle types are defined in the x/z plane facing in the negative y direction.
+  if (glm::length(to_camera) < 0.001) {
+    return transform;
+  }
+  to_camera = glm::normalize(to_camera);
+  glm::vec3 front(0, -1, 0);
+  glm::vec3 rotate_axis = glm::normalize(glm::cross(front, to_camera));
+  float angle = glm::orientedAngle(front, to_camera, rotate_axis);
+  return glm::rotate(transform, angle, rotate_axis);
 }
 
 struct SolidColorInstanceData {
@@ -54,6 +73,7 @@ struct SolidColorInstances {
   u32 num_cylinders = 0;
   u32 num_quads = 0;
   u32 num_cylinder_walls = 0;
+  u32 num_circles = 0;
 
   u32 GetSpheresOffset() const {
     return 0;
@@ -69,6 +89,10 @@ struct SolidColorInstances {
 
   u32 GetCylinderWallsOffset() const {
     return GetQuadsOffset() + num_quads;
+  }
+
+  u32 GetCirclesOffset() const {
+    return GetCylinderWallsOffset() + num_cylinder_walls;
   }
 };
 
@@ -96,6 +120,7 @@ struct DrawData {
   std::vector<SolidColorInstanceData> solid_cylinders;
   std::vector<SolidColorInstanceData> solid_quads;
   std::vector<SolidColorInstanceData> solid_cylinder_walls;
+  std::vector<SolidColorInstanceData> solid_circles;
 };
 
 glm::vec3 Lerp(const glm::vec3& a, const glm::vec3& b, float mix_percent) {
@@ -188,6 +213,7 @@ class DrawDataBuilder {
                               DrawData* draw_data) {
     draw_data->solid_quads.reserve(6 + targets.size() * 2);
     draw_data->solid_spheres.reserve(targets.size() * 2);
+    draw_data->solid_circles.reserve(targets.size() * 2);
     draw_data->solid_cylinders.reserve(targets.size());
     AddDrawRoom(view_projection, theme, room, draw_data);
     AddDrawTargets(view_projection, look_at, theme, health_bar, targets, draw_center, draw_data);
@@ -478,8 +504,11 @@ class DrawDataBuilder {
                       const Theme& theme,
                       const HealthBarSettings& health_bar_settings,
                       const std::vector<Target>& targets,
-                      bool draw_center,
+                      bool try_to_draw_center,
                       DrawData* draw_data) {
+    // Only try to draw center if the theme has a specific color specified.
+    try_to_draw_center = try_to_draw_center && theme.has_center_target_color();
+
     glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
     glm::vec3 center_target_color =
         theme.has_center_target_color() ? ToVec3(theme.center_target_color()) : target_color;
@@ -508,6 +537,7 @@ class DrawDataBuilder {
         continue;
       }
       const glm::vec3& color = target.is_ghost ? ghost_target_color : target_color;
+      bool should_draw_center = try_to_draw_center && !target.is_ghost;
       if (target.is_pill) {
         Cylinder c;
         c.radius = target.radius;
@@ -515,43 +545,27 @@ class DrawDataBuilder {
         c.height = target.height - target.radius;
         c.position = target.position;
 
-        // AddDrawCylinder(view_projection, c, color, draw_data);
         AddDrawCylinderQuad(view_projection, c, color, look_at, draw_data);
 
         glm::vec3 top = c.position + c.up * (c.height * 0.5f);
-        AddDrawSphere(view_projection, top, target.radius, color, draw_data);
+        AddDrawSphereCircle(view_projection, top, target.radius, color, look_at, draw_data);
 
         glm::vec3 bottom = c.position + c.up * (c.height * -0.5f);
-        AddDrawSphere(view_projection, bottom, target.radius, color, draw_data);
-
-        if (draw_center && !target.is_ghost) {
-          glm::vec3 small_position_translation = look_at.position - target.position;
-
-          AddDrawSphere(view_projection,
-                        top + small_position_translation,
-                        target.radius * kCenterSphereSizeMultiplier,
-                        center_target_color,
-                        draw_data);
-          AddDrawSphere(view_projection,
-                        bottom + small_position_translation,
-                        target.radius * kCenterSphereSizeMultiplier,
-                        center_target_color,
-                        draw_data);
-        }
+        AddDrawSphereCircle(view_projection, bottom, target.radius, color, look_at, draw_data);
 
         continue;
       }
 
-      AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
-
-      if (draw_center && !target.is_ghost) {
-        glm::vec3 small_position =
-            target.position + glm::normalize(look_at.position - target.position) * target.radius;
+      if (should_draw_center) {
+        AddDrawSphereCircle(
+            view_projection, target.position, target.radius, color, look_at, draw_data);
         AddDrawSphere(view_projection,
-                      small_position,
+                      target.position,
                       target.radius * kCenterSphereSizeMultiplier,
                       center_target_color,
                       draw_data);
+      } else {
+        AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
       }
 
       if (health_bar_settings.show() && target.HasHealth()) {
@@ -594,7 +608,7 @@ class DrawDataBuilder {
     glm::mat4 transform(1.0f);
     transform = glm::translate(transform, health_bar_center);
 
-    transform = RotateTowardsCamera(look_at, position, transform, /*rotate_z=*/false);
+    transform = RotateBasicShapeTowardsCamera(look_at, position, transform, /*rotate_z=*/false);
 
     transform = glm::scale(transform, glm::vec3(width, 1, height));
 
@@ -652,6 +666,24 @@ class DrawDataBuilder {
     data.color = glm::vec4(color, 1.0f);
   }
 
+  void AddDrawSphereCircle(const glm::mat4& view_projection,
+                           const glm::vec3& position,
+                           float radius,
+                           const glm::vec3& color,
+                           const LookAtInfo& look_at,
+                           DrawData* draw_data) {
+    draw_data->solid_circles.emplace_back();
+    SolidColorInstanceData& data = draw_data->solid_circles.back();
+
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, position);
+    model = RotateBasicShapeTowardsCamera(look_at, position, model, /*rotate_z=*/true);
+    model = glm::scale(model, glm::vec3(radius, 1.0, radius));
+
+    data.transform = view_projection * model;
+    data.color = glm::vec4(color, 1.0f);
+  }
+
   void AddDrawCylinder(const glm::mat4& view_projection,
                        const Cylinder& c,
                        const glm::vec3& color,
@@ -689,8 +721,8 @@ class DrawDataBuilder {
       float angle = glm::acos(glm::dot(up, c.up));
       model = glm::rotate(model, angle, rotate_axis);
     }
-    model = RotateTowardsCamera(look_at, c.position, model, /*rotate_z=*/false);
-    model = glm::scale(model, glm::vec3(c.radius * 2, c.radius * 2, c.height));
+    model = RotateBasicShapeTowardsCamera(look_at, c.position, model, /*rotate_z=*/false);
+    model = glm::scale(model, glm::vec3(c.radius * 2, 1.0, c.height));
 
     data.transform = view_projection * model;
     data.color = glm::vec4(color, 1.0f);
@@ -991,7 +1023,8 @@ class RendererImpl : public Renderer {
     times->pack_instance_data.start = stopwatch.GetElapsedMicros();
     instances->instances.reserve(draw_data.solid_spheres.size() + draw_data.solid_cylinders.size() +
                                  draw_data.solid_quads.size() +
-                                 draw_data.solid_cylinder_walls.size());
+                                 draw_data.solid_cylinder_walls.size() +
+                                 draw_data.solid_circles.size());
 
     AddSolidColorInstancesOfType(
         instances->instances, draw_data.solid_spheres, &instances->num_spheres);
@@ -1001,6 +1034,8 @@ class RendererImpl : public Renderer {
         instances->instances, draw_data.solid_quads, &instances->num_quads);
     AddSolidColorInstancesOfType(
         instances->instances, draw_data.solid_cylinder_walls, &instances->num_cylinder_walls);
+    AddSolidColorInstancesOfType(
+        instances->instances, draw_data.solid_circles, &instances->num_circles);
 
     times->pack_instance_data.end = stopwatch.GetElapsedMicros();
 
@@ -1099,6 +1134,14 @@ class RendererImpl : public Renderer {
                             num_cylinder_wall_vertices_,
                             instances.num_cylinder_walls,
                             cylinder_wall_vertices_offset_,
+                            0);
+    }
+    if (instances.num_circles > 0) {
+      set_instance_offset_uniform(instances.GetCirclesOffset());
+      SDL_DrawGPUPrimitives(ctx->render_pass,
+                            num_circle_vertices_,
+                            instances.num_circles,
+                            circle_vertices_offset_,
                             0);
     }
 
@@ -1237,9 +1280,13 @@ class RendererImpl : public Renderer {
     std::vector<glm::vec3> cylinder_vertices = GenerateCylinderVertices(100);
     num_cylinder_vertices_ = cylinder_vertices.size();
 
+    auto circle_vertices = GenerateCircleVertices(200);
+    num_circle_vertices_ = circle_vertices.size();
+
     std::vector<float> packed_data = sphere_vertices;
     packed_data.reserve(sphere_vertices.size() + (quad_vertices.size() * 3) +
-                        (cylinder_vertices.size() * 3) + (cylinder_wall_vertices.size() * 3));
+                        (circle_vertices.size() * 3) + (cylinder_vertices.size() * 3) +
+                        (cylinder_wall_vertices.size() * 3));
 
     for (const VertexAndTexCoord& vt : quad_vertices) {
       packed_data.push_back(vt.vertex.x);
@@ -1257,11 +1304,17 @@ class RendererImpl : public Renderer {
       packed_data.push_back(vt.vertex.y);
       packed_data.push_back(vt.vertex.z);
     }
+    for (const glm::vec3& v : circle_vertices) {
+      packed_data.push_back(v.x);
+      packed_data.push_back(v.y);
+      packed_data.push_back(v.z);
+    }
 
     sphere_vertices_offset_ = 0;
     quad_vertices_offset_ = num_sphere_vertices_;
     cylinder_vertices_offset_ = quad_vertices_offset_ + kQuadNumVertices;
     cylinder_wall_vertices_offset_ = cylinder_vertices_offset_ + num_cylinder_vertices_;
+    circle_vertices_offset_ = cylinder_wall_vertices_offset_ + num_cylinder_wall_vertices_;
 
     int size = sizeof(float) * packed_data.size();
     return UploadBuffer(packed_data.data(), size, copy_pass, &packed_vertex_buffer_);
@@ -1352,11 +1405,13 @@ class RendererImpl : public Renderer {
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
   unsigned int num_cylinder_vertices_;
+  unsigned int num_circle_vertices_;
 
   unsigned int sphere_vertices_offset_;
   unsigned int cylinder_vertices_offset_;
   unsigned int cylinder_wall_vertices_offset_;
   unsigned int quad_vertices_offset_;
+  unsigned int circle_vertices_offset_;
 
   unsigned int textured_cylinder_wall_vertices_offset_;
   unsigned int textured_quad_vertices_offset_;
