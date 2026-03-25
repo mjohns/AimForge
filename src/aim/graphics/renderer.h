@@ -41,6 +41,7 @@ class Renderer {
 
   virtual void DrawScenario(const glm::mat4& projection,
                             const Room& room,
+                            ShotType::TypeCase shot_type,
                             const Theme& theme,
                             const HealthBarSettings& health_bar,
                             const std::vector<Target>& targets,

@@ -9,7 +9,7 @@
 namespace aim {
 namespace {
 
-constexpr const int kTrackQueueSize = 3;
+constexpr const int kTrackQueueSize = 4;
 
 }  // namespace
 

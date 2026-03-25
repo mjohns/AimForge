@@ -122,6 +122,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       ShouldRecordReplay(def_, requires_per_frame_target_data, settings_)) {
     replay_ = std::make_unique<ReplayRecorder>(scenario_name_,
                                                def_.room(),
+                                               def_.shot_type().type_case(),
                                                replay_fps,
                                                static_cast<i32>(def_.duration_seconds()),
                                                def_.target_def().num_targets(),
@@ -424,6 +425,7 @@ void Scenario::OnWaitingForClickTick() {
   if (app_.StartRender(&ctx)) {
     app_.renderer()->DrawScenario(projection_,
                                   def_.room(),
+                                  def_.shot_type().type_case(),
                                   theme_,
                                   settings_.health_bar(),
                                   target_manager_.GetTargets(),
@@ -500,6 +502,7 @@ void Scenario::OnStartCountdownClickTick() {
   if (app_.StartRender(&ctx)) {
     app_.renderer()->DrawScenario(projection_,
                                   def_.room(),
+                                  def_.shot_type().type_case(),
                                   theme_,
                                   settings_.health_bar(),
                                   target_manager_.GetTargets(),
@@ -589,6 +592,7 @@ void Scenario::OnRunningTick() {
   if (app_.StartRender(&ctx)) {
     app_.renderer()->DrawScenario(projection_,
                                   def_.room(),
+                                  def_.shot_type().type_case(),
                                   theme_,
                                   settings_.health_bar(),
                                   target_manager_.GetTargets(),

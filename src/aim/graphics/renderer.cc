@@ -21,6 +21,7 @@ namespace {
 constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 1500.0f;
 constexpr const u32 kMaxSolidColorInstances = 1500;
+constexpr const float kCenterSphereSizeMultiplier = 0.25;
 
 struct SolidColorInstanceData {
   glm::mat4 transform;
@@ -162,6 +163,7 @@ class DrawDataBuilder {
 
   void GetDrawDataForScenario(const glm::mat4& view_projection,
                               const Room& room,
+                              bool draw_center,
                               const Theme& theme,
                               const HealthBarSettings& health_bar,
                               const std::vector<Target>& targets,
@@ -171,7 +173,7 @@ class DrawDataBuilder {
     draw_data->solid_spheres.reserve(targets.size() * 2);
     draw_data->solid_cylinders.reserve(targets.size());
     AddDrawRoom(view_projection, theme, room, draw_data);
-    AddDrawTargets(view_projection, look_at, theme, health_bar, targets, draw_data);
+    AddDrawTargets(view_projection, look_at, theme, health_bar, targets, draw_center, draw_data);
 
     // Make sure all textured walls are grouped by Texture* so that the samplers can be bound
     // minimally and don't need to be switched back and forth.
@@ -459,8 +461,11 @@ class DrawDataBuilder {
                       const Theme& theme,
                       const HealthBarSettings& health_bar_settings,
                       const std::vector<Target>& targets,
+                      bool draw_center,
                       DrawData* draw_data) {
     glm::vec3 target_color = theme.has_target_color() ? ToVec3(theme.target_color()) : glm::vec3(0);
+    glm::vec3 center_target_color =
+        theme.has_center_target_color() ? ToVec3(theme.center_target_color()) : target_color;
     glm::vec3 ghost_target_color =
         theme.has_ghost_target_color() ? ToVec3(theme.ghost_target_color()) : glm::vec3(0.3);
 
@@ -494,26 +499,42 @@ class DrawDataBuilder {
         c.position = target.position;
         AddDrawCylinder(view_projection, c, color, draw_data);
 
-        AddDrawSphere(view_projection,
-                      c.position + c.up * (c.height * 0.5f),
-                      target.radius,
-                      color,
-                      draw_data);
-        AddDrawSphere(view_projection,
-                      c.position + c.up * (c.height * -0.5f),
-                      target.radius,
-                      color,
-                      draw_data);
+        glm::vec3 top = c.position + c.up * (c.height * 0.5f);
+        AddDrawSphere(view_projection, top, target.radius, color, draw_data);
+
+        glm::vec3 bottom = c.position + c.up * (c.height * -0.5f);
+        AddDrawSphere(view_projection, bottom, target.radius, color, draw_data);
+
+        if (draw_center && !target.is_ghost) {
+          glm::vec3 small_position_translation =
+              look_at.position - target.position;
+
+          AddDrawSphere(view_projection,
+                        top + small_position_translation,
+                        target.radius * kCenterSphereSizeMultiplier,
+                        center_target_color,
+                        draw_data);
+          AddDrawSphere(view_projection,
+                        bottom + small_position_translation,
+                        target.radius * kCenterSphereSizeMultiplier,
+                        center_target_color,
+                        draw_data);
+        }
+
         continue;
       }
 
       AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
 
-      /*
-      glm::vec3 small_position =
-          target.position + glm::normalize(look_at.position - target.position) * target.radius;
-      AddDrawSphere(view_projection, small_position, target.radius * 0.2, color * 0.8f, draw_data);
-      */
+      if (draw_center && !target.is_ghost) {
+        glm::vec3 small_position =
+            target.position + glm::normalize(look_at.position - target.position) * target.radius;
+        AddDrawSphere(view_projection,
+                      small_position,
+                      target.radius * kCenterSphereSizeMultiplier,
+                      center_target_color,
+                      draw_data);
+      }
 
       if (health_bar_settings.show() && target.HasHealth()) {
         bool is_damaged = target.GetHealthPercent() < 1;
@@ -793,6 +814,7 @@ class RendererImpl : public Renderer {
 
   void DrawScenario(const glm::mat4& projection,
                     const Room& room,
+                    ShotType::TypeCase shot_type,
                     const Theme& theme,
                     const HealthBarSettings& health_bar,
                     const std::vector<Target>& targets,
@@ -804,8 +826,14 @@ class RendererImpl : public Renderer {
 
     times->build_draw_data.start = stopwatch.GetElapsedMicros();
     DrawData draw_data;
-    draw_data_builder_.GetDrawDataForScenario(
-        view_projection, room, theme, health_bar, targets, look_at, &draw_data);
+    draw_data_builder_.GetDrawDataForScenario(view_projection,
+                                              room,
+                                              shot_type == ShotType::kTrackingProximity,
+                                              theme,
+                                              health_bar,
+                                              targets,
+                                              look_at,
+                                              &draw_data);
     times->build_draw_data.end = stopwatch.GetElapsedMicros();
 
     SolidColorInstances solid_color_instances;

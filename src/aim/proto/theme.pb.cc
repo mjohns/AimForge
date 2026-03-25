@@ -149,6 +149,7 @@ inline constexpr Theme::Impl_::Impl_(
         crosshair_{nullptr},
         target_color_{nullptr},
         ghost_target_color_{nullptr},
+        center_target_color_{nullptr},
         health_bar_{nullptr} {}
 
 template <typename>
@@ -218,7 +219,7 @@ const ::uint32_t
         3,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_._has_bits_),
-        12, // hasbit index offset
+        13, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.reference_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.roof_appearance_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.side_appearance_),
@@ -227,6 +228,7 @@ const ::uint32_t
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.crosshair_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.target_color_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.ghost_target_color_),
+        PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.center_target_color_),
         PROTOBUF_FIELD_OFFSET(::aim::Theme, _impl_.health_bar_),
         0,
         1,
@@ -237,6 +239,7 @@ const ::uint32_t
         6,
         7,
         8,
+        9,
 };
 
 static const ::_pbi::MigrationSchema
@@ -268,7 +271,7 @@ const char descriptor_table_protodef_theme_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "\014health_color\030\001 \001(\0132\020.aim.StoredColor\022\024\n"
     "\014health_alpha\030\002 \001(\002\022*\n\020background_color\030"
     "\003 \001(\0132\020.aim.StoredColor\022\030\n\020background_al"
-    "pha\030\004 \001(\002\"\200\003\n\005Theme\022\021\n\treference\030\001 \001(\t\022,"
+    "pha\030\004 \001(\002\"\257\003\n\005Theme\022\021\n\treference\030\001 \001(\t\022,"
     "\n\017roof_appearance\030\002 \001(\0132\023.aim.WallAppear"
     "ance\022,\n\017side_appearance\030\003 \001(\0132\023.aim.Wall"
     "Appearance\022-\n\020front_appearance\030\004 \001(\0132\023.a"
@@ -276,9 +279,10 @@ const char descriptor_table_protodef_theme_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "\001(\0132\023.aim.WallAppearance\022&\n\tcrosshair\030\007 "
     "\001(\0132\023.aim.CrosshairTheme\022&\n\014target_color"
     "\030\010 \001(\0132\020.aim.StoredColor\022,\n\022ghost_target"
-    "_color\030\t \001(\0132\020.aim.StoredColor\022,\n\nhealth"
-    "_bar\030\013 \001(\0132\030.aim.HealthBarAppearanceb\010ed"
-    "itionsp\350\007"
+    "_color\030\t \001(\0132\020.aim.StoredColor\022-\n\023center"
+    "_target_color\030\n \001(\0132\020.aim.StoredColor\022,\n"
+    "\nhealth_bar\030\013 \001(\0132\030.aim.HealthBarAppeara"
+    "nceb\010editionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_theme_2eproto_deps[1] = {
@@ -288,7 +292,7 @@ static ::absl::once_flag descriptor_table_theme_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_theme_2eproto = {
     false,
     false,
-    889,
+    936,
     descriptor_table_protodef_theme_2eproto,
     "theme.proto",
     &descriptor_table_theme_2eproto_once,
@@ -1791,6 +1795,12 @@ void Theme::clear_ghost_target_color() {
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000080U);
 }
+void Theme::clear_center_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.center_target_color_ != nullptr) _impl_.center_target_color_->Clear();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000100U);
+}
 Theme::Theme(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
     : ::google::protobuf::Message(arena, Theme_class_data_.base()) {
@@ -1843,7 +1853,10 @@ Theme::Theme(
   _impl_.ghost_target_color_ = (CheckHasBit(cached_has_bits, 0x00000080U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.ghost_target_color_)
                 : nullptr;
-  _impl_.health_bar_ = (CheckHasBit(cached_has_bits, 0x00000100U))
+  _impl_.center_target_color_ = (CheckHasBit(cached_has_bits, 0x00000100U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.center_target_color_)
+                : nullptr;
+  _impl_.health_bar_ = (CheckHasBit(cached_has_bits, 0x00000200U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.health_bar_)
                 : nullptr;
 
@@ -1883,6 +1896,7 @@ inline void Theme::SharedDtor(MessageLite& self) {
   delete this_._impl_.crosshair_;
   delete this_._impl_.target_color_;
   delete this_._impl_.ghost_target_color_;
+  delete this_._impl_.center_target_color_;
   delete this_._impl_.health_bar_;
   this_._impl_.~Impl_();
 }
@@ -1930,17 +1944,17 @@ Theme::GetClassData() const {
   return Theme_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<4, 9, 8, 35, 2>
+const ::_pbi::TcParseTable<4, 10, 9, 35, 2>
 Theme::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(Theme, _impl_._has_bits_),
     0, // no _extensions_
     11, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294965792,  // skipmap
+    4294965280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    9,  // num_field_entries
-    8,  // num_aux_entries
+    10,  // num_field_entries
+    9,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     Theme_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -1983,10 +1997,13 @@ Theme::_table_ = {
     {::_pbi::TcParser::FastMtS1,
      {74, 7, 6,
       PROTOBUF_FIELD_OFFSET(Theme, _impl_.ghost_target_color_)}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.StoredColor center_target_color = 10;
+    {::_pbi::TcParser::FastMtS1,
+     {82, 8, 7,
+      PROTOBUF_FIELD_OFFSET(Theme, _impl_.center_target_color_)}},
     // .aim.HealthBarAppearance health_bar = 11;
     {::_pbi::TcParser::FastMtS1,
-     {90, 8, 7,
+     {90, 9, 8,
       PROTOBUF_FIELD_OFFSET(Theme, _impl_.health_bar_)}},
     {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
@@ -2011,8 +2028,10 @@ Theme::_table_ = {
     {PROTOBUF_FIELD_OFFSET(Theme, _impl_.target_color_), _Internal::kHasBitsOffset + 6, 5, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.StoredColor ghost_target_color = 9;
     {PROTOBUF_FIELD_OFFSET(Theme, _impl_.ghost_target_color_), _Internal::kHasBitsOffset + 7, 6, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.StoredColor center_target_color = 10;
+    {PROTOBUF_FIELD_OFFSET(Theme, _impl_.center_target_color_), _Internal::kHasBitsOffset + 8, 7, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.HealthBarAppearance health_bar = 11;
-    {PROTOBUF_FIELD_OFFSET(Theme, _impl_.health_bar_), _Internal::kHasBitsOffset + 8, 7, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(Theme, _impl_.health_bar_), _Internal::kHasBitsOffset + 9, 8, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::WallAppearance>()},
@@ -2020,6 +2039,7 @@ Theme::_table_ = {
       {::_pbi::TcParser::GetTable<::aim::WallAppearance>()},
       {::_pbi::TcParser::GetTable<::aim::WallAppearance>()},
       {::_pbi::TcParser::GetTable<::aim::CrosshairTheme>()},
+      {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
       {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
       {::_pbi::TcParser::GetTable<::aim::StoredColor>()},
       {::_pbi::TcParser::GetTable<::aim::HealthBarAppearance>()},
@@ -2071,9 +2091,15 @@ PROTOBUF_NOINLINE void Theme::Clear() {
       _impl_.ghost_target_color_->Clear();
     }
   }
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
-    ABSL_DCHECK(_impl_.health_bar_ != nullptr);
-    _impl_.health_bar_->Clear();
+  if (BatchCheckHasBit(cached_has_bits, 0x00000300U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+      ABSL_DCHECK(_impl_.center_target_color_ != nullptr);
+      _impl_.center_target_color_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+      ABSL_DCHECK(_impl_.health_bar_ != nullptr);
+      _impl_.health_bar_->Clear();
+    }
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -2155,8 +2181,15 @@ PROTOBUF_NOINLINE void Theme::Clear() {
         stream);
   }
 
-  // .aim.HealthBarAppearance health_bar = 11;
+  // .aim.StoredColor center_target_color = 10;
   if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        10, *this_._impl_.center_target_color_, this_._impl_.center_target_color_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.HealthBarAppearance health_bar = 11;
+  if (CheckHasBit(cached_has_bits, 0x00000200U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
         11, *this_._impl_.health_bar_, this_._impl_.health_bar_->GetCachedSize(), target,
         stream);
@@ -2229,9 +2262,14 @@ PROTOBUF_NOINLINE void Theme::Clear() {
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.ghost_target_color_);
     }
   }
-   {
-    // .aim.HealthBarAppearance health_bar = 11;
+  if (BatchCheckHasBit(cached_has_bits, 0x00000300U)) {
+    // .aim.StoredColor center_target_color = 10;
     if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.center_target_color_);
+    }
+    // .aim.HealthBarAppearance health_bar = 11;
+    if (CheckHasBit(cached_has_bits, 0x00000200U)) {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.health_bar_);
     }
@@ -2316,12 +2354,22 @@ void Theme::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
   }
-  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
-    ABSL_DCHECK(from._impl_.health_bar_ != nullptr);
-    if (_this->_impl_.health_bar_ == nullptr) {
-      _this->_impl_.health_bar_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.health_bar_);
-    } else {
-      _this->_impl_.health_bar_->MergeFrom(*from._impl_.health_bar_);
+  if (BatchCheckHasBit(cached_has_bits, 0x00000300U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+      ABSL_DCHECK(from._impl_.center_target_color_ != nullptr);
+      if (_this->_impl_.center_target_color_ == nullptr) {
+        _this->_impl_.center_target_color_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.center_target_color_);
+      } else {
+        _this->_impl_.center_target_color_->MergeFrom(*from._impl_.center_target_color_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000200U)) {
+      ABSL_DCHECK(from._impl_.health_bar_ != nullptr);
+      if (_this->_impl_.health_bar_ == nullptr) {
+        _this->_impl_.health_bar_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.health_bar_);
+      } else {
+        _this->_impl_.health_bar_->MergeFrom(*from._impl_.health_bar_);
+      }
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;

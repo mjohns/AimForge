@@ -8,6 +8,7 @@ namespace aim {
 
 ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
                                const Room& room,
+                               ShotType::TypeCase shot_type,
                                u16 replay_fps,
                                i32 duration_seconds,
                                i32 num_targets,
@@ -18,6 +19,7 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
   replay_->room = room;
   replay_->replay_fps = replay_fps;
   replay_->num_targets = num_targets;
+  replay_->shot_type = shot_type;
 
   i32 max_replay_frame_number = replay_fps * duration_seconds;
   i32 total_target_data_count = max_replay_frame_number * num_targets;

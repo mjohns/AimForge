@@ -118,6 +118,11 @@ class ThemeEditor {
       ImGui::SameLine();
       DrawStoredColorEditor("GhostTargetColor", current_theme_.mutable_ghost_target_color());
 
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Center color");
+      ImGui::SameLine();
+      DrawStoredColorEditor("CenterTargetColor", current_theme_.mutable_center_target_color());
+
       ImGui::Unindent();
 
       ImGui::SpacedSeparator();
@@ -337,7 +342,7 @@ class ThemeEditorScreen : public UiScreen {
     look_at_ = camera.GetLookAt();
 
     Target t;
-    t.radius = 3;
+    t.radius = 8;
     t.wall_position = glm::vec2(20, 20);
     t.health_seconds = 3;
     t.AddTestDamage();
@@ -535,6 +540,7 @@ class ThemeEditorScreen : public UiScreen {
       health_bar.set_size(1.5);
       app_.renderer()->DrawScenario(projection_,
                                     default_room_,
+                                    ShotType::kTrackingProximity,
                                     theme_editor_->GetThemeToToRender(),
                                     health_bar,
                                     target_manager_.GetTargets(),

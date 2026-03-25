@@ -46,6 +46,8 @@ message Theme {
   CrosshairTheme crosshair = 7;
   StoredColor target_color = 8;
   StoredColor ghost_target_color = 9;
+  // For proximity tracking types, the center of the target will have the specified color.
+  StoredColor center_target_color = 10;
 
   HealthBarAppearance health_bar = 11;
 }

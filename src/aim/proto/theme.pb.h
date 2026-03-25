@@ -1162,6 +1162,7 @@ class Theme final : public ::google::protobuf::Message
     kCrosshairFieldNumber = 7,
     kTargetColorFieldNumber = 8,
     kGhostTargetColorFieldNumber = 9,
+    kCenterTargetColorFieldNumber = 10,
     kHealthBarFieldNumber = 11,
   };
   // string reference = 1;
@@ -1285,6 +1286,21 @@ class Theme final : public ::google::protobuf::Message
   ::aim::StoredColor* PROTOBUF_NONNULL _internal_mutable_ghost_target_color();
 
   public:
+  // .aim.StoredColor center_target_color = 10;
+  bool has_center_target_color() const;
+  void clear_center_target_color() ;
+  const ::aim::StoredColor& center_target_color() const;
+  [[nodiscard]] ::aim::StoredColor* PROTOBUF_NULLABLE release_center_target_color();
+  ::aim::StoredColor* PROTOBUF_NONNULL mutable_center_target_color();
+  void set_allocated_center_target_color(::aim::StoredColor* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_center_target_color(::aim::StoredColor* PROTOBUF_NULLABLE value);
+  ::aim::StoredColor* PROTOBUF_NULLABLE unsafe_arena_release_center_target_color();
+
+  private:
+  const ::aim::StoredColor& _internal_center_target_color() const;
+  ::aim::StoredColor* PROTOBUF_NONNULL _internal_mutable_center_target_color();
+
+  public:
   // .aim.HealthBarAppearance health_bar = 11;
   bool has_health_bar() const;
   void clear_health_bar() ;
@@ -1304,8 +1320,8 @@ class Theme final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 9,
-                                   8, 35,
+  static const ::google::protobuf::internal::TcParseTable<4, 10,
+                                   9, 35,
                                    2>
       _table_;
 
@@ -1334,6 +1350,7 @@ class Theme final : public ::google::protobuf::Message
     ::aim::CrosshairTheme* PROTOBUF_NULLABLE crosshair_;
     ::aim::StoredColor* PROTOBUF_NULLABLE target_color_;
     ::aim::StoredColor* PROTOBUF_NULLABLE ghost_target_color_;
+    ::aim::StoredColor* PROTOBUF_NULLABLE center_target_color_;
     ::aim::HealthBarAppearance* PROTOBUF_NULLABLE health_bar_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -2937,9 +2954,102 @@ inline void Theme::set_allocated_ghost_target_color(::aim::StoredColor* PROTOBUF
   // @@protoc_insertion_point(field_set_allocated:aim.Theme.ghost_target_color)
 }
 
+// .aim.StoredColor center_target_color = 10;
+inline bool Theme::has_center_target_color() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  PROTOBUF_ASSUME(!value || _impl_.center_target_color_ != nullptr);
+  return value;
+}
+inline const ::aim::StoredColor& Theme::_internal_center_target_color() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::StoredColor* p = _impl_.center_target_color_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::StoredColor&>(::aim::_StoredColor_default_instance_);
+}
+inline const ::aim::StoredColor& Theme::center_target_color() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Theme.center_target_color)
+  return _internal_center_target_color();
+}
+inline void Theme::unsafe_arena_set_allocated_center_target_color(
+    ::aim::StoredColor* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.center_target_color_);
+  }
+  _impl_.center_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.center_target_color)
+}
+inline ::aim::StoredColor* PROTOBUF_NULLABLE Theme::release_center_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::StoredColor* released = _impl_.center_target_color_;
+  _impl_.center_target_color_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::StoredColor* PROTOBUF_NULLABLE Theme::unsafe_arena_release_center_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Theme.center_target_color)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::StoredColor* temp = _impl_.center_target_color_;
+  _impl_.center_target_color_ = nullptr;
+  return temp;
+}
+inline ::aim::StoredColor* PROTOBUF_NONNULL Theme::_internal_mutable_center_target_color() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.center_target_color_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::StoredColor>(GetArena());
+    _impl_.center_target_color_ = reinterpret_cast<::aim::StoredColor*>(p);
+  }
+  return _impl_.center_target_color_;
+}
+inline ::aim::StoredColor* PROTOBUF_NONNULL Theme::mutable_center_target_color()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ::aim::StoredColor* _msg = _internal_mutable_center_target_color();
+  // @@protoc_insertion_point(field_mutable:aim.Theme.center_target_color)
+  return _msg;
+}
+inline void Theme::set_allocated_center_target_color(::aim::StoredColor* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.center_target_color_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::Message*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  }
+
+  _impl_.center_target_color_ = reinterpret_cast<::aim::StoredColor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.Theme.center_target_color)
+}
+
 // .aim.HealthBarAppearance health_bar = 11;
 inline bool Theme::has_health_bar() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   PROTOBUF_ASSUME(!value || _impl_.health_bar_ != nullptr);
   return value;
 }
@@ -2947,7 +3057,7 @@ inline void Theme::clear_health_bar() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.health_bar_ != nullptr) _impl_.health_bar_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000200U);
 }
 inline const ::aim::HealthBarAppearance& Theme::_internal_health_bar() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -2966,16 +3076,16 @@ inline void Theme::unsafe_arena_set_allocated_health_bar(
   }
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarAppearance*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Theme.health_bar)
 }
 inline ::aim::HealthBarAppearance* PROTOBUF_NULLABLE Theme::release_health_bar() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::HealthBarAppearance* released = _impl_.health_bar_;
   _impl_.health_bar_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -2995,7 +3105,7 @@ inline ::aim::HealthBarAppearance* PROTOBUF_NULLABLE Theme::unsafe_arena_release
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Theme.health_bar)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::HealthBarAppearance* temp = _impl_.health_bar_;
   _impl_.health_bar_ = nullptr;
   return temp;
@@ -3010,7 +3120,7 @@ inline ::aim::HealthBarAppearance* PROTOBUF_NONNULL Theme::_internal_mutable_hea
 }
 inline ::aim::HealthBarAppearance* PROTOBUF_NONNULL Theme::mutable_health_bar()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   ::aim::HealthBarAppearance* _msg = _internal_mutable_health_bar();
   // @@protoc_insertion_point(field_mutable:aim.Theme.health_bar)
   return _msg;
@@ -3027,9 +3137,9 @@ inline void Theme::set_allocated_health_bar(::aim::HealthBarAppearance* PROTOBUF
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000100U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000200U);
   }
 
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarAppearance*>(value);

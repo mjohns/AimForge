@@ -61,6 +61,7 @@ struct ReplayEvent {
 
 struct Replay {
   Room room;
+  ShotType::TypeCase shot_type = ShotType::TYPE_NOT_SET;
   u16 replay_fps;
   u16 num_targets;
   std::string scenario_name;
@@ -78,6 +79,7 @@ class ReplayRecorder {
  public:
   ReplayRecorder(const std::string& scenario_name,
                  const Room& room,
+                 ShotType::TypeCase shot_type,
                  u16 replay_fps,
                  i32 duration_seconds,
                  i32 num_targets,

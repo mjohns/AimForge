@@ -550,6 +550,7 @@ class ScenarioEditorScreen : public UiScreen {
       auto projection = GetPerspectiveTransformation(app_.screen_info(), room.horizontal_fov());
       app_.renderer()->DrawScenario(projection,
                                     room,
+                                    def_.shot_type().type_case(),
                                     theme_,
                                     settings_.health_bar(),
                                     target_manager_.GetTargets(),

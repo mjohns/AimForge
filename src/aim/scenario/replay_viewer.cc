@@ -547,6 +547,7 @@ class ReplayViewerScreen : public Screen {
       LookAtInfo look_at = replay_view_->camera.GetLookAt();
       app_.renderer()->DrawScenario(projection_,
                                     replay.room,
+                                    replay.shot_type,
                                     theme_,
                                     settings_.health_bar(),
                                     replay_view_->target_manager.GetTargets(),
