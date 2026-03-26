@@ -343,6 +343,20 @@ void InputStoredColor(const std::string& id, aim::StoredColor* stored_color, flo
                     PROTO_FLOAT_FIELD(aim::StoredColor, stored_color, multiplier));
 }
 
+void InputOptionalStoredColor(const std::string& id,
+                              aim::PtrField<aim::StoredColor> stored_color,
+                              float char_x) {
+  ImGui::IdGuard cid(id);
+  bool has_value = stored_color.has();
+  ImGui::Checkbox("##UseStoredColor", &has_value);
+  if (has_value) {
+    ImGui::SameLine();
+    InputStoredColor("StoredColorEditor", stored_color.get_mutable(), char_x);
+  } else {
+    stored_color.clear();
+  }
+}
+
 void SpacedSeparator() {
   ImGui::Spacing();
   ImGui::Separator();

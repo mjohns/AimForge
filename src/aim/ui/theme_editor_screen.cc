@@ -121,7 +121,9 @@ class ThemeEditor {
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Center color");
       ImGui::SameLine();
-      DrawStoredColorEditor("CenterTargetColor", current_theme_.mutable_center_target_color());
+      DrawOptionalStoredColorEditor(
+          "CenterTargetColor",
+          PROTO_PTR_FIELD(StoredColor, Theme, &current_theme_, center_target_color));
 
       ImGui::Unindent();
 
@@ -256,6 +258,11 @@ class ThemeEditor {
   void DrawStoredColorEditor(const std::string& id, StoredColor* stored_color) {
     float char_x = ImGui::GetDefaultCharSizeX();
     ImGui::InputStoredColor(id, stored_color, char_x);
+  }
+
+  void DrawOptionalStoredColorEditor(const std::string& id, PtrField<StoredColor> stored_color) {
+    float char_x = ImGui::GetDefaultCharSizeX();
+    ImGui::InputOptionalStoredColor(id, stored_color, char_x);
   }
 
   void DrawWallAppearanceEditor(const std::string& header,

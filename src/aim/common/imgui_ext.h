@@ -328,6 +328,9 @@ struct InputIntParams {
 void InputInt(const InputIntParams& params, aim::Field<int> field);
 
 void InputStoredColor(const std::string& id, aim::StoredColor* stored_color, float char_x);
+void InputOptionalStoredColor(const std::string& id,
+                              aim::PtrField<aim::StoredColor> stored_color,
+                              float char_x);
 
 void SpacedSeparator();
 
