@@ -106,6 +106,7 @@ inline const std::vector<std::pair<ShotType::TypeCase, std::string>> kShotTypes{
     {ShotType::kTrackingKill, "Switching"},
     {ShotType::kPoke, "Poke"},
     {ShotType::kTrackingProximity, "Proximity tracking"},
+    {ShotType::kPokeInstant, "Instant poke"},
     {ShotType::kClickMulti, "Multi click"},
 };
 extern const std::unordered_map<ShotType::TypeCase, std::string> kShotTypeDisplayNameMap;

@@ -171,6 +171,8 @@ message ShotType {
     // A single invincible target is tracked. The score is based on how close to the center you are
     // and not the size of the target which is just visual.
     bool tracking_proximity = 6;
+    // Poke with an instant kill time.
+    bool poke_instant = 7;
   }
   // If unset defaults to 0.05 (50 millis)
   float poke_kill_time_seconds = 10;

@@ -1192,6 +1192,9 @@ void DrawShotTypeEditor(ShotType& s) {
     if (type == ShotType::kPoke) {
       s.set_poke(true);
     }
+    if (type == ShotType::kPokeInstant) {
+      s.set_poke_instant(true);
+    }
   }
 
   if (type == ShotType::kPoke) {

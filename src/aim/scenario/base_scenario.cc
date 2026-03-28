@@ -96,6 +96,8 @@ void BaseScenario::UpdateState(UpdateStateData* data) {
     HandleProximityTrackingHits(data);
   } else if (shot_type == ShotType::kPoke) {
     HandlePokeHits(data);
+  } else if (shot_type == ShotType::kPokeInstant) {
+    HandlePokeInstantHits(data);
   } else {
     HandleClickHits(data);
   }
@@ -321,6 +323,24 @@ void BaseScenario::TrackingHoldDone() {
 
 void BaseScenario::OnPause() {
   TrackingHoldDone();
+}
+
+void BaseScenario::HandlePokeInstantHits(UpdateStateData* data) {
+  auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
+  if (maybe_hit_target_id.has_value()) {
+    stats_.num_hits++;
+    stats_.num_shots++;
+    stats_.num_kills++;
+    PlayKillSound();
+    data->force_render = true;
+
+    auto hit_target_id = *maybe_hit_target_id;
+    AddNewTarget(hit_target_id);
+
+    if (replay_) {
+      replay_->AddMouseClick(timer_.GetElapsedMicros(), true);
+    }
+  }
 }
 
 void BaseScenario::HandlePokeHits(UpdateStateData* data) {
@@ -610,6 +630,7 @@ std::optional<StatsDbRow> BaseScenario::GetStatsRow() {
     case ShotType::kClickSingle:
     case ShotType::kClickMulti:
     case ShotType::kPoke:
+    case ShotType::kPokeInstant:
       // Nothing extra to do
       break;
     default:
@@ -661,6 +682,7 @@ float BaseScenario::CalculateScore(float current_time) {
       return stats_.num_hits * (1 - accuracy_penalty) * time_normalized_multiplier;
     }
     case ShotType::kPoke:
+    case ShotType::kPokeInstant:
       return stats_.num_kills * time_normalized_multiplier;
     default:
       break;

@@ -4154,6 +4154,7 @@ class ShotType final : public ::google::protobuf::Message
     kClickSingle = 4,
     kClickMulti = 5,
     kTrackingProximity = 6,
+    kPokeInstant = 7,
     TYPE_NOT_SET = 0,
   };
   static constexpr int kIndexInFileMessages = 13;
@@ -4261,6 +4262,7 @@ class ShotType final : public ::google::protobuf::Message
     kClickSingleFieldNumber = 4,
     kClickMultiFieldNumber = 5,
     kTrackingProximityFieldNumber = 6,
+    kPokeInstantFieldNumber = 7,
   };
   // .aim.ReloadInfo reload = 20;
   bool has_reload() const;
@@ -4461,6 +4463,17 @@ class ShotType final : public ::google::protobuf::Message
   void _internal_set_tracking_proximity(bool value);
 
   public:
+  // bool poke_instant = 7;
+  bool has_poke_instant() const;
+  void clear_poke_instant() ;
+  bool poke_instant() const;
+  void set_poke_instant(bool value);
+
+  private:
+  bool _internal_poke_instant() const;
+  void _internal_set_poke_instant(bool value);
+
+  public:
   void clear_type();
   TypeCase type_case() const;
   // @@protoc_insertion_point(class_scope:aim.ShotType)
@@ -4472,10 +4485,11 @@ class ShotType final : public ::google::protobuf::Message
   void set_has_click_single();
   void set_has_click_multi();
   void set_has_tracking_proximity();
+  void set_has_poke_instant();
   inline bool has_type() const;
   inline void clear_has_type();
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 18,
+  static const ::google::protobuf::internal::TcParseTable<4, 19,
                                    1, 0,
                                    2>
       _table_;
@@ -4518,6 +4532,7 @@ class ShotType final : public ::google::protobuf::Message
       bool click_single_;
       bool click_multi_;
       bool tracking_proximity_;
+      bool poke_instant_;
     } type_;
     ::uint32_t _oneof_case_[1];
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -15597,6 +15612,39 @@ inline void ShotType::set_tracking_proximity(bool value) {
 inline bool ShotType::_internal_tracking_proximity() const {
   if (type_case() == kTrackingProximity) {
     return _impl_.type_.tracking_proximity_;
+  }
+  return false;
+}
+
+// bool poke_instant = 7;
+inline bool ShotType::has_poke_instant() const {
+  return type_case() == kPokeInstant;
+}
+inline void ShotType::set_has_poke_instant() {
+  _impl_._oneof_case_[0] = kPokeInstant;
+}
+inline void ShotType::clear_poke_instant() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (type_case() == kPokeInstant) {
+    _impl_.type_.poke_instant_ = false;
+    clear_has_type();
+  }
+}
+inline bool ShotType::poke_instant() const {
+  // @@protoc_insertion_point(field_get:aim.ShotType.poke_instant)
+  return _internal_poke_instant();
+}
+inline void ShotType::set_poke_instant(bool value) {
+  if (type_case() != kPokeInstant) {
+    clear_type();
+    set_has_poke_instant();
+  }
+  _impl_.type_.poke_instant_ = value;
+  // @@protoc_insertion_point(field_set:aim.ShotType.poke_instant)
+}
+inline bool ShotType::_internal_poke_instant() const {
+  if (type_case() == kPokeInstant) {
+    return _impl_.type_.poke_instant_;
   }
   return false;
 }
