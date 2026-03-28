@@ -6,6 +6,7 @@
 #include "aim/graphics/textures.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/play_time_screen.h"
+#include "aim/ui/reaction_time_screen.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
@@ -92,6 +93,9 @@ void DrawTopBar(UiScreen* screen) {
     }
     if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
       screen->PushNextScreen(CreatePlayTimeScreen(&app));
+    }
+    if (ImGui::Selectable(std::format("{} Reaction time", icons::kTimer).c_str(), false)) {
+      screen->PushNextScreen(CreateReactionTimeScreen(&app));
     }
 
     ImGui::SpacedSeparator();
