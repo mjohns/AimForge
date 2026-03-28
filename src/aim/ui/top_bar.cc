@@ -94,7 +94,7 @@ void DrawTopBar(UiScreen* screen) {
     if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
       screen->PushNextScreen(CreatePlayTimeScreen(&app));
     }
-    if (ImGui::Selectable(std::format("{} Reaction time", icons::kTimer).c_str(), false)) {
+    if (ImGui::Selectable(std::format("{} Reaction", icons::kTimer).c_str(), false)) {
       screen->PushNextScreen(CreateReactionTimeScreen(&app));
     }
 

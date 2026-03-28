@@ -22,25 +22,24 @@ struct ReactionTimeResult {
 
 class SingleReactionTimeScreen : public Screen {
  public:
-  SingleReactionTimeScreen(Application* app, const Settings& settings, ReactionTimeResult* result)
-      : Screen(*app), result_(result), settings_(settings) {
+  SingleReactionTimeScreen(Application* app,
+                           const Settings& settings,
+                           bool is_audio,
+                           ReactionTimeResult* result)
+      : Screen(*app), result_(result), settings_(settings), is_audio_(is_audio) {
     app->SetPresentMode(settings.present_mode());
-    stopwatch_.Start();
-    initial_wait_time_seconds_ = app->rand().GetInRange(1, 3);
   }
 
   void OnEvents(std::span<SDL_Event> events) override {
-    ImGuiIO& io = ImGui::GetIO();
     for (const SDL_Event& event : events) {
       if (event.type == SDL_EVENT_QUIT) {
         app_.RequestExit();
       }
-      ImGui_ImplSDL3_ProcessEvent(&event);
-      OnEvent(event, io.WantTextInput);
+      OnEvent(event);
     }
   }
 
-  void OnEvent(const SDL_Event& event, bool user_is_typing) {
+  void OnEvent(const SDL_Event& event) {
     if (IsEscapeKeyDown(event)) {
       PopSelf();
     }
@@ -52,60 +51,98 @@ class SingleReactionTimeScreen : public Screen {
       } else {
         result_->click_too_early = true;
       }
-
       PopSelf();
     }
   }
 
-  void OnTick() override {
-    i64 now_micros = stopwatch_.GetElapsedMicros();
+  void DrawSquare(ImU32 color) {
+    ScreenInfo screen = app_.screen_info();
+    float char_x = ImGui::GetDefaultCharSizeX();
+    float width = char_x * 14;
 
+    ImVec2 upper_left;
+    upper_left.x = screen.center.x - width;
+    upper_left.y = screen.center.y - width;
+
+    ImVec2 bottom_right;
+    bottom_right.x = screen.center.x + width;
+    bottom_right.y = screen.center.y + width;
+
+    ImGui::GetWindowDrawList()->AddRectFilled(upper_left, bottom_right, color);
+  }
+
+  void OnTickStart() override {
+    if (set_react_start_time_) {
+      // Set the start time after rendering of the trigger frame is complete.
+      set_react_start_time_ = false;
+      react_start_time_ = stopwatch_.GetElapsedMicros();
+    }
+  }
+
+  void OnTick() override {
+    if (initial_wait_time_seconds_ < 0) {
+      // Initialize
+      stopwatch_.Start();
+      initial_wait_time_seconds_ = app_.rand().GetInRange(1, 3);
+
+      app_.NewImGuiFrame();
+      app_.BeginFullscreenWindow();
+
+      if (is_audio_) {
+        ScreenInfo screen = app_.screen_info();
+        auto bold = app_.font_manager().UseLargeBold();
+        std::string message = "Click after sound";
+        ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+        ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+        ImGui::SetCursorPosY(app_.screen_info().center.y - text_size.y * 0.5);
+        ImGui::Text(message);
+      } else {
+        // Visual
+        DrawSquare(IM_COL32(255, 0, 0, 255));
+      }
+
+      ImGui::End();
+      app_.Render();
+      return;
+    }
+
+    i64 now_micros = stopwatch_.GetElapsedMicros();
     if (MicrosToSeconds(now_micros) > 10) {
       // No reaction. Just return;
       PopSelf();
       return;
     }
 
-    bool do_render = last_render_time_ < 0 || (now_micros - last_render_time_) > 4000;
-
     bool waiting_for_reaction = react_start_time_ > 0;
     if (!waiting_for_reaction) {
       // See if we should play audio/visual cue.
       bool show_cue = MicrosToSeconds(now_micros) >= initial_wait_time_seconds_;
       if (show_cue) {
-        app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
         react_start_time_ = now_micros;
-        do_render = true;
+
+        if (is_audio_) {
+          app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
+        } else {
+          app_.NewImGuiFrame();
+          app_.BeginFullscreenWindow();
+          DrawSquare(IM_COL32(0, 255, 0, 255));
+          ImGui::End();
+          app_.Render();
+          // Reset the start time after rendering is done.
+          set_react_start_time_ = true;
+        }
       }
-    } else {
-      // Waiting for click.
     }
-
-    if (!do_render) {
-      return;
-    }
-
-    last_render_time_ = now_micros;
-
-    app_.NewImGuiFrame();
-    app_.BeginFullscreenWindow();
-    if (waiting_for_reaction) {
-      float elapsed_ms = (now_micros - react_start_time_) / 1000.0f;
-      ImGui::TextFmt("Click {}ms", MaybeIntToString(elapsed_ms));
-    } else {
-      ImGui::Text("Click after sound");
-    }
-    ImGui::End();
-    app_.Render();
   }
 
   Settings settings_;
   ReactionTimeResult* result_;
   Stopwatch stopwatch_;
 
-  float initial_wait_time_seconds_;
+  float initial_wait_time_seconds_ = -1;
   i64 react_start_time_ = -1;
-  i64 last_render_time_ = -1;
+  bool is_audio_ = true;
+  bool set_react_start_time_ = false;
 };
 
 class ReactionTimeScreen : public UiScreen {
@@ -132,7 +169,14 @@ class ReactionTimeScreen : public UiScreen {
     if (ImGui::Button("Audio")) {
       waiting_for_result_ = true;
       result_ = {};
-      PushNextScreen(std::make_unique<SingleReactionTimeScreen>(&app_, settings_, &result_));
+      PushNextScreen(std::make_unique<SingleReactionTimeScreen>(
+          &app_, settings_, /*is_audio=*/true, &result_));
+    }
+    if (ImGui::Button("Visual")) {
+      waiting_for_result_ = true;
+      result_ = {};
+      PushNextScreen(std::make_unique<SingleReactionTimeScreen>(
+          &app_, settings_, /*is_audio=*/false, &result_));
     }
 
     for (i64 time_micros : reaction_times_) {
