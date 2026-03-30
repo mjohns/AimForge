@@ -18,7 +18,6 @@ class WallTargetPlacer {
 
   // z represents the distance away from the wall for the target. 0 means on the wall.
   virtual glm::vec3 GetNextPosition() = 0;
-  virtual glm::vec3 GetNextPosition(ProfileSelectionContext* context) = 0;
 };
 
 std::unique_ptr<WallTargetPlacer> CreateWallTargetPlacer(const Wall& wall,

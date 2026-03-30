@@ -24,10 +24,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
       : wall_(wall), strategy_(strategy), target_manager_(target_manager), app_(app) {}
 
   glm::vec3 GetNextPosition() override {
-    return GetNextPosition(&selection_context_);
-  }
+    ProfileSelectionContext* context = &selection_context_;
 
-  glm::vec3 GetNextPosition(ProfileSelectionContext* context) override {
     glm::vec3 candidate_pos(0.0f);
     if (strategy_.regions_size() == 0) {
       return candidate_pos;
