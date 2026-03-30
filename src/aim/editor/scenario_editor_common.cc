@@ -122,6 +122,19 @@ void DrawTargetRegion(float char_x, bool support_depth, TargetRegion* region) {
     region->clear_depth_jitter();
   }
 
+  ImGui::AlignTextToFramePadding();
+  ImGui::Text("Fixed distance");
+  ImGui::SameLine();
+  DrawOptionalJitteredRegionLengthEditor(
+      "FixedDistanceInput",
+      RegionLength::kXPercentValue,
+      PROTO_PTR_FIELD(RegionLength, TargetRegion, region, fixed_distance_from_last_target),
+      PROTO_PTR_FIELD(RegionLength, TargetRegion, region, fixed_distance_from_last_target_jitter),
+      10);
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "New target will be placed at a fixed distance from the last target that was added.");
+
   if (!is_point) {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Offset");
@@ -380,20 +393,6 @@ void DrawTargetPlacementStrategyEditor(const std::string& id,
       1);
   ImGui::SameLine();
   ImGui::HelpMarker("Minimum vertical distance between targets along the y axis.");
-
-  ImGui::AlignTextToFramePadding();
-  ImGui::Text("Fixed distance");
-  ImGui::SameLine();
-  DrawOptionalJitteredRegionLengthEditor(
-      "FixedDistanceInput",
-      RegionLength::kXPercentValue,
-      PROTO_PTR_FIELD(RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target),
-      PROTO_PTR_FIELD(
-          RegionLength, TargetPlacementStrategy, s, fixed_distance_from_last_target_jitter),
-      10);
-  ImGui::SameLine();
-  ImGui::HelpMarker(
-      "New target will be placed at a fixed distance from the last target that was added.");
 }
 
 void DrawBoundsEditor(const std::string& id, Bounds* bounds, BoundsDimensions dimensions) {

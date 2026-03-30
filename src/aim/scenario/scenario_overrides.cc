@@ -226,11 +226,13 @@ ScenarioDef ApplyLeveledOverrides(const ScenarioDef& original,
     if (maybe_strat && maybe_strat->has()) {
       float mult = get_multiplier(overrides.fixed_distance_from_last_target_multiplier());
       TargetPlacementStrategy* strat = maybe_strat->get_mutable();
-      if (strat->has_fixed_distance_from_last_target()) {
-        MultiplyRegionLength(strat->mutable_fixed_distance_from_last_target(), mult);
-      }
-      if (strat->has_fixed_distance_from_last_target_jitter()) {
-        MultiplyRegionLength(strat->mutable_fixed_distance_from_last_target_jitter(), mult);
+      for (TargetRegion& region : *strat->mutable_regions()) {
+        if (region.has_fixed_distance_from_last_target()) {
+          MultiplyRegionLength(region.mutable_fixed_distance_from_last_target(), mult);
+        }
+        if (region.has_fixed_distance_from_last_target_jitter()) {
+          MultiplyRegionLength(region.mutable_fixed_distance_from_last_target_jitter(), mult);
+        }
       }
     }
   }

@@ -3495,7 +3495,13 @@
          "yLength": {
           "yPercentValue": 0.9
          }
-        }
+        },
+      "fixedDistanceFromLastTarget": {
+       "value": 10
+      },
+      "fixedDistanceFromLastTargetJitter": {
+       "value": 0
+      }
        },
        {
         "info": {
@@ -3519,12 +3525,6 @@
       },
       "minDistance": {
        "value": 8
-      },
-      "fixedDistanceFromLastTarget": {
-       "value": 10
-      },
-      "fixedDistanceFromLastTargetJitter": {
-       "value": 0
       }
      }
     }

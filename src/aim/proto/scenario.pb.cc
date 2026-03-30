@@ -752,6 +752,8 @@ inline constexpr TargetRegion::Impl_::Impl_(
         y_offset_{nullptr},
         depth_{nullptr},
         depth_jitter_{nullptr},
+        fixed_distance_from_last_target_{nullptr},
+        fixed_distance_from_last_target_jitter_{nullptr},
         type_{},
         _oneof_case_{} {}
 
@@ -875,8 +877,6 @@ inline constexpr TargetPlacementStrategy::Impl_::Impl_(
         regions_{},
         regions_info_{nullptr},
         min_distance_{nullptr},
-        fixed_distance_from_last_target_{nullptr},
-        fixed_distance_from_last_target_jitter_{nullptr},
         min_x_distance_{nullptr},
         min_y_distance_{nullptr} {}
 
@@ -1287,12 +1287,14 @@ const ::uint32_t
         0x085, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_._has_bits_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_._oneof_case_[0]),
-        14, // hasbit index offset
+        16, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.info_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.x_offset_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.y_offset_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.depth_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.depth_jitter_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.fixed_distance_from_last_target_),
+        PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.fixed_distance_from_last_target_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.type_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.type_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetRegion, _impl_.type_),
@@ -1303,6 +1305,8 @@ const ::uint32_t
         2,
         3,
         4,
+        5,
+        6,
         ~0u,
         ~0u,
         ~0u,
@@ -1334,12 +1338,10 @@ const ::uint32_t
         1,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_._has_bits_),
-        10, // hasbit index offset
+        8, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.regions_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.regions_info_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_distance_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_),
-        PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_jitter_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_x_distance_),
         PROTOBUF_FIELD_OFFSET(::aim::TargetPlacementStrategy, _impl_.min_y_distance_),
         0,
@@ -1347,8 +1349,6 @@ const ::uint32_t
         2,
         3,
         4,
-        5,
-        6,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioOverrides, _impl_._has_bits_),
         14, // hasbit index offset
@@ -1864,10 +1864,10 @@ static const ::_pbi::MigrationSchema
         {54, sizeof(::aim::RegionLength)},
         {61, sizeof(::aim::RegionVec2)},
         {68, sizeof(::aim::TargetRegion)},
-        {91, sizeof(::aim::RectangleTargetRegion)},
-        {102, sizeof(::aim::EllipseTargetRegion)},
-        {109, sizeof(::aim::CircleTargetRegion)},
-        {116, sizeof(::aim::TargetPlacementStrategy)},
+        {95, sizeof(::aim::RectangleTargetRegion)},
+        {106, sizeof(::aim::EllipseTargetRegion)},
+        {113, sizeof(::aim::CircleTargetRegion)},
+        {120, sizeof(::aim::TargetPlacementStrategy)},
         {133, sizeof(::aim::ScenarioOverrides)},
         {158, sizeof(::aim::ReloadInfo)},
         {167, sizeof(::aim::ShotType)},
@@ -1960,33 +1960,33 @@ const char descriptor_table_protodef_scenario_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\n\017y_percent_value\030\002 \001(\002H\000\022\035\n\023depth_perce"
     "nt_value\030\003 \001(\002H\000\022\017\n\005value\030\004 \001(\002H\000B\006\n\004typ"
     "e\"H\n\nRegionVec2\022\034\n\001x\030\001 \001(\0132\021.aim.RegionL"
-    "ength\022\034\n\001y\030\002 \001(\0132\021.aim.RegionLength\"\366\002\n\014"
+    "ength\022\034\n\001y\030\002 \001(\0132\021.aim.RegionLength\"\365\003\n\014"
     "TargetRegion\022\036\n\004info\030\001 \001(\0132\020.aim.Profile"
     "Info\022#\n\010x_offset\030\002 \001(\0132\021.aim.RegionLengt"
     "h\022#\n\010y_offset\030\003 \001(\0132\021.aim.RegionLength\022 "
     "\n\005depth\030\004 \001(\0132\021.aim.RegionLength\022\'\n\014dept"
-    "h_jitter\030\005 \001(\0132\021.aim.RegionLength\022/\n\trec"
-    "tangle\030\n \001(\0132\032.aim.RectangleTargetRegion"
-    "H\000\022+\n\007ellipse\030\013 \001(\0132\030.aim.EllipseTargetR"
-    "egionH\000\022)\n\006circle\030\014 \001(\0132\027.aim.CircleTarg"
-    "etRegionH\000\022 \n\005point\030\r \001(\0132\017.aim.RegionVe"
-    "c2H\000B\006\n\004type\"\267\001\n\025RectangleTargetRegion\022#"
-    "\n\010x_length\030\001 \001(\0132\021.aim.RegionLength\022#\n\010y"
-    "_length\030\002 \001(\0132\021.aim.RegionLength\022)\n\016inne"
-    "r_x_length\030\003 \001(\0132\021.aim.RegionLength\022)\n\016i"
-    "nner_y_length\030\004 \001(\0132\021.aim.RegionLength\"c"
-    "\n\023EllipseTargetRegion\022%\n\nx_diameter\030\001 \001("
-    "\0132\021.aim.RegionLength\022%\n\ny_diameter\030\002 \001(\013"
-    "2\021.aim.RegionLength\"d\n\022CircleTargetRegio"
-    "n\022#\n\010diameter\030\001 \001(\0132\021.aim.RegionLength\022)"
-    "\n\016inner_diameter\030\002 \001(\0132\021.aim.RegionLengt"
-    "h\"\347\002\n\027TargetPlacementStrategy\022\"\n\007regions"
-    "\030\001 \003(\0132\021.aim.TargetRegion\022*\n\014regions_inf"
-    "o\030\002 \001(\0132\024.aim.ProfileListInfo\022\'\n\014min_dis"
-    "tance\030\003 \001(\0132\021.aim.RegionLength\022:\n\037fixed_"
-    "distance_from_last_target\030\004 \001(\0132\021.aim.Re"
-    "gionLength\022A\n&fixed_distance_from_last_t"
-    "arget_jitter\030\005 \001(\0132\021.aim.RegionLength\022)\n"
+    "h_jitter\030\005 \001(\0132\021.aim.RegionLength\022:\n\037fix"
+    "ed_distance_from_last_target\030\006 \001(\0132\021.aim"
+    ".RegionLength\022A\n&fixed_distance_from_las"
+    "t_target_jitter\030\007 \001(\0132\021.aim.RegionLength"
+    "\022/\n\trectangle\030\n \001(\0132\032.aim.RectangleTarge"
+    "tRegionH\000\022+\n\007ellipse\030\013 \001(\0132\030.aim.Ellipse"
+    "TargetRegionH\000\022)\n\006circle\030\014 \001(\0132\027.aim.Cir"
+    "cleTargetRegionH\000\022 \n\005point\030\r \001(\0132\017.aim.R"
+    "egionVec2H\000B\006\n\004type\"\267\001\n\025RectangleTargetR"
+    "egion\022#\n\010x_length\030\001 \001(\0132\021.aim.RegionLeng"
+    "th\022#\n\010y_length\030\002 \001(\0132\021.aim.RegionLength\022"
+    ")\n\016inner_x_length\030\003 \001(\0132\021.aim.RegionLeng"
+    "th\022)\n\016inner_y_length\030\004 \001(\0132\021.aim.RegionL"
+    "ength\"c\n\023EllipseTargetRegion\022%\n\nx_diamet"
+    "er\030\001 \001(\0132\021.aim.RegionLength\022%\n\ny_diamete"
+    "r\030\002 \001(\0132\021.aim.RegionLength\"d\n\022CircleTarg"
+    "etRegion\022#\n\010diameter\030\001 \001(\0132\021.aim.RegionL"
+    "ength\022)\n\016inner_diameter\030\002 \001(\0132\021.aim.Regi"
+    "onLength\"\350\001\n\027TargetPlacementStrategy\022\"\n\007"
+    "regions\030\001 \003(\0132\021.aim.TargetRegion\022*\n\014regi"
+    "ons_info\030\002 \001(\0132\024.aim.ProfileListInfo\022\'\n\014"
+    "min_distance\030\003 \001(\0132\021.aim.RegionLength\022)\n"
     "\016min_x_distance\030\006 \001(\0132\021.aim.RegionLength"
     "\022)\n\016min_y_distance\030\007 \001(\0132\021.aim.RegionLen"
     "gth\"\220\003\n\021ScenarioOverrides\022 \n\030target_radi"
@@ -4523,6 +4523,12 @@ TargetRegion::TargetRegion(
   _impl_.depth_jitter_ = (CheckHasBit(cached_has_bits, 0x00000010U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.depth_jitter_)
                 : nullptr;
+  _impl_.fixed_distance_from_last_target_ = (CheckHasBit(cached_has_bits, 0x00000020U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_)
+                : nullptr;
+  _impl_.fixed_distance_from_last_target_jitter_ = (CheckHasBit(cached_has_bits, 0x00000040U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_jitter_)
+                : nullptr;
   switch (type_case()) {
     case TYPE_NOT_SET:
       break;
@@ -4554,9 +4560,9 @@ inline void TargetRegion::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, info_),
            0,
-           offsetof(Impl_, depth_jitter_) -
+           offsetof(Impl_, fixed_distance_from_last_target_jitter_) -
                offsetof(Impl_, info_) +
-               sizeof(Impl_::depth_jitter_));
+               sizeof(Impl_::fixed_distance_from_last_target_jitter_));
 }
 TargetRegion::~TargetRegion() {
   // @@protoc_insertion_point(destructor:aim.TargetRegion)
@@ -4574,6 +4580,8 @@ inline void TargetRegion::SharedDtor(MessageLite& self) {
   delete this_._impl_.y_offset_;
   delete this_._impl_.depth_;
   delete this_._impl_.depth_jitter_;
+  delete this_._impl_.fixed_distance_from_last_target_;
+  delete this_._impl_.fixed_distance_from_last_target_jitter_;
   if (this_.has_type()) {
     this_.clear_type();
   }
@@ -4667,17 +4675,17 @@ TargetRegion::GetClassData() const {
   return TargetRegion_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 9, 9, 0, 2>
+const ::_pbi::TcParseTable<3, 11, 11, 0, 2>
 TargetRegion::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_._has_bits_),
     0, // no _extensions_
     13, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294959584,  // skipmap
+    4294959488,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    9,  // num_field_entries
-    9,  // num_aux_entries
+    11,  // num_field_entries
+    11,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     TargetRegion_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -4707,8 +4715,14 @@ TargetRegion::_table_ = {
     {::_pbi::TcParser::FastMtS1,
      {42, 4, 4,
       PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.depth_jitter_)}},
-    {::_pbi::TcParser::MiniParse, {}},
-    {::_pbi::TcParser::MiniParse, {}},
+    // .aim.RegionLength fixed_distance_from_last_target = 6;
+    {::_pbi::TcParser::FastMtS1,
+     {50, 5, 5,
+      PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.fixed_distance_from_last_target_)}},
+    // .aim.RegionLength fixed_distance_from_last_target_jitter = 7;
+    {::_pbi::TcParser::FastMtS1,
+     {58, 6, 6,
+      PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.fixed_distance_from_last_target_jitter_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -4722,17 +4736,23 @@ TargetRegion::_table_ = {
     {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.depth_), _Internal::kHasBitsOffset + 3, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength depth_jitter = 5;
     {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.depth_jitter_), _Internal::kHasBitsOffset + 4, 4, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.RegionLength fixed_distance_from_last_target = 6;
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.fixed_distance_from_last_target_), _Internal::kHasBitsOffset + 5, 5, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.RegionLength fixed_distance_from_last_target_jitter = 7;
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.fixed_distance_from_last_target_jitter_), _Internal::kHasBitsOffset + 6, 6, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RectangleTargetRegion rectangle = 10;
-    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.rectangle_), _Internal::kOneofCaseOffset + 0, 5, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.rectangle_), _Internal::kOneofCaseOffset + 0, 7, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.EllipseTargetRegion ellipse = 11;
-    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.ellipse_), _Internal::kOneofCaseOffset + 0, 6, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.ellipse_), _Internal::kOneofCaseOffset + 0, 8, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.CircleTargetRegion circle = 12;
-    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.circle_), _Internal::kOneofCaseOffset + 0, 7, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.circle_), _Internal::kOneofCaseOffset + 0, 9, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionVec2 point = 13;
-    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.point_), _Internal::kOneofCaseOffset + 0, 8, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.type_.point_), _Internal::kOneofCaseOffset + 0, 10, (0 | ::_fl::kFcOneof | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::ProfileInfo>()},
+      {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
+      {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
@@ -4753,7 +4773,7 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       ABSL_DCHECK(_impl_.info_ != nullptr);
       _impl_.info_->Clear();
@@ -4773,6 +4793,14 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       ABSL_DCHECK(_impl_.depth_jitter_ != nullptr);
       _impl_.depth_jitter_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      ABSL_DCHECK(_impl_.fixed_distance_from_last_target_ != nullptr);
+      _impl_.fixed_distance_from_last_target_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      ABSL_DCHECK(_impl_.fixed_distance_from_last_target_jitter_ != nullptr);
+      _impl_.fixed_distance_from_last_target_jitter_->Clear();
     }
   }
   clear_type();
@@ -4834,6 +4862,20 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
         stream);
   }
 
+  // .aim.RegionLength fixed_distance_from_last_target = 6;
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        6, *this_._impl_.fixed_distance_from_last_target_, this_._impl_.fixed_distance_from_last_target_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.RegionLength fixed_distance_from_last_target_jitter = 7;
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        7, *this_._impl_.fixed_distance_from_last_target_jitter_, this_._impl_.fixed_distance_from_last_target_jitter_->GetCachedSize(), target,
+        stream);
+  }
+
   switch (this_.type_case()) {
     case kRectangle: {
       target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
@@ -4887,7 +4929,7 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
     // .aim.ProfileInfo info = 1;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 +
@@ -4912,6 +4954,16 @@ PROTOBUF_NOINLINE void TargetRegion::Clear() {
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.depth_jitter_);
+    }
+    // .aim.RegionLength fixed_distance_from_last_target = 6;
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.fixed_distance_from_last_target_);
+    }
+    // .aim.RegionLength fixed_distance_from_last_target_jitter = 7;
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.fixed_distance_from_last_target_jitter_);
     }
   }
   switch (this_.type_case()) {
@@ -4962,7 +5014,7 @@ void TargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       ABSL_DCHECK(from._impl_.info_ != nullptr);
       if (_this->_impl_.info_ == nullptr) {
@@ -5001,6 +5053,22 @@ void TargetRegion::MergeImpl(::google::protobuf::MessageLite& to_msg,
         _this->_impl_.depth_jitter_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.depth_jitter_);
       } else {
         _this->_impl_.depth_jitter_->MergeFrom(*from._impl_.depth_jitter_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      ABSL_DCHECK(from._impl_.fixed_distance_from_last_target_ != nullptr);
+      if (_this->_impl_.fixed_distance_from_last_target_ == nullptr) {
+        _this->_impl_.fixed_distance_from_last_target_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_);
+      } else {
+        _this->_impl_.fixed_distance_from_last_target_->MergeFrom(*from._impl_.fixed_distance_from_last_target_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      ABSL_DCHECK(from._impl_.fixed_distance_from_last_target_jitter_ != nullptr);
+      if (_this->_impl_.fixed_distance_from_last_target_jitter_ == nullptr) {
+        _this->_impl_.fixed_distance_from_last_target_jitter_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_jitter_);
+      } else {
+        _this->_impl_.fixed_distance_from_last_target_jitter_->MergeFrom(*from._impl_.fixed_distance_from_last_target_jitter_);
       }
     }
   }
@@ -5070,8 +5138,8 @@ void TargetRegion::InternalSwap(TargetRegion* PROTOBUF_RESTRICT PROTOBUF_NONNULL
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.depth_jitter_)
-      + sizeof(TargetRegion::_impl_.depth_jitter_)
+      PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.fixed_distance_from_last_target_jitter_)
+      + sizeof(TargetRegion::_impl_.fixed_distance_from_last_target_jitter_)
       - PROTOBUF_FIELD_OFFSET(TargetRegion, _impl_.info_)>(
           reinterpret_cast<char*>(&_impl_.info_),
           reinterpret_cast<char*>(&other->_impl_.info_));
@@ -6162,16 +6230,10 @@ TargetPlacementStrategy::TargetPlacementStrategy(
   _impl_.min_distance_ = (CheckHasBit(cached_has_bits, 0x00000004U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.min_distance_)
                 : nullptr;
-  _impl_.fixed_distance_from_last_target_ = (CheckHasBit(cached_has_bits, 0x00000008U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_)
-                : nullptr;
-  _impl_.fixed_distance_from_last_target_jitter_ = (CheckHasBit(cached_has_bits, 0x00000010U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_jitter_)
-                : nullptr;
-  _impl_.min_x_distance_ = (CheckHasBit(cached_has_bits, 0x00000020U))
+  _impl_.min_x_distance_ = (CheckHasBit(cached_has_bits, 0x00000008U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.min_x_distance_)
                 : nullptr;
-  _impl_.min_y_distance_ = (CheckHasBit(cached_has_bits, 0x00000040U))
+  _impl_.min_y_distance_ = (CheckHasBit(cached_has_bits, 0x00000010U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.min_y_distance_)
                 : nullptr;
 
@@ -6205,8 +6267,6 @@ inline void TargetPlacementStrategy::SharedDtor(MessageLite& self) {
   ABSL_DCHECK(this_.GetArena() == nullptr);
   delete this_._impl_.regions_info_;
   delete this_._impl_.min_distance_;
-  delete this_._impl_.fixed_distance_from_last_target_;
-  delete this_._impl_.fixed_distance_from_last_target_jitter_;
   delete this_._impl_.min_x_distance_;
   delete this_._impl_.min_y_distance_;
   this_._impl_.~Impl_();
@@ -6267,17 +6327,17 @@ TargetPlacementStrategy::GetClassData() const {
   return TargetPlacementStrategy_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 7, 7, 0, 2>
+const ::_pbi::TcParseTable<3, 5, 5, 0, 2>
 TargetPlacementStrategy::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_._has_bits_),
     0, // no _extensions_
     7, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967168,  // skipmap
+    4294967192,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    7,  // num_field_entries
-    7,  // num_aux_entries
+    5,  // num_field_entries
+    5,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     TargetPlacementStrategy_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -6299,21 +6359,15 @@ TargetPlacementStrategy::_table_ = {
     {::_pbi::TcParser::FastMtS1,
      {26, 2, 2,
       PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_)}},
-    // .aim.RegionLength fixed_distance_from_last_target = 4;
-    {::_pbi::TcParser::FastMtS1,
-     {34, 3, 3,
-      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_)}},
-    // .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
-    {::_pbi::TcParser::FastMtS1,
-     {42, 4, 4,
-      PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_jitter_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
     // .aim.RegionLength min_x_distance = 6;
     {::_pbi::TcParser::FastMtS1,
-     {50, 5, 5,
+     {50, 3, 3,
       PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_x_distance_)}},
     // .aim.RegionLength min_y_distance = 7;
     {::_pbi::TcParser::FastMtS1,
-     {58, 6, 6,
+     {58, 4, 4,
       PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_y_distance_)}},
   }}, {{
     65535, 65535
@@ -6324,20 +6378,14 @@ TargetPlacementStrategy::_table_ = {
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.regions_info_), _Internal::kHasBitsOffset + 1, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength min_distance = 3;
     {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_distance_), _Internal::kHasBitsOffset + 2, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.RegionLength fixed_distance_from_last_target = 4;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_), _Internal::kHasBitsOffset + 3, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.fixed_distance_from_last_target_jitter_), _Internal::kHasBitsOffset + 4, 4, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength min_x_distance = 6;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_x_distance_), _Internal::kHasBitsOffset + 5, 5, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_x_distance_), _Internal::kHasBitsOffset + 3, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.RegionLength min_y_distance = 7;
-    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_y_distance_), _Internal::kHasBitsOffset + 6, 6, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(TargetPlacementStrategy, _impl_.min_y_distance_), _Internal::kHasBitsOffset + 4, 4, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
       {::_pbi::TcParser::GetTable<::aim::TargetRegion>()},
       {::_pbi::TcParser::GetTable<::aim::ProfileListInfo>()},
-      {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
-      {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
       {::_pbi::TcParser::GetTable<::aim::RegionLength>()},
@@ -6353,7 +6401,7 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       _impl_.regions_.Clear();
     }
@@ -6366,18 +6414,10 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
       _impl_.min_distance_->Clear();
     }
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      ABSL_DCHECK(_impl_.fixed_distance_from_last_target_ != nullptr);
-      _impl_.fixed_distance_from_last_target_->Clear();
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-      ABSL_DCHECK(_impl_.fixed_distance_from_last_target_jitter_ != nullptr);
-      _impl_.fixed_distance_from_last_target_jitter_->Clear();
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
       ABSL_DCHECK(_impl_.min_x_distance_ != nullptr);
       _impl_.min_x_distance_->Clear();
     }
-    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       ABSL_DCHECK(_impl_.min_y_distance_ != nullptr);
       _impl_.min_y_distance_->Clear();
     }
@@ -6432,29 +6472,15 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
         stream);
   }
 
-  // .aim.RegionLength fixed_distance_from_last_target = 4;
-  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        4, *this_._impl_.fixed_distance_from_last_target_, this_._impl_.fixed_distance_from_last_target_->GetCachedSize(), target,
-        stream);
-  }
-
-  // .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
-  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        5, *this_._impl_.fixed_distance_from_last_target_jitter_, this_._impl_.fixed_distance_from_last_target_jitter_->GetCachedSize(), target,
-        stream);
-  }
-
   // .aim.RegionLength min_x_distance = 6;
-  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
         6, *this_._impl_.min_x_distance_, this_._impl_.min_x_distance_->GetCachedSize(), target,
         stream);
   }
 
   // .aim.RegionLength min_y_distance = 7;
-  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
         7, *this_._impl_.min_y_distance_, this_._impl_.min_y_distance_->GetCachedSize(), target,
         stream);
@@ -6485,7 +6511,7 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
     // repeated .aim.TargetRegion regions = 1;
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       total_size += 1UL * this_._internal_regions_size();
@@ -6503,23 +6529,13 @@ PROTOBUF_NOINLINE void TargetPlacementStrategy::Clear() {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.min_distance_);
     }
-    // .aim.RegionLength fixed_distance_from_last_target = 4;
-    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.fixed_distance_from_last_target_);
-    }
-    // .aim.RegionLength fixed_distance_from_last_target_jitter = 5;
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-      total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.fixed_distance_from_last_target_jitter_);
-    }
     // .aim.RegionLength min_x_distance = 6;
-    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.min_x_distance_);
     }
     // .aim.RegionLength min_y_distance = 7;
-    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       total_size += 1 +
                     ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.min_y_distance_);
     }
@@ -6543,7 +6559,7 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000007fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
     if (CheckHasBitForRepeated(cached_has_bits, 0x00000001U)) {
       _this->_internal_mutable_regions()->InternalMergeFromWithArena(
           ::google::protobuf::MessageLite::internal_visibility(), arena,
@@ -6566,22 +6582,6 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      ABSL_DCHECK(from._impl_.fixed_distance_from_last_target_ != nullptr);
-      if (_this->_impl_.fixed_distance_from_last_target_ == nullptr) {
-        _this->_impl_.fixed_distance_from_last_target_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_);
-      } else {
-        _this->_impl_.fixed_distance_from_last_target_->MergeFrom(*from._impl_.fixed_distance_from_last_target_);
-      }
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-      ABSL_DCHECK(from._impl_.fixed_distance_from_last_target_jitter_ != nullptr);
-      if (_this->_impl_.fixed_distance_from_last_target_jitter_ == nullptr) {
-        _this->_impl_.fixed_distance_from_last_target_jitter_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.fixed_distance_from_last_target_jitter_);
-      } else {
-        _this->_impl_.fixed_distance_from_last_target_jitter_->MergeFrom(*from._impl_.fixed_distance_from_last_target_jitter_);
-      }
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
       ABSL_DCHECK(from._impl_.min_x_distance_ != nullptr);
       if (_this->_impl_.min_x_distance_ == nullptr) {
         _this->_impl_.min_x_distance_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.min_x_distance_);
@@ -6589,7 +6589,7 @@ void TargetPlacementStrategy::MergeImpl(::google::protobuf::MessageLite& to_msg,
         _this->_impl_.min_x_distance_->MergeFrom(*from._impl_.min_x_distance_);
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       ABSL_DCHECK(from._impl_.min_y_distance_ != nullptr);
       if (_this->_impl_.min_y_distance_ == nullptr) {
         _this->_impl_.min_y_distance_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.min_y_distance_);
