@@ -28,8 +28,15 @@ class ScopedFont {
     }
   }
 
+  ScopedFont(ScopedFont&& other) {
+    font_ = other.font_;
+    popped_ = other.popped_;
+
+    other.font_ = nullptr;
+    other.popped_ = true;
+  }
+
   ScopedFont(const ScopedFont&) = delete;
-  ScopedFont(ScopedFont&&) = default;
   ScopedFont& operator=(ScopedFont other) = delete;
   ScopedFont& operator=(ScopedFont&& other) = delete;
 

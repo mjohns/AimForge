@@ -186,13 +186,35 @@ class ReactionTimeScreen : public UiScreen {
       options_.is_audio = selected_type == audio_label;
     }
 
-    if (ImGui::Button("Start")) {
-      StartRun();
+    {
+      auto font = app_.font_manager().UseLarge();
+      std::string message = icons::kRefresh;
+      ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+      ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+      ImGui::SetCursorPosY(app_.screen_info().center.y - text_size.y * 4);
+      if (ImGui::SelectableButton(message)) {
+        StartRun();
+      }
     }
 
-    for (i64 time_micros : reaction_times_) {
-      float millis = time_micros / 1000.0f;
-      ImGui::TextFmt("{}ms", MaybeIntToString(millis, 0));
+    ImGui::Spacing();
+    ImGui::Spacing();
+    int count = 0;
+    for (int i = reaction_times_.size() - 1; i >= 0; --i) {
+      count++;
+      if (count > 5) {
+        break;
+      }
+      {
+        auto font =
+             count == 1 ? app_.font_manager().UseLargeBold() : app_.font_manager().UseMedium();
+            //app_.font_manager().UseLargeBold();
+        float millis = reaction_times_[i] / 1000.0f;
+        std::string message = std::format("{}ms", MaybeIntToString(millis, 0));
+        ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+        ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+        ImGui::Text(message);
+      }
     }
   }
 
