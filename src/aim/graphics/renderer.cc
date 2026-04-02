@@ -565,7 +565,9 @@ class DrawDataBuilder {
                       center_target_color,
                       draw_data);
       } else {
-        AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
+        //AddDrawSphere(view_projection, target.position, target.radius, color, draw_data);
+        AddDrawSphereCircle(
+            view_projection, target.position, target.radius, color, look_at, draw_data);
       }
 
       if (health_bar_settings.show() && target.HasHealth()) {

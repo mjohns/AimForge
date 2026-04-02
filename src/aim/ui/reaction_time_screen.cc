@@ -3,6 +3,7 @@
 #include <format>
 #include <optional>
 
+#include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
@@ -15,6 +16,12 @@
 namespace aim {
 namespace {
 
+struct ReactionTimeOptions {
+  bool is_audio = false;
+  float min_time = 1.0f;
+  float max_time = 3.0f;
+};
+
 struct ReactionTimeResult {
   i64 reaction_micros = -1;
   bool click_too_early = false;
@@ -24,9 +31,9 @@ class SingleReactionTimeScreen : public Screen {
  public:
   SingleReactionTimeScreen(Application* app,
                            const Settings& settings,
-                           bool is_audio,
+                           const ReactionTimeOptions& options,
                            ReactionTimeResult* result)
-      : Screen(*app), result_(result), settings_(settings), is_audio_(is_audio) {
+      : Screen(*app), result_(result), settings_(settings), options_(options) {
     app->SetPresentMode(settings.present_mode());
   }
 
@@ -88,7 +95,7 @@ class SingleReactionTimeScreen : public Screen {
       app_.NewImGuiFrame();
       app_.BeginFullscreenWindow();
 
-      if (is_audio_) {
+      if (options_.is_audio) {
         ScreenInfo screen = app_.screen_info();
         auto bold = app_.font_manager().UseLargeBold();
         std::string message = "Click after sound";
@@ -120,7 +127,7 @@ class SingleReactionTimeScreen : public Screen {
       if (show_cue) {
         react_start_time_ = now_micros;
 
-        if (is_audio_) {
+        if (options_.is_audio) {
           app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
         } else {
           app_.NewImGuiFrame();
@@ -141,7 +148,7 @@ class SingleReactionTimeScreen : public Screen {
 
   float initial_wait_time_seconds_ = -1;
   i64 react_start_time_ = -1;
-  bool is_audio_ = true;
+  ReactionTimeOptions options_;
   bool set_react_start_time_ = false;
 };
 
@@ -166,17 +173,21 @@ class ReactionTimeScreen : public UiScreen {
       PopSelf();
     }
 
-    if (ImGui::Button("Audio")) {
-      waiting_for_result_ = true;
-      result_ = {};
-      PushNextScreen(std::make_unique<SingleReactionTimeScreen>(
-          &app_, settings_, /*is_audio=*/true, &result_));
+    const char* audio_label = "Audio";
+    const char* visual_label = "Visual";
+    float char_x = ImGui::GetDefaultCharSizeX();
+
+    std::string selected_type = options_.is_audio ? audio_label : visual_label;
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Type");
+    ImGui::SameLine();
+    if (ImGui::SimpleDropdown(
+            "TypeSelector", &selected_type, {visual_label, audio_label}, char_x * 10)) {
+      options_.is_audio = selected_type == audio_label;
     }
-    if (ImGui::Button("Visual")) {
-      waiting_for_result_ = true;
-      result_ = {};
-      PushNextScreen(std::make_unique<SingleReactionTimeScreen>(
-          &app_, settings_, /*is_audio=*/false, &result_));
+
+    if (ImGui::Button("Start")) {
+      StartRun();
     }
 
     for (i64 time_micros : reaction_times_) {
@@ -195,11 +206,29 @@ class ReactionTimeScreen : public UiScreen {
     }
   }
 
+  void StartRun() {
+    waiting_for_result_ = true;
+    result_ = {};
+    PushNextScreen(
+        std::make_unique<SingleReactionTimeScreen>(&app_, settings_, options_, &result_));
+  }
+
+  void OnEvent(const SDL_Event& event, bool user_is_typing) override {
+    if (IsMappableKeyDownEvent(event)) {
+      std::string event_name = absl::AsciiStrToLower(GetKeyNameForEvent(event));
+      if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
+        StartRun();
+      }
+    }
+  }
+
  private:
   Settings settings_;
   ReactionTimeResult result_;
   bool waiting_for_result_ = false;
   std::vector<i64> reaction_times_;
+
+  ReactionTimeOptions options_;
 };
 
 }  // namespace
