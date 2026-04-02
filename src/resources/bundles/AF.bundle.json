@@ -3450,6 +3450,81 @@
    }
   },
   {
+   "name": "SmoothSwerve Wide",
+   "def": {
+    "durationSeconds": 60,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 3,
+       "speed": 130,
+       "acceleration": 170
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+     },
+     "cylinderRoom": {
+      "height": 130,
+      "radius": 200,
+      "sideAngleDegrees": 48,
+      "widthDegrees": 115
+     }
+    },
+    "overrides": {},
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.96,
+     "speedMultiplier": 1.04,
+     "accelerationMultiplier": 1.02
+    },
+    "strafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.9
+      },
+      "height": {
+       "yPercentValue": 0.9
+      }
+     },
+     "leftRightProfiles": [
+      {
+       "centerBias": 0.2,
+       "distance": {
+        "xPercentValue": 0.5
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.2
+       }
+      }
+     ],
+     "upDownProfiles": [
+      {
+       "centerBias": 0.2,
+       "distance": {
+        "yPercentValue": 0.5
+       },
+       "distanceJitter": {
+        "yPercentValue": 0.15
+       },
+       "speedMultiplier": 0.2,
+       "accelerationMultiplier": 0.1
+      }
+     ],
+     "leftRightInitialDirection": "DIRECTION_POSITIVE",
+     "upDownInitialDirection": "DIRECTION_RANDOM",
+     "forwardBackInitialDirection": "DIRECTION_RANDOM"
+    }
+   }
+  },
+  {
    "name": "SnakeClick",
    "def": {
     "durationSeconds": 60,
@@ -3488,6 +3563,12 @@
         "info": {
          "weight": 1
         },
+        "fixedDistanceFromLastTarget": {
+         "value": 10
+        },
+        "fixedDistanceFromLastTargetJitter": {
+         "value": 0
+        },
         "rectangle": {
          "xLength": {
           "xPercentValue": 0.9
@@ -3495,13 +3576,7 @@
          "yLength": {
           "yPercentValue": 0.9
          }
-        },
-      "fixedDistanceFromLastTarget": {
-       "value": 10
-      },
-      "fixedDistanceFromLastTargetJitter": {
-       "value": 0
-      }
+        }
        },
        {
         "info": {
