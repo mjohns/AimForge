@@ -78,14 +78,6 @@ class SingleReactionTimeScreen : public Screen {
     ImGui::GetWindowDrawList()->AddRectFilled(upper_left, bottom_right, color);
   }
 
-  void OnTickStart() override {
-    if (set_react_start_time_) {
-      // Set the start time after rendering of the trigger frame is complete.
-      set_react_start_time_ = false;
-      react_start_time_ = stopwatch_.GetElapsedMicros();
-    }
-  }
-
   void OnTick() override {
     if (initial_wait_time_seconds_ < 0) {
       // Initialize
@@ -135,8 +127,7 @@ class SingleReactionTimeScreen : public Screen {
           DrawSquare(IM_COL32(0, 255, 0, 255));
           ImGui::End();
           app_.Render();
-          // Reset the start time after rendering is done.
-          set_react_start_time_ = true;
+          react_start_time_ = stopwatch_.GetElapsedMicros();
         }
       }
     }
@@ -149,7 +140,6 @@ class SingleReactionTimeScreen : public Screen {
   float initial_wait_time_seconds_ = -1;
   i64 react_start_time_ = -1;
   ReactionTimeOptions options_;
-  bool set_react_start_time_ = false;
 };
 
 class ReactionTimeScreen : public UiScreen {
@@ -199,6 +189,13 @@ class ReactionTimeScreen : public UiScreen {
 
     ImGui::Spacing();
     ImGui::Spacing();
+    if (too_early_) {
+      auto font = app_.font_manager().UseLarge();
+      std::string message = "Too soon";
+      ImVec2 text_size = ImGui::CalcTextSize(message.c_str());
+      ImGui::SetCursorPosX(app_.screen_info().center.x - text_size.x * 0.5);
+      ImGui::Text(message);
+    }
     int count = 0;
     for (int i = reaction_times_.size() - 1; i >= 0; --i) {
       count++;
@@ -215,12 +212,20 @@ class ReactionTimeScreen : public UiScreen {
   }
 
   void OnAttachUi() override {
-    if (waiting_for_result_) {
-      i64 reaction_time = result_.reaction_micros;
-      if (reaction_time > 0) {
-        reaction_times_.push_back(reaction_time);
-      }
-      waiting_for_result_ = false;
+    if (!waiting_for_result_) {
+      return;
+    }
+    waiting_for_result_ = false;
+    too_early_ = false;
+
+    if (result_.click_too_early) {
+      too_early_ = true;
+      return;
+    }
+
+    i64 reaction_time = result_.reaction_micros;
+    if (reaction_time > 0) {
+      reaction_times_.push_back(reaction_time);
     }
   }
 
@@ -247,6 +252,8 @@ class ReactionTimeScreen : public UiScreen {
   std::vector<i64> reaction_times_;
 
   ReactionTimeOptions options_;
+
+  bool too_early_ = false;
 };
 
 }  // namespace

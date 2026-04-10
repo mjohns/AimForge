@@ -1174,7 +1174,7 @@
       "regions": [
        {
         "info": {
-         "weight": 2
+         "weight": 3
         },
         "depth": {
          "value": 0
@@ -1182,12 +1182,12 @@
         "depthJitter": {
          "value": 0
         },
-        "ellipse": {
-         "xDiameter": {
-          "xPercentValue": 0.75
+        "rectangle": {
+         "xLength": {
+          "xPercentValue": 0.9
          },
-         "yDiameter": {
-          "yPercentValue": 0.44
+         "yLength": {
+          "yPercentValue": 0.9
          }
         }
        },

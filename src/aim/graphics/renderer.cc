@@ -21,7 +21,7 @@ namespace {
 constexpr const int kQuadNumVertices = 6;
 constexpr const float kMaxDistance = 1500.0f;
 constexpr const u32 kMaxSolidColorInstances = 1500;
-constexpr const float kCenterSphereSizeMultiplier = 0.25;
+constexpr const float kCenterSphereSizeMultiplier = 0.2f;
 constexpr const glm::vec3 kWorldUp = glm::vec3(0, 0, 1);
 
 glm::mat4 RotateTowardsCameraAroundZ(const LookAtInfo& look_at,
