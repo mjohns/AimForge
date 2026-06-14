@@ -14,6 +14,6 @@ endif()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+add_subdirectory(vendor)
 add_subdirectory(src)
 add_subdirectory(tests)
-add_subdirectory(vendor)

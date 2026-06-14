@@ -40,6 +40,7 @@ add_subdirectory(spdlog)
 add_subdirectory(protobuf)
 add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
+include(${CMAKE_CURRENT_SOURCE_DIR}/protobuf/cmake/protobuf-generate.cmake)
 
 add_subdirectory(SDL3)
 add_subdirectory(SDL_mixer)
