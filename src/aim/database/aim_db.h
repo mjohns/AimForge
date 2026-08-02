@@ -63,9 +63,9 @@ class AimDb {
   // Guides
   //
 
-  virtual std::unordered_map<std::string, i64> GetGuideIdMap() = 0;
-  virtual i64 GetGuideId(const std::string& name) = 0;
-  virtual i64 RenameGuide(const std::string& old_name, const std::string& new_name) = 0;
+  //virtual std::unordered_map<std::string, i64> GetGuideIdMap() = 0;
+  //virtual i64 GetGuideId(const std::string& name) = 0;
+  //virtual i64 RenameGuide(const std::string& old_name, const std::string& new_name) = 0;
 
   //
   // Scenarios
