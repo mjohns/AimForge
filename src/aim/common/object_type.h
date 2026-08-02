@@ -9,6 +9,7 @@ enum class ObjectType : int {
   PLAYLIST = 2,
   THEME = 3,
   CROSSHAIR = 4,
+  GUIDE = 5,
 };
 
 static std::string ObjectTypeToString(ObjectType t) {
@@ -21,6 +22,8 @@ static std::string ObjectTypeToString(ObjectType t) {
       return "Theme";
     case ObjectType::CROSSHAIR:
       return "Crosshair";
+    case ObjectType::GUIDE:
+      return "Guide";
   }
 
   assert(false && "Unhandled ObjectType");

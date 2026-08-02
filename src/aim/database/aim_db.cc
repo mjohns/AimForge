@@ -44,6 +44,36 @@ const char* kUpdatePlaylistNameSql = R"AIMS(
 UPDATE Playlists SET PlaylistName = ? WHERE PlaylistId = ?;
 )AIMS";
 
+const char* kCreateGuidesTable = R"AIMS(
+CREATE TABLE IF NOT EXISTS Guides (
+    GuideId INTEGER PRIMARY KEY AUTOINCREMENT,
+    GuideName TEXT NOT NULL,
+    Info BLOB
+);
+)AIMS";
+
+const char* kCreateGuidesByNameIndex = R"AIMS(
+CREATE UNIQUE INDEX IF NOT EXISTS GuidesByName ON Guides(GuideName);
+)AIMS";
+
+const char* kCreateGuideSql = R"AIMS(
+INSERT INTO Guides (GuideId, GuideName) VALUES (NULL, ?);
+)AIMS";
+
+const char* kGetAllGuideIdsSql = R"AIMS(
+SELECT GuideId, GuideName FROM Guides;
+)AIMS";
+
+const char* kGetGuideIdSql = R"AIMS(
+SELECT GuideId FROM Guides
+INDEXED BY GuidesByName
+WHERE GuideName = ?;
+)AIMS";
+
+const char* kUpdateGuideNameSql = R"AIMS(
+UPDATE Guides SET GuideName = ? WHERE GuideId = ?;
+)AIMS";
+
 const char* kCreateScenariosTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS Scenarios (
     ScenarioId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -304,6 +334,12 @@ class AimDbImpl : public AimDb {
     if (!ExecuteSqliteQuery(db_, kCreatePlaylistsByNameIndex, &error_message)) {
       initialization_error_ = error_message;
     }
+    //if (!ExecuteSqliteQuery(db_, kCreateGuidesTable, &error_message)) {
+    //  initialization_error_ = error_message;
+    //}
+    //if (!ExecuteSqliteQuery(db_, kCreateGuidesByNameIndex, &error_message)) {
+    //  initialization_error_ = error_message;
+    //}
     if (!ExecuteSqliteQuery(db_, kCreateStatsTable, &error_message)) {
       initialization_error_ = error_message;
     }
