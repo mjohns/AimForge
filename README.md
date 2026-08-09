@@ -45,14 +45,11 @@ On Unix like systems you will need to make sure CMake and [Ninja](https://ninja-
 Then run the following commands:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --target FpsAimForge
-cd build/bin
-./FpsAimForge
+cmake --build build --target FpsAimForge && ./build/bin/FpsAimForge
 ```
 
 To build protoc run:
 ```bash
 cmake --build build --target protoc
-cd build/bin
-./protoc
+ls build/bin/protoc
 ```

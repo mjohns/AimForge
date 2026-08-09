@@ -284,7 +284,7 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
     auto logo_path = file_system_->GetBasePath("resources/images/logo.png");
     icon_ = LoadImageSurface(logo_path.string().c_str());
     if (icon_ != nullptr) {
-      // SDL_SetWindowIcon(sdl_window_, icon_);
+      SDL_SetWindowIcon(sdl_window_, icon_);
     } else {
       logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
     }
