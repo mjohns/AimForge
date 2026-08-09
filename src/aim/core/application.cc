@@ -432,7 +432,7 @@ void Application::Initialize() {
   scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));
   playlist_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenamePlaylist, db_.get()));
 
-  auto clear_caches_on_rename = [=](const std::string& old_name, const std::string& new_name) {
+  auto clear_caches_on_rename = [this](const std::string& old_name, const std::string& new_name) {
     history_manager_->ClearCache();
     labels_manager_->ClearCache();
   };

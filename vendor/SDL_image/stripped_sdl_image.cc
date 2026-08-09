@@ -24,21 +24,6 @@
 // Stripped down version of IMG_stb.c and is_png/is_jpeg from IMG_jpg/png.c.
 // https://github.com/libsdl-org/SDL_image/commits/main/src/IMG_stb.c
 
-#define malloc SDL_malloc
-#define realloc SDL_realloc
-#define free SDL_free
-#undef memcpy
-#define memcpy SDL_memcpy
-#undef memset
-#define memset SDL_memset
-#undef strcmp
-#define strcmp SDL_strcmp
-#undef strncmp
-#define strncmp SDL_strncmp
-#define strtol SDL_strtol
-
-#define abs SDL_abs
-#define pow SDL_pow
 #define ldexp SDL_scalbn
 
 #define STB_IMAGE_STATIC

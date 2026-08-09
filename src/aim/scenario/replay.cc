@@ -45,7 +45,7 @@ ReplayRecorder::ReplayRecorder(const std::string& scenario_name,
 void ReplayRecorder::FillInMissingPitchYaws() {
   float max_pitch = GetMaxPitch();
 
-  auto find_first_valid = [=](int i) {
+  auto find_first_valid = [=,this](int i) {
     for (; i < replay_->pitch_yaws.size(); ++i) {
       PitchYaw& pitch_yaw = replay_->pitch_yaws[i];
       bool is_invalid = pitch_yaw.pitch > max_pitch;

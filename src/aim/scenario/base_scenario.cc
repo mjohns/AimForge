@@ -31,7 +31,7 @@ void BaseScenario::Initialize() {
   for (int i = 0; i < num_targets_to_add_immediately; ++i) {
     float stagger_seconds = def_.target_def().stagger_initial_targets_seconds();
     if (stagger_seconds > 0) {
-      RunAfterSeconds(i * stagger_seconds, [=]() { AddNewTarget(0, true); });
+      RunAfterSeconds(i * stagger_seconds, [this]() { AddNewTarget(0, true); });
     } else {
       AddNewTarget(0, true);
     }
@@ -39,7 +39,7 @@ void BaseScenario::Initialize() {
 
   for (float delay : t.delayed_target_times()) {
     if (delay > 0) {
-      RunAfterSeconds(delay, [=]() { AddNewTarget(0, true); });
+      RunAfterSeconds(delay, [this]() { AddNewTarget(0, true); });
     } else {
       AddNewTarget(0, true);
     }
@@ -446,7 +446,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
         bool unghost = def_.shot_type().unghost_miss_on_expiration();
         if (time_to_wait > 0) {
           target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = true;
-          RunAfterSeconds(time_to_wait, [=]() {
+          RunAfterSeconds(time_to_wait, [=, this]() {
             if (unghost) {
               target_manager_.GetMutableTarget(*target_id_to_ghost)->is_ghost = false;
             } else {
@@ -561,7 +561,7 @@ void BaseScenario::AddNewTarget(u16 old_target_id, bool is_init) {
   }
 
   if (!is_init && def_.target_def().new_target_delay_seconds() > 0) {
-    RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=]() {
+    RunAfterSeconds(def_.target_def().new_target_delay_seconds(), [=, this]() {
       Target new_target = target;
       if (new_target.growth_info) {
         new_target.growth_info->start_time_seconds = timer_.GetElapsedSeconds();
