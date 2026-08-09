@@ -1,11 +1,10 @@
 #include "copy_playlist_dialog.h"
 
-#include "absl/strings/strip.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/common/name_util.h"
-#include "aim/common/search.h"
+#include "aim/common/object_type.h"
+#include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
-#include "aim/editor/scenario_editor_screen.h"
+#include "aim/core/playlist_manager.h"
 #include "imgui.h"
 
 namespace aim {

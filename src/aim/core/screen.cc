@@ -2,9 +2,7 @@
 
 #include <cassert>
 
-#include "aim/common/log.h"
 #include "aim/core/application.h"
-#include "aim/core/application_state.h"
 
 namespace aim {
 

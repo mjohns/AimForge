@@ -1,34 +1,22 @@
 #include "home_screen.h"
 
-#include <ranges>
-
-#include "SDL3/SDL.h"
-#include "absl/algorithm/container.h"
-#include "absl/strings/str_split.h"
-#include "absl/strings/string_view.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/common/mat_icons.h"
-#include "aim/common/search.h"
-#include "aim/common/util.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/core/version.h"
-#include "aim/editor/scenario_editor_common.h"
-#include "aim/editor/scenario_editor_screen.h"
-#include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/ui/bundle_ui.h"
-#include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
-#include "aim/ui/settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/top_bar.h"
 #include "aim/ui/ui_screen.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
-#include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {
