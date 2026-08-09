@@ -295,6 +295,24 @@ static void HIDAPI_DriverFlydigi_SetAvailable(SDL_HIDAPI_Device *device, bool av
     ctx->available = available;
 }
 
+static int HIDAPI_DriverFlydigi_WritePacket(SDL_HIDAPI_Device *device, const Uint8 *data, size_t size)
+{
+    // We know that at the very least the Vader 5 now uses unnumbered reports for commands instead of FLYDIGI_V2_CMD_REPORT_ID.
+    // If other Flydigi things prove to do the same, we can tweak this check to be more general.
+    bool bUsesUnnumberedReports = (device->vendor_id == USB_VENDOR_FLYDIGI_V2 && device->product_id == USB_PRODUCT_FLYDIGI_V2_VADER);
+
+    if (bUsesUnnumberedReports && data[0] == FLYDIGI_V2_CMD_REPORT_ID) {
+        // Zero out the report byte.
+        Uint8 output[USB_PACKET_LENGTH];
+        SDL_memcpy(output, data, SDL_min(size, USB_PACKET_LENGTH));
+        output[0] = 0;
+        return SDL_hid_write(device->dev, output, SDL_min(size, USB_PACKET_LENGTH));
+    }
+
+    return SDL_hid_write(device->dev, data, size);
+}
+
+
 static bool HIDAPI_DriverFlydigi_InitControllerV1(SDL_HIDAPI_Device *device)
 {
     SDL_DriverFlydigi_Context *ctx = (SDL_DriverFlydigi_Context *)device->context;
@@ -303,7 +321,7 @@ static bool HIDAPI_DriverFlydigi_InitControllerV1(SDL_HIDAPI_Device *device)
     for (int attempt = 0; ctx->deviceID == 0 && attempt < 30; ++attempt) {
         const Uint8 request[] = { FLYDIGI_V1_CMD_REPORT_ID, FLYDIGI_V1_GET_INFO_COMMAND, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         // This write will occasionally return -1, so ignore failure here and try again
-        (void)SDL_hid_write(device->dev, request, sizeof(request));
+        (void)HIDAPI_DriverFlydigi_WritePacket(device, request, sizeof(request));
 
         // Read the reply
         for (int i = 0; i < 100; ++i) {
@@ -389,6 +407,51 @@ static bool GetReply(SDL_HIDAPI_Device* device, Uint8 command, Uint8* data, size
     return false;
 }
 
+static bool SDL_HIDAPI_Flydigi_SendInfoRequest(SDL_HIDAPI_Device *device)
+{
+    const Uint8 cmd[] = {
+        FLYDIGI_V2_CMD_REPORT_ID,
+        FLYDIGI_V2_MAGIC1,
+        FLYDIGI_V2_MAGIC2,
+        FLYDIGI_V2_GET_INFO_COMMAND,
+        2,
+        0
+    };
+
+    if (HIDAPI_DriverFlydigi_WritePacket(device, cmd, sizeof(cmd)) < 0) {
+        return SDL_SetError("Couldn't query controller info");
+    }
+    return true;
+}
+
+static void HIDAPI_DriverFlydigi_HandleInfoResponse(SDL_Joystick *joystick, SDL_DriverFlydigi_Context *ctx, Uint8 *data, int size)
+{
+    SDL_PowerState state;
+    int percent;
+    Uint8 status = (data[11] >> 4) & 0x0F;
+    Uint8 level = (data[11] & 0x0F);
+
+    switch (status) {
+    case 0:
+        state = SDL_POWERSTATE_ON_BATTERY;
+        percent = level * 20;
+        break;
+    case 1:
+        state = SDL_POWERSTATE_CHARGING;
+        percent = level * 20;
+        break;
+    case 2:
+        state = SDL_POWERSTATE_CHARGED;
+        percent = 100;
+        break;
+    default:
+        state = SDL_POWERSTATE_UNKNOWN;
+        percent = 0;
+        break;
+    }
+    SDL_SendJoystickPowerInfo(joystick, state, percent);
+}
+
 static bool SDL_HIDAPI_Flydigi_SendStatusRequest(SDL_HIDAPI_Device *device)
 {
     const Uint8 cmd[] = {
@@ -397,7 +460,8 @@ static bool SDL_HIDAPI_Flydigi_SendStatusRequest(SDL_HIDAPI_Device *device)
         FLYDIGI_V2_MAGIC2,
         FLYDIGI_V2_GET_STATUS_COMMAND
     };
-    if (SDL_hid_write(device->dev, cmd, sizeof(cmd)) < 0) {
+
+    if (HIDAPI_DriverFlydigi_WritePacket(device, cmd, sizeof(cmd)) < 0) {
         return SDL_SetError("Couldn't query controller status");
     }
     return true;
@@ -425,7 +489,7 @@ static bool SDL_HIDAPI_Flydigi_SendAcquireRequest(SDL_HIDAPI_Device *device, boo
         'S', 'D', 'L', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    if (SDL_hid_write(device->dev, cmd, sizeof(cmd)) < 0) {
+    if (HIDAPI_DriverFlydigi_WritePacket(device, cmd, sizeof(cmd)) < 0) {
         return SDL_SetError("Couldn't send acquire command");
     }
     return true;
@@ -444,9 +508,8 @@ static bool HIDAPI_DriverFlydigi_InitControllerV2(SDL_HIDAPI_Device *device)
     SDL_DriverFlydigi_Context *ctx = (SDL_DriverFlydigi_Context *)device->context;
 
     Uint8 data[USB_PACKET_LENGTH];
-    const Uint8 query_info[] = { FLYDIGI_V2_CMD_REPORT_ID, FLYDIGI_V2_MAGIC1, FLYDIGI_V2_MAGIC2, FLYDIGI_V2_GET_INFO_COMMAND, 2, 0 };
-    if (SDL_hid_write(device->dev, query_info, sizeof(query_info)) < 0) {
-        return SDL_SetError("Couldn't query controller info");
+    if (!SDL_HIDAPI_Flydigi_SendInfoRequest(device)) {
+        return false;
     }
     if (!GetReply(device, FLYDIGI_V2_GET_INFO_COMMAND, data, sizeof(data))) {
         return SDL_SetError("Couldn't get controller info");
@@ -902,6 +965,11 @@ static void HIDAPI_DriverFlydigi_HandlePacketV2(SDL_Joystick *joystick, SDL_Driv
     }
 
     switch (data[2]) {
+    case FLYDIGI_V2_GET_INFO_COMMAND:
+        if (joystick) {
+            HIDAPI_DriverFlydigi_HandleInfoResponse(joystick, ctx, data, size);
+        }
+        break;
     case FLYDIGI_V2_SET_STATUS_COMMAND:
         HIDAPI_DriverFlydigi_HandleStatusUpdate(ctx->device, data, size);
         break;
@@ -937,6 +1005,7 @@ static bool HIDAPI_DriverFlydigi_UpdateDevice(SDL_HIDAPI_Device *device)
     if (device->vendor_id == USB_VENDOR_FLYDIGI_V2 && joystick) {
         if (!ctx->next_heartbeat || now >= ctx->next_heartbeat) {
             SDL_HIDAPI_Flydigi_SendAcquireRequest(device, true);
+            SDL_HIDAPI_Flydigi_SendInfoRequest(device);
             ctx->next_heartbeat = now + FLYDIGI_ACQUIRE_CONTROLLER_HEARTBEAT_TIME;
         }
     }

@@ -183,10 +183,14 @@ static SDL_MimeDataList *mime_data_list_find(struct wl_list *list,
 {
     SDL_MimeDataList *found = NULL;
 
-    SDL_MimeDataList *mime_list = NULL;
-    wl_list_for_each (mime_list, list, link) {
-        if (SDL_strcmp(mime_list->mime_type, mime_type) == 0) {
-            found = mime_list;
+    SDL_MimeDataList *item = NULL;
+    wl_list_for_each (item, list, link) {
+        if (!item->mime_type) {
+            continue;
+        }
+
+        if (SDL_strcmp(item->mime_type, mime_type) == 0) {
+            found = item;
             break;
         }
     }
@@ -418,6 +422,11 @@ static void offer_source_done_handler(void *data, struct wl_callback *callback, 
         SDL_free(id);
         if (source_is_external) {
             Wayland_data_offer_notify_from_mimes(offer, false);
+        } else {
+            // Recursive data offer; just destroy it.
+            SDL_WaylandDataDevice *data_device = offer->data_device;
+            Wayland_data_offer_destroy(offer);
+            data_device->selection_offer = NULL;
         }
     }
 }
@@ -470,6 +479,10 @@ void Wayland_data_offer_notify_from_mimes(SDL_WaylandDataOffer *offer, bool chec
         // Do a first pass to compute allocation size.
         SDL_MimeDataList *item = NULL;
         wl_list_for_each(item, &offer->mimes, link) {
+            if (!item->mime_type) {
+                continue;
+            }
+
             // If origin metadata is found, queue a check and wait for confirmation that this offer isn't recursive.
             if (check_origin && SDL_strcmp(item->mime_type, SDL_DATA_ORIGIN_MIME) == 0) {
                 Wayland_data_offer_check_source(offer, item->mime_type);
@@ -493,6 +506,10 @@ void Wayland_data_offer_notify_from_mimes(SDL_WaylandDataOffer *offer, bool chec
         item = NULL;
         int i = 0;
         wl_list_for_each(item, &offer->mimes, link) {
+            if (!item->mime_type) {
+                continue;
+            }
+
             new_mime_types[i] = strPtr;
             strPtr = stpcpy(strPtr, item->mime_type) + 1;
             i++;
@@ -705,7 +722,7 @@ bool Wayland_data_device_set_selection(SDL_WaylandDataDevice *data_device,
 
 bool Wayland_primary_selection_device_set_selection(SDL_WaylandPrimarySelectionDevice *primary_selection_device,
                                                    SDL_WaylandPrimarySelectionSource *source,
-                                                   const char **mime_types,
+                                                   const char *const *mime_types,
                                                    size_t mime_count)
 {
     bool result = true;

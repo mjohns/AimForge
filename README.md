@@ -44,7 +44,8 @@ installation. This will automatically install versions for CMake and Ninja. You 
 On Unix like systems you will need to make sure CMake and [Ninja](https://ninja-build.org/) are installed (and a c++ compiler).
 Then run the following commands:
 ```bash
-cmake -S . -B build && cmake --build build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target FpsAimForge
 cd build/bin
 ./FpsAimForge
 ```

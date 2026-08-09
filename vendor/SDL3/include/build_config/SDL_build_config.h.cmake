@@ -107,7 +107,6 @@
 #cmakedefine HAVE_STRTOK_R 1
 #cmakedefine HAVE_ITOA 1
 #cmakedefine HAVE__LTOA 1
-#cmakedefine HAVE__UITOA 1
 #cmakedefine HAVE__ULTOA 1
 #cmakedefine HAVE_STRTOL 1
 #cmakedefine HAVE_STRTOUL 1
@@ -572,6 +571,8 @@
 #cmakedefine SDL_VIDEO_VITA_PIB 1
 #cmakedefine SDL_VIDEO_VITA_PVR 1
 #cmakedefine SDL_VIDEO_VITA_PVR_OGL 1
+
+#cmakedefine SDL_EMSCRIPTEN_PERSISTENT_PATH_STRING "@SDL_EMSCRIPTEN_PERSISTENT_PATH_STRING@"
 
 /* xkbcommon version info */
 #define SDL_XKBCOMMON_VERSION_MAJOR @SDL_XKBCOMMON_VERSION_MAJOR@

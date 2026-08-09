@@ -148,9 +148,23 @@ static SDL_Cursor *WIN_CreateAnimatedCursorAndData(SDL_CursorFrameInfo *frames, 
     data->hot_y = hot_y;
     data->num_frames = frame_count;
     for (int i = 0; i < frame_count; ++i) {
-        data->frames[i].surface = frames[i].surface;
+        SDL_Surface *surface = frames[i].surface;
+        if (surface->flags & SDL_SURFACE_PREALLOCATED) {
+            surface = SDL_DuplicateSurface(surface);
+            if (!surface) {
+                while (i > 0) {
+                    --i;
+                    SDL_DestroySurface(data->frames[i].surface);
+                }
+                SDL_free(data);
+                SDL_free(cursor);
+                return NULL;
+            }
+        } else {
+            ++surface->refcount;
+        }
+        data->frames[i].surface = surface;
         data->frames[i].duration = frames[i].duration;
-        ++frames[i].surface->refcount;
     }
     cursor->internal = data;
     return cursor;
@@ -218,7 +232,9 @@ static bool WriteIconSurface(SDL_IOStream *dst, SDL_Surface *surface)
 static void *CreateIconMask(SDL_Surface *surface, size_t *mask_size)
 {
     Uint8 *dst;
-    const int pitch = ((surface->w + 15) & ~15) / 8;
+    const int w = (surface->w + 7) / 8;
+    const int pad = (((w) % 4) ? (4 - ((w) % 4)) : 0);
+    const int pitch = (w + pad);
     const size_t size = pitch * surface->h;
     static const unsigned char masks[] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1 };
 

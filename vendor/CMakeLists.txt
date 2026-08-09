@@ -2,7 +2,7 @@ set(SPDLOG_USE_STD_FORMAT ON)
 
 set(ABSL_PROPAGATE_CXX_STD ON)
 set(ABSL_ENABLE_INSTALL ON)
-if (NOT BUILD_SHARED_LIBS) 
+if (NOT BUILD_SHARED_LIBS)
   set(ABSL_MSVC_STATIC_RUNTIME ON)
 endif()
 
@@ -42,6 +42,7 @@ add_subdirectory(googletest)
 add_subdirectory(protobuf-matchers)
 include(${CMAKE_CURRENT_SOURCE_DIR}/protobuf/cmake/protobuf-generate.cmake)
 
+# version 3.4.14
 add_subdirectory(SDL3)
 add_subdirectory(SDL_mixer)
 

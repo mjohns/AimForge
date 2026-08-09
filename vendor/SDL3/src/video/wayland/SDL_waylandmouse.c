@@ -717,8 +717,8 @@ static bool Wayland_GetSystemCursor(SDL_CursorData *cdata, SDL_WaylandCursorStat
 
 static int surface_sort_callback(const void *a, const void *b)
 {
-    SDL_Surface *s1 = (SDL_Surface *)a;
-    SDL_Surface *s2 = (SDL_Surface *)b;
+    const SDL_Surface *s1 = *(const SDL_Surface **)a;
+    const SDL_Surface *s2 = *(const SDL_Surface **)b;
 
     return (s1->w * s1->h) <= (s2->w * s2->h) ? -1 : 1;
 }
@@ -1103,12 +1103,28 @@ static void Wayland_CursorStateSetCursor(SDL_WaylandCursorState *state, const Wa
 
             dst_height = dst_width;
         } else {
-            // If viewports aren't available, the scale is always 1.0.
-            state->scale = viddata->viewporter && focus ? focus->scale_factor : 1.0;
-            dst_width = cursor_data->cursor_data.custom.width;
-            dst_height = cursor_data->cursor_data.custom.height;
-            hot_x = cursor_data->cursor_data.custom.hot_x;
-            hot_y = cursor_data->cursor_data.custom.hot_y;
+            /* If viewports aren't available, the scale is always 1.0.
+             *
+             * If the pointer scale values are 1.0, the preferred backing buffer scale is the window scale.
+             *
+             * If the pointer is scaled, the dimensions are scaled by the pointer scale, so custom cursors will be scaled
+             * relative to the viewport size.
+             */
+            if (!focus || (focus->pointer_scale.x == 1.0 && focus->pointer_scale.y == 1.0)) {
+                state->scale = viddata->viewporter && focus ? focus->scale_factor : 1.0;
+                dst_width = cursor_data->cursor_data.custom.width;
+                dst_height = cursor_data->cursor_data.custom.height;
+                hot_x = cursor_data->cursor_data.custom.hot_x;
+                hot_y = cursor_data->cursor_data.custom.hot_y;
+            } else {
+                // The preferred buffer scale is the inverse of the pointer scale.
+                state->scale = 1.0 / SDL_min(focus->pointer_scale.x, focus->pointer_scale.y);
+                dst_width = SDL_max((int)SDL_lround((double)cursor_data->cursor_data.custom.width / focus->pointer_scale.x), 1);
+                dst_height = SDL_max((int)SDL_lround((double)cursor_data->cursor_data.custom.height / focus->pointer_scale.y), 1);
+                hot_x = (int)SDL_lround((double)cursor_data->cursor_data.custom.hot_x / focus->pointer_scale.x);
+                hot_y = (int)SDL_lround((double)cursor_data->cursor_data.custom.hot_y / focus->pointer_scale.y);
+            }
+
         }
 
         state->current_cursor = cursor_data;
@@ -1178,6 +1194,34 @@ static void Wayland_CursorStateResetCursor(SDL_WaylandCursorState *state)
     // Stop the frame callback and set the reset status.
     Wayland_CursorStateDestroyFrameCallback(state);
     state->current_frame = -1;
+}
+
+void Wayland_DisplayUpdatePointerFocusedScale(SDL_WindowData *updated_window)
+{
+    SDL_VideoData *viddata = updated_window->waylandData;
+    SDL_WaylandSeat *seat;
+    const double new_scale = SDL_min(updated_window->pointer_scale.x, updated_window->pointer_scale.y);
+
+    wl_list_for_each (seat, &viddata->seat_list, link) {
+        if (seat->pointer.focus == updated_window) {
+            SDL_WaylandCursorState *state = &seat->pointer.cursor_state;
+            if (state->current_cursor && !state->current_cursor->is_system_cursor && state->scale != new_scale) {
+                Wayland_CursorStateResetCursor(state);
+                Wayland_SeatUpdatePointerCursor(seat);
+            }
+        }
+
+        SDL_WaylandPenTool *tool;
+        wl_list_for_each (tool, &seat->tablet.tool_list, link) {
+            if (tool->focus == updated_window) {
+                SDL_WaylandCursorState *state = &tool->cursor_state;
+                if (state->current_cursor && !state->current_cursor->is_system_cursor && state->scale != new_scale) {
+                    Wayland_CursorStateResetCursor(&tool->cursor_state);
+                    Wayland_TabletToolUpdateCursor(tool);
+                }
+            }
+        }
+    }
 }
 
 static bool Wayland_ShowCursor(SDL_Cursor *cursor)

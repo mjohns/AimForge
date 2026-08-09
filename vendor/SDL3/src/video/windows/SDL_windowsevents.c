@@ -61,6 +61,14 @@
 
 // #define HIGHDPI_DEBUG
 
+// Undocumented window messages
+#ifndef WM_NCUAHDRAWCAPTION
+#define WM_NCUAHDRAWCAPTION 0xAE
+#endif
+#ifndef WM_NCUAHDRAWFRAME
+#define WM_NCUAHDRAWFRAME 0xAF
+#endif
+
 // Make sure XBUTTON stuff is defined that isn't in older Platform SDKs...
 #ifndef WM_XBUTTONDOWN
 #define WM_XBUTTONDOWN 0x020B
@@ -321,7 +329,7 @@ static void WIN_CheckAsyncMouseRelease(Uint64 timestamp, SDL_WindowData *data)
     data->mouse_button_flags = (WPARAM)-1;
 }
 
-static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, DWORD pos)
+static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, LPPOINT pos)
 {
     SDL_WindowData *data = window->internal;
     HWND hwnd = data->hwnd;
@@ -358,8 +366,8 @@ static void WIN_UpdateFocus(SDL_Window *window, bool expect_focus, DWORD pos)
 
         // In relative mode we are guaranteed to have mouse focus if we have keyboard focus
         if (!SDL_GetMouse()->relative_mode) {
-            cursorPos.x = (LONG)GET_X_LPARAM(pos);
-            cursorPos.y = (LONG)GET_Y_LPARAM(pos);
+            cursorPos.x = pos->x;
+            cursorPos.y = pos->y;
             ScreenToClient(hwnd, &cursorPos);
             SDL_SendMouseMotion(WIN_GetEventTimestamp(), window, SDL_GLOBAL_MOUSE_ID, false, (float)cursorPos.x, (float)cursorPos.y);
         }
@@ -496,6 +504,9 @@ WIN_KeyboardHookProc(int nCode, WPARAM wParam, LPARAM lParam)
         break;
     case VK_RCONTROL:
         scanCode = SDL_SCANCODE_RCTRL;
+        break;
+    case VK_SNAPSHOT:
+        scanCode = SDL_SCANCODE_PRINTSCREEN;
         break;
 
     // These are required to intercept Alt+Tab and Alt+Esc on Windows 7
@@ -708,11 +719,11 @@ static void WIN_HandleRawMouseInput(Uint64 timestamp, SDL_VideoData *data, HANDL
         if (rawmouse->usButtonFlags & RI_MOUSE_WHEEL) {
             SHORT amount = (SHORT)rawmouse->usButtonData;
             float fAmount = (float)amount / WHEEL_DELTA;
-            SDL_SendMouseWheel(WIN_GetEventTimestamp(), window, mouseID, 0.0f, fAmount, SDL_MOUSEWHEEL_NORMAL);
+            SDL_SendMouseWheel(timestamp, window, mouseID, 0.0f, fAmount, SDL_MOUSEWHEEL_NORMAL);
         } else if (rawmouse->usButtonFlags & RI_MOUSE_HWHEEL) {
             SHORT amount = (SHORT)rawmouse->usButtonData;
             float fAmount = (float)amount / WHEEL_DELTA;
-            SDL_SendMouseWheel(WIN_GetEventTimestamp(), window, mouseID, fAmount, 0.0f, SDL_MOUSEWHEEL_NORMAL);
+            SDL_SendMouseWheel(timestamp, window, mouseID, fAmount, 0.0f, SDL_MOUSEWHEEL_NORMAL);
         }
 
         /* Invalidate the mouse button flags. If we don't do this then disabling raw input
@@ -774,7 +785,8 @@ static void WIN_HandleRawKeyboardInput(Uint64 timestamp, SDL_VideoData *data, HA
 
     if (down) {
         SDL_Window *focus = SDL_GetKeyboardFocus();
-        if (!focus || focus->text_input_active) {
+        // With input sink flag we want to receive input even if not focused
+        if ((!data->raw_keyboard_flag_inputsink && !focus) || (focus && focus->text_input_active)) {
             return;
         }
     }
@@ -889,6 +901,7 @@ static char *GetDeviceName(HANDLE hDevice, HDEVINFO devinfo, const char *instanc
 
     if (hid_loaded) {
         char devName[MAX_PATH + 1];
+        devName[0] = '\0';
         UINT cap = sizeof(devName) - 1;
         UINT len = GetRawInputDeviceInfoA(hDevice, RIDI_DEVICENAME, devName, &cap);
         if (len != (UINT)-1) {
@@ -1208,14 +1221,39 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
         /* Update the focus here, since it's possible to get WM_ACTIVATE and WM_SETFOCUS without
            actually being the foreground window, but this appears to get called in all cases where
-           the global foreground window changes to and from this window. */
-        WIN_UpdateFocus(data->window, !!wParam, GetMessagePos());
+           the global foreground window changes to and from this window.
+
+           The current cursor position is needed here, as the message position contains old
+           coordinates if the pointer moved while an overlay was active. */
+        POINT pos = { 0, 0 };
+        GetCursorPos(&pos);
+        WIN_UpdateFocus(data->window, !!wParam, &pos);
+
+        /* Handle borderless windows; this event is intended for drawing the titlebar, so we need
+           to stop that from happening. */
+        if (data->window->flags & SDL_WINDOW_BORDERLESS) {
+            lParam = -1; // According to MSDN, DefWindowProc will draw a title bar if lParam != -1
+        }
+    } break;
+
+    case WM_NCUAHDRAWCAPTION:
+    case WM_NCUAHDRAWFRAME:
+    {
+        /* These messages are undocumented. They are responsible for redrawing the window frame and
+           caption. Notably, WM_NCUAHDRAWCAPTION is sent when calling SetWindowText on a window.
+           For borderless windows, we don't want to draw a frame or caption, so we should stop
+           that from happening. */
+        if (data->window->flags & SDL_WINDOW_BORDERLESS) {
+            returnCode = 0;
+        }
     } break;
 
     case WM_ACTIVATE:
     {
         // Update the focus in case we changed focus to a child window and then away from the application
-        WIN_UpdateFocus(data->window, !!LOWORD(wParam), GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, !!LOWORD(wParam), &pos);
     } break;
 
     case WM_MOUSEACTIVATE:
@@ -1238,14 +1276,18 @@ LRESULT CALLBACK WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_SETFOCUS:
     {
         // Update the focus in case it's changing between top-level windows in the same application
-        WIN_UpdateFocus(data->window, true, GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, true, &pos);
     } break;
 
     case WM_KILLFOCUS:
     case WM_ENTERIDLE:
     {
         // Update the focus in case it's changing between top-level windows in the same application
-        WIN_UpdateFocus(data->window, false, GetMessagePos());
+        const DWORD msgPos = GetMessagePos();
+        POINT pos = { GET_X_LPARAM(msgPos), GET_Y_LPARAM(msgPos) };
+        WIN_UpdateFocus(data->window, false, &pos);
     } break;
 
     case WM_POINTERENTER:
