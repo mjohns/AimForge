@@ -50,4 +50,9 @@ cd build/bin
 ./FpsAimForge
 ```
 
-Join the [discord](https://discord.gg/jQ2XCRK8YB)
+To build protoc run:
+```bash
+cmake --build build --target protoc
+cd build/bin
+./protoc
+```
