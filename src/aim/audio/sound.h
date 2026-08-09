@@ -2,9 +2,9 @@
 
 #include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 struct MIX_Audio;
 struct MIX_Mixer;

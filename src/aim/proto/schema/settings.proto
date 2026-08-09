@@ -45,7 +45,7 @@ message Settings {
   float start_countdown_time = 17;
 
   ScenarioSettingsConfig scenario_settings_config = 18;
-  
+
   // This is purely for audio and not actual scoring.
   float tracking_shots_per_second = 19;
 

@@ -4,17 +4,15 @@
 
 #include <algorithm>
 #include <functional>
-#include <memory>
 #include <optional>
-#include <random>
 #include <string>
 #include <vector>
 
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
+#include "glm/vec2.hpp" // IWYU pragma: keep
+#include "glm/vec3.hpp" // IWYU pragma: keep
+#include "google/protobuf/message.h"
 #include "imgui.h"
 
 namespace aim {

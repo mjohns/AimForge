@@ -6,8 +6,8 @@
 
 namespace aim {
 
-SDL_Surface *LoadImageSurface(const std::filesystem::path &path) {
-  SDL_IOStream *src = SDL_IOFromFile(path.string().c_str(), "rb");
+SDL_Surface* LoadImageSurface(const std::filesystem::path& path) {
+  SDL_IOStream* src = SDL_IOFromFile(path.string().c_str(), "rb");
   if (!src) {
     return nullptr;
   }
@@ -27,7 +27,7 @@ SDL_Surface *LoadImageSurface(const std::filesystem::path &path) {
   return nullptr;
 }
 
-Image::Image(const std::filesystem::path &path) {
+Image::Image(const std::filesystem::path& path) {
   surface_ = LoadImageSurface(path);
   if (surface_ == nullptr) {
     Logger::get()->warn(

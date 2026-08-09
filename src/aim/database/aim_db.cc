@@ -334,12 +334,12 @@ class AimDbImpl : public AimDb {
     if (!ExecuteSqliteQuery(db_, kCreatePlaylistsByNameIndex, &error_message)) {
       initialization_error_ = error_message;
     }
-    //if (!ExecuteSqliteQuery(db_, kCreateGuidesTable, &error_message)) {
-    //  initialization_error_ = error_message;
-    //}
-    //if (!ExecuteSqliteQuery(db_, kCreateGuidesByNameIndex, &error_message)) {
-    //  initialization_error_ = error_message;
-    //}
+    // if (!ExecuteSqliteQuery(db_, kCreateGuidesTable, &error_message)) {
+    //   initialization_error_ = error_message;
+    // }
+    // if (!ExecuteSqliteQuery(db_, kCreateGuidesByNameIndex, &error_message)) {
+    //   initialization_error_ = error_message;
+    // }
     if (!ExecuteSqliteQuery(db_, kCreateStatsTable, &error_message)) {
       initialization_error_ = error_message;
     }
