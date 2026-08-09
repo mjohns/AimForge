@@ -15,3 +15,5 @@ CMakeUserPresets.json
 .vs
 enc_temp_folder/
 /src/logo.aps
+
+.idea
