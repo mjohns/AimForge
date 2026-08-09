@@ -24,6 +24,8 @@
 // Stripped down version of IMG_stb.c and is_png/is_jpeg from IMG_jpg/png.c.
 // https://github.com/libsdl-org/SDL_image/commits/main/src/IMG_stb.c
 
+#include <stdlib.h>
+
 #define ldexp SDL_scalbn
 
 #define STB_IMAGE_STATIC
