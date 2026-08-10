@@ -3640,6 +3640,7 @@ class StrafeProfile final : public ::google::protobuf::Message
     kPauseChancePercentFieldNumber = 13,
     kTargetRadiusMultiplierFieldNumber = 14,
     kTargetRadiusMultiplierJitterFieldNumber = 15,
+    kStartSpeedPercentFieldNumber = 16,
   };
   // .aim.ProfileInfo info = 1;
   bool has_info() const;
@@ -3818,11 +3819,22 @@ class StrafeProfile final : public ::google::protobuf::Message
   void _internal_set_target_radius_multiplier_jitter(float value);
 
   public:
+  // float start_speed_percent = 16;
+  bool has_start_speed_percent() const;
+  void clear_start_speed_percent() ;
+  float start_speed_percent() const;
+  void set_start_speed_percent(float value);
+
+  private:
+  float _internal_start_speed_percent() const;
+  void _internal_set_start_speed_percent(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.StrafeProfile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 15,
+  static const ::google::protobuf::internal::TcParseTable<4, 16,
                                    3, 0,
                                    2>
       _table_;
@@ -3859,6 +3871,7 @@ class StrafeProfile final : public ::google::protobuf::Message
     float pause_chance_percent_;
     float target_radius_multiplier_;
     float target_radius_multiplier_jitter_;
+    float start_speed_percent_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -22099,6 +22112,35 @@ inline float StrafeProfile::_internal_target_radius_multiplier_jitter() const {
 inline void StrafeProfile::_internal_set_target_radius_multiplier_jitter(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_radius_multiplier_jitter_ = value;
+}
+
+// float start_speed_percent = 16;
+inline bool StrafeProfile::has_start_speed_percent() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00008000U);
+  return value;
+}
+inline void StrafeProfile::clear_start_speed_percent() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_speed_percent_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00008000U);
+}
+inline float StrafeProfile::start_speed_percent() const {
+  // @@protoc_insertion_point(field_get:aim.StrafeProfile.start_speed_percent)
+  return _internal_start_speed_percent();
+}
+inline void StrafeProfile::set_start_speed_percent(float value) {
+  _internal_set_start_speed_percent(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00008000U);
+  // @@protoc_insertion_point(field_set:aim.StrafeProfile.start_speed_percent)
+}
+inline float StrafeProfile::_internal_start_speed_percent() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.start_speed_percent_;
+}
+inline void StrafeProfile::_internal_set_start_speed_percent(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.start_speed_percent_ = value;
 }
 
 // -------------------------------------------------------------------

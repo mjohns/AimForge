@@ -4,14 +4,9 @@
 #include <functional>
 #include <optional>
 
-#include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/common/search.h"
-#include "aim/common/util.h"
-#include "aim/common/wall.h"
 #include "aim/core/application.h"
-#include "aim/core/application_state.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/editor/profile_list_editor.h"
 #include "aim/editor/room_editor.h"
@@ -298,6 +293,17 @@ void DrawStrafeProfile(float char_x,
                                 .set_is_optional()
                                 .set_width(char_x * 10),
                             PROTO_JITTERED_FIELD(StrafeProfile, p, acceleration_multiplier));
+  ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Start speed percent")
+                        .set_is_optional()
+                        .set_step(1, 10)
+                        .set_min(1)
+                        .set_default(100)
+                        .set_width(char_x * 10),
+                    PROTO_PERCENT_FIELD(StrafeProfile, p, start_speed_percent));
+  ImGui::SameLine();
+  ImGui::HelpMarker(
+      "For a new target with acceleartion. What percent of max speed to start at. The default is "
+      "to start at 0 speed.");
   ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Center bias")
                         .set_is_optional()
                         .set_step(0.1, 0.5)

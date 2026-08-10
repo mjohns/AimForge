@@ -1,7 +1,6 @@
 #include "scenario_editor_screen.h"
 
 #include <format>
-#include <functional>
 #include <optional>
 
 #include "absl/strings/ascii.h"
@@ -13,20 +12,16 @@
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/resource_name.h"
-#include "aim/common/search.h"
 #include "aim/common/util.h"
-#include "aim/common/wall.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/camera.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
-#include "aim/editor/profile_list_editor.h"
 #include "aim/editor/room_editor.h"
 #include "aim/editor/scenario_editor_common.h"
 #include "aim/editor/scenario_type_editor.h"
 #include "aim/editor/target_editor.h"
-#include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"

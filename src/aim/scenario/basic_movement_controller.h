@@ -104,6 +104,7 @@ class StrafeController {
                        const ProfileListInfo& profiles_info,
                        float target_speed,
                        float current_position,
+                       bool is_first,
                        float* target_radius_out);
 
   Direction initial_direction_;

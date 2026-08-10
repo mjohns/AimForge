@@ -3,10 +3,9 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/target.h"
-#include "glm/vec2.hpp"
+#include "glm/vec2.hpp"  // IWYU pragma: keep
 #include "google/protobuf/message_lite.h"
 
-using google::protobuf::RepeatedField;
 using google::protobuf::RepeatedPtrField;
 
 namespace aim {
@@ -177,7 +176,7 @@ float StrafeController::GetUpdatedPosition(Target& t,
   if (is_first || too_left || too_right || time_up ||
       (is_stopping_ && acceleration > 0 && current_speed_ <= 0.001)) {
     ChangeDirection(
-        rand, now_seconds, profiles, profiles_info, t.speed, current_position, &t.radius);
+        rand, now_seconds, profiles, profiles_info, t.speed, current_position, is_first, &t.radius);
   }
 
   float max_speed = t.speed * speed_multiplier_;
@@ -240,6 +239,7 @@ void StrafeController::ChangeDirection(Random& rand,
                                        const ProfileListInfo& profiles_info,
                                        float target_speed,
                                        float current_position,
+                                       bool is_first,
                                        float* target_radius_out) {
   if (pause_time_ > 0) {
     wait_until_time_ = now_seconds + pause_time_;
@@ -317,14 +317,13 @@ void StrafeController::ChangeDirection(Random& rand,
     }
   }
 
-  /*
-  // Start at full speed
+  // Maybe start at non zero speed (for acceleration)
   float acceleration = unscaled_acceleration_ * acceleration_multiplier_;
-  if (direction_change_count_ == 1 && acceleration > 0) {
-    float max_speed_that_can_stop = GetSpeedToStopInTime(time, acceleration);
-    current_speed_ = glm::min<float>(max_speed_that_can_stop, target_speed * speed_multiplier_);
+  if (is_first && acceleration > 0 && p->has_start_speed_percent()) {
+    float max_speed = target_speed * speed_multiplier_;
+    // float max_speed_that_can_stop = GetSpeedToStopInTime(time, acceleration);
+    current_speed_ = glm::min<float>(max_speed, max_speed * p->start_speed_percent());
   }
-  */
 
   next_direction_change_pos_ = {};
   next_direction_change_time_ = -1;

@@ -435,6 +435,11 @@ message StrafeProfile {
 
   float target_radius_multiplier = 14;
   float target_radius_multiplier_jitter = 15;
+
+  // For a new target starting with this profile. Start with an initial velocity x% of the max
+  // velocity. This is only relevant for targets with acceleration. 1 will start at full speed.
+  // 0.5 at half speed.
+  float start_speed_percent = 16;
 }
 
 message StrafeScenarioDef {

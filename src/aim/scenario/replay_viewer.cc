@@ -2,9 +2,8 @@
 
 #include <algorithm>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h" // IWYU pragma: keep
 #include "absl/cleanup/cleanup.h"
-#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/times.h"
 #include "aim/core/application.h"
