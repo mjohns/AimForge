@@ -293,12 +293,6 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
-    int fps = (int)ImGui::GetIO().Framerate;
-    if (fps < 30 && app_.GetAppRunTimeSeconds() > 4) {
-      ImGui::AlignTextToFramePadding();
-      ImGui::TextFmt("{} Fps {}", icons::kWarning, fps);
-    }
-
     /*
     const char* driverName = SDL_GetGPUDeviceDriver(app_.gpu_device());
     ImGui::Text(driverName);

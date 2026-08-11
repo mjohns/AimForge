@@ -8,8 +8,8 @@
 #include "aim/scenario/basic_movement_controller.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
+#include "glm/vec2.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 
 namespace aim {
 namespace {
