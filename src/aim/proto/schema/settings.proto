@@ -54,6 +54,8 @@ message Settings {
 
   // Shot rate when at center.
   float proximity_max_shots_per_second = 21;
+
+  bool disable_replays = 22;
 }
 
 message SoundItem {

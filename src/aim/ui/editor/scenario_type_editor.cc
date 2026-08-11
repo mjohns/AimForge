@@ -8,11 +8,11 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/core/application.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/scenario/scenario_overrides.h"
 #include "aim/ui/editor/profile_list_editor.h"
 #include "aim/ui/editor/room_editor.h"
 #include "aim/ui/editor/scenario_editor_common.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
-#include "aim/scenario/scenario_overrides.h"
 #include "aim/ui/search_selector.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 

@@ -10,8 +10,8 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/proto/common.pb.h"
-#include "glm/vec2.hpp" // IWYU pragma: keep
-#include "glm/vec3.hpp" // IWYU pragma: keep
+#include "glm/vec2.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 #include "google/protobuf/message.h"
 #include "imgui.h"
 

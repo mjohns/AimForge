@@ -3,6 +3,7 @@
 #include <format>
 #include <functional>
 
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/audio/sound_manager.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
@@ -176,6 +177,12 @@ class SettingsScreen : public UiScreen {
       ImGui::SimpleTypeDropdown("GpuPresentModes", &present_mode, kPresentModes, char_x_ * 10);
       updater_.settings.set_present_mode(present_mode);
 
+      const char* driver_name = SDL_GetGPUDeviceDriver(app_.gpu_device());
+      if (driver_name != nullptr) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextFmt("GPU device driver: {}", driver_name);
+      }
+
       ImGui::SpacedSeparator();
 
       ImGui::AlignTextToFramePadding();
@@ -289,6 +296,11 @@ class SettingsScreen : public UiScreen {
 
         ImGui::Unindent();
       }
+
+      ImGui::SpacedSeparator();
+
+      ImGui::InputBool(ImGui::InputBoolParams("DisableReplays").set_label("Disable replays"),
+                       PROTO_BOOL_FIELD(Settings, &updater_.settings, disable_replays));
 
       ImGui::SpacedSeparator();
 

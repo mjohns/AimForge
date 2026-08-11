@@ -22,7 +22,6 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/proto/common.pb.h"
@@ -30,6 +29,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/scenario/scenario_timer.h"
+#include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/stats_screen.h"
 #include "aim/ui/ui_screen.h"
@@ -77,8 +77,16 @@ bool RequiresPerFrameTargetData(const ScenarioDef& def) {
 bool ShouldRecordReplay(ScenarioDef& def,
                         bool requires_per_frame_target_data,
                         const Settings& settings) {
-  return def.duration_seconds() < 80 && def.target_def().num_targets() > 0 &&
-         (!requires_per_frame_target_data || def.target_def().num_targets() < 20);
+  if (settings.disable_replays()) {
+    return false;
+  }
+  if (def.duration_seconds() > 80 || def.target_def().num_targets() <= 0) {
+    return false;
+  }
+  if (requires_per_frame_target_data) {
+    return def.target_def().num_targets() < 20;
+  }
+  return true;
 }
 
 }  // namespace

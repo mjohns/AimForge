@@ -2166,6 +2166,7 @@ class Settings final : public ::google::protobuf::Message
     kTrackingShotsPerSecondFieldNumber = 19,
     kProximityMinShotsPerSecondFieldNumber = 20,
     kProximityMaxShotsPerSecondFieldNumber = 21,
+    kDisableReplaysFieldNumber = 22,
   };
   // string theme_name = 4;
   bool has_theme_name() const;
@@ -2409,11 +2410,22 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_proximity_max_shots_per_second(float value);
 
   public:
+  // bool disable_replays = 22;
+  bool has_disable_replays() const;
+  void clear_disable_replays() ;
+  bool disable_replays() const;
+  void set_disable_replays(bool value);
+
+  private:
+  bool _internal_disable_replays() const;
+  void _internal_set_disable_replays(bool value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<5, 20,
+  static const ::google::protobuf::internal::TcParseTable<5, 21,
                                    4, 69,
                                    2>
       _table_;
@@ -2455,6 +2467,7 @@ class Settings final : public ::google::protobuf::Message
     float tracking_shots_per_second_;
     float proximity_min_shots_per_second_;
     float proximity_max_shots_per_second_;
+    bool disable_replays_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3484,6 +3497,35 @@ inline float Settings::_internal_proximity_max_shots_per_second() const {
 inline void Settings::_internal_set_proximity_max_shots_per_second(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.proximity_max_shots_per_second_ = value;
+}
+
+// bool disable_replays = 22;
+inline bool Settings::has_disable_replays() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00100000U);
+  return value;
+}
+inline void Settings::clear_disable_replays() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_replays_ = false;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00100000U);
+}
+inline bool Settings::disable_replays() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.disable_replays)
+  return _internal_disable_replays();
+}
+inline void Settings::set_disable_replays(bool value) {
+  _internal_set_disable_replays(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00100000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.disable_replays)
+}
+inline bool Settings::_internal_disable_replays() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.disable_replays_;
+}
+inline void Settings::_internal_set_disable_replays(bool value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.disable_replays_ = value;
 }
 
 // -------------------------------------------------------------------

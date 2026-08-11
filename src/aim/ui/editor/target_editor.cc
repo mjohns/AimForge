@@ -5,8 +5,8 @@
 
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/ui/editor/profile_list_editor.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/ui/editor/profile_list_editor.h"
 #include "imgui.h"
 
 namespace aim {

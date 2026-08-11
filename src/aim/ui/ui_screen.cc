@@ -1,6 +1,6 @@
 #include "ui_screen.h"
 
-#include "SDL3/SDL.h" // IWYU pragma: keep
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/strings/ascii.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
