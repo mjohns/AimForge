@@ -3,7 +3,7 @@
 #include <memory>
 #include <span>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 
 namespace aim {
 

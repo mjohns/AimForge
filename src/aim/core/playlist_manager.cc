@@ -7,8 +7,6 @@
 #include <unordered_set>
 
 #include "absl/strings/strip.h"
-#include "aim/common/files.h"
-#include "aim/common/log.h"
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/util.h"

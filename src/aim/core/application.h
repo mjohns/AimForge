@@ -2,16 +2,13 @@
 
 #include <memory>
 #include <optional>
-#include <random>
 
-#include "SDL3/SDL.h"
-#include "absl/log/log.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/log/log_sink.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/times.h"
-#include "aim/common/util.h"
 #include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
@@ -22,7 +19,7 @@
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/textures.h"
 #include "imgui.h"
-#include "spdlog/spdlog.h"
+#include "spdlog/logger.h"
 
 struct MIX_Mixer;
 
@@ -71,7 +68,7 @@ class Application {
   void FinishRender(RenderContext* render_context);
 
   // Render just ImGui screen.
-  void Render(ImVec4 clear_color = ImVec4(0.05f, 0.05f, 0.07f, 1.00f));
+  void Render(ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
 
   SDL_Window* sdl_window() {
     return sdl_window_;

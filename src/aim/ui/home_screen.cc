@@ -139,6 +139,11 @@ class HomeScreen : public UiScreen {
     }
     ScenarioItem current_scenario = *GetCurrentScenario();
     app_.history_manager().UpdateRecentView(ObjectType::SCENARIO, current_scenario.name);
+
+    auto run = app_.playlist_manager().GetCurrentRun();
+    if (run) {
+      app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, run->playlist.name);
+    }
     CreateScenarioParams params;
     params.name = current_scenario.name;
     std::optional<ScenarioDef> evaluated_def =
@@ -335,7 +340,7 @@ class HomeScreen : public UiScreen {
         playlist_list_component_->Show(&result);
         if (result.open_playlist.has_value()) {
           auto playlist = *result.open_playlist;
-          app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name);
+          // app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST, playlist.name);
           app_.playlist_manager().SetCurrentPlaylist(playlist.name);
         }
       }

@@ -1,7 +1,6 @@
 #include "top_bar.h"
 
 #include "aim/common/mat_icons.h"
-#include "aim/common/util.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/graphics/textures.h"
 #include "aim/ui/crosshair_editor_screen.h"
@@ -10,7 +9,6 @@
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/ui_screen.h"
-#include "home_screen.h"
 
 namespace aim {
 

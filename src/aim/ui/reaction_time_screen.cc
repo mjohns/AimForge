@@ -172,6 +172,7 @@ class ReactionTimeScreen : public UiScreen {
             "TypeSelector", &selected_type, {visual_label, audio_label}, char_x * 10)) {
       options_.is_audio = selected_type == audio_label;
     }
+    ImGui::Text("Use \"restart scenario\" keybind to start");
 
     {
       auto font = app_.font_manager().UseLarge();
@@ -239,6 +240,9 @@ class ReactionTimeScreen : public UiScreen {
       if (KeyMappingMatchesEvent(event_name, settings_.keybinds().restart_scenario())) {
         StartRun();
       }
+    }
+    if (IsEscapeKeyDown(event)) {
+      PopSelf();
     }
   }
 
