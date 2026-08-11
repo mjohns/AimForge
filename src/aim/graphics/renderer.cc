@@ -4,16 +4,16 @@
 
 #include <cassert>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/algorithm/container.h"
 #include "aim/common/geometry.h"
 #include "aim/common/log.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/graphics/shapes.h"
-#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
 #include "glm/gtx/vector_angle.hpp"
-#include "glm/mat4x4.hpp"
+#include "glm/mat4x4.hpp"  // IWYU pragma: keep
 
 namespace aim {
 namespace {

@@ -1,18 +1,14 @@
 #include "room_editor.h"
 
-#include <algorithm>
-#include <functional>
 #include <string>
 
-#include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/util.h"
-#include "aim/editor/scenario_editor_common.h"
+#include "aim/ui/editor/scenario_editor_common.h"
 #include "aim/proto/scenario.pb.h"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
-#include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 

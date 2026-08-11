@@ -6,7 +6,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/util.h"
 #include "aim/core/play_time_manager.h"
-#include "aim/editor/scenario_editor_common.h"
+#include "aim/ui/editor/scenario_editor_common.h"
 
 namespace aim {
 namespace {

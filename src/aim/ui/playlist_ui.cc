@@ -8,7 +8,7 @@
 #include "aim/core/bundle_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/editor/scenario_editor_screen.h"
+#include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/playlist_editor_component.h"
 #include "aim/ui/select_variation_dialog.h"

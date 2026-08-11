@@ -22,7 +22,7 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/editor/scenario_editor_screen.h"
+#include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"
 #include "aim/proto/common.pb.h"
