@@ -76,6 +76,9 @@ bool FontManager::LoadFonts() {
     Logger::get()->error("Unable to load large bold font from: {}", bold_font_path.string());
     return false;
   }
+  icons_config.GlyphOffset.y = 8;
+  io.Fonts->AddFontFromFileTTF(
+      material_icons_path.string().c_str(), large_font_size(), &icons_config, icons_ranges);
 
   medium_bold_font_ =
       io.Fonts->AddFontFromFileTTF(bold_font_path.string().c_str(), medium_font_size());

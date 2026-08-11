@@ -168,9 +168,15 @@ class QuickSettingsScreen : public UiScreen {
       std::string top_text = type_ == QuickSettingsType::DEFAULT
                                  ? MaybeIntToString(updater_.settings.cm_per_360())
                                  : MaybeIntToString(updater_.settings.metronome_bpm());
+      std::string top_help = type_ == QuickSettingsType::DEFAULT
+                                 ? "Scroll to adjust cm/360"
+                                 : "Scroll to adjust BPM";
       float text_size = ImGui::CalcTextSize(top_text.c_str()).x;
       ImGui::SetCursorPosX((screen.width - text_size) / 2.0);
-      ImGui::Text(top_text);
+      ImGui::TextFmt("{}{}", top_text, icons::kHeight);
+      auto normal_font = app_.font_manager().UseDefault();
+      ImGui::HelpTooltip(top_help);
+      normal_font.Pop();
       ImGui::Spacing();
       ImGui::Spacing();
     }
@@ -185,13 +191,13 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::Spacing();
       ImGui::Spacing();
 
-      ImGui::InputFloat(ImGui::InputFloatParams("CmPer360")
-                            .set_label("cm/360")
-                            .set_step(1, 10)
-                            .set_width(char_size.x * 9)
-                            .set_min(1)
-                            .set_default(35),
-                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, cm_per_360));
+      // ImGui::InputFloat(ImGui::InputFloatParams("CmPer360")
+      //                       .set_label("cm/360")
+      //                       .set_step(1, 10)
+      //                       .set_width(char_size.x * 9)
+      //                       .set_min(1)
+      //                       .set_default(35),
+      //                   PROTO_FLOAT_FIELD(Settings, &updater_.settings, cm_per_360));
 
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Theme");
@@ -233,16 +239,15 @@ class QuickSettingsScreen : public UiScreen {
       ImGui::InputBool(ImGui::InputBoolParams("EnableMetronome").set_label("Enable metronome"),
                        PROTO_BOOL_FIELD(Settings, &updater_.settings, enable_metronome));
 
-      ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
-                            .set_label("BPM")
-                            .set_min(0)
-                            .set_zero_is_unset()
-                            .set_step(1, 10)
-                            .set_width(char_size.x * 9),
-                        PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
+      // ImGui::InputFloat(ImGui::InputFloatParams("MetronomeBpm")
+      //                       .set_label("BPM")
+      //                       .set_min(0)
+      //                       .set_zero_is_unset()
+      //                       .set_step(1, 10)
+      //                       .set_width(char_size.x * 9),
+      //                   PROTO_FLOAT_FIELD(Settings, &updater_.settings, metronome_bpm));
 
-      ImGui::SameLine();
-      if (ImGui::Button("Clear")) {
+      if (ImGui::Button("Clear BPM")) {
         updater_.settings.clear_metronome_bpm();
         updater_.settings.set_enable_metronome(false);
       }
