@@ -2,13 +2,13 @@
 
 #include <algorithm>
 #include <cassert>
-#include <fstream>
 #include <optional>
 #include <utility>
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/implot_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/util.h"
@@ -22,7 +22,6 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/settings_screen.h"
 #include "aim/ui/top_bar.h"
 #include "imgui.h"
 #include "implot.h"

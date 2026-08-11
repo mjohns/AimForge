@@ -2,9 +2,8 @@
 
 #include <optional>
 
-#include "aim/common/simple_types.h"
 #include "aim/proto/scenario.pb.h"
-#include "glm/vec2.hpp"
+#include "glm/vec2.hpp"  // IWYU pragma: keep
 
 namespace aim {
 

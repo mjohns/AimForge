@@ -1,10 +1,9 @@
 #include "play_time_screen.h"
 
 #include <format>
-#include <optional>
 
 #include "aim/common/imgui_ext.h"
-#include "aim/common/util.h"
+#include "aim/common/mat_icons.h"
 #include "aim/core/play_time_manager.h"
 #include "aim/ui/editor/scenario_editor_common.h"
 

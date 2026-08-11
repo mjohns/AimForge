@@ -2,13 +2,12 @@
 
 #include <format>
 #include <functional>
-#include <optional>
 
-#include "absl/strings/ascii.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/core/settings_manager.h"
 #include "aim/proto/common.pb.h"

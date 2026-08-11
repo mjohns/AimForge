@@ -4,9 +4,10 @@
 
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/util.h"
-#include "aim/ui/editor/scenario_editor_common.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/ui/editor/scenario_editor_common.h"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
 

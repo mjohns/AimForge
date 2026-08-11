@@ -1,10 +1,8 @@
 #include "scenario_ui.h"
 
-#include <algorithm>
-
 #include "absl/algorithm/container.h"
-#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"

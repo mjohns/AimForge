@@ -1,19 +1,13 @@
 #include "target_editor.h"
 
-#include <algorithm>
 #include <functional>
 #include <string>
 
-#include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/common/util.h"
 #include "aim/ui/editor/profile_list_editor.h"
-#include "aim/ui/editor/scenario_editor_common.h"
 #include "aim/proto/scenario.pb.h"
-#include "google/protobuf/repeated_ptr_field.h"
 #include "imgui.h"
-#include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {

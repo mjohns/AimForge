@@ -2,6 +2,7 @@
 
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/playlist_manager.h"

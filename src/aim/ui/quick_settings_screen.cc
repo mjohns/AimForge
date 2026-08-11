@@ -2,14 +2,13 @@
 
 #include <format>
 #include <functional>
-#include <optional>
 
+#include "aim/common/mat_icons.h"
 #include "aim/common/util.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/settings_screen.h"
 #include "aim/ui/ui_screen.h"
 #include "backends/imgui_impl_sdl3.h"
-#include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 namespace {

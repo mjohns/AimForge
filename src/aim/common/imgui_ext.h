@@ -3,15 +3,12 @@
 #include <format>
 #include <functional>
 #include <string>
-#include <string_view>
 #include <vector>
 
 #include "aim/common/field.h"
-#include "aim/common/mat_icons.h"
-#include "aim/common/util.h"
 #include "aim/proto/common.pb.h"
 #include "imgui.h"
-#include "imgui/misc/cpp/imgui_stdlib.h"
+#include "misc/cpp/imgui_stdlib.h"  // IWYU pragma: keep
 
 namespace ImGui {
 

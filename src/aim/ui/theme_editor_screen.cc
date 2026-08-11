@@ -6,6 +6,7 @@
 #include "aim/common/field.h"
 #include "aim/common/files.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"

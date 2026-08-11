@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "glm/vec3.hpp"
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 #include "imgui.h"
 
 namespace aim {

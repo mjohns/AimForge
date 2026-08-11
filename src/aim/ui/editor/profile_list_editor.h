@@ -5,10 +5,14 @@
 #include "absl/strings/ascii.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/proto_util.h"
+#include "aim/common/simple_types.h"
+#include "aim/common/util.h"
 #include "aim/proto/scenario.pb.h"
 #include "google/protobuf/message.h"
 #include "imgui.h"
+#include "misc/cpp/imgui_stdlib.h"
 
 namespace aim {
 
