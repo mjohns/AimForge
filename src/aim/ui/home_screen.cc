@@ -5,7 +5,6 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/core/version.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
@@ -317,8 +316,8 @@ class HomeScreen : public UiScreen {
     }
     */
 
-    ImGui::SetCursorAtBottom();
-    ImGui::Text("%s", kAimForgeVersion);
+    // ImGui::SetCursorAtBottom();
+    // ImGui::Text("%s", kAimForgeVersion);
   }
 
   void DrawScenariosScreen() {
