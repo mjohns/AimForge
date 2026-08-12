@@ -1,6 +1,7 @@
 #include "home_screen.h"
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
+#include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
@@ -11,7 +12,7 @@
 #include "aim/ui/bundle_ui.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
-#include "aim/ui/stats_screen.h"
+#include "aim/ui/stats/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/top_bar.h"
 #include "aim/ui/ui_screen.h"

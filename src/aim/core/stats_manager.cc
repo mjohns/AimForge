@@ -2,9 +2,8 @@
 
 #include <memory>
 
-#include "aim/common/util.h"
+#include "aim/common/times.h"
 #include "aim/core/playlist_manager.h"
-#include "glm/ext/scalar_common.hpp"
 
 namespace aim {
 namespace {
@@ -56,6 +55,83 @@ class StatsManagerImpl : public StatsManager {
     i64 scenario_id = db_->GetScenarioId(scenario_name);
     db_->DeleteStats(scenario_id, run_id);
     stats_cache_.erase(scenario_id);
+  }
+
+  bool GetStatsDetails(const std::string& scenario_name,
+                       i64 run_id,
+                       StatsDetails* details) override {
+    auto all_stats = GetStats(scenario_name);
+    details->all_stats.reserve(all_stats.size());
+    details->scores.reserve(all_stats.size());
+
+    if (all_stats.size() == 0) {
+      return false;
+    }
+
+    i64 now_micros = GetNowEpochMicros();
+
+    int found_max_index = -1;
+    float max_score = 0;
+    bool found_stats = false;
+    details->min_score = 1000000;
+
+    i64 average_mm_per_360 = 0;
+    float average_runs_count = 0;
+    for (int i = 0; i < all_stats.size(); ++i) {
+      StatsDbRow& stats = all_stats[i];
+      details->all_stats.push_back(stats);
+      details->scores.push_back(stats.score);
+
+      if (stats.stats_id == run_id) {
+        details->stats = stats;
+        found_stats = true;
+        break;
+      }
+
+      {
+        // Sum values for calculating the average. This will not include the current run.
+        details->average_stats.score += stats.score;
+        // This will overflow if done directly with the mm_per_360 i16.
+        average_mm_per_360 += stats.mm_per_360;
+        StatsInfo& info = details->average_stats.info;
+        info.set_num_hits(info.num_hits() + stats.info.num_hits());
+        info.set_num_shots(info.num_shots() + stats.info.num_shots());
+        average_runs_count++;
+      }
+
+      if (stats.score >= max_score && stats.score > 0) {
+        found_max_index = i;
+        max_score = stats.score;
+      }
+      if (stats.score < details->min_score) {
+        details->min_score = stats.score;
+      }
+    }
+
+    if (average_runs_count > 0) {
+      details->average_stats.score /= average_runs_count;
+
+      details->average_stats.info.set_num_hits(details->average_stats.info.num_hits() /
+                                               average_runs_count);
+      details->average_stats.info.set_num_shots(details->average_stats.info.num_shots() /
+                                                average_runs_count);
+      details->average_stats.mm_per_360 = average_mm_per_360 / average_runs_count;
+    }
+
+    if (!found_stats) {
+      return false;
+    }
+
+    if (found_max_index >= 0) {
+      details->previous_high_score_stats = all_stats[found_max_index];
+    }
+
+    details->sorted_stats = details->all_stats;
+    std::sort(details->sorted_stats.begin(),
+              details->sorted_stats.end(),
+              [](const StatsDbRow& lhs, const StatsDbRow& rhs) { return lhs.score < rhs.score; });
+
+    return true;
   }
 
   std::optional<LatestStatsRun> GetLatestRun() override {

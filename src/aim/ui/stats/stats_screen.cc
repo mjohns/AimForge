@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cassert>
 #include <optional>
-#include <utility>
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
@@ -22,6 +21,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
+#include "aim/ui/stats/perf_ui.h"
 #include "aim/ui/top_bar.h"
 #include "imgui.h"
 #include "implot.h"
@@ -123,70 +123,11 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
   ImPlot::EndPlot();
 }
 
-void DumpFrameTimeline(const FrameTimes& t) {
-  std::vector<std::pair<i64, std::string>> time_points;
-  auto push_time_span = [&](const TimeSpan& span, const std::string& label) {
-    time_points.push_back({span.start, label + "_start"});
-    time_points.push_back({span.end, label + "_end"});
-  };
-
-#define AIM_PUSH_TIME_SPAN(name) push_time_span(t.name, #name)
-#define AIM_PUSH_TIME(name) time_points.push_back({t.name, #name})
-
-  AIM_PUSH_TIME(events_start);
-  AIM_PUSH_TIME(update_start);
-  AIM_PUSH_TIME(render.start);
-  AIM_PUSH_TIME_SPAN(start_render);
-  AIM_PUSH_TIME_SPAN(build_draw_data);
-  AIM_PUSH_TIME_SPAN(pack_instance_data);
-  AIM_PUSH_TIME_SPAN(upload_instance_data);
-  AIM_PUSH_TIME_SPAN(upload_instance_data_copy_pass);
-  AIM_PUSH_TIME_SPAN(upload_instance_data_memcpy);
-  AIM_PUSH_TIME_SPAN(render_draw_data);
-  AIM_PUSH_TIME_SPAN(finish_render);
-
-  AIM_PUSH_TIME(begin_render_pass);
-  AIM_PUSH_TIME(end_render_pass);
-  AIM_PUSH_TIME(imgui_begin_render_pass);
-  AIM_PUSH_TIME(imgui_end_render_pass);
-  AIM_PUSH_TIME(imgui_render_draw_data);
-  AIM_PUSH_TIME(imgui_prepare_draw_data);
-  AIM_PUSH_TIME(finish_render_submit_command_buffer);
-  AIM_PUSH_TIME(draw_crosshair);
-  AIM_PUSH_TIME(acquire_swapchain);
-  AIM_PUSH_TIME(submit_swapchain_command_buffer);
-
-  // AIM_PUSH_TIME(start);
-  // AIM_PUSH_TIME(end);
-
-  std::erase_if(time_points, [](const auto& p) { return p.first <= 0; });
-  std::stable_sort(time_points.begin(), time_points.end());
-
-  if (time_points.empty()) {
-    return;
-  }
-
-  i64 last_time = time_points[0].first;
-  std::string last_label = time_points[0].second;
-  for (int i = 1; i < time_points.size(); ++i) {
-    i64 time = time_points[i].first;
-    const std::string& label = time_points[i].second;
-
-    i64 duration_micros = time - last_time;
-
-    ImGui::TextFmt("{:.2f}ms: {} -> {}", duration_micros / 1000.0f, last_label, label);
-    last_time = time;
-    last_label = label;
-  }
-}
-
 enum class SelectedScreen : int {
   STATS = 1,
   HISTORY = 2,
   PERF = 3,
 };
-
-constexpr i64 kDayMicros = 86400000000;
 
 struct HistoryRow {
   int run_number = 0;
@@ -209,17 +150,6 @@ std::string GetHitPercentageString(const StatsDbRow& stats) {
   }
   return "";
 }
-
-struct StatsDetails {
-  std::vector<StatsDbRow> all_stats;
-  std::vector<StatsDbRow> sorted_stats;
-  StatsDbRow stats;
-  StatsDbRow previous_high_score_stats;
-  StatsDbRow average_stats;
-
-  std::vector<double> scores;
-  float min_score = 0;
-};
 
 struct StatsComparison {
   float score_diff = 0;
@@ -257,7 +187,8 @@ class StatsScreen : public UiScreen {
       reference_scenario_name_ = scenario_->unevaluated_def.reference_def().scenario_name();
     }
 
-    is_valid_ = InitializeStatsDetails();
+    is_valid_ = is_valid_ =
+        app_.stats_manager().GetStatsDetails(scenario_name_, run_id_, &details_);
 
     performance_stats_ = state_.GetPerformanceStats(scenario_name, run_id);
 
@@ -313,7 +244,7 @@ class StatsScreen : public UiScreen {
       reset_stats_ = false;
       history_rows_ = {};
       details_ = {};
-      is_valid_ = InitializeStatsDetails();
+      is_valid_ = app_.stats_manager().GetStatsDetails(scenario_name_, run_id_, &details_);
     }
 
     if (!is_valid_) {
@@ -360,7 +291,9 @@ class StatsScreen : public UiScreen {
           DrawStatsPanel();
         }
         if (selected_screen_ == SelectedScreen::PERF) {
-          DrawPerformanceStats();
+          if (performance_stats_) {
+            DrawPerformanceStats(*performance_stats_);
+          }
         }
         if (selected_screen_ == SelectedScreen::HISTORY) {
           DrawHistoryPanel();
@@ -540,88 +473,6 @@ class StatsScreen : public UiScreen {
     ImGui::SetNextWindowSize(ImVec2(width, height));
     return ImGui::Begin(
         name.c_str(), nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
-  }
-
-  void DrawPerformanceStats() {
-    auto& worst_times_ = performance_stats_->worst_times;
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Worst frame");
-    ImGui::SameLine();
-    ImGui::InfoMarker(std::format("At time {:.1f}s. Frame {:L}",
-                                  performance_stats_->worst_times_micros / 1000000.0f,
-                                  worst_times_.frame_number));
-
-    float total_ms = (worst_times_.end - worst_times_.start) / 1000.0;
-    ImGui::Indent();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Projected fps");
-    ImGui::SameLine();
-    ImGui::Button(MaybeIntToString(1000 / total_ms));
-    ImGui::HelpTooltip("Projected fps if all frames were this bad.");
-    ImGui::TextFmt("Total time: {:.2f}ms", total_ms);
-    ImGui::TextFmt("Process events: {:.2f}ms",
-                   (worst_times_.events_end - worst_times_.events_start) / 1000.0);
-    ImGui::TextFmt("Event count: {} (mouse={}, max_seen={})",
-                   worst_times_.events_count,
-                   worst_times_.mouse_events_count,
-                   performance_stats_->top_events_count);
-    ImGui::TextFmt("Update time: {:.2f}ms",
-                   (worst_times_.update_end - worst_times_.update_start) / 1000.0);
-    if (worst_times_.render.start > 0) {
-      ImGui::TextFmt("Render time: {:.2f}ms", worst_times_.render.GetSeconds() * 1000.0);
-      ImGui::Indent();
-      ImGui::TextFmt("Build draw data: {:.2f}ms",
-                     worst_times_.build_draw_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Pack instance data: {:.2f}ms",
-                     worst_times_.pack_instance_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Upload instance data: {:.2f}ms",
-                     worst_times_.upload_instance_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Upload instance data (copy pass): {:.2f}ms",
-                     worst_times_.upload_instance_data_copy_pass.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Upload instance data (memcpy): {:.2f}ms",
-                     worst_times_.upload_instance_data_memcpy.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Render draw data: {:.2f}ms",
-                     worst_times_.render_draw_data.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Start render: {:.2f}ms", worst_times_.start_render.GetSeconds() * 1000.0);
-      ImGui::TextFmt("Finish render: {:.2f}ms", worst_times_.finish_render.GetSeconds() * 1000.0);
-      ImGui::Unindent();
-    }
-    ImGui::Unindent();
-
-    if (ImGui::TreeNode("Frame timeline")) {
-      DumpFrameTimeline(worst_times_);
-      ImGui::TreePop();
-    }
-
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-
-    ImGui::Text("Total Times (ms)");
-    ImGui::Indent();
-    DumpHistogram(performance_stats_->total_time_histogram);
-    ImGui::Unindent();
-
-    if (worst_times_.render.start > 0) {
-      ImGui::SpacedSeparator();
-
-      ImGui::Text("Render Times (ms)");
-      ImGui::Indent();
-      DumpHistogram(performance_stats_->render_time_histogram);
-      ImGui::Unindent();
-    }
-
-    ImGui::SpacedSeparator();
-    ImGui::Text("Update Times (ms)");
-    ImGui::Indent();
-    DumpHistogram(performance_stats_->update_time_histogram);
-    ImGui::Unindent();
-
-    ImGui::SpacedSeparator();
-    ImGui::Text("Event Times (ms)");
-    ImGui::Indent();
-    DumpHistogram(performance_stats_->events_time_histogram);
-    ImGui::Unindent();
   }
 
   void DrawCurrentStatsPanel() {
@@ -1093,82 +944,6 @@ class StatsScreen : public UiScreen {
       }
     }
     return result;
-  }
-
-  bool InitializeStatsDetails() {
-    auto all_stats = app_.stats_manager().GetStats(scenario_name_);
-    details_.all_stats.reserve(all_stats.size());
-    details_.scores.reserve(all_stats.size());
-
-    if (all_stats.size() == 0) {
-      return false;
-    }
-
-    i64 step = kDayMicros;
-    i64 now_micros = GetNowEpochMicros();
-
-    int found_max_index = -1;
-    float max_score = 0;
-    bool found_stats = false;
-    details_.min_score = 1000000;
-
-    i64 average_mm_per_360 = 0;
-    float average_runs_count = 0;
-    for (int i = 0; i < all_stats.size(); ++i) {
-      StatsDbRow& stats = all_stats[i];
-      details_.all_stats.push_back(stats);
-      details_.scores.push_back(stats.score);
-
-      if (stats.stats_id == run_id_) {
-        details_.stats = stats;
-        found_stats = true;
-        break;
-      }
-
-      {
-        // Sum values for calculating the average. This will not include the current run.
-        details_.average_stats.score += stats.score;
-        // This will overflow if done directly with the mm_per_360 i16.
-        average_mm_per_360 += stats.mm_per_360;
-        StatsInfo& info = details_.average_stats.info;
-        info.set_num_hits(info.num_hits() + stats.info.num_hits());
-        info.set_num_shots(info.num_shots() + stats.info.num_shots());
-        average_runs_count++;
-      }
-
-      if (stats.score >= max_score && stats.score > 0) {
-        found_max_index = i;
-        max_score = stats.score;
-      }
-      if (stats.score < details_.min_score) {
-        details_.min_score = stats.score;
-      }
-    }
-
-    if (average_runs_count > 0) {
-      details_.average_stats.score /= average_runs_count;
-
-      details_.average_stats.info.set_num_hits(details_.average_stats.info.num_hits() /
-                                               average_runs_count);
-      details_.average_stats.info.set_num_shots(details_.average_stats.info.num_shots() /
-                                                average_runs_count);
-      details_.average_stats.mm_per_360 = average_mm_per_360 / average_runs_count;
-    }
-
-    if (!found_stats) {
-      return false;
-    }
-
-    if (found_max_index >= 0) {
-      details_.previous_high_score_stats = all_stats[found_max_index];
-    }
-
-    details_.sorted_stats = details_.all_stats;
-    std::sort(details_.sorted_stats.begin(),
-              details_.sorted_stats.end(),
-              [](const StatsDbRow& lhs, const StatsDbRow& rhs) { return lhs.score < rhs.score; });
-
-    return true;
   }
 
   std::string scenario_name_;

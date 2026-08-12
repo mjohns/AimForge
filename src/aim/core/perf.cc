@@ -1,5 +1,8 @@
 #include "perf.h"
 
+#include "aim/common/imgui_ext.h"
+#include "imgui.h"
+
 namespace aim {
 
 void DumpHistogram(const TimeHistogram& h) {

@@ -3,10 +3,9 @@
 #include <algorithm>
 #include <cassert>
 #include <format>
-#include <fstream>
 #include <memory>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/cleanup/cleanup.h"
 #include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
@@ -31,11 +30,11 @@
 #include "aim/scenario/scenario_timer.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/quick_settings_screen.h"
-#include "aim/ui/stats_screen.h"
+#include "aim/ui/stats/stats_screen.h"
 #include "aim/ui/ui_screen.h"
-#include "glm/mat4x4.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
+#include "glm/mat4x4.hpp"  // IWYU pragma: keep
+#include "glm/vec2.hpp"    // IWYU pragma: keep
+#include "glm/vec3.hpp"    // IWYU pragma: keep
 #include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 

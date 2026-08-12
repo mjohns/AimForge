@@ -1,5 +1,6 @@
 #include "top_bar.h"
 
+#include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/graphics/textures.h"

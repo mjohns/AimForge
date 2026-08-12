@@ -3,6 +3,7 @@
 #include <format>
 #include <functional>
 
+#include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/util.h"
 #include "aim/core/settings_manager.h"
@@ -168,9 +169,8 @@ class QuickSettingsScreen : public UiScreen {
       std::string top_text = type_ == QuickSettingsType::DEFAULT
                                  ? MaybeIntToString(updater_.settings.cm_per_360())
                                  : MaybeIntToString(updater_.settings.metronome_bpm());
-      std::string top_help = type_ == QuickSettingsType::DEFAULT
-                                 ? "Scroll to adjust cm/360"
-                                 : "Scroll to adjust BPM";
+      std::string top_help =
+          type_ == QuickSettingsType::DEFAULT ? "Scroll to adjust cm/360" : "Scroll to adjust BPM";
       float text_size = ImGui::CalcTextSize(top_text.c_str()).x;
       ImGui::SetCursorPosX((screen.width - text_size) / 2.0);
       ImGui::TextFmt("{}{}", top_text, icons::kHeight);

@@ -2,12 +2,9 @@
 
 #include <optional>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
-#include "aim/common/resource_name.h"
 #include "aim/common/simple_types.h"
-#include "aim/core/file_system.h"
 #include "aim/database/aim_db.h"
 #include "aim/proto/scenario.pb.h"
 
@@ -27,6 +24,18 @@ struct AggregateScenarioStats {
 struct LatestStatsRun {
   std::string scenario_name;
   i64 run_id;
+};
+
+// Stats to display for a particular run along with relevant history.
+struct StatsDetails {
+  std::vector<StatsDbRow> all_stats;
+  std::vector<StatsDbRow> sorted_stats;
+  StatsDbRow stats;
+  StatsDbRow previous_high_score_stats;
+  StatsDbRow average_stats;
+
+  std::vector<double> scores;
+  float min_score = 0;
 };
 
 class StatsManager {
@@ -49,6 +58,11 @@ class StatsManager {
                             const std::string& to_scenario_name) = 0;
 
   virtual void DeleteStats(const std::string& scenario_name, i64 run_id) = 0;
+
+  // Gets relevant stats for a particular run including things like the previous high score.
+  virtual bool GetStatsDetails(const std::string& scenario_name,
+                               i64 run_id,
+                               StatsDetails* details) = 0;
 };
 
 std::unique_ptr<StatsManager> CreateStatsManager(AimDb* db);

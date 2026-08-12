@@ -3,9 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "aim/common/imgui_ext.h"
 #include "aim/common/times.h"
-#include "imgui.h"
 
 namespace aim {
 
@@ -13,7 +11,7 @@ struct TimeSpan {
   i64 start = 0;
   i64 end = 0;
 
-  float GetSeconds() {
+  float GetSeconds() const {
     i64 duration_micros = end - start;
     if (duration_micros < 0) {
       return 0;

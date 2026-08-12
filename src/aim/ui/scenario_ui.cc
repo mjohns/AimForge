@@ -14,7 +14,7 @@
 #include "aim/ui/editor/scenario_editor_common.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/select_variation_dialog.h"
-#include "aim/ui/stats_screen.h"
+#include "aim/ui/stats/stats_screen.h"
 #include "imgui.h"
 
 namespace aim {
