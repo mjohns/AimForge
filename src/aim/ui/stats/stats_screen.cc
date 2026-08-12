@@ -175,11 +175,12 @@ StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
 
 class StatsScreen : public UiScreen {
  public:
-  StatsScreen(std::string scenario_name, i64 run_id, Application* app)
+  StatsScreen(std::string scenario_name, i64 run_id, bool delay_display, Application* app)
       : UiScreen(*app),
         scenario_name_(scenario_name),
         run_id_(run_id),
-        replay_(app->replay_manager().GetReplay(run_id)) {
+        replay_(app->replay_manager().GetReplay(run_id)),
+        delay_display_(delay_display) {
     screen_start_time_millis_ = GetNowEpochMillis();
     scenario_ = app->scenario_manager().GetScenario(scenario_name);
     evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
@@ -253,7 +254,7 @@ class StatsScreen : public UiScreen {
     }
 
     i64 age_millis = GetNowEpochMillis() - screen_start_time_millis_;
-    if (!IsScreenOlderThan(200)) {
+    if (delay_display_ && !IsScreenOlderThan(200)) {
       return;
     }
 
@@ -450,7 +451,7 @@ class StatsScreen : public UiScreen {
 
     // cm/360
     ImGui::TableNextColumn();
-    ImGui::Text(MaybeIntToString(comparison_stats.mm_per_360 / 10));
+    ImGui::Text(MaybeIntToString(comparison_stats.mm_per_360 / 10.0));
 
     // time
     ImGui::TableNextColumn();
@@ -976,14 +977,16 @@ class StatsScreen : public UiScreen {
   std::shared_ptr<Replay> replay_;
   std::optional<ScoresOverTime> scores_over_time_;
   float score_target_ = 0;
+  bool delay_display_;
 };
 
 }  // namespace
 
 std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_name,
                                             i64 run_id,
+                                            bool delay_display,
                                             Application* app) {
-  return std::make_unique<StatsScreen>(scenario_name, run_id, app);
+  return std::make_unique<StatsScreen>(scenario_name, run_id, delay_display, app);
 }
 
 }  // namespace aim

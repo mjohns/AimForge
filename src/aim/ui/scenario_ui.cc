@@ -160,7 +160,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (ImGui::BeginMenu("Advanced")) {
       if (ImGui::Selectable("View stats")) {
         app.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(
-            scenario_name, app.stats_manager().GetLatestRunId(scenario_name), &app));
+            scenario_name, app.stats_manager().GetLatestRunId(scenario_name), false, &app));
       }
       if (ImGui::Selectable("Copy as reference")) {
         ScenarioEditorOptions opts;
@@ -603,7 +603,7 @@ class ScenariosComponentImpl : public ScenariosComponent {
       ImGui::SameLine();
       if (ImGui::Button(MaybeIntToString(stats.high_score_stats.score))) {
         app_.GetCurrentScreen()->PushNextScreen(
-            CreateStatsScreen(item.name, stats.high_score_stats.stats_id, &app_));
+            CreateStatsScreen(item.name, stats.high_score_stats.stats_id, false, &app_));
       }
       ImGui::HelpTooltip("View stats for run.");
       std::string high_score_time = GetHowLongAgoStringFromEpochSeconds(

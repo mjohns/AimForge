@@ -639,7 +639,7 @@ void Scenario::HandleScenarioDone() {
       app_.replay_manager().AddReplay(stats_row.stats_id, replay_->replay());
     }
     state_.AddPerformanceStats(scenario_name_, stats_row.stats_id, perf_stats_);
-    PushNextScreen(CreateStatsScreen(scenario_name_, stats_row.stats_id, &app_));
+    PushNextScreen(CreateStatsScreen(scenario_name_, stats_row.stats_id, true, &app_));
   }
 }
 

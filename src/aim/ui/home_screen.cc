@@ -290,7 +290,8 @@ class HomeScreen : public UiScreen {
     if (latest_run) {
       if (ImGui::Selectable(std::format("{} Last run", icons::kAssignment).c_str(),
                             app_screen_ == AppScreen::BUNDLES)) {
-        PushNextScreen(CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, &app_));
+        PushNextScreen(
+            CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, false, &app_));
       }
     }
 
