@@ -181,6 +181,8 @@ set(SRCS
     "ui/select_variation_dialog.h"
     "ui/settings_screen.cc"
     "ui/settings_screen.h"
+    "ui/stats/history_plot.cc"
+    "ui/stats/history_plot.h"
     "ui/stats/perf_ui.cc"
     "ui/stats/perf_ui.h"
     "ui/stats/stats_screen.cc"

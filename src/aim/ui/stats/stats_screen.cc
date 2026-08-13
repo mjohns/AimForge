@@ -21,6 +21,7 @@
 #include "aim/scenario/replay_viewer.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/quick_settings_screen.h"
+#include "aim/ui/stats/history_plot.h"
 #include "aim/ui/stats/perf_ui.h"
 #include "aim/ui/top_bar.h"
 #include "imgui.h"
@@ -648,7 +649,10 @@ class StatsScreen : public UiScreen {
       ImGui::SpacedSeparator();
       DrawStatsTable();
 
-      DrawHistoryPlot(40);
+      DrawHistoryPlot(std::format("##ScoreHistory_{}_{}", scenario_name_, run_id_),
+                      details_,
+                      40,
+                      score_target_);
 
       if (scores_over_time_) {
         ImGui::SpacedSeparator();
@@ -688,132 +692,11 @@ class StatsScreen : public UiScreen {
     ImGui::TextFmt("{}/{}", progress.runs_done, progress.item.num_plays());
   }
 
-  void DrawHistoryPlot(int max_to_show) {
-    if (details_.scores.size() < 2) {
-      return;
-    }
-
-    ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
-    ImPlotFlags plot_flags =
-        ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
-    if (!ImPlot::BeginPlot(std::format("##ScoreHistory_{}_{}", scenario_name_, run_id_).c_str(),
-                           ImVec2(-1, 0),
-                           plot_flags)) {
-      return;
-    }
-
-    std::span<StatsDbRow> stats = std::span(details_.all_stats);
-    if (stats.size() > max_to_show) {
-      // Take the last n items.
-      stats = stats.subspan(stats.size() - max_to_show, max_to_show);
-    }
-
-    double high_score =
-        std::max<double>(details_.previous_high_score_stats.score, details_.stats.score);
-    float min_score = high_score + 1;
-    for (const auto& row : stats) {
-      float score = row.score;
-      min_score = std::min(score, min_score);
-    }
-
-    ImPlot::SetupAxis(ImAxis_X1, "Run number", ImPlotAxisFlags_NoDecorations);
-    ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
-
-    ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
-
-    double double_score_target = score_target_;
-    double top_score = std::max(double_score_target, high_score);
-    float score_range = abs(top_score - min_score);
-    float vertical_padding = score_range * 0.05;
-    ImPlot::SetupAxisLimits(
-        ImAxis_Y1, min_score - vertical_padding, top_score + vertical_padding, ImPlotCond_Always);
-
-    struct PlotData {
-      std::span<StatsDbRow> rows;
-    };
-    PlotData plot_data;
-    plot_data.rows = stats;
-
-    auto point_getter = [](int idx, void* data_ptr) {
-      PlotData data = *((PlotData*)data_ptr);
-      return ImPlotPoint(idx + 1, data.rows[idx].score);
-    };
-
-    ImPlot::DragLineY(0, &high_score, kTopThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
-    if (double_score_target > 0) {
-      ImPlot::DragLineY(
-          1, &double_score_target, kMidThresholdColor, 1.0f, ImPlotDragToolFlags_NoInputs);
-    }
-
-    // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
-    ImPlot::PlotLineG("Scores", point_getter, &plot_data, stats.size());
-    ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle, 3.0f);
-    ImPlot::PlotScatterG("ScorePoint", point_getter, &plot_data, stats.size());
-
-    if (ImPlot::IsPlotHovered()) {
-      ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
-
-      float plot_index = mouse_pos.x;
-      int closest_index = std::round(plot_index) - 1;
-      if (IsValidIndex(stats, closest_index)) {
-        float x_val = closest_index + 1;
-        const auto& row = stats[closest_index];
-        float score = row.score;
-
-        float vertical_distance = abs(score - mouse_pos.y) / score;
-
-        if (ImPlot::IsPointNearMouse(mouse_pos, x_val, score)) {
-          ImGui::BeginTooltip();
-
-          if (score < high_score) {
-            float diff_percent = (high_score - score) / high_score;
-            ImGui::TextFmt(
-                "{} (-{}%)", MaybeIntToString(score, 2), MaybeIntToString(diff_percent * 100, 1));
-          } else {
-            ImGui::TextFmt("{} (High)", MaybeIntToString(score, 2));
-          }
-
-          std::string time_ago =
-              GetHowLongAgoStringFromEpochSeconds(GetNowEpochSeconds(), row.epoch_seconds);
-          ImGui::Text(time_ago);
-
-          ImGui::EndTooltip();
-
-          ImPlot::SetNextMarkerStyle(
-              ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
-          ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
-        } else {
-          // See if it is near one of the drag lines and show the tooltip if so.
-          ImPlotPoint threshold = ImPlot::GetPlotDistanceFromPixels(10);
-          if (abs(high_score - mouse_pos.y) < threshold.y) {
-            ImGui::BeginTooltip();
-            ImGui::TextFmt("High score: {}", MaybeIntToString(high_score, 2));
-            ImGui::EndTooltip();
-
-            ImPlot::SetNextMarkerStyle(
-                ImPlotMarker_Circle, 3.0f, kTopThresholdColor, IMPLOT_AUTO, kTopThresholdColor);
-            float float_high_score = high_score;
-            float mouse_x = mouse_pos.x;
-            ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1);
-          } else if (score_target_ > 0 && abs(score_target_ - mouse_pos.y) < threshold.y) {
-            ImGui::BeginTooltip();
-            ImGui::TextFmt("Target score: {}", MaybeIntToString(score_target_, 2));
-            ImGui::EndTooltip();
-
-            ImPlot::SetNextMarkerStyle(
-                ImPlotMarker_Circle, 3.0f, kMidThresholdColor, IMPLOT_AUTO, kMidThresholdColor);
-            float mouse_x = mouse_pos.x;
-            ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &score_target_, 1);
-          }
-        }
-      }
-    }
-
-    ImPlot::EndPlot();
-  }
-
   void DrawHistory() {
-    DrawHistoryPlot(60);
+    DrawHistoryPlot(std::format("##FullScoreHistory_{}_{}", scenario_name_, run_id_),
+                    details_,
+                    60,
+                    score_target_);
     DrawHistoryListTable();
   }
 
