@@ -90,7 +90,7 @@ void DrawHistoryPlot(const std::string& id,
 
       float vertical_distance = abs(score - mouse_pos.y) / score;
 
-      if (ImPlot::IsPointNearMouse(mouse_pos, x_val, score)) {
+      if (ImPlot::IsPointNearMouse(mouse_pos, x_val, score, 20)) {
         ImGui::BeginTooltip();
 
         if (score < high_score) {
