@@ -4,8 +4,6 @@
 #include <optional>
 #include <string>
 
-#include "aim/common/resource_name.h"
-#include "aim/core/application.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/ui/ui_screen.h"
 

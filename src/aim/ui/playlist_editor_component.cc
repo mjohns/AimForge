@@ -81,6 +81,9 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       return;
     }
 
+    ImGui::SameLine();
+    ImGui::HelpMarker("Right click on items for additional options. Drag items to reorder");
+
     ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
