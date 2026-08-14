@@ -162,7 +162,10 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
   if (data->is_click_held) {
     if (!proximity_tracking_sound_) {
       proximity_tracking_sound_ =
-          std::make_unique<ProximityTrackingSound>(settings_.sounds(), &app_);
+          std::make_unique<ProximityTrackingSound>(settings_.sounds(),
+                                                   settings_.proximity_min_shots_per_second(),
+                                                   settings_.proximity_max_shots_per_second(),
+                                                   &app_);
     }
     std::optional<float> normalized_distance_from_center;
     const auto& targets = target_manager_.GetTargets();

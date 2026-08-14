@@ -14,6 +14,7 @@
 #include "aim/proto/common.pb.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/theme_editor_screen.h"
+#include "imgui.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
@@ -442,6 +443,35 @@ class SettingsScreen : public UiScreen {
                           .set_min(0.1)
                           .set_default(9),
                       PROTO_FLOAT_FIELD(Settings, &updater_.settings, tracking_shots_per_second));
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("Proximity tracking shots per second");
+    bool has_proximity_sounds = updater_.settings.has_proximity_max_shots_per_second() ||
+                                updater_.settings.has_proximity_min_shots_per_second();
+    ImGui::SameLine();
+    ImGui::Checkbox("##HasProximitySounds", &has_proximity_sounds);
+
+    if (has_proximity_sounds) {
+      ImGui::Indent();
+      ImGui::InputFloat(
+          ImGui::InputFloatParams::WithLabelAsId("Slow")
+              .set_step(0.5, 5)
+              .set_width(char_x_ * 9)
+              .set_min(0.1)
+              .set_default(4),
+          PROTO_FLOAT_FIELD(Settings, &updater_.settings, proximity_min_shots_per_second));
+      ImGui::InputFloat(
+          ImGui::InputFloatParams::WithLabelAsId("Fast")
+              .set_step(0.5, 5)
+              .set_width(char_x_ * 9)
+              .set_min(0.1)
+              .set_default(10),
+          PROTO_FLOAT_FIELD(Settings, &updater_.settings, proximity_max_shots_per_second));
+      ImGui::Unindent();
+    } else {
+      updater_.settings.clear_proximity_min_shots_per_second();
+      updater_.settings.clear_proximity_max_shots_per_second();
+    }
 
     ImGui::SpacedSeparator();
 
