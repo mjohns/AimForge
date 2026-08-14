@@ -203,7 +203,7 @@ void Scenario::OnEvents(std::span<SDL_Event> events) {
 }
 
 void Scenario::OnEvent(const SDL_Event& event) {
-  if (event.type == SDL_EVENT_QUIT) {
+  if (IsQuitEvent(event)) {
     app_.RequestExit();
   }
   if (is_adjusting_crosshair_) {

@@ -10,6 +10,8 @@ namespace aim {
 class Application;
 class ApplicationState;
 
+bool IsQuitEvent(const SDL_Event& event);
+
 class Screen {
  public:
   Screen(Application& app);

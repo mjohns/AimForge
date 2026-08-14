@@ -6,6 +6,15 @@
 
 namespace aim {
 
+bool IsQuitEvent(const SDL_Event& event) {
+  if (event.type == SDL_EVENT_QUIT) {
+    return true;
+  }
+  // ctrl-q to quit
+  return event.type == SDL_EVENT_KEY_DOWN && event.key.key == SDLK_Q &&
+         (event.key.mod & SDL_KMOD_CTRL);
+}
+
 Screen::Screen(Application& app) : app_(app), state_(app.state()) {}
 
 void Screen::PopSelf() {

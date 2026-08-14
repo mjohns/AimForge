@@ -84,7 +84,7 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
 void UiScreen::OnEvents(std::span<SDL_Event> events) {
   ImGuiIO& io = ImGui::GetIO();
   for (const SDL_Event& event : events) {
-    if (event.type == SDL_EVENT_QUIT) {
+    if (IsQuitEvent(event)) {
       app_.RequestExit();
     }
     ImGui_ImplSDL3_ProcessEvent(&event);

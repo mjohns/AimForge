@@ -36,7 +36,7 @@ class SingleReactionTimeScreen : public Screen {
 
   void OnEvents(std::span<SDL_Event> events) override {
     for (const SDL_Event& event : events) {
-      if (event.type == SDL_EVENT_QUIT) {
+      if (IsQuitEvent(event)) {
         app_.RequestExit();
       }
       OnEvent(event);
