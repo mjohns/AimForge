@@ -288,7 +288,7 @@ class HomeScreen : public UiScreen {
     }
     auto latest_run = app_.stats_manager().GetLatestRun();
     if (latest_run) {
-      if (ImGui::Selectable(std::format("{} Last run", icons::kAssignment).c_str(), false)) {
+      if (ImGui::Selectable(std::format("{} Results", icons::kAssignment).c_str(), false)) {
         PushNextScreen(
             CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, false, &app_));
       }

@@ -1,16 +1,13 @@
 #include "application.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <functional>
 #include <memory>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "SDL3_mixer/SDL_mixer.h"
 #include "absl/cleanup/cleanup.h"
-#include "absl/log/log.h"
-#include "absl/log/log_sink.h"
 #include "absl/log/log_sink_registry.h"
 #include "aim/common/files.h"
 #include "aim/common/log.h"
@@ -26,6 +23,7 @@
 #include "aim/database/aim_db.h"
 #include "aim/graphics/image.h"
 #include "aim/graphics/renderer.h"
+#include "glm/common.hpp"  // IWYU pragma: keep
 #include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/backends/imgui_impl_sdlgpu3.h"
@@ -35,6 +33,222 @@
 
 namespace aim {
 namespace {
+
+ImVec4 ImLerp(const ImVec4& a, const ImVec4& b, float t) {
+  return ImVec4(
+      a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+}
+
+void SetupColorScheme() {
+  ImGuiStyle& style = ImGui::GetStyle();
+  ImVec4* colors = style.Colors;
+
+  // Catppuccin machiato
+  auto rosewater = HexToImColor("#f4dbd6");
+  auto flamingo = HexToImColor("#f0c6c6");
+  auto pink = HexToImColor("#f5bde6");
+  auto mauve = HexToImColor("#c6a0f6");
+  auto red = HexToImColor("#ed8796");
+  auto maroon = HexToImColor("#ee99a0");
+  auto peach = HexToImColor("#f5a97f");
+  auto yellow = HexToImColor("#eed49f");
+  auto green = HexToImColor("#a6da95");
+  auto teal = HexToImColor("#8bd5ca");
+  auto sky = HexToImColor("#91d7e3");
+  auto sapphire = HexToImColor("#7dc4e4");
+  auto blue = HexToImColor("#8aadf4");
+  auto lavender = HexToImColor("#b7bdf8");
+  auto text = HexToImColor("#cad3f5");
+  auto subtext1 = HexToImColor("#b8c0e0");
+  auto subtext0 = HexToImColor("#a5adcb");
+  auto overlay2 = HexToImColor("#939ab7");
+  auto overlay1 = HexToImColor("#8087a2");
+  auto overlay0 = HexToImColor("#6e738d");
+  auto surface2 = HexToImColor("#5b6078");
+  auto surface1 = HexToImColor("#494d64");
+  auto surface0 = HexToImColor("#363a4f");
+  auto base = HexToImColor("#24273a");
+  auto mantle = HexToImColor("#1e2030");
+  auto crust = HexToImColor("#181926");
+
+  // --- Configuration ---
+  // Change this to change the primary accent color of the UI!
+  auto accent = blue;
+
+  // Helper to apply alpha to an ImVec4
+  auto WithAlpha = [](ImVec4 col, float alpha) -> ImVec4 {
+    col.w = alpha;
+    return col;
+  };
+
+  auto Mult = [](ImVec4 col, float mult) -> ImVec4 {
+    col.x = glm::clamp(col.x * mult, 0.0f, 1.0f);
+    col.y = glm::clamp(col.y * mult, 0.0f, 1.0f);
+    col.z = glm::clamp(col.z * mult, 0.0f, 1.0f);
+    return col;
+  };
+
+  // --- Core Text & Backgrounds ---
+  colors[ImGuiCol_Text] = text;
+  colors[ImGuiCol_TextDisabled] = overlay1;  // Catppuccin uses overlays for disabled text
+  colors[ImGuiCol_WindowBg] = base;          // Main window background
+  // colors[ImGuiCol_ChildBg]               = base;
+  colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  colors[ImGuiCol_PopupBg] = mantle;  // Popups stand out slightly by using darker mantle
+
+  // --- Borders ---
+  colors[ImGuiCol_Border] = surface1;  // Standard borders
+  colors[ImGuiCol_BorderShadow] = WithAlpha(crust, 0.20f);
+
+  // --- Frames (Inputs, Checkboxes, etc.) ---
+  colors[ImGuiCol_FrameBg] = surface0;  // Text inputs, checkmarks
+  colors[ImGuiCol_FrameBgHovered] = surface1;
+  colors[ImGuiCol_FrameBgActive] = surface2;
+
+  // --- Titles ---
+  colors[ImGuiCol_TitleBg] = crust;  // Window title bars
+  colors[ImGuiCol_TitleBgActive] = mantle;
+  colors[ImGuiCol_TitleBgCollapsed] = crust;
+
+  // --- Menus & Scrollbars ---
+  colors[ImGuiCol_MenuBarBg] = mantle;
+  colors[ImGuiCol_ScrollbarBg] = crust;
+  colors[ImGuiCol_ScrollbarGrab] = surface0;
+  colors[ImGuiCol_ScrollbarGrabHovered] = surface1;
+  colors[ImGuiCol_ScrollbarGrabActive] = surface2;
+
+  // --- Interactive / Accents ---
+  colors[ImGuiCol_CheckMark] = accent;
+  colors[ImGuiCol_CheckboxSelectedBg] = accent;  // Note: Custom var from your code
+  colors[ImGuiCol_SliderGrab] = accent;
+  colors[ImGuiCol_SliderGrabActive] = WithAlpha(accent, 0.8f);
+
+  colors[ImGuiCol_Button] = surface0;
+  colors[ImGuiCol_ButtonHovered] = surface1;
+  colors[ImGuiCol_ButtonActive] = surface2;
+  // colors[ImGuiCol_Button] = rosewater;
+  // colors[ImGuiCol_ButtonHovered] = Mult(colors[ImGuiCol_Button], 1.1);
+  // colors[ImGuiCol_ButtonActive] = surface2;
+
+  // --- Headers (Collapsing Headers, Tree Nodes) ---
+  colors[ImGuiCol_Header] = surface0;
+  colors[ImGuiCol_HeaderHovered] = surface1;
+  colors[ImGuiCol_HeaderActive] = surface2;
+
+  // --- Separators & Resizing ---
+  colors[ImGuiCol_Separator] = surface1;
+  colors[ImGuiCol_SeparatorHovered] = surface2;
+  colors[ImGuiCol_SeparatorActive] = accent;
+
+  colors[ImGuiCol_ResizeGrip] = WithAlpha(surface0, 0.5f);
+  colors[ImGuiCol_ResizeGripHovered] = surface1;
+  colors[ImGuiCol_ResizeGripActive] = surface2;
+
+  // --- Tabs ---
+  colors[ImGuiCol_Tab] = mantle;
+  colors[ImGuiCol_TabHovered] = surface1;
+  colors[ImGuiCol_TabSelected] = base;  // Matches WindowBg so it looks like an open folder tab
+  colors[ImGuiCol_TabSelectedOverline] = accent;
+  colors[ImGuiCol_TabDimmed] = mantle;
+  colors[ImGuiCol_TabDimmedSelected] = base;
+  colors[ImGuiCol_TabDimmedSelectedOverline] = overlay1;
+
+  // --- Plotting ---
+  colors[ImGuiCol_PlotLines] = text;
+  colors[ImGuiCol_PlotLinesHovered] = accent;
+  colors[ImGuiCol_PlotHistogram] = accent;
+  colors[ImGuiCol_PlotHistogramHovered] = peach;  // Provide a nice contrasting pop
+
+  // --- Tables ---
+  colors[ImGuiCol_TableHeaderBg] = mantle;
+  colors[ImGuiCol_TableBorderStrong] = surface2;
+  colors[ImGuiCol_TableBorderLight] = surface1;
+  colors[ImGuiCol_TableRowBg] = WithAlpha(base, 0.0f);  // Transparent
+  colors[ImGuiCol_TableRowBgAlt] = WithAlpha(surface0, 0.3f);
+
+  // --- Text & Navigation ---
+  colors[ImGuiCol_InputTextCursor] = text;
+  colors[ImGuiCol_TextLink] = accent;
+  colors[ImGuiCol_TextSelectedBg] = WithAlpha(accent, 0.30f);
+  colors[ImGuiCol_TreeLines] = overlay0;
+
+  // --- Drag/Drop & Modals ---
+  colors[ImGuiCol_DragDropTarget] = accent;
+  colors[ImGuiCol_DragDropTargetBg] = WithAlpha(base, 0.0f);
+  colors[ImGuiCol_UnsavedMarker] = peach;
+  colors[ImGuiCol_NavCursor] = accent;
+  colors[ImGuiCol_NavWindowingHighlight] = WithAlpha(accent, 0.70f);
+  colors[ImGuiCol_NavWindowingDimBg] = WithAlpha(crust, 0.60f);  // Darkens background behind modals
+  colors[ImGuiCol_ModalWindowDimBg] = WithAlpha(crust, 0.60f);
+
+  colors[ImGuiCol_Tab] = ImLerp(colors[ImGuiCol_Header], colors[ImGuiCol_TitleBgActive], 0.80f);
+  colors[ImGuiCol_CheckboxSelectedBg] =
+      ImLerp(colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBgActive], 0.65f);
+  colors[ImGuiCol_TabSelected] =
+      ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
+  colors[ImGuiCol_TabDimmed] = ImLerp(colors[ImGuiCol_Tab], colors[ImGuiCol_TitleBg], 0.80f);
+  colors[ImGuiCol_TabDimmedSelected] =
+      ImLerp(colors[ImGuiCol_TabSelected], colors[ImGuiCol_TitleBg], 0.40f);
+
+  // colors[ImGuiCol_Text] = text;
+  // colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
+  // colors[ImGuiCol_WindowBg] = base;
+  // colors[ImGuiCol_ChildBg] = base;
+  // colors[ImGuiCol_PopupBg] = crust;
+  // colors[ImGuiCol_Border] = ImVec4(0.50f, 0.50f, 0.50f, 0.50f);
+  // colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  // colors[ImGuiCol_FrameBg] = ImVec4(0.43f, 0.43f, 0.43f, 0.39f);
+  // colors[ImGuiCol_FrameBgHovered] = ImVec4(0.47f, 0.47f, 0.69f, 0.40f);
+  // colors[ImGuiCol_FrameBgActive] = ImVec4(0.42f, 0.41f, 0.64f, 0.69f);
+  // colors[ImGuiCol_TitleBg] = ImVec4(0.27f, 0.27f, 0.54f, 0.83f);
+  // colors[ImGuiCol_TitleBgActive] = ImVec4(0.32f, 0.32f, 0.63f, 0.87f);
+  // colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.40f, 0.40f, 0.80f, 0.20f);
+  // colors[ImGuiCol_MenuBarBg] = ImVec4(0.40f, 0.40f, 0.55f, 0.80f);
+  // colors[ImGuiCol_ScrollbarBg] = ImVec4(0.20f, 0.25f, 0.30f, 0.60f);
+  // colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.40f, 0.40f, 0.80f, 0.30f);
+  // colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.40f, 0.40f, 0.80f, 0.40f);
+  // colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
+  // colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.90f, 0.90f, 0.50f);
+  // colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
+  // colors[ImGuiCol_SliderGrabActive] = ImVec4(0.41f, 0.39f, 0.80f, 0.60f);
+  // colors[ImGuiCol_Button] = ImVec4(0.35f, 0.40f, 0.61f, 0.62f);
+  // colors[ImGuiCol_ButtonHovered] = ImVec4(0.40f, 0.48f, 0.71f, 0.79f);
+  // colors[ImGuiCol_ButtonActive] = ImVec4(0.46f, 0.54f, 0.80f, 1.00f);
+  // colors[ImGuiCol_Header] = ImVec4(0.40f, 0.40f, 0.90f, 0.45f);
+  // colors[ImGuiCol_HeaderHovered] = ImVec4(0.45f, 0.45f, 0.90f, 0.80f);
+  // colors[ImGuiCol_HeaderActive] = ImVec4(0.53f, 0.53f, 0.87f, 0.80f);
+  // colors[ImGuiCol_Separator] = ImVec4(0.50f, 0.50f, 0.50f, 0.60f);
+  // colors[ImGuiCol_SeparatorHovered] = ImVec4(0.60f, 0.60f, 0.70f, 1.00f);
+  // colors[ImGuiCol_SeparatorActive] = ImVec4(0.70f, 0.70f, 0.90f, 1.00f);
+  // colors[ImGuiCol_ResizeGrip] = ImVec4(1.00f, 1.00f, 1.00f, 0.10f);
+  // colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.78f, 0.82f, 1.00f, 0.60f);
+  // colors[ImGuiCol_ResizeGripActive] = ImVec4(0.78f, 0.82f, 1.00f, 0.90f);
+  // colors[ImGuiCol_InputTextCursor] = colors[ImGuiCol_Text];
+  // colors[ImGuiCol_TabHovered] = colors[ImGuiCol_HeaderHovered];
+  // colors[ImGuiCol_TabSelectedOverline] = colors[ImGuiCol_HeaderActive];
+  // colors[ImGuiCol_TabDimmedSelectedOverline] = ImVec4(0.53f, 0.53f, 0.87f, 0.00f);
+  // colors[ImGuiCol_PlotLines] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+  // colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+  // colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+  // colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+  // colors[ImGuiCol_TableHeaderBg] = ImVec4(0.27f, 0.27f, 0.38f, 1.00f);
+  // colors[ImGuiCol_TableBorderStrong] =
+  //     ImVec4(0.31f, 0.31f, 0.45f, 1.00f);  // Prefer using Alpha=1.0 here
+  // colors[ImGuiCol_TableBorderLight] =
+  //     ImVec4(0.26f, 0.26f, 0.28f, 1.00f);  // Prefer using Alpha=1.0 here
+  // colors[ImGuiCol_TableRowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  // colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.00f, 1.00f, 1.00f, 0.07f);
+  // colors[ImGuiCol_TextLink] = colors[ImGuiCol_HeaderActive];
+  // colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
+  // colors[ImGuiCol_TreeLines] = colors[ImGuiCol_Border];
+  // colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+  // colors[ImGuiCol_DragDropTargetBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  // colors[ImGuiCol_UnsavedMarker] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+  // colors[ImGuiCol_NavCursor] = colors[ImGuiCol_HeaderHovered];
+  // colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+  // colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+  // colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+}
 
 constexpr const int kMaxEventsToProcessPerFrame = 500;
 
@@ -309,8 +523,9 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   // style.Colors.
 
   // ImGui::StyleColorsDark();
+  // SetupColorScheme();
   ImGui::StyleColorsClassic();
-  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.1f, 1.00f);
   style.AntiAliasedLines = true;
   style.AntiAliasedFill = true;
 
@@ -451,7 +666,14 @@ void Application::Initialize() {
   // bundle_manager_->SaveDirtyBundles();
 }
 
-void Application::Render(ImVec4 clear_color) {
+void Application::Render(std::optional<ImVec4> explicit_clear_color) {
+  ImVec4 clear_color;
+  if (explicit_clear_color) {
+    clear_color = *explicit_clear_color;
+  } else {
+    ImGuiStyle& style = ImGui::GetStyle();
+    clear_color = style.Colors[ImGuiCol_WindowBg];
+  }
   ImGui::Render();
   ImDrawData* draw_data = ImGui::GetDrawData();
   const bool is_minimized = (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);

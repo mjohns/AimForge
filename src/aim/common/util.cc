@@ -73,6 +73,11 @@ Rgb HexToRgb(std::string hex) {
   return v;
 }
 
+ImColor HexToImColor(std::string hex) {
+  Rgb rgb = HexToRgb(hex);
+  return ImColor(rgb.r, rgb.g, rgb.b);
+}
+
 std::string ToHexString(const StoredColor& c) {
   return ToHexString(ToStoredRgb(c));
 }

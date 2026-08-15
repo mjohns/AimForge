@@ -68,7 +68,7 @@ class Application {
   void FinishRender(RenderContext* render_context);
 
   // Render just ImGui screen.
-  void Render(ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+  void Render(std::optional<ImVec4> clear_color = {});
 
   SDL_Window* sdl_window() {
     return sdl_window_;

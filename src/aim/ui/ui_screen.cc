@@ -32,8 +32,7 @@ void UiScreen::OnTick() {
 }
 
 void UiScreen::Render() {
-  ImVec4 clear_color = ImVec4(0.07f, 0.07f, 0.1f, 1.00f);
-  app_.Render(clear_color);
+  app_.Render();
   app_.logger()->flush();
 }
 

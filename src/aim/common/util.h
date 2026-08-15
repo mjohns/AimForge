@@ -44,6 +44,7 @@ static StoredVec3 ToStoredVec3(const T& v) {
 
 i32 FloatColorTo255(float value);
 Rgb HexToRgb(std::string hex);
+ImColor HexToImColor(std::string hex);
 std::string ToHexString(const StoredColor& c);
 std::string ToHexString(const StoredRgb& c);
 StoredRgb ToStoredRgb(const StoredColor& c);

@@ -123,7 +123,7 @@ class SingleReactionTimeScreen : public Screen {
           app_.BeginFullscreenWindow();
           DrawSquare(IM_COL32(0, 255, 0, 255));
           ImGui::End();
-          app_.Render();
+          app_.Render(ImColor(0.0f, 0.0f, 0.0f, 1.0f));
           react_start_time_ = stopwatch_.GetElapsedMicros();
         }
       }
