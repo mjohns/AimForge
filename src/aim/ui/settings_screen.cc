@@ -11,6 +11,7 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/core/settings_manager.h"
+#include "aim/core/version.h"
 #include "aim/proto/common.pb.h"
 #include "aim/ui/crosshair_editor_screen.h"
 #include "aim/ui/theme_editor_screen.h"
@@ -310,6 +311,7 @@ class SettingsScreen : public UiScreen {
       }
       ImGui::HelpTooltip(
           std::format("Open \"{}\"", app_.file_system()->GetUserDataPath().string()));
+      ImGui::Text(kAimForgeVersion);
 
       ImGui::EndTabItem();
     }

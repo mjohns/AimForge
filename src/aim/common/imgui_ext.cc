@@ -33,6 +33,10 @@ bool Button(const std::string& label, const ImVec2& size) {
   return Button(label.c_str(), size);
 }
 
+bool Selectable(const std::string& label) {
+  return Selectable(label.c_str());
+}
+
 bool SimpleDropdown(const std::string& id,
                     std::string* value,
                     const std::vector<std::string>& values,

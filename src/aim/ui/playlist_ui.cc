@@ -142,50 +142,46 @@ class PlaylistComponentImpl : public PlaylistComponent {
     ImGui::AlignTextToFramePadding();
     ImGui::Text(current_playlist_name_);
 
-    bool is_readonly = app_.bundle_manager().IsBundleReadonly(GetBundleName(run->playlist.name));
-    bool has_dynamic_suffix = run->playlist.playlist_name_info.HasDynamicSuffix();
-    if (!has_dynamic_suffix && !is_readonly) {
-      ImGui::SameLine();
-      if (ImGui::Button(icons::kEdit)) {
-        showing_editor_ = true;
-      }
-      ImGui::HelpTooltip("Edit playlist");
-    } else {
-      ImGui::SameLine();
-      ImGui::AlignTextToFramePadding();
-      ImGui::BeginDisabled();
-      ImGui::Text("%s", icons::kEditOff);
-      ImGui::EndDisabled();
-      if (has_dynamic_suffix) {
-        // TODO: Support editing and switching to edit the base version by default.
-        ImGui::HelpTooltip("Cannot edit playlist with dynamic suffix like 25cm or 5%Faster.");
-      } else {
-        ImGui::HelpTooltip(
-            std::format("Bundle \"{}\" is readonly.", GetBundleName(run->playlist.name)));
-      }
-    }
-
     const char* menu_id = "CurrentPlaylistMenu";
     if (ImGui::BeginPopupContextItem(menu_id)) {
-      if (ImGui::Selectable("Copy")) {
+      bool has_dynamic_suffix = run->playlist.playlist_name_info.HasDynamicSuffix();
+      bool is_readonly = has_dynamic_suffix ||
+                         app_.bundle_manager().IsBundleReadonly(GetBundleName(run->playlist.name));
+      if (!is_readonly) {
+        if (ImGui::Selectable(std::format("{} Edit", icons::kEdit))) {
+          showing_editor_ = true;
+        }
+      }
+
+      if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
         copy_dialog_.NotifyOpen(run->playlist);
       }
-      if (ImGui::Selectable("Shuffle")) {
+      if (ImGui::Selectable(std::format("{} Shuffle", icons::kShuffle))) {
         run->Shuffle(app_.rand());
       }
-      if (ImGui::Selectable("Reset run")) {
+      if (ImGui::Selectable(std::format("{} Reset run", icons::kRestartAlt))) {
         app_.playlist_manager().ClearRun(run->playlist.name);
         run = app_.playlist_manager().GetCurrentRun();
       }
-      if (ImGui::Selectable("Select variation")) {
+      if (ImGui::Selectable(std::format("{} Select variation", icons::kTune))) {
         select_variation_dialog_.NotifyOpen(run->playlist.name);
       }
 
-      if (!is_readonly) {
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-        if (ImGui::Selectable("Delete")) {
+      ImGui::SpacedSeparator();
+      if (is_readonly) {
+        ImGui::AlignTextToFramePadding();
+        ImGui::BeginDisabled();
+        ImGui::Text("%s Readonly", icons::kEditOff);
+        ImGui::EndDisabled();
+        if (has_dynamic_suffix) {
+          // TODO: Support editing and switching to edit the base version by default.
+          ImGui::HelpTooltip("Cannot edit playlist with dynamic suffix like 25cm or 5%Faster.");
+        } else {
+          ImGui::HelpTooltip(
+              std::format("Bundle \"{}\" is readonly.", GetBundleName(run->playlist.name)));
+        }
+      } else {
+        if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
           delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
                                                  run->playlist);
         }
@@ -548,11 +544,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
               "%s",
               std::format("{}{}", MaybeIntToString(score_levels[i], 1), icons::kBolt).c_str());
         } else {
-          ImGui::TextAligned(
-              1.0f,
-              -FLT_MIN,
-              "%s",
-              std::format("5 {}", icons::kVerified).c_str());
+          ImGui::TextAligned(1.0f, -FLT_MIN, "%s", std::format("5 {}", icons::kVerified).c_str());
         }
       }
     }
