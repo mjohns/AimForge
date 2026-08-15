@@ -1,5 +1,8 @@
 #include "select_variation_dialog.h"
 
+#include <optional>
+#include <vector>
+
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
 #include "imgui.h"
@@ -66,6 +69,16 @@ bool SelectVariationDialog::Draw(std::string* updated_name) {
       selected = true;
       popup_.Close();
     }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Clear")) {
+      NameInfo cleared;
+      cleared.base_name = name_info_.base_name;
+      name_info_ = cleared;
+      selected = true;
+      popup_.Close();
+    }
+    ImGui::HelpTooltip("Clear variation");
 
     ImGui::SameLine();
     if (ImGui::Button("Cancel")) {
