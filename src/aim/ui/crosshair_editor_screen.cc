@@ -126,6 +126,10 @@ class CrosshairEditorScreen : public UiScreen {
         ImGui::EndPopup();
       }
       ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kMoreVert)) {
+        ImGui::OpenPopup(popup_id);
+      }
 
       // Draw the crosshair too?
     }
@@ -182,6 +186,13 @@ class CrosshairEditorScreen : public UiScreen {
     if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
       BackToCrosshairList();
     }
+    ImGui::SameLine();
+    if (ImGui::Button(std::format("{} Save", icons::kSave))) {
+      if (SaveCurrentCrosshair()) {
+        BackToCrosshairList();
+      }
+    }
+
     Line();
 
     Crosshair& c = crosshair_;
@@ -191,13 +202,6 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::SameLine();
     ImGui::SetNextItemWidth(char_x_ * 20);
     ImGui::InputText("##NameInput", &current_crosshair_name_);
-
-    ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Save", icons::kSave))) {
-      if (SaveCurrentCrosshair()) {
-        BackToCrosshairList();
-      }
-    }
 
     if (c.layers_size() == 0) {
       c.add_layers();

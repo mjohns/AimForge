@@ -378,6 +378,10 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::SetNextWindowSize(ImVec2(width, -1));
     ImGui::Begin("TopBar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
 
+    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
+      BackToThemeList();
+    }
+    ImGui::SameLine();
     if (ImGui::Button(std::format("{} Save", icons::kSave))) {
       std::string error_message = "Could not save theme";
       if (theme_editor_->Save(&error_message)) {
@@ -386,10 +390,6 @@ class ThemeEditorScreen : public UiScreen {
       } else {
         notification_popup_.NotifyOpen(error_message);
       }
-    }
-    ImGui::SameLine();
-    if (ImGui::Button(std::format("{} Back", icons::kArrowBack))) {
-      BackToThemeList();
     }
 
     ImGui::End();
@@ -504,6 +504,10 @@ class ThemeEditorScreen : public UiScreen {
         ImGui::EndPopup();
       }
       ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kMoreVert)) {
+        ImGui::OpenPopup(popup_id);
+      }
     }
     ImGui::Unindent();
     ImGui::EndChild();
