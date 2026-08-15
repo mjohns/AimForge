@@ -541,11 +541,19 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     if (has_score_level) {
       ImGui::TableNextColumn();
       if (score_levels[i] > 0) {
-        ImGui::TextAligned(
-            1.0f,
-            -FLT_MIN,
-            "%s",
-            std::format("{}{}", MaybeIntToString(score_levels[i], 1), icons::kBolt).c_str());
+        if (score_levels[i] < 5) {
+          ImGui::TextAligned(
+              1.0f,
+              -FLT_MIN,
+              "%s",
+              std::format("{}{}", MaybeIntToString(score_levels[i], 1), icons::kBolt).c_str());
+        } else {
+          ImGui::TextAligned(
+              1.0f,
+              -FLT_MIN,
+              "%s",
+              std::format("5 {}", icons::kVerified).c_str());
+        }
       }
     }
 

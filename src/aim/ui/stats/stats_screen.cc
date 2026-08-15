@@ -529,7 +529,11 @@ class StatsScreen : public UiScreen {
       if (score_level > 0) {
         auto font1 = app_.font_manager().UseLarge();
         ImGui::SameLine();
-        ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), icons::kBolt));
+        if (score_level < 5) {
+          ImGui::Button(std::format("{}{}", MaybeIntToString(score_level, 2), icons::kBolt));
+        } else {
+          ImGui::Button(std::format("5 {}", icons::kVerified));
+        }
         auto font2 = app_.font_manager().UseDefault();
         ImGui::HelpTooltip(
             std::format("Target score: {}",
