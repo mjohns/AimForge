@@ -118,4 +118,18 @@ bool StringMatchesContainsSearch(const std::string& input,
   return true;
 }
 
+bool FuzzyMatch(const std::string& pattern, const std::string& str) {
+  size_t p_idx = 0;
+  size_t s_idx = 0;
+
+  while (p_idx < pattern.length() && s_idx < str.length()) {
+    if (std::tolower(pattern[p_idx]) == std::tolower(str[s_idx])) {
+      p_idx++;
+    }
+    s_idx++;
+  }
+
+  return p_idx == pattern.length();
+}
+
 }  // namespace aim

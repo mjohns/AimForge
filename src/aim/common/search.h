@@ -25,4 +25,6 @@ bool StringMatchesContainsSearch(const std::string& input,
                                  const std::vector<std::string>& search_words,
                                  bool empty_matches = true);
 
+bool FuzzyMatch(const std::string& pattern, const std::string& str);
+
 }  // namespace aim
