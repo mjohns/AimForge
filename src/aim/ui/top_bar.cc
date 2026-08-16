@@ -52,13 +52,17 @@ void DrawTopBar(UiScreen* screen) {
     ImGui::SameLine();
 
     {
+      // Draw the play button slightly smaller and circular.
+      //
+      // Alternatively we could just change the font size and still do the cursor.y
+      // adjustments.
       ImVec2 cursor = ImGui::GetCursorPos();
       float frame_height = ImGui::GetFrameHeight();
       float play_height = frame_height * 0.9;
       float height_diff = frame_height - play_height;
       ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, play_height / 2.0f);
       ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.0f));
-      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(play_height * 0.055f, 0.0f));
+      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(play_height * 0.05f, 0.0f));
       ImGui::SetCursorPosY(cursor.y + height_diff / 2.0);
       if (ImGui::Button(std::format("{}", icons::kPlayArrow), ImVec2(play_height, play_height))) {
         app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
