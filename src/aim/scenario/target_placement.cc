@@ -33,6 +33,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
     float min_distance = wall_.GetRegionLength(strategy_.min_distance());
     float min_x_distance = wall_.GetRegionLength(strategy_.min_x_distance());
     float min_y_distance = wall_.GetRegionLength(strategy_.min_y_distance());
+    bool has_min_distance = min_distance > 0 || min_x_distance > 0 || min_y_distance > 0;
+
     ProfileSelectionContext original_context = *context;
     for (int i = 0; i < 200; ++i) {
       // Reset this so that the counter only increments once even if the candidates are invalid.
@@ -45,6 +47,9 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
                                   candidate_pos.z);
       }
       // TODO: consider also checking wall_.IsPointInBounds
+      if (!has_min_distance) {
+        return candidate_pos;
+      }
       if (AreNoneWithinDistanceOnWall(
               candidate_pos, min_distance, min_x_distance, min_y_distance)) {
         return candidate_pos;
