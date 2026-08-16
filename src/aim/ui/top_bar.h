@@ -4,7 +4,6 @@
 
 namespace aim {
 
-// Returns if you should return home.
 void DrawTopBar(UiScreen* screen);
 
 }  // namespace aim

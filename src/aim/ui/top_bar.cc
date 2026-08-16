@@ -60,7 +60,7 @@ void DrawTopBar(UiScreen* screen) {
       float frame_height = ImGui::GetFrameHeight();
       float play_height = frame_height * 0.9;
       float height_diff = frame_height - play_height;
-      ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, play_height / 2.0f);
+      ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, play_height / 2.8f);
       ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.0f));
       ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(play_height * 0.05f, 0.0f));
       ImGui::SetCursorPosY(cursor.y + height_diff / 2.0);

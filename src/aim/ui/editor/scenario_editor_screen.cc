@@ -308,7 +308,9 @@ class ScenarioEditorScreen : public UiScreen {
 
     if (def_.has_reference_def()) {
       if (BeginMainWindow("ReferenceEditor", 0.6)) {
+        ImGui::BeginChild("OnlyColumnContainer", ImVec2(0, 0));
         DrawReferenceEditor();
+        ImGui::EndChild();
       }
       ImGui::End();
     } else {

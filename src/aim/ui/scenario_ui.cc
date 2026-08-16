@@ -419,8 +419,8 @@ class ScenarioBrowserComponent {
     bool has_advanced_filter = has_shot_type_filter || has_scenario_type_filter;
 
     auto scenario_name_matches = [&](const std::string& scenario_name) {
-      // bool search_matches = StringMatchesSearch(scenario_name, search_words);
-      bool search_matches = search_text_.empty() || FuzzyMatch(search_text_, scenario_name);
+      bool search_matches = StringMatchesSearch(scenario_name, search_words);
+      // bool search_matches = search_text_.empty() || FuzzyMatch(search_text_, scenario_name);
       if (!search_matches) {
         return false;
       }
