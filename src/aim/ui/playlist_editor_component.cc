@@ -321,6 +321,13 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
       ImGui::SetNextItemWidth(char_x_ * 8);
       ImGui::InputScalar("###NumPlays", ImGuiDataType_U32, &num_plays, &step, nullptr, "%u");
 
+      ImGui::SameLine();
+      ImGui::Text("   ");
+      ImGui::SameLine();
+      if (ImGui::SelectableButton(icons::kClear)) {
+        remove_i = i;
+      }
+
       item.set_num_plays(num_plays);
     }
 
