@@ -53,3 +53,10 @@ To build protoc run:
 cmake --build build --target protoc
 ls build/bin/protoc
 ```
+
+To run tests:
+```bash
+cmake --build build --target FpsAimForgeTests
+cd build
+ctest
+```

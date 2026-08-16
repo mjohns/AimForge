@@ -12,9 +12,7 @@ extern char** environ;
 
 #include <filesystem>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <sstream>
 
 #include "aim/common/log.h"
 #include "google/protobuf/json/json.h"
@@ -24,7 +22,7 @@ namespace aim {
 namespace {
 
 #ifndef _WIN32
-void RunPosixSystemCommand(const std::string& command, const std::vector<std::string>& args) {
+bool RunPosixSystemCommand(const std::string& command, const std::vector<std::string>& args) {
   pid_t pid;
 
   std::vector<char*> c_args;
@@ -40,11 +38,17 @@ void RunPosixSystemCommand(const std::string& command, const std::vector<std::st
 
   int status = posix_spawnp(&pid, command.c_str(), nullptr, nullptr, c_args.data(), environ);
   if (status != 0) {
-    return;
+    return false;
   }
 
   int exit_status;
-  waitpid(pid, &exit_status, 0);
+  if (waitpid(pid, &exit_status, 0) == -1) {
+    return false;
+  }
+
+  // WIFEXITED checks if the process terminated normally (e.g., wasn't killed by a signal)
+  // WEXITSTATUS extracts the actual exit code (0 usually indicates success)
+  return WIFEXITED(exit_status) && (WEXITSTATUS(exit_status) == 0);
 }
 #endif
 
@@ -218,7 +222,10 @@ void MoveFileToTrash(const std::filesystem::path& fs_path) {
   // TODO: Support actual trash on apple
   std::filesystem::remove(fs_path);
 #else
-  RunPosixSystemCommand("gio", {"trash", path});
+  if (!RunPosixSystemCommand("gio", {"trash", path})) {
+    // Fall back to just trying a real delete.
+    std::filesystem::remove(fs_path);
+  }
 #endif
 }
 

@@ -1,6 +1,16 @@
-set(NAME FpsAimForgeTests) 
+set(NAME FpsAimForgeTests)
 
-file(GLOB_RECURSE TEST_SOURCES *.cc)
+file(GLOB_RECURSE TEST_SOURCES
+  "aim_db_test.cc"
+  "bundle_functional_test.cc"
+  "geometry_test.cc"
+  "name_util_test.cc"
+  "playlist_manager_test.cc"
+  "scenario_manager_test.cc"
+  "textures_test.cc"
+  "times_test.cc"
+  "util_test.cc"
+)
 
 # Add the test executable
 add_executable(${NAME} ${TEST_SOURCES})
@@ -18,3 +28,6 @@ if(MSVC)
     # Disables warnings from protobuf lib
     target_compile_options(${NAME} PRIVATE /wd4091)
 endif()
+
+include(GoogleTest)
+gtest_discover_tests(${NAME})
