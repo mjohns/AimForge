@@ -40,3 +40,5 @@ file(COPY resources/crosshairs DESTINATION "${OUTPUT_DIR}")
 file(COPY resources/imgui.ini DESTINATION "${OUTPUT_DIR}")
 
 file(COPY aim/graphics/shaders/compiled DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders")
+
+add_subdirectory(tests)

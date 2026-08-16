@@ -22,4 +22,3 @@ enable_testing()
 
 add_subdirectory(vendor)
 add_subdirectory(src)
-add_subdirectory(tests)
