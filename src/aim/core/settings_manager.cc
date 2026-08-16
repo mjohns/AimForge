@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "SDL3/SDL.h"
+#include "SDL3/SDL_mouse.h"
 #include "absl/status/status.h"
 #include "absl/strings/ascii.h"
 #include "absl/strings/strip.h"
@@ -475,6 +476,12 @@ std::string GetMouseButtonName(u8 button) {
   }
   if (button == SDL_BUTTON_RIGHT) {
     return "Right Click";
+  }
+  if (button == SDL_BUTTON_X1) {
+    return "Mouse X1";
+  }
+  if (button == SDL_BUTTON_X2) {
+    return "Mouse X2";
   }
   return "";
 }

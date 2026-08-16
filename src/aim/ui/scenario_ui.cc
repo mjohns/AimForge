@@ -1,9 +1,13 @@
 #include "scenario_ui.h"
 
+#include <optional>
+#include <string>
+
 #include "absl/algorithm/container.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
+#include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
 #include "aim/core/application.h"

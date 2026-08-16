@@ -194,6 +194,15 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::OpenPopup(menu_id);
     }
 
+    auto highest_complete_level = GetHighestCompleteLevel(run.get());
+    if (highest_complete_level) {
+      std::string text = std::format("L{}", MaybeIntToString(*highest_complete_level, 2));
+      ImGui::SameLine();
+      ImGui::SetButtonCursorAtRight(text);
+      ImGui::Button(std::format("L{}", MaybeIntToString(*highest_complete_level, 2)));
+      ImGui::HelpTooltip("Highest complete level where score target was hit");
+    }
+
     const PlaylistDef& def = run->playlist.def();
 
     if (def.levels().base_scenario().size() > 0) {
@@ -218,6 +227,41 @@ class PlaylistComponentImpl : public PlaylistComponent {
   }
 
  private:
+  // TODO: This logic should be in Playlist/PlaylistRun or somewhere in non ui code.
+  std::optional<float> GetHighestCompleteLevel(PlaylistRun* run) {
+    if (!run->playlist.def().has_levels()) {
+      return {};
+    }
+    std::optional<float> highest_level;
+    for (const auto& item : run->progress_list) {
+      NameInfo name = GetScenarioNameInfo(item.item.scenario());
+      if (!name.level) {
+        continue;
+      }
+      float this_level = *name.level;
+      auto stats = app_.stats_manager().GetAggregateStats(item.item.scenario());
+      if (stats.total_runs <= 0) {
+        continue;
+      }
+      auto scenario_def = app_.scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
+      if (!scenario_def) {
+        continue;
+      }
+      float level = GetScenarioScoreLevel(stats.high_score_stats.score,
+                                          GetTargetScore(scenario_def->score_targets(), run));
+      if (level < 5) {
+        continue;
+      }
+
+      if (!highest_level) {
+        highest_level = this_level;
+      } else if (this_level > *highest_level) {
+        highest_level = this_level;
+      }
+    }
+    return highest_level;
+  }
+
   void ResetForNewCurrentPlaylist() {
     editor_component_ = {};
     showing_editor_ = false;

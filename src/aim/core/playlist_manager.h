@@ -8,8 +8,6 @@
 
 #include "aim/common/name_util.h"
 #include "aim/common/random.h"
-#include "aim/common/resource_name.h"
-#include "aim/common/util.h"
 #include "aim/proto/bundle.pb.h"
 #include "aim/proto/playlist.pb.h"
 
