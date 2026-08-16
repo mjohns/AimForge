@@ -390,27 +390,17 @@ void ReadonlyLabeledFloat(const std::string& label, float value, int width_multi
 
 bool Chip(const std::string& label, bool selected) {
   ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
-
   ImVec2 size = ImGui::CalcTextSize(label.c_str());
   ImVec2 frame_padding = ImGui::GetStyle().FramePadding;
-  bool clicked = false;
-  if (ImGui::Selectable(label.c_str(), selected, ImGuiSelectableFlags_None, size)) {
-    clicked = true;
-  }
-
+  bool clicked = ImGui::Selectable(label.c_str(), selected, ImGuiSelectableFlags_None, size);
   ImGui::PopStyleVar();
   return clicked;
 }
 
 bool SelectableButton(const std::string& label) {
   ImGui::PushStyleVar(ImGuiStyleVar_SelectableTextAlign, ImVec2(0.5f, 0.5f));
-
   ImVec2 size = ImGui::CalcTextSize(label.c_str());
-  bool clicked = false;
-  if (ImGui::Selectable(label.c_str(), false, ImGuiSelectableFlags_None, size)) {
-    clicked = true;
-  }
-
+  bool clicked = ImGui::Selectable(label.c_str(), false, ImGuiSelectableFlags_None, size);
   ImGui::PopStyleVar();
   return clicked;
 }
