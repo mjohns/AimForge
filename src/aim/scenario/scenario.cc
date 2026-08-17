@@ -389,6 +389,8 @@ void Scenario::OnWaitingForClickTick() {
   app_.BeginFullscreenWindow();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
+  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
+
   ImGui::Text("%s", scenario_name_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
   if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
@@ -397,7 +399,6 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::Text("theme: %s", settings_.theme_name().c_str());
   ImGui::Text("cm/360: %.0f", effective_cm_per_360_);
 
-  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
   {
     auto bold = app_.font_manager().UseLargeBold();
     std::string message = "Click to Start";
@@ -465,8 +466,10 @@ void Scenario::OnStartCountdownClickTick() {
   app_.BeginFullscreenWindow();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
+  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
   ImGui::Text("%s", scenario_name_.c_str());
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+  ImGui::PopStyleColor();
 
   {
     // Draw the countdown progress bar.
@@ -582,6 +585,7 @@ void Scenario::OnRunningTick() {
 
   DrawAdditionalUiElements();
 
+  ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
   float elapsed_seconds = timer_.GetElapsedSeconds();
   ImGui::Text("time: %.1f", elapsed_seconds);
   ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
@@ -590,6 +594,7 @@ void Scenario::OnRunningTick() {
   if (settings_.enable_metronome() && settings_.metronome_bpm() > 0) {
     ImGui::Text("bpm: %.0f", settings_.metronome_bpm());
   }
+  ImGui::PopStyleColor();
 
   ImGui::End();
 
