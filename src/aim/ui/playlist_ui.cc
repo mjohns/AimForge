@@ -198,7 +198,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
     if (highest_complete_level) {
       std::string text = std::format("L{}", MaybeIntToString(*highest_complete_level, 2));
       ImGui::SameLine();
-      ImGui::SetButtonCursorAtRight(text);
+      // ImGui::SetButtonCursorAtRight(text);
       ImGui::Button(std::format("L{}", MaybeIntToString(*highest_complete_level, 2)));
       ImGui::HelpTooltip("Highest complete level where score target was hit");
     }

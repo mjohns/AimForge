@@ -338,6 +338,7 @@ class ScenarioEditorScreen : public UiScreen {
     ScenarioDef compare_def = *maybe_compare_def;
 
     if (ImGui::BeginTabItem("Scenario type")) {
+      ImGui::BeginChild("ScenarioTypeContainer", ImVec2(0, 0));
       ImGui::Spacing();
       std::string error_message;
       bool no_op_editing_room = false;
@@ -345,19 +346,24 @@ class ScenarioEditorScreen : public UiScreen {
           compare_def, /*app=*/nullptr, &error_message, &no_op_editing_room, nullptr);
       ImGui::SpacedSeparator();
       DrawSecondaryScenarioTypeEditor(compare_def);
+      ImGui::EndChild();
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Targets")) {
+      ImGui::BeginChild("TargetsContainer", ImVec2(0, 0));
       ImGui::Spacing();
       DrawTargetEditor(compare_def);
+      ImGui::EndChild();
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Shot type")) {
+      ImGui::BeginChild("ShotTypeContainer", ImVec2(0, 0));
       ImGui::Spacing();
       ImGui::AlignTextToFramePadding();
       ImGui::Text("Shot type");
       ImGui::SameLine();
       DrawShotTypeEditor(*compare_def.mutable_shot_type());
+      ImGui::EndChild();
       ImGui::EndTabItem();
     }
 
