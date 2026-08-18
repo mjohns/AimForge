@@ -13,6 +13,7 @@
 #include "aim/graphics/renderer.h"
 #include "aim/scenario/scenario_timer.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
+#include "aim/scenario/replay.h"
 #include "implot.h"
 
 namespace aim {
