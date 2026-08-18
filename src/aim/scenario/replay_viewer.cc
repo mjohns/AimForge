@@ -153,11 +153,15 @@ void DrawMouseSpeedsPlot(float now, float t_step, std::span<float> mouse_speeds,
 
   int closest_index = std::round(now / t_step);
   if (IsValidIndex(mouse_speeds, closest_index)) {
-    ImPlot::SetNextMarkerStyle(
-        ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
+    ImPlotSpec spec;
+    spec.Marker = ImPlotMarker_Circle;
+    spec.MarkerSize = 4.0f;
+    spec.MarkerFillColor = ImVec4(1, 0, 0, 1);
+    spec.MarkerLineColor = ImVec4(1, 0, 0, 1);
+    spec.LineWeight = IMPLOT_AUTO;
     float x_val = closest_index * t_step;
     float y_val = mouse_speeds[closest_index];
-    ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1);
+    ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1, spec);
   }
 
   ImPlot::EndPlot();

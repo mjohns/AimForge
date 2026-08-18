@@ -115,9 +115,13 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
       ImGui::Text("Time: %.2f", x_val);
       ImGui::EndTooltip();
 
-      ImPlot::SetNextMarkerStyle(
-          ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
-      ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1);
+      ImPlotSpec spec;
+      spec.Marker = ImPlotMarker_Circle;
+      spec.MarkerSize = 4.0f;
+      spec.MarkerFillColor = ImVec4(1, 0, 0, 1);
+      spec.MarkerLineColor = ImVec4(1, 0, 0, 1);
+      spec.LineWeight = IMPLOT_AUTO;
+      ImPlot::PlotScatter("MouseDot", &x_val, &y_val, 1, spec);
     }
   }
 

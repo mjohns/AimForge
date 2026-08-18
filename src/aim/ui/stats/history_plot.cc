@@ -75,8 +75,13 @@ void DrawHistoryPlot(const std::string& id,
 
   // ImPlot::PlotShaded("Score History", times.data(), scores.data(), scores.size(), 0);
   ImPlot::PlotLineG("Scores", point_getter, &plot_data, stats.size());
-  ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle, 3.0f);
-  ImPlot::PlotScatterG("ScorePoint", point_getter, &plot_data, stats.size());
+  ImPlotSpec spec;
+  spec.Marker = ImPlotMarker_Circle;
+  spec.MarkerSize = 3.0f;
+  spec.MarkerFillColor = IMPLOT_AUTO_COL;
+  spec.MarkerLineColor = IMPLOT_AUTO_COL;
+  spec.LineWeight = IMPLOT_AUTO;
+  ImPlot::PlotScatterG("ScorePoint", point_getter, &plot_data, stats.size(), spec);
 
   if (ImPlot::IsPlotHovered()) {
     ImPlotPoint mouse_pos = ImPlot::GetPlotMousePos(ImAxis_X1, ImAxis_Y1);
@@ -107,32 +112,38 @@ void DrawHistoryPlot(const std::string& id,
 
         ImGui::EndTooltip();
 
-        ImPlot::SetNextMarkerStyle(
-            ImPlotMarker_Circle, 4.0f, ImVec4(1, 0, 0, 1), IMPLOT_AUTO, ImVec4(1, 0, 0, 1));
-        ImPlot::PlotScatter("MouseDot", &x_val, &score, 1);
+        ImPlotSpec spec;
+        spec.Marker = ImPlotMarker_Circle;
+        spec.MarkerSize = 4.0f;
+        spec.MarkerFillColor = ImVec4(1, 0, 0, 1);
+        spec.MarkerLineColor = ImVec4(1, 0, 0, 1);
+        spec.LineWeight = IMPLOT_AUTO;
+        ImPlot::PlotScatter("MouseDot", &x_val, &score, 1, spec);
       } else {
         // See if it is near one of the drag lines and show the tooltip if so.
         ImPlotPoint threshold = ImPlot::GetPlotDistanceFromPixels(10);
+        ImPlotSpec spec;
+        spec.Marker = ImPlotMarker_Circle;
+        spec.MarkerSize = 3.0f;
+        spec.MarkerFillColor = kTopThresholdColor;
+        spec.MarkerLineColor = kTopThresholdColor;
+        spec.LineWeight = IMPLOT_AUTO;
         if (abs(high_score - mouse_pos.y) < threshold.y) {
           ImGui::BeginTooltip();
           ImGui::TextFmt("High score: {}", MaybeIntToString(high_score, 2));
           ImGui::EndTooltip();
 
-          ImPlot::SetNextMarkerStyle(
-              ImPlotMarker_Circle, 3.0f, kTopThresholdColor, IMPLOT_AUTO, kTopThresholdColor);
           float float_high_score = high_score;
           float mouse_x = mouse_pos.x;
-          ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1);
+          ImPlot::PlotScatter("HighScoreDot", &mouse_x, &float_high_score, 1, spec);
         } else if (score_target > 0 && abs(score_target - mouse_pos.y) < threshold.y) {
           ImGui::BeginTooltip();
           ImGui::TextFmt("Target score: {}", MaybeIntToString(score_target, 2));
           ImGui::EndTooltip();
 
-          ImPlot::SetNextMarkerStyle(
-              ImPlotMarker_Circle, 3.0f, kMidThresholdColor, IMPLOT_AUTO, kMidThresholdColor);
           float mouse_x = mouse_pos.x;
           float float_score_target = score_target;
-          ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &float_score_target, 1);
+          ImPlot::PlotScatter("ScoreTargetDot", &mouse_x, &float_score_target, 1, spec);
         }
       }
     }
