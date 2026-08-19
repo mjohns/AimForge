@@ -32,6 +32,8 @@ class UiScreen : public Screen {
   void HandleDefaultScenarioEvents(const SDL_Event& event,
                                    bool user_is_typing,
                                    const std::string& scenario_name);
+ private:
+  bool has_rendered_ = false;
 };
 
 }  // namespace aim

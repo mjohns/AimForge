@@ -9,13 +9,16 @@
 
 namespace aim {
 
-void UiScreen::OnTickStart() {
-  if (!app_.has_input_focus()) {
-    SDL_Delay(250);
-  }
-}
+void UiScreen::OnTickStart() {}
 
 void UiScreen::OnTick() {
+  if (has_rendered_ && !app_.has_input_focus()) {
+    // Checking has_rendered_ ensures that the UI renders the first time and that the app gets focus
+    // on the initial loading.
+    SDL_Delay(250);
+    return;
+  }
+  has_rendered_ = true;
   Stopwatch tick_timer;
   tick_timer.Start();
 
