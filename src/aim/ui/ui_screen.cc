@@ -10,7 +10,7 @@
 
 namespace aim {
 
-constexpr i64 kIdleSleepTimeMicros = 90 * 1000000;
+constexpr i64 kIdleSleepTimeMicros = 30 * 1000000;
 
 void UiScreen::OnTickStart() {}
 
@@ -49,6 +49,7 @@ void UiScreen::OnAttach() {
   app_.EnableVsync();
   SDL_SetWindowRelativeMouseMode(app_.sdl_window(), false);
   OnAttachUi();
+  last_event_time_micros_ = -1;
 }
 
 void UiScreen::OnDetach() {
