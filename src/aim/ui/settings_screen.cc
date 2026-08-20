@@ -10,6 +10,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
+#include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/version.h"
 #include "aim/proto/common.pb.h"
@@ -105,10 +106,9 @@ const std::vector<std::pair<PresentMode, std::string>> kPresentModes{
 };
 
 const std::vector<std::pair<MsaaLevel, std::string>> kMsaaLevels{
-    {MsaaLevel::MSAA_LEVEL_MAX, "Max"},
-    {MsaaLevel::MSAA_LEVEL_2, "2x"},
-    {MsaaLevel::MSAA_LEVEL_4, "4x"},
-    {MsaaLevel::MSAA_LEVEL_8, "8x"},
+    {MsaaLevel::MSAA_LEVEL_2X, "2x"},
+    {MsaaLevel::MSAA_LEVEL_4X, "4x"},
+    {MsaaLevel::MSAA_LEVEL_8X, "8x"},
     {MsaaLevel::MSAA_LEVEL_OFF, "Disabled"},
 };
 
@@ -191,6 +191,9 @@ class SettingsScreen : public UiScreen {
       ImGui::Text("MSAA");
       ImGui::SameLine();
       MsaaLevel msaa_level = updater_.settings.msaa_level();
+      if (msaa_level == MsaaLevel::MSAA_LEVEL_UNKNOWN) {
+        msaa_level = app_.GetDefaultMsaaLevel();
+      }
       ImGui::SimpleTypeDropdown("MsaaLevels", &msaa_level, kMsaaLevels, char_x_ * 9);
       updater_.settings.set_msaa_level(msaa_level);
       ImGui::SameLine();

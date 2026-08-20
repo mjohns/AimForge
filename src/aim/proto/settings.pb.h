@@ -105,11 +105,11 @@ internal::EnumTraitsT<::aim::ScenarioSettingsStoreType_internal_data_>
 
 namespace aim {
 enum MsaaLevel : int {
-  MSAA_LEVEL_MAX = 0,
+  MSAA_LEVEL_UNKNOWN = 0,
   MSAA_LEVEL_OFF = 1,
-  MSAA_LEVEL_2 = 2,
-  MSAA_LEVEL_4 = 3,
-  MSAA_LEVEL_8 = 4,
+  MSAA_LEVEL_2X = 2,
+  MSAA_LEVEL_4X = 4,
+  MSAA_LEVEL_8X = 8,
   MsaaLevel_INT_MIN_SENTINEL_DO_NOT_USE_ =
       ::std::numeric_limits<::int32_t>::min(),
   MsaaLevel_INT_MAX_SENTINEL_DO_NOT_USE_ =
@@ -120,11 +120,11 @@ extern const uint32_t MsaaLevel_internal_data_[];
 inline constexpr MsaaLevel MsaaLevel_MIN =
     static_cast<MsaaLevel>(0);
 inline constexpr MsaaLevel MsaaLevel_MAX =
-    static_cast<MsaaLevel>(4);
+    static_cast<MsaaLevel>(8);
 inline bool MsaaLevel_IsValid(int value) {
-  return 0 <= value && value <= 4;
+  return 0 <= value && value <= 8 && ((279u >> value) & 1) != 0;
 }
-inline constexpr int MsaaLevel_ARRAYSIZE = 4 + 1;
+inline constexpr int MsaaLevel_ARRAYSIZE = 8 + 1;
 const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MsaaLevel_descriptor();
 template <typename T>
 const ::std::string& MsaaLevel_Name(T value) {
@@ -135,7 +135,7 @@ const ::std::string& MsaaLevel_Name(T value) {
 }
 template <>
 inline const ::std::string& MsaaLevel_Name(MsaaLevel value) {
-  return ::google::protobuf::internal::NameOfDenseEnum<MsaaLevel_descriptor, 0, 4>(
+  return ::google::protobuf::internal::NameOfDenseEnum<MsaaLevel_descriptor, 0, 8>(
       static_cast<int>(value));
 }
 inline bool MsaaLevel_Parse(

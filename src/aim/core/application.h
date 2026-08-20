@@ -66,6 +66,7 @@ class Application {
 
   virtual void EnableVsync() = 0;
   virtual void SetPresentMode(PresentMode present_mode) = 0;
+  virtual MsaaLevel GetDefaultMsaaLevel() = 0;
 
   virtual void RequestExit() = 0;
   virtual void RequestRestart() = 0;

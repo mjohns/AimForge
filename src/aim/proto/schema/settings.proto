@@ -13,11 +13,11 @@ message HealthBarSettings {
 }
 
 enum MsaaLevel {
-  MSAA_LEVEL_MAX = 0;
+  MSAA_LEVEL_UNKNOWN = 0;
   MSAA_LEVEL_OFF = 1;
-  MSAA_LEVEL_2 = 2;
-  MSAA_LEVEL_4 = 3;
-  MSAA_LEVEL_8 = 4;
+  MSAA_LEVEL_2X = 2;
+  MSAA_LEVEL_4X = 4;
+  MSAA_LEVEL_8X = 8;
 }
 
 message Settings {

@@ -540,12 +540,13 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "ust_crosshair_size\030\005 \001(\0132\017.aim.KeyMappin"
     "g\022(\n\017quick_metronome\030\006 \001(\0132\017.aim.KeyMapp"
     "ing\022&\n\redit_scenario\030\007 \001(\0132\017.aim.KeyMapp"
-    "ing*i\n\tMsaaLevel\022\022\n\016MSAA_LEVEL_MAX\020\000\022\022\n\016"
-    "MSAA_LEVEL_OFF\020\001\022\020\n\014MSAA_LEVEL_2\020\002\022\020\n\014MS"
-    "AA_LEVEL_4\020\003\022\020\n\014MSAA_LEVEL_8\020\004*q\n\031Scenar"
-    "ioSettingsStoreType\022(\n$SCENARIO_SETTINGS"
-    "_STORE_TYPE_UNKNOWN\020\000\022\026\n\022STORE_PER_SCENA"
-    "RIO\020\001\022\022\n\016STORE_GLOBALLY\020\002b\010editionsp\350\007"
+    "ing*p\n\tMsaaLevel\022\026\n\022MSAA_LEVEL_UNKNOWN\020\000"
+    "\022\022\n\016MSAA_LEVEL_OFF\020\001\022\021\n\rMSAA_LEVEL_2X\020\002\022"
+    "\021\n\rMSAA_LEVEL_4X\020\004\022\021\n\rMSAA_LEVEL_8X\020\010*q\n"
+    "\031ScenarioSettingsStoreType\022(\n$SCENARIO_S"
+    "ETTINGS_STORE_TYPE_UNKNOWN\020\000\022\026\n\022STORE_PE"
+    "R_SCENARIO\020\001\022\022\n\016STORE_GLOBALLY\020\002b\010editio"
+    "nsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_settings_2eproto_deps[1] = {
@@ -555,7 +556,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    2598,
+    2605,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -574,7 +575,7 @@ const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MsaaLevel_descriptor(
   return file_level_enum_descriptors_settings_2eproto[0];
 }
 PROTOBUF_CONSTINIT const uint32_t MsaaLevel_internal_data_[] = {
-    327680u, 0u, };
+    196608u, 32u, 34u, };
 const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL ScenarioSettingsStoreType_descriptor() {
   ::google::protobuf::internal::AssignDescriptors(&descriptor_table_settings_2eproto);
   return file_level_enum_descriptors_settings_2eproto[1];
