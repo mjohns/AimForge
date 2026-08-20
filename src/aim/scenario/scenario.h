@@ -5,7 +5,7 @@
 
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
-#include "aim/core/metronome.h"
+#include "aim/scenario/metronome.h"
 #include "aim/core/perf.h"
 #include "aim/core/screen.h"
 #include "aim/core/target.h"
@@ -13,9 +13,8 @@
 #include "aim/proto/scenario.pb.h"
 #include "aim/scenario/replay.h"
 #include "aim/scenario/scenario_timer.h"
-#include "glm/mat4x4.hpp"
-#include "glm/vec3.hpp"
-#include "google/protobuf/arena.h"
+#include "glm/mat4x4.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 
 namespace aim {
 
