@@ -24,6 +24,7 @@
 #include "aim/database/aim_db.h"
 #include "aim/graphics/image.h"
 #include "aim/graphics/renderer.h"
+#include "aim/proto/settings.pb.h"
 #include "glm/common.hpp"  // IWYU pragma: keep
 #include "imgui.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
@@ -34,6 +35,66 @@
 
 namespace aim {
 namespace {
+
+SDL_GPUSampleCount GetMaxSupportedMsaaSampleCount(SDL_Window* sdl_window,
+                                                  SDL_GPUDevice* gpu_device) {
+  SDL_GPUTextureFormat format = SDL_GetGPUSwapchainTextureFormat(gpu_device, sdl_window);
+  for (auto count : {SDL_GPU_SAMPLECOUNT_8, SDL_GPU_SAMPLECOUNT_4, SDL_GPU_SAMPLECOUNT_2}) {
+    if (SDL_GPUTextureSupportsSampleCount(gpu_device, format, count)) {
+      return count;
+    }
+  }
+  return SDL_GPU_SAMPLECOUNT_1;
+}
+
+int SampleCountToInt(SDL_GPUSampleCount count) {
+  switch (count) {
+    case SDL_GPU_SAMPLECOUNT_1:
+      return 1;
+    case SDL_GPU_SAMPLECOUNT_2:
+      return 2;
+    case SDL_GPU_SAMPLECOUNT_4:
+      return 4;
+    case SDL_GPU_SAMPLECOUNT_8:
+      return 8;
+  }
+  return 1;
+}
+
+SDL_GPUSampleCount IntToSampleCount(int count) {
+  if (count >= 8) {
+    return SDL_GPU_SAMPLECOUNT_8;
+  }
+  if (count >= 4) {
+    return SDL_GPU_SAMPLECOUNT_4;
+  }
+  if (count >= 2) {
+    return SDL_GPU_SAMPLECOUNT_2;
+  }
+  return SDL_GPU_SAMPLECOUNT_1;
+}
+
+SDL_GPUSampleCount GetMsaaSampleCount(SDL_Window* sdl_window,
+                                      SDL_GPUDevice* gpu_device,
+                                      MsaaLevel requested_level) {
+  auto get_requested_sample_count = [=] {
+    if (requested_level == MSAA_LEVEL_OFF) {
+      return SDL_GPU_SAMPLECOUNT_1;
+    }
+    if (requested_level == MSAA_LEVEL_2) {
+      return SDL_GPU_SAMPLECOUNT_2;
+    }
+    if (requested_level == MSAA_LEVEL_4) {
+      return SDL_GPU_SAMPLECOUNT_4;
+    }
+    return SDL_GPU_SAMPLECOUNT_8;
+  };
+
+  SDL_GPUSampleCount requested = get_requested_sample_count();
+  SDL_GPUSampleCount max_supported = GetMaxSupportedMsaaSampleCount(sdl_window, gpu_device);
+  int final_level = std::min(SampleCountToInt(requested), SampleCountToInt(max_supported));
+  return IntToSampleCount(final_level);
+}
 
 ImVec4 ImLerp(const ImVec4& a, const ImVec4& b, float t) {
   return ImVec4(
@@ -490,21 +551,6 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
                  window_display_scale,
                  window_pixel_density);
 
-  msaa_sample_count_ = GetMaxMsaaSampleCount();
-
-  if (msaa_sample_count_ != SDL_GPU_SAMPLECOUNT_1) {
-    SDL_GPUTextureCreateInfo render_texture_info{};
-    render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-    render_texture_info.width = window_pixel_width_;
-    render_texture_info.height = window_pixel_height_;
-    render_texture_info.layer_count_or_depth = 1;
-    render_texture_info.num_levels = 1;
-    render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-    render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
-    render_texture_info.sample_count = msaa_sample_count_;
-    msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
-  }
-
   state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
   // SDL_ShowWindow(sdl_window_);
@@ -523,43 +569,6 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
       logger_->warn("Could not load icon at {}. SDL_Error: {}", logo_path.string(), SDL_GetError());
     }
   }
-
-  trace.Add("ImGui Start");
-  // Setup Dear ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImPlot::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
-  (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
-  imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
-  io.IniFilename = imgui_ini_filename_.c_str();
-
-  ImGuiStyle& style = ImGui::GetStyle();
-  style.WindowRounding = 6;
-  style.FrameRounding = 4;
-  // style.Colors.
-
-  // ImGui::StyleColorsDark();
-  // SetupColorScheme();
-  ImGui::StyleColorsClassic();
-  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.1f, 1.00f);
-  style.AntiAliasedLines = true;
-  style.AntiAliasedFill = true;
-
-  trace.Add("ImGui InitSDL");
-  // Setup Platform/Renderer backends
-  ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);
-  ImGui_ImplSDLGPU3_InitInfo init_info = {};
-  init_info.Device = gpu_device_;
-  init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  init_info.MSAASamples = msaa_sample_count_;
-  init_info.SwapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;
-  init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
-  ImGui_ImplSDLGPU3_Init(&init_info);
-  imgui_initialized_ = true;
 
   trace.Add("InitDone");
   return {};
@@ -598,15 +607,24 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
   };
   sound_manager_ = std::make_unique<SoundManager>(sdl_mixer_, sound_dirs);
 
-  auto fonts_path = file_system_->GetBasePath("resources/fonts");
-  font_manager_ = std::make_unique<FontManager>(fonts_path);
-  if (!font_manager_->LoadFonts()) {
-    return std::format("Unable to load fonts from \"{}\"", fonts_path.string());
-  }
-
   auto settings_status = settings_manager_->Initialize();
   if (!settings_status.ok()) {
     return "Unable to load settings.json";
+  }
+
+  msaa_sample_count_ = GetMsaaSampleCount(
+      sdl_window_, gpu_device_, settings_manager_->GetCurrentSettings().msaa_level());
+  if (msaa_sample_count_ != SDL_GPU_SAMPLECOUNT_1) {
+    SDL_GPUTextureCreateInfo render_texture_info{};
+    render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+    render_texture_info.width = window_pixel_width_;
+    render_texture_info.height = window_pixel_height_;
+    render_texture_info.layer_count_or_depth = 1;
+    render_texture_info.num_levels = 1;
+    render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+    render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
+    render_texture_info.sample_count = msaa_sample_count_;
+    msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
   }
 
   std::vector<std::filesystem::path> texture_dirs = {
@@ -628,6 +646,47 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
 
   logo_texture_ = std::make_unique<Texture>(file_system_->GetBasePath("resources/images/logo.png"),
                                             gpu_device_);
+
+  // Setup Dear ImGui context
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImPlot::CreateContext();
+  ImGuiIO& io = ImGui::GetIO();
+  (void)io;
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+  imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
+  io.IniFilename = imgui_ini_filename_.c_str();
+
+  ImGuiStyle& style = ImGui::GetStyle();
+  style.WindowRounding = 6;
+  style.FrameRounding = 4;
+  // style.Colors.
+
+  // ImGui::StyleColorsDark();
+  // SetupColorScheme();
+  ImGui::StyleColorsClassic();
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.1f, 1.00f);
+  style.AntiAliasedLines = true;
+  style.AntiAliasedFill = true;
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplSDL3_InitForSDLGPU(sdl_window_);
+  ImGui_ImplSDLGPU3_InitInfo init_info = {};
+  init_info.Device = gpu_device_;
+  init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+  init_info.MSAASamples = msaa_sample_count_;
+  init_info.SwapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;
+  init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
+  ImGui_ImplSDLGPU3_Init(&init_info);
+  imgui_initialized_ = true;
+
+  auto fonts_path = file_system_->GetBasePath("resources/fonts");
+  font_manager_ = std::make_unique<FontManager>(fonts_path);
+  if (!font_manager_->LoadFonts()) {
+    return std::format("Unable to load fonts from \"{}\"", fonts_path.string());
+  }
 
   return {};
 }
@@ -951,16 +1010,6 @@ void Application::RequestExit() {
 
 void Application::RequestRestart() {
   should_restart_ = true;
-}
-
-SDL_GPUSampleCount Application::GetMaxMsaaSampleCount() {
-  SDL_GPUTextureFormat format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  for (auto count : {SDL_GPU_SAMPLECOUNT_8, SDL_GPU_SAMPLECOUNT_4, SDL_GPU_SAMPLECOUNT_2}) {
-    if (SDL_GPUTextureSupportsSampleCount(gpu_device_, format, count)) {
-      return count;
-    }
-  }
-  return SDL_GPU_SAMPLECOUNT_1;
 }
 
 }  // namespace aim

@@ -104,6 +104,14 @@ const std::vector<std::pair<PresentMode, std::string>> kPresentModes{
     {PresentMode::PRESENT_MODE_MAILBOX, "Mailbox"},
 };
 
+const std::vector<std::pair<MsaaLevel, std::string>> kMsaaLevels{
+    {MsaaLevel::MSAA_LEVEL_MAX, "Max"},
+    {MsaaLevel::MSAA_LEVEL_2, "2x"},
+    {MsaaLevel::MSAA_LEVEL_4, "4x"},
+    {MsaaLevel::MSAA_LEVEL_8, "8x"},
+    {MsaaLevel::MSAA_LEVEL_OFF, "Disabled"},
+};
+
 const char* kQuickSettingsHelpText =
     "Hold the key to bring up a settings menu which will close when the key is released. Scroll "
     "wheel can be used to adjust mouse sensitivity.";
@@ -178,6 +186,17 @@ class SettingsScreen : public UiScreen {
       PresentMode present_mode = updater_.settings.present_mode();
       ImGui::SimpleTypeDropdown("GpuPresentModes", &present_mode, kPresentModes, char_x_ * 10);
       updater_.settings.set_present_mode(present_mode);
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("MSAA");
+      ImGui::SameLine();
+      MsaaLevel msaa_level = updater_.settings.msaa_level();
+      ImGui::SimpleTypeDropdown("MsaaLevels", &msaa_level, kMsaaLevels, char_x_ * 9);
+      updater_.settings.set_msaa_level(msaa_level);
+      ImGui::SameLine();
+      ImGui::HelpMarker("Multisample anti-aliasing sample count");
+      ImGui::SameLine();
+      ImGui::TextDisabled("requires restart");
 
       const char* driver_name = SDL_GetGPUDeviceDriver(app_.gpu_device());
       if (driver_name != nullptr) {

@@ -55,6 +55,8 @@ extern "C" {
 extern const ::google::protobuf::internal::DescriptorTable descriptor_table_settings_2eproto;
 }  // extern "C"
 namespace aim {
+enum MsaaLevel : int;
+extern const uint32_t MsaaLevel_internal_data_[];
 enum ScenarioSettingsStoreType : int;
 extern const uint32_t ScenarioSettingsStoreType_internal_data_[];
 class HealthBarSettings;
@@ -93,12 +95,54 @@ extern const ::google::protobuf::internal::ClassDataFull SoundSettings_class_dat
 namespace google {
 namespace protobuf {
 template <>
+internal::EnumTraitsT<::aim::MsaaLevel_internal_data_>
+    internal::EnumTraitsImpl::value<::aim::MsaaLevel>;
+template <>
 internal::EnumTraitsT<::aim::ScenarioSettingsStoreType_internal_data_>
     internal::EnumTraitsImpl::value<::aim::ScenarioSettingsStoreType>;
 }  // namespace protobuf
 }  // namespace google
 
 namespace aim {
+enum MsaaLevel : int {
+  MSAA_LEVEL_MAX = 0,
+  MSAA_LEVEL_OFF = 1,
+  MSAA_LEVEL_2 = 2,
+  MSAA_LEVEL_4 = 3,
+  MSAA_LEVEL_8 = 4,
+  MsaaLevel_INT_MIN_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::min(),
+  MsaaLevel_INT_MAX_SENTINEL_DO_NOT_USE_ =
+      ::std::numeric_limits<::int32_t>::max(),
+};
+
+extern const uint32_t MsaaLevel_internal_data_[];
+inline constexpr MsaaLevel MsaaLevel_MIN =
+    static_cast<MsaaLevel>(0);
+inline constexpr MsaaLevel MsaaLevel_MAX =
+    static_cast<MsaaLevel>(4);
+inline bool MsaaLevel_IsValid(int value) {
+  return 0 <= value && value <= 4;
+}
+inline constexpr int MsaaLevel_ARRAYSIZE = 4 + 1;
+const ::google::protobuf::EnumDescriptor* PROTOBUF_NONNULL MsaaLevel_descriptor();
+template <typename T>
+const ::std::string& MsaaLevel_Name(T value) {
+  static_assert(::std::is_same<T, MsaaLevel>::value ||
+                    ::std::is_integral<T>::value,
+                "Incorrect type passed to MsaaLevel_Name().");
+  return MsaaLevel_Name(static_cast<MsaaLevel>(value));
+}
+template <>
+inline const ::std::string& MsaaLevel_Name(MsaaLevel value) {
+  return ::google::protobuf::internal::NameOfDenseEnum<MsaaLevel_descriptor, 0, 4>(
+      static_cast<int>(value));
+}
+inline bool MsaaLevel_Parse(
+    ::absl::string_view name, MsaaLevel* PROTOBUF_NONNULL value) {
+  return ::google::protobuf::internal::ParseNamedEnum<MsaaLevel>(MsaaLevel_descriptor(), name,
+                                           value);
+}
 enum ScenarioSettingsStoreType : int {
   SCENARIO_SETTINGS_STORE_TYPE_UNKNOWN = 0,
   STORE_PER_SCENARIO = 1,
@@ -2167,6 +2211,7 @@ class Settings final : public ::google::protobuf::Message
     kProximityMinShotsPerSecondFieldNumber = 20,
     kProximityMaxShotsPerSecondFieldNumber = 21,
     kDisableReplaysFieldNumber = 22,
+    kMsaaLevelFieldNumber = 23,
   };
   // string theme_name = 4;
   bool has_theme_name() const;
@@ -2421,11 +2466,22 @@ class Settings final : public ::google::protobuf::Message
   void _internal_set_disable_replays(bool value);
 
   public:
+  // .aim.MsaaLevel msaa_level = 23;
+  bool has_msaa_level() const;
+  void clear_msaa_level() ;
+  ::aim::MsaaLevel msaa_level() const;
+  void set_msaa_level(::aim::MsaaLevel value);
+
+  private:
+  ::aim::MsaaLevel _internal_msaa_level() const;
+  void _internal_set_msaa_level(::aim::MsaaLevel value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.Settings)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<5, 21,
+  static const ::google::protobuf::internal::TcParseTable<5, 22,
                                    4, 69,
                                    2>
       _table_;
@@ -2468,6 +2524,7 @@ class Settings final : public ::google::protobuf::Message
     float proximity_min_shots_per_second_;
     float proximity_max_shots_per_second_;
     bool disable_replays_;
+    int msaa_level_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -3526,6 +3583,35 @@ inline bool Settings::_internal_disable_replays() const {
 inline void Settings::_internal_set_disable_replays(bool value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_replays_ = value;
+}
+
+// .aim.MsaaLevel msaa_level = 23;
+inline bool Settings::has_msaa_level() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00200000U);
+  return value;
+}
+inline void Settings::clear_msaa_level() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.msaa_level_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00200000U);
+}
+inline ::aim::MsaaLevel Settings::msaa_level() const {
+  // @@protoc_insertion_point(field_get:aim.Settings.msaa_level)
+  return _internal_msaa_level();
+}
+inline void Settings::set_msaa_level(::aim::MsaaLevel value) {
+  _internal_set_msaa_level(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00200000U);
+  // @@protoc_insertion_point(field_set:aim.Settings.msaa_level)
+}
+inline ::aim::MsaaLevel Settings::_internal_msaa_level() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return static_cast<::aim::MsaaLevel>(_impl_.msaa_level_);
+}
+inline void Settings::_internal_set_msaa_level(::aim::MsaaLevel value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.msaa_level_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -5847,6 +5933,12 @@ inline void Keybinds::set_allocated_edit_scenario(::aim::KeyMapping* PROTOBUF_NU
 namespace google {
 namespace protobuf {
 
+template <>
+struct is_proto_enum<::aim::MsaaLevel> : std::true_type {};
+template <>
+inline const EnumDescriptor* PROTOBUF_NONNULL GetEnumDescriptor<::aim::MsaaLevel>() {
+  return ::aim::MsaaLevel_descriptor();
+}
 template <>
 struct is_proto_enum<::aim::ScenarioSettingsStoreType> : std::true_type {};
 template <>

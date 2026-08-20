@@ -181,7 +181,6 @@ class Application {
   // Returns error message if failed to initialize.
   std::optional<std::string> InitializeCritical(const Stopwatch& stopwatch);
   void Initialize();
-  SDL_GPUSampleCount GetMaxMsaaSampleCount();
 
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
