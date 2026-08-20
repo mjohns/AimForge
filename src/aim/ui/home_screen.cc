@@ -3,6 +3,9 @@
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
+#include "aim/core/history_manager.h"
+#include "aim/core/labels_manager.h"
+#include "aim/core/local_store.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"

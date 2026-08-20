@@ -12,6 +12,9 @@
 #include "aim/common/times.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
+#include "aim/core/history_manager.h"
+#include "aim/core/labels_manager.h"
+#include "aim/core/local_store.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
@@ -120,13 +123,13 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (!is_readonly && ImGui::Selectable("Edit")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("Copy")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("Select variation")) {
       dialogs->select_variation_dialog.NotifyOpen(scenario_name);
@@ -171,7 +174,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
         opts.scenario_name = scenario_name;
         opts.is_new_copy = true;
         opts.copy_as_reference = true;
-        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, &app));
+        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
       }
       if (ImGui::Selectable("Create levels playlist")) {
         dialogs->create_levels_playlist_dialog.NotifyOpen(scenario_name);
@@ -235,7 +238,7 @@ class ScenarioBrowserComponent {
       ScenarioEditorOptions opts;
       opts.scenario_name = "";
       opts.is_new_copy = true;
-      app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app_));
+      app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
 
     ImGui::SpacedSeparator();

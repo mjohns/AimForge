@@ -844,7 +844,7 @@ void DrawReferenceEditor(ScenarioDef& def,
         app->GetCurrentScreen()->PopSelf();
         ScenarioEditorOptions opts;
         opts.scenario_name = r.scenario_name();
-        app->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts, app));
+        app->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
       }
       ImGui::HelpTooltip("Go to the referenced scenario. All current edits will be lost.");
     }

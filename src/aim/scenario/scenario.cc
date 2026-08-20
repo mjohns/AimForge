@@ -239,7 +239,7 @@ void Scenario::OnEvent(const SDL_Event& event) {
         ReturnHome();
         ScenarioEditorOptions opts;
         opts.scenario_name = scenario_name_;
-        PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+        PushNextScreen(CreateScenarioEditorScreen(opts));
       }
     }
     if (!is_waiting_for_click_to_start() &&
@@ -319,7 +319,7 @@ void Scenario::OnTickStart() {
     PopSelf();
     return;
   }
-  if (!app_.has_input_focus()) {
+  if (!app_.HasInputFocus()) {
     PopSelf();
     return;
   }

@@ -31,7 +31,7 @@ void Screen::PushNextScreen(std::shared_ptr<Screen> next_screen) {
 void Screen::UpdateScreenStack() {
   if (return_home_) {
     int i = 0;
-    while (!app_.is_on_home_screen()) {
+    while (app_.GetScreenStackSize() > 1) {
       i++;
       if (i > 2000) {
         assert(false && "Screen stack is too large");

@@ -8,6 +8,7 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/times.h"
 #include "aim/core/application.h"
+#include "aim/core/local_store.h"
 #include "aim/core/settings_manager.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/renderer.h"

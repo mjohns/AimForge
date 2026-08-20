@@ -4,6 +4,7 @@
 #include "aim/common/object_type.h"
 #include "aim/common/resource_name.h"
 #include "aim/core/application.h"
+#include "aim/core/history_manager.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "imgui.h"

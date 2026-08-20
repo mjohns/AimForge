@@ -15,6 +15,7 @@
 #include "aim/common/util.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/camera.h"
+#include "aim/core/history_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
@@ -36,8 +37,8 @@ constexpr const char* kDefaultNewScenarioName = "New Scenario";
 
 class ScenarioEditorScreen : public UiScreen {
  public:
-  explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts, Application& app)
-      : UiScreen(app),
+  explicit ScenarioEditorScreen(const ScenarioEditorOptions& opts)
+      : UiScreen(),
         target_manager_(GetDefaultSimpleRoom()),
         add_to_playlist_(opts.add_to_playlist) {
     auto themes = app_.settings_manager().ListThemes();
@@ -634,9 +635,8 @@ class ScenarioEditorScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options,
-                                                     Application* app) {
-  return std::make_unique<ScenarioEditorScreen>(options, *app);
+std::unique_ptr<UiScreen> CreateScenarioEditorScreen(const ScenarioEditorOptions& options) {
+  return std::make_unique<ScenarioEditorScreen>(options);
 }
 
 }  // namespace aim

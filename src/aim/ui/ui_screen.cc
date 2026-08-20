@@ -18,7 +18,7 @@ void UiScreen::OnTick() {
   i64 now_micros = GetNowEpochMicros();
   bool is_idle =
       last_event_time_micros_ > 0 && (now_micros - last_event_time_micros_) > kIdleSleepTimeMicros;
-  if (has_rendered_ && (!app_.has_input_focus() || is_idle)) {
+  if (has_rendered_ && (!app_.HasInputFocus() || is_idle)) {
     // Checking has_rendered_ ensures that the UI renders the first time and that the app gets focus
     // on the initial loading.
     SDL_Delay(250);
@@ -70,7 +70,7 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
     ReturnHome();
     ScenarioEditorOptions opts;
     opts.scenario_name = scenario_name;
-    PushNextScreen(CreateScenarioEditorScreen(opts, &app_));
+    PushNextScreen(CreateScenarioEditorScreen(opts));
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().restart_scenario())) {
     state_.scenario_run_option = ScenarioRunOption::START_CURRENT;

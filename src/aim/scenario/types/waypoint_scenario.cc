@@ -1,14 +1,13 @@
 #include <memory>
 
-#include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/target.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
 #include "aim/scenario/waypoint_movement_controller.h"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
+#include "glm/vec2.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 
 namespace aim {
 namespace {

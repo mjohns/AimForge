@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   auto pid_cleanup = absl::MakeCleanup([&]() { process_lock->ReleaseLockFile(); });
 
   while (true) {
-    auto app = Application::Create();
+    auto app = CreateNewApplication();
     if (!app) {
       break;
     }

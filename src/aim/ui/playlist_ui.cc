@@ -9,6 +9,9 @@
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/history_manager.h"
+#include "aim/core/labels_manager.h"
+#include "aim/core/local_store.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
@@ -455,13 +458,13 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
     if (ImGui::Selectable("Edit")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+      screen.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("Copy")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+      screen.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("View")) {
       screen.app().scenario_manager().SetCurrentScenario(scenario_name);
@@ -474,7 +477,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
         opts.is_new_copy = true;
         opts.add_to_playlist = run.playlist.name;
         opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
-        screen.PushNextScreen(CreateScenarioEditorScreen(opts, &screen.app()));
+        screen.PushNextScreen(CreateScenarioEditorScreen(opts));
       }
     }
     if (ImGui::BeginMenu("Add to")) {

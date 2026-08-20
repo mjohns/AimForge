@@ -4,24 +4,17 @@
 #include <optional>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
-#include "absl/log/log_sink.h"
 #include "aim/audio/sound_manager.h"
 #include "aim/common/random.h"
 #include "aim/common/simple_types.h"
-#include "aim/common/times.h"
 #include "aim/core/application_state.h"
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
-#include "aim/core/history_manager.h"
-#include "aim/core/labels_manager.h"
-#include "aim/core/local_store.h"
 #include "aim/core/screen.h"
 #include "aim/graphics/crosshair.h"
 #include "aim/graphics/textures.h"
 #include "imgui.h"
 #include "spdlog/logger.h"
-
-struct MIX_Mixer;
 
 namespace aim {
 
@@ -35,195 +28,70 @@ class PlayTimeManager;
 class Renderer;
 class RenderContext;
 class ReplayManager;
-
-class AimAbslLogSink : public absl::LogSink {
- public:
-  AimAbslLogSink(std::shared_ptr<spdlog::logger> logger) : logger_(std::move(logger)) {}
-  void Send(const absl::LogEntry& entry) override;
-
- private:
-  std::shared_ptr<spdlog::logger> logger_;
-};
+class LocalStore;
+class HistoryManager;
+class LabelsManager;
 
 class Application {
  public:
-  ~Application();
+  virtual ~Application() {}
 
-  static std::unique_ptr<Application> Create();
-
-  // Returns whether the program should exit.
-  bool RunMainLoop();
+  // Returns whether the program should exit. If it returns false, the application will restart.
+  virtual bool RunMainLoop() = 0;
 
   // Should only be called using methods in Screen
-  std::shared_ptr<Screen> PopScreenInternal();
-  void PushScreenInternal(std::shared_ptr<Screen> screen);
+  virtual std::shared_ptr<Screen> PopScreenInternal() = 0;
+  virtual void PushScreenInternal(std::shared_ptr<Screen> screen) = 0;
 
-  bool is_on_home_screen() const;
-  std::shared_ptr<Screen> GetCurrentScreen();
+  virtual int GetScreenStackSize() const = 0;
+  virtual std::shared_ptr<Screen> GetCurrentScreen() = 0;
 
-  void NewImGuiFrame();
-  bool BeginFullscreenWindow(const std::string& id = "Fullscreen");
+  virtual void NewImGuiFrame() = 0;
+  virtual bool BeginFullscreenWindow(const std::string& id = "Fullscreen") = 0;
 
-  bool StartRender(RenderContext* render_context);
-  void FinishRender(RenderContext* render_context);
+  virtual bool StartRender(RenderContext* render_context) = 0;
+  virtual void FinishRender(RenderContext* render_context) = 0;
 
   // Render just ImGui screen.
-  void Render(std::optional<ImVec4> clear_color = {});
+  virtual void Render(std::optional<ImVec4> clear_color = {}) = 0;
 
-  SDL_Window* sdl_window() {
-    return sdl_window_;
-  }
+  virtual SDL_Window* sdl_window() = 0;
+  virtual SDL_GPUDevice* gpu_device() = 0;
 
-  SDL_GPUDevice* gpu_device() {
-    return gpu_device_;
-  }
+  virtual bool HasInputFocus() = 0;
 
-  bool has_input_focus() {
-    return SDL_GetWindowFlags(sdl_window()) & SDL_WINDOW_INPUT_FOCUS;
-  }
+  virtual ScreenInfo screen_info() = 0;
 
-  ScreenInfo screen_info() {
-    return ScreenInfo(window_width_, window_height_);
-  }
+  virtual float GetAppRunTimeSeconds() const = 0;
 
-  Random& rand() {
-    return rand_;
-  }
+  virtual void EnableVsync() = 0;
+  virtual void SetPresentMode(PresentMode present_mode) = 0;
 
-  SoundManager* sound_manager() {
-    return sound_manager_.get();
-  }
+  virtual void RequestExit() = 0;
+  virtual void RequestRestart() = 0;
 
-  StatsManager& stats_manager() {
-    return *stats_manager_;
-  }
-
-  PlayTimeManager& play_time_manager() {
-    return *play_time_manager_;
-  }
-
-  Renderer* renderer() {
-    return renderer_.get();
-  }
-
-  FileSystem* file_system() {
-    return file_system_.get();
-  }
-
-  FontManager& font_manager() {
-    return *font_manager_;
-  }
-
-  SettingsManager& settings_manager() {
-    return *settings_manager_;
-  }
-
-  ScenarioManager& scenario_manager() {
-    return *scenario_manager_;
-  }
-
-  PlaylistManager& playlist_manager() {
-    return *playlist_manager_;
-  }
-
-  BundleManager& bundle_manager() {
-    return *bundle_manager_;
-  }
-
-  HistoryManager& history_manager() {
-    return *history_manager_;
-  }
-
-  LabelsManager& labels_manager() {
-    return *labels_manager_;
-  }
-
-  LocalStore& local_store() {
-    return *local_store_;
-  }
-
-  CrosshairManager& crosshair_manager() {
-    return *crosshair_manager_;
-  }
-
-  ReplayManager& replay_manager() {
-    return *replay_manager_;
-  }
-
-  AimDb& db() {
-    return *db_;
-  }
-
-  spdlog::logger* logger() {
-    return logger_.get();
-  };
-
-  ApplicationState& state() {
-    return *state_.get();
-  }
-
-  Texture& logo_texture() {
-    return *logo_texture_;
-  }
-
-  float GetAppRunTimeSeconds() const;
-
-  void EnableVsync();
-  void SetPresentMode(PresentMode present_mode);
-
-  void RequestExit();
-  void RequestRestart();
-
- private:
-  Application();
-
-  std::optional<std::string> InitializeWindow(const Stopwatch& stopwatch);
-  // Returns error message if failed to initialize.
-  std::optional<std::string> InitializeCritical(const Stopwatch& stopwatch);
-  void Initialize();
-
-  SDL_Window* sdl_window_ = nullptr;
-  SDL_Surface* icon_ = nullptr;
-  SDL_GPUDevice* gpu_device_ = nullptr;
-  MIX_Mixer* sdl_mixer_ = nullptr;
-  SDL_GPUTexture* msaa_render_texture_ = nullptr;
-  SDL_GPUSampleCount msaa_sample_count_;
-
-  int window_width_ = -1;
-  int window_height_ = -1;
-  int window_pixel_width_ = -1;
-  int window_pixel_height_ = -1;
-
-  Random rand_;
-
-  std::unique_ptr<SoundManager> sound_manager_;
-  std::unique_ptr<StatsManager> stats_manager_;
-  std::unique_ptr<SettingsManager> settings_manager_;
-  std::unique_ptr<LabelsManager> labels_manager_;
-  std::unique_ptr<HistoryManager> history_manager_;
-  std::unique_ptr<Renderer> renderer_;
-  std::unique_ptr<CrosshairManager> crosshair_manager_;
-  std::unique_ptr<FileSystem> file_system_;
-  std::unique_ptr<ScenarioManager> scenario_manager_;
-  std::unique_ptr<BundleManager> bundle_manager_;
-  std::unique_ptr<PlaylistManager> playlist_manager_;
-  std::unique_ptr<PlayTimeManager> play_time_manager_;
-  std::unique_ptr<FontManager> font_manager_;
-  std::unique_ptr<LocalStore> local_store_;
-  std::unique_ptr<ReplayManager> replay_manager_;
-  std::unique_ptr<AimDb> db_;
-  std::shared_ptr<spdlog::logger> logger_;
-  std::unique_ptr<AimAbslLogSink> absl_log_sink_;
-  std::string imgui_ini_filename_;
-  std::unique_ptr<Texture> logo_texture_;
-
-  std::vector<std::shared_ptr<Screen>> screen_stack_;
-  std::unique_ptr<ApplicationState> state_;
-
-  bool should_exit_ = false;
-  bool should_restart_ = false;
-  i64 application_start_time_micros_ = 0;
-  bool imgui_initialized_ = false;
+  virtual Random& rand() = 0;
+  virtual SoundManager* sound_manager() = 0;
+  virtual StatsManager& stats_manager() = 0;
+  virtual PlayTimeManager& play_time_manager() = 0;
+  virtual Renderer* renderer() = 0;
+  virtual FileSystem* file_system() = 0;
+  virtual FontManager& font_manager() = 0;
+  virtual SettingsManager& settings_manager() = 0;
+  virtual ScenarioManager& scenario_manager() = 0;
+  virtual PlaylistManager& playlist_manager() = 0;
+  virtual BundleManager& bundle_manager() = 0;
+  virtual HistoryManager& history_manager() = 0;
+  virtual LabelsManager& labels_manager() = 0;
+  virtual LocalStore& local_store() = 0;
+  virtual CrosshairManager& crosshair_manager() = 0;
+  virtual ReplayManager& replay_manager() = 0;
+  virtual AimDb& db() = 0;
+  virtual spdlog::logger* logger() = 0;
+  virtual ApplicationState& state() = 0;
+  virtual Texture& logo_texture() = 0;
 };
+
+std::unique_ptr<Application> CreateNewApplication();
 
 }  // namespace aim
