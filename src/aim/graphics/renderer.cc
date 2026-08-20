@@ -11,6 +11,7 @@
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
 #include "aim/graphics/shapes.h"
+#include "aim/graphics/textures.h"
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
 #include "glm/gtx/vector_angle.hpp"
 #include "glm/mat4x4.hpp"  // IWYU pragma: keep
@@ -736,14 +737,17 @@ class DrawDataBuilder {
 class RendererImpl : public Renderer {
  public:
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
+               SDL_GPUSampleCount msaa_sample_count,
+               SDL_GPUTexture* msaa_render_texture,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
       : device_(device),
         sdl_window_(sdl_window),
+        msaa_sample_count_(msaa_sample_count),
+        msaa_render_texture_(msaa_render_texture),
         texture_manager_(texture_dirs, device),
         draw_data_builder_(&texture_manager_) {
     SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
-    msaa_sample_count_ = GetMaxMsaaSampleCount();
   }
 
   ~RendererImpl() override {
@@ -779,10 +783,6 @@ class RendererImpl : public Renderer {
     if (depth_texture_ != nullptr) {
       SDL_ReleaseGPUTexture(device_, depth_texture_);
       depth_texture_ = nullptr;
-    }
-    if (msaa_render_texture_ != nullptr) {
-      SDL_ReleaseGPUTexture(device_, msaa_render_texture_);
-      msaa_render_texture_ = nullptr;
     }
     texture_manager_.clear();
   }
@@ -827,17 +827,6 @@ class RendererImpl : public Renderer {
     depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT;
     depth_texture_info.usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
     depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
-
-    SDL_GPUTextureCreateInfo render_texture_info{};
-    render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-    render_texture_info.width = viewport_width_;
-    render_texture_info.height = viewport_height_;
-    render_texture_info.layer_count_or_depth = 1;
-    render_texture_info.num_levels = 1;
-    render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
-    render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
-    render_texture_info.sample_count = msaa_sample_count_;
-    msaa_render_texture_ = SDL_CreateGPUTexture(device_, &render_texture_info);
 
     if (!CreateTextureQuadPipeline()) {
       return false;
@@ -915,8 +904,7 @@ class RendererImpl : public Renderer {
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
 
     target_info.texture = msaa_render_texture_;
-    target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
-    target_info.resolve_texture = ctx->swapchain_texture;
+    target_info.store_op = SDL_GPU_STOREOP_STORE;
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
     target_info.cycle = true;
@@ -1373,17 +1361,6 @@ class RendererImpl : public Renderer {
     return transfer_buffer;
   }
 
-  SDL_GPUSampleCount GetMaxMsaaSampleCount() {
-    SDL_GPUTextureFormat format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
-    for (auto count : {SDL_GPU_SAMPLECOUNT_8, SDL_GPU_SAMPLECOUNT_4, SDL_GPU_SAMPLECOUNT_2}) {
-      if (SDL_GPUTextureSupportsSampleCount(device_, format, count)) {
-        return count;
-      }
-    }
-    Logger::get()->warn("MSAA is not supported");
-    return SDL_GPU_SAMPLECOUNT_2;
-  }
-
   SDL_GPUShader* solid_color_instanced_fragment_shader_ = nullptr;
   SDL_GPUShader* solid_color_instanced_vertex_shader_ = nullptr;
   SDL_GPUShader* position_and_tex_coord_vertex_shader_ = nullptr;
@@ -1402,7 +1379,7 @@ class RendererImpl : public Renderer {
   SDL_GPUTexture* depth_texture_ = nullptr;
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
 
-  SDL_GPUSampleCount msaa_sample_count_ = SDL_GPU_SAMPLECOUNT_2;
+  SDL_GPUSampleCount msaa_sample_count_;
 
   unsigned int num_sphere_vertices_;
   unsigned int num_cylinder_wall_vertices_;
@@ -1429,9 +1406,12 @@ class RendererImpl : public Renderer {
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
+                                         SDL_GPUSampleCount msaa_sample_count,
+                                         SDL_GPUTexture* msaa_render_texture,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window) {
-  auto renderer = std::make_unique<RendererImpl>(texture_dirs, device, sdl_window);
+  auto renderer = std::make_unique<RendererImpl>(
+      texture_dirs, msaa_sample_count, msaa_render_texture, device, sdl_window);
   if (!renderer->Initialize(shader_dir)) {
     return {};
   }

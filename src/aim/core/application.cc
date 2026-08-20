@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
+#include "SDL3/SDL_gpu.h"
 #include "SDL3_mixer/SDL_mixer.h"
 #include "absl/cleanup/cleanup.h"
 #include "absl/log/log_sink_registry.h"
@@ -392,6 +393,10 @@ Application::~Application() {
     if (renderer_) {
       renderer_->Cleanup();
     }
+    if (msaa_render_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(gpu_device_, msaa_render_texture_);
+      msaa_render_texture_ = nullptr;
+    }
     if (sdl_window_ != nullptr) {
       SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
     }
@@ -485,6 +490,19 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
                  window_display_scale,
                  window_pixel_density);
 
+  msaa_sample_count_ = GetMaxMsaaSampleCount();
+
+  SDL_GPUTextureCreateInfo render_texture_info{};
+  render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+  render_texture_info.width = window_pixel_width_;
+  render_texture_info.height = window_pixel_height_;
+  render_texture_info.layer_count_or_depth = 1;
+  render_texture_info.num_levels = 1;
+  render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+  render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
+  render_texture_info.sample_count = msaa_sample_count_;
+  msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
+
   state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
   // SDL_ShowWindow(sdl_window_);
@@ -535,9 +553,8 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
   ImGui_ImplSDLGPU3_InitInfo init_info = {};
   init_info.Device = gpu_device_;
   init_info.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  init_info.MSAASamples = SDL_GPU_SAMPLECOUNT_1;  // Only used in multi-viewports mode.
-  init_info.SwapchainComposition =
-      SDL_GPU_SWAPCHAINCOMPOSITION_SDR;  // Only used in multi-viewports mode.
+  init_info.MSAASamples = msaa_sample_count_;
+  init_info.SwapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;
   init_info.PresentMode = SDL_GPU_PRESENTMODE_VSYNC;
   ImGui_ImplSDLGPU3_Init(&init_info);
   imgui_initialized_ = true;
@@ -598,7 +615,8 @@ std::optional<std::string> Application::InitializeCritical(const Stopwatch& stop
   if (!std::filesystem::exists(shader_dir)) {
     return std::format("Compiled shader folder missing at \"{}\".", shader_dir.string());
   }
-  renderer_ = CreateRenderer(texture_dirs, shader_dir, gpu_device_, sdl_window_);
+  renderer_ = CreateRenderer(
+      texture_dirs, shader_dir, msaa_sample_count_, msaa_render_texture_, gpu_device_, sdl_window_);
   if (!renderer_) {
     return "Failed to initialize renderer.";
   }
@@ -694,11 +712,12 @@ void Application::Render(std::optional<ImVec4> explicit_clear_color) {
 
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
-    target_info.texture = swapchain_texture;
+    target_info.texture = msaa_render_texture_;
     target_info.clear_color =
         SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-    target_info.store_op = SDL_GPU_STOREOP_STORE;
+    target_info.resolve_texture = swapchain_texture;
+    target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
     target_info.cycle = false;
@@ -748,9 +767,10 @@ void Application::FinishRender(RenderContext* ctx) {
   ctx->times->finish_render.start = ctx->stopwatch->GetElapsedMicros();
   // Setup and start a render pass
   SDL_GPUColorTargetInfo target_info = {};
-  target_info.texture = ctx->swapchain_texture;
+  target_info.texture = msaa_render_texture_;
+  target_info.resolve_texture = ctx->swapchain_texture;
   target_info.load_op = SDL_GPU_LOADOP_LOAD;
-  target_info.store_op = SDL_GPU_STOREOP_STORE;
+  target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
   target_info.mip_level = 0;
   target_info.layer_or_depth_plane = 0;
   target_info.cycle = false;
@@ -919,6 +939,17 @@ void Application::RequestExit() {
 
 void Application::RequestRestart() {
   should_restart_ = true;
+}
+
+SDL_GPUSampleCount Application::GetMaxMsaaSampleCount() {
+  SDL_GPUTextureFormat format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+  for (auto count : {SDL_GPU_SAMPLECOUNT_8, SDL_GPU_SAMPLECOUNT_4, SDL_GPU_SAMPLECOUNT_2}) {
+    if (SDL_GPUTextureSupportsSampleCount(gpu_device_, format, count)) {
+      return count;
+    }
+  }
+  Logger::get()->warn("MSAA is not supported");
+  return SDL_GPU_SAMPLECOUNT_2;
 }
 
 }  // namespace aim

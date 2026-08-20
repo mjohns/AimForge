@@ -10,7 +10,6 @@
 #include "aim/core/camera.h"
 #include "aim/core/perf.h"
 #include "aim/core/target.h"
-#include "aim/graphics/textures.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/theme.pb.h"
@@ -53,6 +52,8 @@ class Renderer {
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
+                                         SDL_GPUSampleCount msaa_sample_count,
+                                         SDL_GPUTexture* msaa_render_texture,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window);
 

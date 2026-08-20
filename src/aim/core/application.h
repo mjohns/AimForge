@@ -181,11 +181,14 @@ class Application {
   // Returns error message if failed to initialize.
   std::optional<std::string> InitializeCritical(const Stopwatch& stopwatch);
   void Initialize();
+  SDL_GPUSampleCount GetMaxMsaaSampleCount();
 
   SDL_Window* sdl_window_ = nullptr;
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
   MIX_Mixer* sdl_mixer_ = nullptr;
+  SDL_GPUTexture* msaa_render_texture_ = nullptr;
+  SDL_GPUSampleCount msaa_sample_count_;
 
   int window_width_ = -1;
   int window_height_ = -1;
