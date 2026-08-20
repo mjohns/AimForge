@@ -492,16 +492,18 @@ std::optional<std::string> Application::InitializeWindow(const Stopwatch& stopwa
 
   msaa_sample_count_ = GetMaxMsaaSampleCount();
 
-  SDL_GPUTextureCreateInfo render_texture_info{};
-  render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-  render_texture_info.width = window_pixel_width_;
-  render_texture_info.height = window_pixel_height_;
-  render_texture_info.layer_count_or_depth = 1;
-  render_texture_info.num_levels = 1;
-  render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-  render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
-  render_texture_info.sample_count = msaa_sample_count_;
-  msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
+  if (msaa_sample_count_ != SDL_GPU_SAMPLECOUNT_1) {
+    SDL_GPUTextureCreateInfo render_texture_info{};
+    render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+    render_texture_info.width = window_pixel_width_;
+    render_texture_info.height = window_pixel_height_;
+    render_texture_info.layer_count_or_depth = 1;
+    render_texture_info.num_levels = 1;
+    render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
+    render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
+    render_texture_info.sample_count = msaa_sample_count_;
+    msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
+  }
 
   state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
@@ -712,12 +714,17 @@ void Application::Render(std::optional<ImVec4> explicit_clear_color) {
 
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
-    target_info.texture = msaa_render_texture_;
     target_info.clear_color =
         SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-    target_info.resolve_texture = swapchain_texture;
-    target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+    if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
+      target_info.texture = swapchain_texture;
+      target_info.store_op = SDL_GPU_STOREOP_STORE;
+    } else {
+      target_info.texture = msaa_render_texture_;
+      target_info.resolve_texture = swapchain_texture;
+      target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+    }
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
     target_info.cycle = false;
@@ -767,10 +774,15 @@ void Application::FinishRender(RenderContext* ctx) {
   ctx->times->finish_render.start = ctx->stopwatch->GetElapsedMicros();
   // Setup and start a render pass
   SDL_GPUColorTargetInfo target_info = {};
-  target_info.texture = msaa_render_texture_;
-  target_info.resolve_texture = ctx->swapchain_texture;
   target_info.load_op = SDL_GPU_LOADOP_LOAD;
-  target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+  if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
+    target_info.texture = ctx->swapchain_texture;
+    target_info.store_op = SDL_GPU_STOREOP_STORE;
+  } else {
+    target_info.texture = msaa_render_texture_;
+    target_info.resolve_texture = ctx->swapchain_texture;
+    target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+  }
   target_info.mip_level = 0;
   target_info.layer_or_depth_plane = 0;
   target_info.cycle = false;
@@ -948,8 +960,7 @@ SDL_GPUSampleCount Application::GetMaxMsaaSampleCount() {
       return count;
     }
   }
-  Logger::get()->warn("MSAA is not supported");
-  return SDL_GPU_SAMPLECOUNT_2;
+  return SDL_GPU_SAMPLECOUNT_1;
 }
 
 }  // namespace aim

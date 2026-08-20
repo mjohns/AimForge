@@ -1,5 +1,7 @@
 #include "renderer.h"
 
+#include "SDL3/SDL_gpu.h"
+
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <cassert>
@@ -902,8 +904,8 @@ class RendererImpl : public Renderer {
     SDL_GPUColorTargetInfo target_info = {};
     target_info.clear_color = SDL_FColor{0, 0, 0, 1.0};
     target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-
-    target_info.texture = msaa_render_texture_;
+    target_info.texture =
+        msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1 ? ctx->swapchain_texture : msaa_render_texture_;
     target_info.store_op = SDL_GPU_STOREOP_STORE;
     target_info.mip_level = 0;
     target_info.layer_or_depth_plane = 0;
