@@ -15,6 +15,7 @@
 #include "aim/ui/stats/stats_screen.h"
 #include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/top_bar.h"
+#include "aim/ui/ui_app.h"
 #include "aim/ui/ui_screen.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 
@@ -87,11 +88,11 @@ class SetInitialDpiDialog {
 
 class HomeScreen : public UiScreen {
  public:
-  explicit HomeScreen(Application& app) : UiScreen(app) {
+  HomeScreen() : UiScreen() {
     playlist_component_ = CreatePlaylistComponent(this);
     playlist_list_component_ = CreatePlaylistListComponent(this);
     bundle_ui_component_ = CreateBundleUiComponent(this);
-    scenarios_component_ = CreateScenariosComponent(app);
+    scenarios_component_ = CreateScenariosComponent(app_);
 
     auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
     if (selected_app_screen) {
@@ -377,8 +378,8 @@ class HomeScreen : public UiScreen {
 
 }  // namespace
 
-std::shared_ptr<Screen> CreateHomeScreen(Application* app) {
-  return std::make_shared<HomeScreen>(*app);
+std::shared_ptr<Screen> CreateHomeScreen() {
+  return std::make_shared<HomeScreen>();
 }
 
 }  // namespace aim

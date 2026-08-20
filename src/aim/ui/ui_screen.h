@@ -5,6 +5,7 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/core/screen.h"
+#include "aim/ui/ui_app.h"
 
 namespace aim {
 
@@ -12,7 +13,8 @@ class Application;
 
 class UiScreen : public Screen {
  public:
-  UiScreen(Application& app) : Screen(app) {}
+  UiScreen() : Screen(GetUiApp()) {}
+  explicit UiScreen(Application& app) : Screen(app) {}
   virtual ~UiScreen() {}
 
  protected:

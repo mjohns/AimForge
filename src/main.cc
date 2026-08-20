@@ -1,9 +1,10 @@
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/cleanup/cleanup.h"
 #include "absl/flags/parse.h"
 #include "aim/core/application.h"
 #include "aim/core/process_lock.h"
 #include "aim/ui/home_screen.h"
+#include "aim/ui/ui_app.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -42,13 +43,17 @@ int main(int argc, char* argv[]) {
     if (!app) {
       break;
     }
+    UiAppHolder::getInstance().set(app.get());
 
-    app->PushScreenInternal(CreateHomeScreen(app.get()));
+    app->PushScreenInternal(CreateHomeScreen());
     bool should_exit = app->RunMainLoop();
     if (should_exit) {
       break;
     }
+
     // Continue to next loop iteration.
+    app = {};
+    UiAppHolder::getInstance().set(nullptr);
   }
 
   return 0;

@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "aim/core/application.h"
+#include "aim/core/screen.h"
 
 namespace aim {
 
-std::shared_ptr<Screen> CreateHomeScreen(Application* app);
+std::shared_ptr<Screen> CreateHomeScreen();
 
 }  // namespace aim
