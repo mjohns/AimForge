@@ -3,6 +3,7 @@
 #include <span>
 #include <string>
 
+#include "aim/common/simple_types.h"
 #include "aim/core/screen.h"
 
 namespace aim {
@@ -32,8 +33,10 @@ class UiScreen : public Screen {
   void HandleDefaultScenarioEvents(const SDL_Event& event,
                                    bool user_is_typing,
                                    const std::string& scenario_name);
+
  private:
   bool has_rendered_ = false;
+  i64 last_event_time_micros_ = -1;
 };
 
 }  // namespace aim

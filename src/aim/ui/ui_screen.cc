@@ -2,6 +2,7 @@
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/strings/ascii.h"
+#include "aim/common/times.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/quick_settings_screen.h"
@@ -9,10 +10,15 @@
 
 namespace aim {
 
+constexpr i64 kIdleSleepTimeMicros = 90 * 1000000;
+
 void UiScreen::OnTickStart() {}
 
 void UiScreen::OnTick() {
-  if (has_rendered_ && !app_.has_input_focus()) {
+  i64 now_micros = GetNowEpochMicros();
+  bool is_idle =
+      last_event_time_micros_ > 0 && (now_micros - last_event_time_micros_) > kIdleSleepTimeMicros;
+  if (has_rendered_ && (!app_.has_input_focus() || is_idle)) {
     // Checking has_rendered_ ensures that the UI renders the first time and that the app gets focus
     // on the initial loading.
     SDL_Delay(250);
@@ -85,12 +91,20 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
 
 void UiScreen::OnEvents(std::span<SDL_Event> events) {
   ImGuiIO& io = ImGui::GetIO();
+  bool has_user_input = false;
   for (const SDL_Event& event : events) {
     if (IsQuitEvent(event)) {
       app_.RequestExit();
     }
     ImGui_ImplSDL3_ProcessEvent(&event);
     OnEvent(event, io.WantTextInput);
+
+    if (event.type == SDL_EVENT_MOUSE_MOTION || event.type == SDL_EVENT_KEY_DOWN) {
+      has_user_input = true;
+    }
+  }
+  if (has_user_input) {
+    last_event_time_micros_ = GetNowEpochMicros();
   }
 }
 
