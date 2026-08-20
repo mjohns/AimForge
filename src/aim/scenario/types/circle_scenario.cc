@@ -1,24 +1,15 @@
 #include <memory>
-#include <random>
 
 #include "aim/common/geometry.h"
-#include "aim/common/times.h"
-#include "aim/common/util.h"
+#include "aim/common/wall.h"
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/target.h"
-#include "aim/proto/common.pb.h"
-#include "aim/proto/settings.pb.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
-#include "aim/scenario/target_placement.h"
-#include "aim/scenario/tracking_sound.h"
 #include "glm/gtc/constants.hpp"
-#include "glm/mat4x4.hpp"
-#include "glm/trigonometric.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "imgui.h"
+#include "glm/vec2.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 
 namespace aim {
 namespace {
