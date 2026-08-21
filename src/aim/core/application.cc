@@ -510,8 +510,8 @@ class ApplicationImpl : public Application {
     return gpu_device_;
   }
 
-  MsaaLevel GetDefaultMsaaLevel() override {
-    return IntToMsaaLevel(SampleCountToInt(GetDefaultMsaaSampleCount(sdl_window_, gpu_device_)));
+  MsaaLevel GetCurrentMsaaLevel() override {
+    return IntToMsaaLevel(SampleCountToInt(msaa_sample_count_));
   }
 
   bool HasInputFocus() override {

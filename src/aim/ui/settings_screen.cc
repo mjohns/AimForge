@@ -192,7 +192,7 @@ class SettingsScreen : public UiScreen {
       ImGui::SameLine();
       MsaaLevel msaa_level = updater_.settings.msaa_level();
       if (msaa_level == MsaaLevel::MSAA_LEVEL_UNKNOWN) {
-        msaa_level = app_.GetDefaultMsaaLevel();
+        msaa_level = app_.GetCurrentMsaaLevel();
       }
       ImGui::SimpleTypeDropdown("MsaaLevels", &msaa_level, kMsaaLevels, char_x_ * 9);
       updater_.settings.set_msaa_level(msaa_level);
