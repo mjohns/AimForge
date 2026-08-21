@@ -645,6 +645,7 @@ class StatsScreen : public UiScreen {
   }
 
   void DrawStatsPanel() {
+    ImGui::BeginChild("StatsPanelContainer", ImVec2(0, 0));
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("StatsPanelTable", 2, flags)) {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
@@ -664,20 +665,17 @@ class StatsScreen : public UiScreen {
 
       if (scores_over_time_) {
         ImGui::SpacedSeparator();
-        if (ImGui::TreeNode("Score over time")) {
-          DrawScoresOverTimePlot(scenario_name_, run_id_, *scores_over_time_, score_target_);
-          ImGui::TreePop();
-        }
+        DrawScoresOverTimePlot(scenario_name_, run_id_, *scores_over_time_, score_target_);
       }
 
-      if (compare_to_scenarios_.size() > 0) {
-        ImGui::SpacedSeparator();
-        if (ImGui::TreeNode("More comparisons")) {
-          ImGui::IdGuard cid("MoreComparisons");
-          DrawStatsTable(/*is_comparisons=*/true);
-          ImGui::TreePop();
-        }
-      }
+      // if (compare_to_scenarios_.size() > 0) {
+      //   ImGui::SpacedSeparator();
+      //   if (ImGui::TreeNode("More comparisons")) {
+      //     ImGui::IdGuard cid("MoreComparisons");
+      //     DrawStatsTable(/*is_comparisons=*/true);
+      //     ImGui::TreePop();
+      //   }
+      // }
 
       ImGui::TableNextColumn();
       if (playlist_run_) {
@@ -686,6 +684,7 @@ class StatsScreen : public UiScreen {
 
       ImGui::EndTable();
     }
+    ImGui::EndChild();
   }
 
   void DrawPlaylistItem(int i, const PlaylistItemProgress& progress, PlaylistRun* run) {
