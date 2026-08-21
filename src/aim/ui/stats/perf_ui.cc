@@ -130,14 +130,11 @@ void DrawPerformanceStats(const RunPerformanceStats& stats) {
   DumpHistogram(stats.total_time_histogram);
   ImGui::Unindent();
 
-  if (worst_times.render.start > 0) {
-    ImGui::SpacedSeparator();
-
-    ImGui::Text("Render Times (ms)");
-    ImGui::Indent();
-    DumpHistogram(stats.render_time_histogram);
-    ImGui::Unindent();
-  }
+  ImGui::SpacedSeparator();
+  ImGui::Text("Render Times (ms)");
+  ImGui::Indent();
+  DumpHistogram(stats.render_time_histogram);
+  ImGui::Unindent();
 
   ImGui::SpacedSeparator();
   ImGui::Text("Update Times (ms)");
