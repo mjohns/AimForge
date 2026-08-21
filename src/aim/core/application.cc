@@ -57,12 +57,12 @@ SDL_GPUSampleCount GetDefaultMsaaSampleCount(SDL_Window* sdl_window, SDL_GPUDevi
     return SDL_GPU_SAMPLECOUNT_2;
   }
   if (pixel_height < 1200) {
-    return SDL_GPU_SAMPLECOUNT_8;
-  }
-  if (pixel_height < 1500) {
     return SDL_GPU_SAMPLECOUNT_4;
   }
-  return SDL_GPU_SAMPLECOUNT_2;
+  if (pixel_height < 1500) {
+    return SDL_GPU_SAMPLECOUNT_2;
+  }
+  return SDL_GPU_SAMPLECOUNT_1;
 }
 
 SDL_GPUSampleCount GetMaxSupportedMsaaSampleCount(SDL_Window* sdl_window,
