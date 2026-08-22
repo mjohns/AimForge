@@ -6,7 +6,6 @@
 
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
-#include "aim/common/implot_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
@@ -527,13 +526,6 @@ class StatsScreen : public UiScreen {
           "{}: {} ({})", prefix, MaybeIntToString(previous_high_score, 2), high_score_time));
     }
     if (evaluated_scenario_def_) {
-      ScoreTargets score_targets = evaluated_scenario_def_->score_targets();
-      if (playlist_run_) {
-        float override_target_score = playlist_run_->playlist.def().levels().target_score();
-        if (override_target_score > 0) {
-          score_targets.set_target_score(override_target_score);
-        }
-      }
       float score_level = GetScenarioScoreLevel(stats.score, score_target_);
       if (score_level > 0) {
         auto font1 = app_.font_manager().UseLarge();
@@ -544,9 +536,7 @@ class StatsScreen : public UiScreen {
           ImGui::Button(std::format("5 {}", icons::kVerified));
         }
         auto font2 = app_.font_manager().UseDefault();
-        ImGui::HelpTooltip(
-            std::format("Target score: {}",
-                        MaybeIntToString(evaluated_scenario_def_->score_targets().end(), 1)));
+        ImGui::HelpTooltip(std::format("Target score: {}", MaybeIntToString(score_target_, 1)));
       }
     }
 
