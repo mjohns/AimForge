@@ -841,10 +841,10 @@ void DrawReferenceEditor(ScenarioDef& def,
       if (ImGui::Button(icons::kOpenInNew)) {
         // TODO: confirmation dialog and check if there are actual edits.
         app->scenario_manager().SetCurrentScenario(r.scenario_name());
-        app->GetCurrentScreen()->PopSelf();
+        app->PopCurrentScreen();
         ScenarioEditorOptions opts;
         opts.scenario_name = r.scenario_name();
-        app->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+        app->PushNextScreen(CreateScenarioEditorScreen(opts));
       }
       ImGui::HelpTooltip("Go to the referenced scenario. All current edits will be lost.");
     }

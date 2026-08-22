@@ -46,6 +46,10 @@ class Application {
   virtual int GetScreenStackSize() const = 0;
   virtual std::shared_ptr<Screen> GetCurrentScreen() = 0;
 
+  virtual void ReturnToHomeScreen() = 0;
+  virtual void PushNextScreen(std::shared_ptr<Screen> next_screen) = 0;
+  virtual void PopCurrentScreen() = 0;
+
   virtual void NewImGuiFrame() = 0;
   virtual bool BeginFullscreenWindow(const std::string& id = "Fullscreen") = 0;
 

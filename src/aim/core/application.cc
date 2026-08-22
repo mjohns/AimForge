@@ -766,6 +766,18 @@ class ApplicationImpl : public Application {
     return screen_stack_.size() > 0 ? screen_stack_.back() : nullptr;
   }
 
+  void ReturnToHomeScreen() override {
+    GetCurrentScreen()->ReturnHome();
+  }
+
+  void PushNextScreen(std::shared_ptr<Screen> next_screen) override {
+    GetCurrentScreen()->PushNextScreen(std::move(next_screen));
+  }
+
+  void PopCurrentScreen() override {
+    GetCurrentScreen()->PopSelf();
+  }
+
   int GetScreenStackSize() const override {
     return screen_stack_.size();
   }

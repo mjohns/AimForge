@@ -123,13 +123,13 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (!is_readonly && ImGui::Selectable("Edit")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("Copy")) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable("Select variation")) {
       dialogs->select_variation_dialog.NotifyOpen(scenario_name);
@@ -166,7 +166,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     }
     if (ImGui::BeginMenu("Advanced")) {
       if (ImGui::Selectable("View stats")) {
-        app.GetCurrentScreen()->PushNextScreen(CreateStatsScreen(
+        app.PushNextScreen(CreateStatsScreen(
             scenario_name, app.stats_manager().GetLatestRunId(scenario_name), false, &app));
       }
       if (ImGui::Selectable("Copy as reference")) {
@@ -174,7 +174,7 @@ void DrawScenarioRightClickMenu(const char* popup_id,
         opts.scenario_name = scenario_name;
         opts.is_new_copy = true;
         opts.copy_as_reference = true;
-        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+        app.PushNextScreen(CreateScenarioEditorScreen(opts));
       }
       if (ImGui::Selectable("Create levels playlist")) {
         dialogs->create_levels_playlist_dialog.NotifyOpen(scenario_name);
@@ -238,7 +238,7 @@ class ScenarioBrowserComponent {
       ScenarioEditorOptions opts;
       opts.scenario_name = "";
       opts.is_new_copy = true;
-      app_->GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+      app_->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
 
     ImGui::SpacedSeparator();

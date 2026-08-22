@@ -460,13 +460,13 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
     if (ImGui::Selectable(std::format("{} Edit", icons::kEdit))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
-      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable(std::format("{} View", icons::kSearch))) {
       app.scenario_manager().SetCurrentScenario(scenario_name);
@@ -480,7 +480,7 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
         opts.is_new_copy = true;
         opts.add_to_playlist = run.playlist.name;
         opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
-        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
+        app.PushNextScreen(CreateScenarioEditorScreen(opts));
       }
     }
     if (ImGui::BeginMenu("Add to")) {
@@ -574,7 +574,7 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
       run->current_index = i;
       app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
       app.scenario_manager().SetCurrentScenario(item.scenario());
-      app.GetCurrentScreen()->ReturnHome();
+      app.ReturnToHomeScreen();
     }
     PlaylistRunRightClickMenu(item.scenario(), *run);
 
