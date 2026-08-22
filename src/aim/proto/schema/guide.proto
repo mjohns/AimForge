@@ -1,0 +1,14 @@
+edition = "2023";
+
+package aim;
+
+message GuideSection {
+  string text = 1;
+
+  repeated string playlists = 2;
+  repeated string guides = 3;
+}
+
+message GuideDef {
+  repeated GuideSection sections = 1;
+}
