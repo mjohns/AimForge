@@ -198,7 +198,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
       ImGui::OpenPopup(menu_id);
     }
 
-    auto highest_complete_level = GetHighestCompleteLevel(run.get());
+    auto highest_complete_level = app_.playlist_manager().GetHighestCompleteLevel(
+        run->playlist, app_.scenario_manager(), app_.stats_manager());
+
     if (highest_complete_level) {
       std::string text = std::format("L{}", MaybeIntToString(*highest_complete_level, 2));
       ImGui::SameLine();
@@ -231,41 +233,6 @@ class PlaylistComponentImpl : public PlaylistComponent {
   }
 
  private:
-  // TODO: This logic should be in Playlist/PlaylistRun or somewhere in non ui code.
-  std::optional<float> GetHighestCompleteLevel(PlaylistRun* run) {
-    if (!run->playlist.def().has_levels()) {
-      return {};
-    }
-    std::optional<float> highest_level;
-    for (const auto& item : run->progress_list) {
-      NameInfo name = GetScenarioNameInfo(item.item.scenario());
-      if (!name.level) {
-        continue;
-      }
-      float this_level = *name.level;
-      auto stats = app_.stats_manager().GetAggregateStats(item.item.scenario());
-      if (stats.total_runs <= 0) {
-        continue;
-      }
-      auto scenario_def = app_.scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
-      if (!scenario_def) {
-        continue;
-      }
-      float level = GetScenarioScoreLevel(stats.high_score_stats.score,
-                                          GetTargetScore(scenario_def->score_targets(), run));
-      if (level < 5) {
-        continue;
-      }
-
-      if (!highest_level) {
-        highest_level = this_level;
-      } else if (this_level > *highest_level) {
-        highest_level = this_level;
-      }
-    }
-    return highest_level;
-  }
-
   void ResetForNewCurrentPlaylist() {
     editor_component_ = {};
     showing_editor_ = false;
@@ -536,8 +503,9 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     if (stats.total_runs > 0) {
       auto scenario_def = app.scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
       if (scenario_def) {
-        level = GetScenarioScoreLevel(stats.high_score_stats.score,
-                                      GetTargetScore(scenario_def->score_targets(), run.get()));
+        level = GetScenarioScoreLevel(
+            stats.high_score_stats.score,
+            GetTargetScore(scenario_def->score_targets(), run->playlist.def()));
         if (level > 0) {
           has_score_level = true;
         }

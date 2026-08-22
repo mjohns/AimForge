@@ -78,7 +78,7 @@ void Text(const std::string& val);
 
 bool Button(const std::string& label, const ImVec2& size = ImVec2(0, 0));
 
-bool Selectable(const std::string& label);
+bool Selectable(const std::string& label, bool selected = false);
 
 bool SimpleDropdown(const std::string& id,
                     std::string* value,

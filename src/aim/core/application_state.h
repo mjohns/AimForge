@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -21,6 +20,7 @@ enum class AppScreen : int {
   SCENARIOS = 1,
   PLAYLISTS = 2,
   BUNDLES = 3,
+  GUIDES = 4,
 };
 
 class ApplicationState {

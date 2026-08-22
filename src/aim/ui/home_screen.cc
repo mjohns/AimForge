@@ -3,6 +3,7 @@
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
+#include "aim/common/simple_types.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/local_store.h"
 #include "aim/core/scenario_manager.h"
@@ -12,6 +13,7 @@
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/scenario_factory.h"
 #include "aim/ui/bundle_ui.h"
+#include "aim/ui/guide_ui.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/stats/stats_screen.h"
@@ -93,6 +95,7 @@ class HomeScreen : public UiScreen {
     playlist_list_component_ = CreatePlaylistListComponent(this);
     bundle_ui_component_ = CreateBundleUiComponent(this);
     scenarios_component_ = CreateScenariosComponent(app_);
+    guides_component_ = CreateGuidesComponent();
 
     auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
     if (selected_app_screen) {
@@ -215,13 +218,16 @@ class HomeScreen : public UiScreen {
 
       if (ImGui::BeginChild("PrimaryContent")) {
         if (app_screen_ == AppScreen::SCENARIOS) {
-          DrawScenariosScreen();
+          scenarios_component_->Show();
         }
         if (app_screen_ == AppScreen::PLAYLISTS) {
           DrawPlaylistsScreen();
         }
         if (app_screen_ == AppScreen::BUNDLES) {
-          DrawBundlesScreen();
+          bundle_ui_component_->Show();
+        }
+        if (app_screen_ == AppScreen::GUIDES) {
+          guides_component_->Show();
         }
         last_app_screen_ = app_screen_;
       }
@@ -275,6 +281,10 @@ class HomeScreen : public UiScreen {
 
   void DrawLeftNav() {
     AppScreen original_app_screen = app_screen_;
+    if (ImGui::Selectable(std::format("{} Guides", icons::kMap).c_str(),
+                          app_screen_ == AppScreen::GUIDES)) {
+      app_screen_ = AppScreen::GUIDES;
+    }
     if (ImGui::Selectable(std::format("{} Playlists", icons::kList).c_str(),
                           app_screen_ == AppScreen::PLAYLISTS)) {
       app_screen_ = AppScreen::PLAYLISTS;
@@ -299,16 +309,10 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
-    ImGui::SetCursorAtBottom();
-    ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-  }
-
-  void DrawScenariosScreen() {
-    scenarios_component_->Show();
-  }
-
-  void DrawBundlesScreen() {
-    bundle_ui_component_->Show();
+    if (kIsDebugBuild) {
+      ImGui::SetCursorAtBottom();
+      ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+    }
   }
 
   void DrawPlaylistsScreen() {
@@ -353,6 +357,7 @@ class HomeScreen : public UiScreen {
   std::unique_ptr<PlaylistListComponent> playlist_list_component_;
   std::unique_ptr<BundleUiComponent> bundle_ui_component_;
   std::unique_ptr<ScenariosComponent> scenarios_component_;
+  std::unique_ptr<GuidesComponent> guides_component_;
   bool request_dpi_ = false;
   SetInitialDpiDialog set_dpi_dialog_;
 };

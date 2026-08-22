@@ -14,6 +14,7 @@
 namespace aim {
 
 class ScenarioManager;
+class StatsManager;
 
 struct CopyPlaylistOptions {
   std::string remove_prefix;
@@ -88,6 +89,10 @@ class PlaylistManager {
   virtual std::shared_ptr<PlaylistRun> GetCurrentRun() = 0;
 
   virtual std::shared_ptr<std::vector<std::string>> playlist_names() const = 0;
+
+  virtual std::optional<float> GetHighestCompleteLevel(const Playlist& playlist,
+                                                       ScenarioManager& scenario_manager,
+                                                       StatsManager& stats_manager) = 0;
 
   virtual std::vector<std::string> FindPlaylistsContainingScenario(
       const std::string& scenario_name) const = 0;

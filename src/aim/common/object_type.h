@@ -1,6 +1,7 @@
 #pragma once
 
-#include <assert.h>
+#include <cassert>
+#include <string>
 
 namespace aim {
 

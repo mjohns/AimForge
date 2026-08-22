@@ -12,6 +12,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/stats_manager.h"
 
 namespace aim {
 namespace {
@@ -434,6 +435,43 @@ class PlaylistManagerImpl : public PlaylistManager {
   void RegisterRenameListener(std::function<void(const std::string& old_name,
                                                  const std::string& new_name)> listener) override {
     rename_listeners_.push_back(std::move(listener));
+  }
+
+  std::optional<float> GetHighestCompleteLevel(const Playlist& playlist,
+                                               ScenarioManager& scenario_manager,
+                                               StatsManager& stats_manager) override {
+    if (!playlist.def().has_levels()) {
+      return {};
+    }
+    std::optional<float> highest_level;
+    for (const auto& item : playlist.items()) {
+      NameInfo name = GetScenarioNameInfo(item.scenario());
+      if (!name.level) {
+        continue;
+      }
+      float this_level = *name.level;
+      auto stats = stats_manager.GetAggregateStats(item.scenario());
+      if (stats.total_runs <= 0) {
+        continue;
+      }
+      auto scenario_def = scenario_manager.GetEvaluatedScenarioDef(item.scenario());
+      if (!scenario_def) {
+        continue;
+      }
+      float level =
+          GetScenarioScoreLevel(stats.high_score_stats.score,
+                                GetTargetScore(scenario_def->score_targets(), playlist.def()));
+      if (level < 5) {
+        continue;
+      }
+
+      if (!highest_level) {
+        highest_level = this_level;
+      } else if (this_level > *highest_level) {
+        highest_level = this_level;
+      }
+    }
+    return highest_level;
   }
 
  private:

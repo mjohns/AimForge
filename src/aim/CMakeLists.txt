@@ -177,6 +177,8 @@ set(SRCS
     "ui/reaction_time_screen.h"
     "ui/scenario_ui.cc"
     "ui/scenario_ui.h"
+    "ui/guide_ui.cc"
+    "ui/guide_ui.h"
     "ui/search_selector.cc"
     "ui/search_selector.h"
     "ui/select_variation_dialog.cc"
