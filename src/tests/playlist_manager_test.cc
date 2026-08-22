@@ -146,7 +146,7 @@ TEST(PlaylistManagerTest, PlaylistRun_IncrementRunDone) {
   auto run = mgr->GetRun(playlist);
   ASSERT_TRUE(run);
   EXPECT_THAT(run->progress_list.size(), Eq(3));
-  EXPECT_THAT(run->current_index, Eq(0));
+  EXPECT_THAT(run->current_index, Eq(-1));
 
   EXPECT_THAT(run->progress_list,
               ElementsAre(EqualsProgressItem(item1, 0),

@@ -156,6 +156,33 @@ TEST_F(AimDbTest, GetPlaylistNameMap) {
           Pair("p1", id1), Pair("p2", id2), Pair("p5", id5), Pair("p4", id4), Pair("p3", new_id3)));
 }
 
+TEST_F(AimDbTest, GetGuideNameMap) {
+  i64 id1 = db_->GetGuideId("p1");
+  ASSERT_THAT(id1, Gt(0));
+  i64 id2 = db_->GetGuideId("p2");
+  ASSERT_THAT(id2, Gt(0));
+  i64 id3 = db_->GetGuideId("p3");
+  ASSERT_THAT(id3, Gt(0));
+  i64 id4 = db_->GetGuideId("p4");
+  ASSERT_THAT(id4, Gt(0));
+  ASSERT_THAT(db_->GetGuideId("p4"), Eq(id4));
+
+  EXPECT_THAT(
+      db_->GetGuideIdMap(),
+      UnorderedElementsAre(Pair("p1", id1), Pair("p2", id2), Pair("p3", id3), Pair("p4", id4)));
+
+  i64 id5 = db_->RenameGuide("p3", "p5");
+  ASSERT_THAT(id5, Eq(id3));
+
+  i64 new_id3 = db_->GetGuideId("p3");
+  ASSERT_THAT(new_id3, Ne(id3));
+
+  EXPECT_THAT(
+      db_->GetGuideIdMap(),
+      UnorderedElementsAre(
+          Pair("p1", id1), Pair("p2", id2), Pair("p5", id5), Pair("p4", id4), Pair("p3", new_id3)));
+}
+
 TEST_F(AimDbTest, GetScenarioNameFromId) {
   i64 id1 = db_->GetScenarioId("s1");
   i64 id2 = db_->GetScenarioId("s2");
