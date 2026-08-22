@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cassert>
 
+#include "absl/cleanup/cleanup.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/implot_ext.h"
 #include "aim/common/times.h"
@@ -25,9 +26,16 @@ void DrawHistoryPlot(const std::string& id,
     return;
   }
 
-  ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
+  auto mantle = HexToImColor("#1e2030");
+  ImPlot::PushStyleColor(ImPlotCol_PlotBg, mantle.Value);
+  // ImPlot::PushStyleVar(ImPlotStyleVar_PlotBorderSize, 0.f);
+  ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
+  auto style_cleanup = absl::MakeCleanup([]() {
+    ImPlot::PopStyleColor();
+    ImPlot::PopStyleVar(1);
+  });
   ImPlotFlags plot_flags =
-      ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
+      ImPlotFlags_NoTitle | ImPlotFlags_NoLegend | ImPlotFlags_NoMenus | ImPlotFlags_NoBoxSelect;
   if (!ImPlot::BeginPlot("##ScoreHistory", ImVec2(-1, 0), plot_flags)) {
     return;
   }
@@ -46,8 +54,10 @@ void DrawHistoryPlot(const std::string& id,
     min_score = std::min(score, min_score);
   }
 
-  ImPlot::SetupAxis(ImAxis_X1, "Run number", ImPlotAxisFlags_NoDecorations);
-  ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
+  auto axis_flags =
+      ImPlotAxisFlags_NoDecorations | ImPlotAxisFlags_NoHighlight | ImPlotAxisFlags_NoSideSwitch;
+  ImPlot::SetupAxis(ImAxis_X1, "Run number", axis_flags);
+  ImPlot::SetupAxis(ImAxis_Y1, "Score", axis_flags);
 
   ImPlot::SetupAxisLimits(ImAxis_X1, 0.5, stats.size() + 0.5, ImPlotCond_Always);
 
