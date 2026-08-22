@@ -109,7 +109,7 @@
      }
     },
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
+     "targetRadiusMultiplier": 0.95
     },
     "waypointDef": {
      "targetPlacementStrategy": {
@@ -117,12 +117,6 @@
        {
         "info": {
          "description": "Bottom Left"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
         },
         "point": {
          "x": {
@@ -137,12 +131,6 @@
         "info": {
          "description": "Top Right"
         },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
         "point": {
          "x": {
           "xPercentValue": 0.49
@@ -155,12 +143,6 @@
        {
         "info": {
          "description": "Bottom Right"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
         },
         "point": {
          "x": {
@@ -175,12 +157,6 @@
         "info": {
          "description": "Top Left"
         },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
         "point": {
          "x": {
           "xPercentValue": -0.49
@@ -192,7 +168,7 @@
        },
        {
         "info": {
-         "description": "Random Left"
+         "description": "Bottom Left"
         },
         "xOffset": {
          "xPercentValue": -0.49
@@ -200,18 +176,12 @@
         "yOffset": {
          "yPercentValue": -0.2
         },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
+        "point": {
+         "x": {
+          "xPercentValue": -0.49
          },
-         "yLength": {
-          "yPercentValue": 0.44
+         "y": {
+          "yPercentValue": -0.48
          }
         }
        }
@@ -235,149 +205,18 @@
   {
    "name": "Box Tracking Close",
    "def": {
-    "durationSeconds": 30,
-    "shotType": {
-     "trackingInvincible": true
-    },
-    "targetDef": {
-     "numTargets": 1,
-     "profiles": [
-      {
-       "targetRadius": 1.2,
-       "speed": 100
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -60,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 114,
-      "width": 248
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
-    },
-    "waypointDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "description": "Bottom Left"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": -0.48
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Top Right"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": 0.48
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Bottom Right"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": -0.48
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Top Left"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": 0.48
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Random Left"
-        },
-        "xOffset": {
-         "xPercentValue": -0.49
-        },
-        "yOffset": {
-         "yPercentValue": -0.2
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "rectangle": {
-         "xLength": {
-          "value": 1
-         },
-         "yLength": {
-          "yPercentValue": 0.44
-         }
-        }
-       }
-      ],
-      "regionsInfo": {
-       "explicitOrder": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        1,
-        2,
-        3
-       ]
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "TSK Box Tracking",
+     "room": {
+      "cameraPosition": {
+       "x": 0,
+       "y": -60,
+       "z": 0
+      },
+      "simpleRoom": {
+       "height": 114,
+       "width": 248
       }
      }
     }
@@ -2099,400 +1938,18 @@
   {
    "name": "DVD Tracking Close",
    "def": {
-    "durationSeconds": 30,
-    "shotType": {
-     "trackingInvincible": true
-    },
-    "targetDef": {
-     "numTargets": 1,
-     "profiles": [
-      {
-       "targetRadius": 1.39999986,
-       "speed": 57
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": -54,
-      "z": 0
-     },
-     "simpleRoom": {
-      "height": 140,
-      "width": 145
-     }
-    },
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.950000048
-    },
-    "waypointDef": {
-     "targetPlacementStrategy": {
-      "regions": [
-       {
-        "info": {
-         "description": "Middle"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0
-         },
-         "y": {
-          "yPercentValue": 0
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "right side1"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": 0
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "left side1"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": -0.250000089
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "middle bottom"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.05
-         },
-         "y": {
-          "yPercentValue": -0.49
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "left side2"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": -0.1
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Up leftish"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.39
-         },
-         "y": {
-          "yPercentValue": 0.49
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "Up leftish bounce"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": 0.37
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "bottom right2"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": -0.3
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "bottom right2 bounce"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.35
-         },
-         "y": {
-          "yPercentValue": -0.49
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "mid left"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": 0.04
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "up mid rightish"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.1
-         },
-         "y": {
-          "yPercentValue": 0.49
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "up mid right bounce"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": 0.36
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "bottom left"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": -0.42
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "right upish"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": 0.2
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "up mid2"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.05
-         },
-         "y": {
-          "yPercentValue": 0.49
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "up left3"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.49
-         },
-         "y": {
-          "yPercentValue": 0.35
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "bottom right"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": 0.49
-         },
-         "y": {
-          "yPercentValue": -0.48
-         }
-        }
-       },
-       {
-        "info": {
-         "description": "bottom left make up"
-        },
-        "depth": {
-         "depthPercentValue": 0
-        },
-        "depthJitter": {
-         "depthPercentValue": 0
-        },
-        "point": {
-         "x": {
-          "xPercentValue": -0.4
-         },
-         "y": {
-          "yPercentValue": -0.49
-         }
-        }
-       }
-      ],
-      "regionsInfo": {
-       "explicitOrder": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        17,
-        13,
-        14,
-        15,
-        16
-       ]
+    "overrides": {},
+    "referenceDef": {
+     "scenarioName": "TSK DVD Tracking",
+     "room": {
+      "cameraPosition": {
+       "x": 0,
+       "y": -54,
+       "z": 0
+      },
+      "simpleRoom": {
+       "height": 130,
+       "width": 150
       }
      }
     }

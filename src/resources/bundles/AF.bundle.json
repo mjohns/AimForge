@@ -68,16 +68,17 @@
   {
    "name": "AlternateClick",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 1.79999971
+       "targetRadius": 1.8
       }
      ],
      "newestTargetIsGhost": true
@@ -115,7 +116,7 @@
           "xPercentValue": 0.08
          },
          "yLength": {
-          "yPercentValue": 0.300000072
+          "yPercentValue": 0.300000101
          }
         }
        },
@@ -152,10 +153,11 @@
   {
    "name": "AlternateClick Corners",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "clickSingle": true,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 2,
@@ -350,13 +352,14 @@
     "durationSeconds": 60,
     "shotType": {
      "clickSingle": true,
-     "removeClosestOnMiss": true
+     "removeClosestOnMiss": true,
+     "accuracyPenalty": "ACCURACY_PENALTY_SQRT"
     },
     "targetDef": {
      "numTargets": 2,
      "profiles": [
       {
-       "targetRadius": 1.5
+       "targetRadius": 1.8
       }
      ],
      "newestTargetIsGhost": true
@@ -452,8 +455,7 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 100,
-     "end": 120
+     "targetScore": 120
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -612,8 +614,7 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 80,
-     "end": 100
+     "targetScore": 100
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -970,6 +971,160 @@
    }
   },
   {
+   "name": "Angle Strafe",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 3.86,
+       "speed": 65
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 111,
+      "width": 150
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.965,
+     "speedMultiplier": 1.035
+    },
+    "scoreTargets": {
+     "targetScore": 55
+    },
+    "angleStrafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.9
+      },
+      "height": {
+       "yPercentValue": 0.9
+      }
+     },
+     "profiles": [
+      {
+       "info": {
+        "weight": 3
+       },
+       "distance": {
+        "xPercentValue": 0.36
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.115
+       },
+       "angle": 0,
+       "angleJitter": 17,
+       "directionChangePercent": 0.2
+      },
+      {
+       "info": {
+        "description": "Longer",
+        "weight": 1
+       },
+       "distance": {
+        "xPercentValue": 0.58
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.06
+       },
+       "angle": 0,
+       "angleJitter": 11,
+       "directionChangePercent": 0.4
+      }
+     ]
+    }
+   }
+  },
+  {
+   "name": "Angle Strafe Ladder",
+   "def": {
+    "durationSeconds": 30,
+    "shotType": {
+     "trackingInvincible": true
+    },
+    "targetDef": {
+     "numTargets": 1,
+     "profiles": [
+      {
+       "targetRadius": 5,
+       "speed": 50
+      }
+     ]
+    },
+    "room": {
+     "cameraPosition": {
+      "x": 0,
+      "y": -200,
+      "z": 0
+     },
+     "simpleRoom": {
+      "height": 111,
+      "width": 150
+     }
+    },
+    "levelOverrides": {
+     "targetRadiusMultiplier": 0.98,
+     "speedMultiplier": 1.02
+    },
+    "scoreTargets": {
+     "targetScore": 55
+    },
+    "angleStrafeDef": {
+     "bounds": {
+      "width": {
+       "xPercentValue": 0.9
+      },
+      "height": {
+       "yPercentValue": 0.9
+      }
+     },
+     "profiles": [
+      {
+       "info": {
+        "weight": 3
+       },
+       "distance": {
+        "xPercentValue": 0.36
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.12
+       },
+       "angle": 0,
+       "angleJitter": 17,
+       "directionChangePercent": 0.2
+      },
+      {
+       "info": {
+        "description": "Longer",
+        "weight": 1
+       },
+       "distance": {
+        "xPercentValue": 0.6
+       },
+       "distanceJitter": {
+        "xPercentValue": 0.05
+       },
+       "angle": 0,
+       "angleJitter": 11,
+       "directionChangePercent": 0.31
+      }
+     ]
+    }
+   }
+  },
+  {
    "name": "Ballsheet",
    "def": {
     "durationSeconds": 30,
@@ -1003,10 +1158,10 @@
        {
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.9
+          "xPercentValue": 0.85
          },
          "yLength": {
-          "yPercentValue": 0.9
+          "yPercentValue": 0.85
          }
         }
        }
@@ -1617,69 +1772,6 @@
    }
   },
   {
-   "name": "GlideTrack",
-   "def": {
-    "durationSeconds": 60,
-    "shotType": {
-     "trackingInvincible": true
-    },
-    "targetDef": {
-     "numTargets": 1,
-     "profiles": [
-      {
-       "targetRadius": 1.8,
-       "speed": 95,
-       "acceleration": 133,
-       "pill": {
-        "height": 8.59998
-       }
-      }
-     ]
-    },
-    "room": {
-     "cameraPosition": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-     },
-     "cylinderRoom": {
-      "height": 240,
-      "radius": 200,
-      "sideAngleDegrees": 65,
-      "widthDegrees": 215.999985
-     }
-    },
-    "overrides": {},
-    "levelOverrides": {
-     "targetRadiusMultiplier": 0.98,
-     "speedMultiplier": 1.03
-    },
-    "angleStrafeDef": {
-     "bounds": {
-      "width": {
-       "xPercentValue": 0.85
-      },
-      "height": {
-       "yPercentValue": 0.9
-      }
-     },
-     "profiles": [
-      {
-       "distance": {
-        "xPercentValue": 0.669999778
-       },
-       "distanceJitter": {
-        "xPercentValue": 0
-       },
-       "angle": 0,
-       "angleJitter": 19,
-       "directionChangePercent": 0.5
-      }
-     ]
-    }
-   }
-  },
-  {
    "name": "LinearClick",
    "def": {
     "durationSeconds": 60,
@@ -1815,19 +1907,17 @@
   {
    "name": "LinearSwitch",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingKill": true,
      "healthSeconds": 0.6,
-     "removeIfBelowHealthSeconds": 0.1
+     "removeIfBelowHealthSeconds": 0.12
     },
     "targetDef": {
-     "numTargets": 4,
+     "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 2.19999981,
-       "targetRadiusJitter": 1.49011612e-08,
+       "targetRadius": 2.2,
        "speed": 48
       }
      ]
@@ -1844,21 +1934,13 @@
      }
     },
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.960000038
+     "targetRadiusMultiplier": 0.96
     },
     "linearDef": {
      "angle": 0,
-     "angleJitter": 11,
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
-        "depth": {
-         "value": 0
-        },
-        "depthJitter": {
-         "value": 0
-        },
         "rectangle": {
          "xLength": {
           "value": 50
@@ -1881,16 +1963,21 @@
   {
    "name": "MicroClick",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
-     "clickSingle": true
+     "clickSingle": true,
+     "reload": {
+      "maxShots": 3,
+      "numToReloadOnHit": 3,
+      "reloadTime": 0.5
+     },
+     "accuracyPenalty": "ACCURACY_PENALTY_NONE"
     },
     "targetDef": {
      "numTargets": 3,
      "profiles": [
       {
-       "info": {},
-       "targetRadius": 1.59999967
+       "targetRadius": 1.6
       }
      ]
     },
@@ -1913,7 +2000,6 @@
      "targetPlacementStrategy": {
       "regions": [
        {
-        "info": {},
         "depth": {
          "value": 0
         },
@@ -2007,7 +2093,8 @@
     "referenceDef": {
      "scenarioName": "AF MicroClick",
      "shotType": {
-      "poke": true
+      "poke": true,
+      "pokeKillTimeSeconds": 0.08
      }
     }
    }
@@ -2058,14 +2145,14 @@
        }
       ],
       "minDistance": {
-       "xPercentValue": 0.25
+       "xPercentValue": 0.35
       }
      }
     }
    }
   },
   {
-   "name": "OmniFlick CloseMid",
+   "name": "OmniFlick Close2",
    "def": {
     "overrides": {
      "wallWidthMultiplier": 1.15,
@@ -2089,6 +2176,18 @@
    }
   },
   {
+   "name": "OmniFlick Far2",
+   "def": {
+    "overrides": {
+     "wallWidthMultiplier": 1.3,
+     "wallHeightMultiplier": 1.3
+    },
+    "referenceDef": {
+     "scenarioName": "AF OmniFlick Far"
+    }
+   }
+  },
+  {
    "name": "OmniFlick Mid",
    "def": {
     "overrides": {
@@ -2101,7 +2200,7 @@
    }
   },
   {
-   "name": "OmniFlick MidFar",
+   "name": "OmniFlick Mid2",
    "def": {
     "overrides": {
      "wallWidthMultiplier": 1.15,
@@ -2109,18 +2208,6 @@
     },
     "referenceDef": {
      "scenarioName": "AF OmniFlick Mid"
-    }
-   }
-  },
-  {
-   "name": "OmniFlick VeryFar",
-   "def": {
-    "overrides": {
-     "wallWidthMultiplier": 1.3,
-     "wallHeightMultiplier": 1.3
-    },
-    "referenceDef": {
-     "scenarioName": "AF OmniFlick Far"
     }
    }
   },
@@ -3012,7 +3099,8 @@
        },
        "distanceJitter": {
         "xPercentValue": 0
-       }
+       },
+       "startSpeedPercent": 0.33
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
@@ -3175,12 +3263,13 @@
         "xPercentValue": 0.64
        },
        "distanceJitter": {
-        "xPercentValue": 0.150000036
+        "xPercentValue": 0.15
        },
        "speedMultiplier": 1,
        "speedMultiplierJitter": 0.15,
        "accelerationMultiplier": 1,
-       "accelerationMultiplierJitter": 0.15
+       "accelerationMultiplierJitter": 0.15,
+       "startSpeedPercent": 0.2
       }
      ],
      "leftRightInitialDirection": "DIRECTION_NEGATIVE",
@@ -3236,7 +3325,8 @@
        },
        "distanceJitter": {
         "xPercentValue": 0
-       }
+       },
+       "startSpeedPercent": 0.25
       }
      ],
      "leftRightInitialDirection": "DIRECTION_POSITIVE",
@@ -3360,7 +3450,7 @@
   {
    "name": "SmoothSwerve",
    "def": {
-    "durationSeconds": 60,
+    "durationSeconds": 40,
     "shotType": {
      "trackingInvincible": true
     },
@@ -3438,12 +3528,10 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 50,
-     "end": 75
+     "targetScore": 75
     },
     "referenceDef": {
      "scenarioName": "AF SmoothSwerve",
-     "durationSeconds": 45,
      "description": "Ladder for \"AF SmoothSwerve\" where the target gets smaller.",
      "explicitTargetRadius": 6
     }
@@ -3626,7 +3714,8 @@
     "referenceDef": {
      "scenarioName": "AF SnakeClick",
      "shotType": {
-      "poke": true
+      "poke": true,
+      "pokeKillTimeSeconds": 0.08
      }
     }
    }
@@ -3664,8 +3753,7 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 55,
-     "end": 80
+     "targetScore": 80
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3733,8 +3821,7 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 150,
-     "end": 200
+     "targetScore": 200
     },
     "staticDef": {
      "targetPlacementStrategy": {
@@ -3886,8 +3973,7 @@
      "targetRadiusMultiplier": 0.96
     },
     "scoreTargets": {
-     "start": 100,
-     "end": 140
+     "targetScore": 140
     },
     "referenceDef": {
      "scenarioName": "AF Static3",
@@ -4082,16 +4168,14 @@
     "durationSeconds": 60,
     "shotType": {
      "trackingKill": true,
-     "healthSeconds": 0.5,
+     "healthSeconds": 0.4,
      "removeIfBelowHealthSeconds": 0.1
     },
     "targetDef": {
      "numTargets": 5,
      "profiles": [
       {
-       "info": {},
        "targetRadius": 2,
-       "targetRadiusJitter": 0,
        "speedJitter": 0
       }
      ]
@@ -4103,8 +4187,8 @@
       "z": 0
      },
      "simpleRoom": {
-      "height": 150,
-      "width": 231
+      "height": 114,
+      "width": 196
      }
     },
     "overrides": {},
@@ -4143,10 +4227,10 @@
         },
         "rectangle": {
          "xLength": {
-          "xPercentValue": 0.65
+          "xPercentValue": 0.85
          },
          "yLength": {
-          "yPercentValue": 0.55
+          "yPercentValue": 0.85
          }
         }
        }
@@ -4248,12 +4332,11 @@
     },
     "overrides": {},
     "levelOverrides": {
-     "targetRadiusMultiplier": 0.965,
-     "speedMultiplier": 1.035
+     "targetRadiusMultiplier": 0.98,
+     "speedMultiplier": 1.025
     },
     "scoreTargets": {
-     "start": 35,
-     "end": 55
+     "targetScore": 55
     },
     "strafeDef": {
      "bounds": {
@@ -4904,6 +4987,17 @@
    }
   },
   {
+   "name": "Angle Strafe Ladder",
+   "def": {
+    "description": "",
+    "levels": {
+     "baseScenario": "AF Angle Strafe Ladder",
+     "maxLevel": 40,
+     "numPlaysPerLevel": 1
+    }
+   }
+  },
+  {
    "name": "Clicking",
    "def": {
     "description": "",
@@ -5117,7 +5211,7 @@
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick CloseMid",
+      "scenario": "AF OmniFlick Close2",
       "numPlays": 1
      },
      {
@@ -5125,7 +5219,7 @@
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick MidFar",
+      "scenario": "AF OmniFlick Mid2",
       "numPlays": 1
      },
      {
@@ -5133,31 +5227,7 @@
       "numPlays": 1
      },
      {
-      "scenario": "AF OmniFlick VeryFar",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick Close Poke",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick CloseMid Poke",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick Mid Poke",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick MidFar Poke",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick Far Poke",
-      "numPlays": 1
-     },
-     {
-      "scenario": "AF OmniFlick VeryFar Poke",
+      "scenario": "AF OmniFlick Far2",
       "numPlays": 1
      }
     ]
@@ -5169,7 +5239,7 @@
     "description": "",
     "levels": {
      "baseScenario": "AF SmoothSwerve Precision Ladder",
-     "maxLevel": 40,
+     "maxLevel": 45,
      "numPlaysPerLevel": 1
     }
    }
@@ -5267,7 +5337,7 @@
     "description": "",
     "levels": {
      "baseScenario": "AF Strafe Mixed Ladder",
-     "maxLevel": 30,
+     "maxLevel": 40,
      "numPlaysPerLevel": 1
     }
    }
