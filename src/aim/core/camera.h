@@ -3,10 +3,9 @@
 #include <optional>
 
 #include "aim/common/simple_types.h"
-#include "aim/common/util.h"
 #include "aim/proto/scenario.pb.h"
-#include "glm/mat4x4.hpp"
-#include "glm/vec3.hpp"
+#include "glm/mat4x4.hpp"  // IWYU pragma: keep
+#include "glm/vec3.hpp"    // IWYU pragma: keep
 
 namespace aim {
 

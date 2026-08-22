@@ -4,7 +4,6 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "aim/common/simple_types.h"
 #include "aim/core/file_system.h"

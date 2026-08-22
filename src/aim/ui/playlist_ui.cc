@@ -405,18 +405,18 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     }
     const char* menu_id = "PlaylistItemMenu";
     if (ImGui::BeginPopupContextItem(menu_id)) {
-      if (ImGui::Selectable("Copy")) {
+      if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
         auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
         if (playlist) {
           copy_dialog_.NotifyOpen(*playlist);
         }
       }
-      if (ImGui::Selectable("Remove from recents")) {
+      if (ImGui::Selectable(std::format("{} Recents", icons::kClose))) {
         app_.history_manager().DeleteRecentView(ObjectType::PLAYLIST, playlist_name);
       }
 
       ImGui::SpacedSeparator();
-      if (ImGui::Selectable("Delete")) {
+      if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
         auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
         if (playlist) {
           delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
@@ -455,21 +455,22 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
   const char* popup_id = "ScenarioItemMenu";
   bool is_levels_playlist = run.playlist.def().has_levels();
   if (ImGui::BeginPopupContextItem(popup_id)) {
-    if (ImGui::Selectable("Edit")) {
+    if (ImGui::Selectable(std::format("{} Edit", icons::kEdit))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       screen.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
-    if (ImGui::Selectable("Copy")) {
+    if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
       screen.PushNextScreen(CreateScenarioEditorScreen(opts));
     }
-    if (ImGui::Selectable("View")) {
+    if (ImGui::Selectable(std::format("{} View", icons::kSearch))) {
       screen.app().scenario_manager().SetCurrentScenario(scenario_name);
       screen.app().state().go_to_app_screen = AppScreen::SCENARIOS;
     }
+    ImGui::Separator();
     if (!is_levels_playlist) {
       if (ImGui::Selectable("Add copy")) {
         ScenarioEditorOptions opts;

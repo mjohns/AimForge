@@ -1,6 +1,5 @@
 #pragma once
 
-#include <format>
 #include <string>
 #include <string_view>
 

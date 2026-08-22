@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "aim/common/object_type.h"
-#include "aim/common/simple_types.h"
 #include "aim/database/aim_db.h"
 
 namespace aim {
