@@ -194,7 +194,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
     }
 
     ImGui::SameLine();
-    if (ImGui::Selectable(icons::kMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+    if (ImGui::MenuButton()) {
       ImGui::OpenPopup(menu_id);
     }
 

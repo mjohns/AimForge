@@ -365,6 +365,9 @@ bool ChipSelector(const std::string& id,
 
 bool SelectableButton(const std::string& label);
 
+float GetMenuButtonWidth();
+bool MenuButton();
+
 bool BeginDefaultPopupModal(const char* id, bool* draw);
 
 class Popup {

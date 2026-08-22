@@ -129,9 +129,8 @@ void DrawTopBar(UiScreen* screen) {
     normal_font.Pop();
     ImGui::EndPopup();
   }
-  float char_x = ImGui::GetDefaultCharSizeX();
-  ImGui::SetCursorAtRight(char_x * 2);
-  if (ImGui::SelectableButton(icons::kMoreVert)) {
+  ImGui::SetCursorAtRight(ImGui::GetMenuButtonWidth() * 1.2);
+  if (ImGui::MenuButton()) {
     ImGui::OpenPopup(menu_id);
   }
 

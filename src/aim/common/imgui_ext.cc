@@ -10,6 +10,8 @@
 namespace ImGui {
 namespace {
 
+constexpr float kMenuButtonWidthMultiplier = 0.5;
+
 static double RoundDouble5(double value) {
   double multiplier = 100000;
   return std::round(value * multiplier) / multiplier;
@@ -35,6 +37,40 @@ bool Button(const std::string& label, const ImVec2& size) {
 
 bool Selectable(const std::string& label, bool selected) {
   return Selectable(label.c_str(), selected);
+}
+
+float GetMenuButtonWidth() {
+  return ImGui::CalcTextSize(aim::icons::kMoreVert).x * kMenuButtonWidthMultiplier;
+}
+
+bool MenuButton() {
+  // auto cleanup = absl::MakeCleanup([]() { ImGui::PopStyleVar(2); });
+
+  auto full_size = ImGui::CalcTextSize(aim::icons::kMoreVert);
+  // full_size.y = ImGui::GetFrameHeight();
+  auto size = full_size;
+  size.x *= kMenuButtonWidthMultiplier;
+
+  // bool selected = ImGui::InvisibleButton("##menu_button", size);
+  // ImVec2 pos = ImGui::GetCursorScreenPos();
+  // if (ImGui::IsItemHovered()) {
+  //   ImU32 hover_color = ImGui::GetColorU32(ImGuiCol_HeaderHovered);
+  //   ImGui::GetWindowDrawList()->AddRectFilled(
+  //       pos, ImVec2(pos.x + size.x, pos.y + size.y), hover_color);
+  // }
+  //
+  // ImGui::SetCursorScreenPos(pos);
+  // ImGui::Text("%s", aim::icons::kMoreVert);
+  //
+  // return selected;
+  //
+  auto pos = GetCursorPos();
+  pos.x -= ((full_size.x - size.x) * 0.5);
+  bool selected = Selectable("##selectable_menu", false, 0, size);
+  ImGui::SameLine();
+  ImGui::SetCursorPos(pos);
+  ImGui::Text("%s", aim::icons::kMoreVert);
+  return selected;
 }
 
 bool SimpleDropdown(const std::string& id,

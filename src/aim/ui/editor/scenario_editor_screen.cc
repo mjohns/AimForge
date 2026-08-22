@@ -191,7 +191,7 @@ class ScenarioEditorScreen : public UiScreen {
       ImGui::EndPopup();
     }
     ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
+    if (ImGui::MenuButton()) {
       ImGui::OpenPopup(advanced_menu_id);
     }
 

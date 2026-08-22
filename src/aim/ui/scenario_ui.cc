@@ -570,7 +570,7 @@ class ScenariosComponentImpl : public ScenariosComponent {
     const char* popup_id = "CurrentScenarioMenu";
     DrawScenarioRightClickMenu(popup_id, item.name, &dialogs_, app_);
     ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
+    if (ImGui::MenuButton()) {
       ImGui::OpenPopup(popup_id);
     }
 

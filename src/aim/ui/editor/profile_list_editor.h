@@ -80,7 +80,7 @@ void DrawOrderListEditor(const std::string& type_name,
       ImGui::EndPopup();
     }
     ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
+    if (ImGui::MenuButton()) {
       ImGui::OpenPopup(item_menu_id);
     }
     /*
@@ -218,7 +218,7 @@ void DrawProfileList(const std::string& id,
     ImGui::SetNextItemWidth(char_x * 22);
     ImGui::InputText("##DescriptionInput", p->mutable_info()->mutable_description());
     ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kMoreVert)) {
+    if (ImGui::MenuButton()) {
       ImGui::OpenPopup(item_menu_id);
     }
 

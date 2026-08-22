@@ -505,7 +505,7 @@ class ThemeEditorScreen : public UiScreen {
       }
       ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
       ImGui::SameLine();
-      if (ImGui::SelectableButton(icons::kMoreVert)) {
+      if (ImGui::MenuButton()) {
         ImGui::OpenPopup(popup_id);
       }
     }

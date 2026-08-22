@@ -127,7 +127,7 @@ class CrosshairEditorScreen : public UiScreen {
       }
       ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
       ImGui::SameLine();
-      if (ImGui::SelectableButton(icons::kMoreVert)) {
+      if (ImGui::MenuButton()) {
         ImGui::OpenPopup(popup_id);
       }
 
@@ -233,7 +233,7 @@ class CrosshairEditorScreen : public UiScreen {
       ImGui::AlignTextToFramePadding();
       ImGui::TextFmt("Layer {}", i + 1);
       ImGui::SameLine();
-      if (ImGui::Selectable(icons::kMoreVert, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
+      if (ImGui::MenuButton()) {
         ImGui::OpenPopup(item_menu_id);
       }
       CrosshairLayer& l = *c.mutable_layers(i);
