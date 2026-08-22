@@ -655,7 +655,7 @@ class StatsScreen : public UiScreen {
 
       DrawHistoryPlot(std::format("##ScoreHistory_{}_{}", scenario_name_, run_id_),
                       details_,
-                      40,
+                      90,
                       score_target_);
 
       if (scores_over_time_) {
