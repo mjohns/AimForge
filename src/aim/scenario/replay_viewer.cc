@@ -568,6 +568,7 @@ class ReplayViewerScreen : public Screen {
   }
 
   void OnAttach() override {
+    app_.SetPresentMode(settings_.present_mode());
     timer_.StartLoop();
     timer_.ResumeRun();
   }
