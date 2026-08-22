@@ -175,7 +175,6 @@ class Scenario : public Screen {
   const CreateScenarioParams create_params_;
   ImU32 health_color_;
   ImU32 health_background_color_;
-  std::vector<float> scores_;
 };
 
 }  // namespace aim
