@@ -17,6 +17,7 @@
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/playlist_editor_component.h"
 #include "aim/ui/select_variation_dialog.h"
+#include "aim/ui/ui_app.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -226,7 +227,7 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
     ImGui::Spacing();
     ImGui::Spacing();
-    PlaylistRunComponent("PlaylistRun", run, screen_);
+    PlaylistRunComponent("PlaylistRun", run);
   }
 
  private:
@@ -451,24 +452,25 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
 
 }  // namespace
 
-void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& run, Screen& screen) {
+void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& run) {
   const char* popup_id = "ScenarioItemMenu";
   bool is_levels_playlist = run.playlist.def().has_levels();
+  auto& app = GetUiApp();
   if (ImGui::BeginPopupContextItem(popup_id)) {
     if (ImGui::Selectable(std::format("{} Edit", icons::kEdit))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
       ScenarioEditorOptions opts;
       opts.scenario_name = scenario_name;
       opts.is_new_copy = true;
-      screen.PushNextScreen(CreateScenarioEditorScreen(opts));
+      app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
     }
     if (ImGui::Selectable(std::format("{} View", icons::kSearch))) {
-      screen.app().scenario_manager().SetCurrentScenario(scenario_name);
-      screen.app().state().go_to_app_screen = AppScreen::SCENARIOS;
+      app.scenario_manager().SetCurrentScenario(scenario_name);
+      app.state().go_to_app_screen = AppScreen::SCENARIOS;
     }
     ImGui::Separator();
     if (!is_levels_playlist) {
@@ -478,16 +480,16 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
         opts.is_new_copy = true;
         opts.add_to_playlist = run.playlist.name;
         opts.force_bundle_name = ResourceName::Parse(opts.add_to_playlist).bundle_name();
-        screen.PushNextScreen(CreateScenarioEditorScreen(opts));
+        app.GetCurrentScreen()->PushNextScreen(CreateScenarioEditorScreen(opts));
       }
     }
     if (ImGui::BeginMenu("Add to")) {
       std::string selected_playlist;
       int playlist_count = 0;
-      const auto& recent_playlists = screen.app().history_manager().recent_playlists();
+      const auto& recent_playlists = app.history_manager().recent_playlists();
       for (int i = 0; i < recent_playlists.size(); ++i) {
         const std::string& playlist_name = recent_playlists[i];
-        auto maybe_playlist = screen.app().playlist_manager().GetPlaylist(playlist_name);
+        auto maybe_playlist = app.playlist_manager().GetPlaylist(playlist_name);
         if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
           continue;
         }
@@ -501,8 +503,8 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
         }
       }
       if (selected_playlist.size() > 0) {
-        screen.app().playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario_name);
-        screen.app().bundle_manager().SaveDirtyBundles();
+        app.playlist_manager().AddScenarioToPlaylist(selected_playlist, scenario_name);
+        app.bundle_manager().SaveDirtyBundles();
       }
       ImGui::EndMenu();
     }
@@ -511,12 +513,13 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
   ImGui::OpenPopupOnItemClick(popup_id, ImGuiPopupFlags_MouseButtonRight);
 }
 
-void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> run, Screen& screen) {
+void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> run) {
   ImGui::IdGuard cid(id);
   if (!ImGui::BeginChild("PlaylistRunComponent")) {
     ImGui::EndChild();
     return;
   }
+  auto& app = GetUiApp();
   i64 now_micros = GetNowEpochMicros();
   std::string sample_progress_text = "00/00";
   float progress_width = ImGui::CalcTextSize(sample_progress_text.c_str()).x;
@@ -528,11 +531,10 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   std::vector<std::string> scores_help;
   bool has_score_level = false;
   for (const auto& item : progress_items) {
-    auto stats = screen.app().stats_manager().GetAggregateStats(item.item.scenario());
+    auto stats = app.stats_manager().GetAggregateStats(item.item.scenario());
     float level = 0;
     if (stats.total_runs > 0) {
-      auto scenario_def =
-          screen.app().scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
+      auto scenario_def = app.scenario_manager().GetEvaluatedScenarioDef(item.item.scenario());
       if (scenario_def) {
         level = GetScenarioScoreLevel(stats.high_score_stats.score,
                                       GetTargetScore(scenario_def->score_targets(), run.get()));
@@ -570,11 +572,11 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
     std::string label = item.scenario();
     if (ImGui::Selectable(label.c_str(), is_selected)) {
       run->current_index = i;
-      screen.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
-      screen.app().scenario_manager().SetCurrentScenario(item.scenario());
-      screen.ReturnHome();
+      app.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+      app.scenario_manager().SetCurrentScenario(item.scenario());
+      app.GetCurrentScreen()->ReturnHome();
     }
-    PlaylistRunRightClickMenu(item.scenario(), *run, screen);
+    PlaylistRunRightClickMenu(item.scenario(), *run);
 
     ImGui::TableNextColumn();
     if (scores[i] > 0) {

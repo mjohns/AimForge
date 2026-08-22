@@ -9,9 +9,7 @@
 
 namespace aim {
 
-void PlaylistRunComponent(const std::string& id,
-                          std::shared_ptr<PlaylistRun> playlist_run,
-                          Screen& screen);
+void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> playlist_run);
 
 class PlaylistComponent {
  public:

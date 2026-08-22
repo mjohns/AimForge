@@ -679,7 +679,7 @@ class StatsScreen : public UiScreen {
 
       ImGui::TableNextColumn();
       if (playlist_run_) {
-        PlaylistRunComponent("PlaylistRun", playlist_run_, *this);
+        PlaylistRunComponent("PlaylistRun", playlist_run_);
       }
 
       ImGui::EndTable();
