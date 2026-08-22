@@ -599,7 +599,7 @@ class ScenarioEditorScreen : public UiScreen {
     params.name = name_.full_name();
     params.force_start_immediately = true;
     params.from_scenario_editor = true;
-    PushNextScreen(CreateScenario(params, &app_));
+    PushNextScreen(CreateScenario(params));
   }
 
   ScenarioDef def_;

@@ -1,6 +1,5 @@
 #include <memory>
 
-#include "aim/core/application.h"
 #include "aim/scenario/base_scenario.h"
 #include "aim/scenario/scenario.h"
 #include "aim/scenario/target_placement.h"
@@ -11,8 +10,7 @@ namespace {
 
 class StaticScenario : public BaseScenario {
  public:
-  explicit StaticScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app) {
+  explicit StaticScenario(const CreateScenarioParams& params) : BaseScenario(params) {
     wall_target_placer_ =
         CreateWallTargetPlacer(Wall::ForRoom(params.def.room()),
                                params.def.static_def().target_placement_strategy(),
@@ -32,9 +30,8 @@ class StaticScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateStaticScenario(const CreateScenarioParams& params,
-                                               Application* app) {
-  return std::make_unique<StaticScenario>(params, app);
+std::unique_ptr<Scenario> CreateStaticScenario(const CreateScenarioParams& params) {
+  return std::make_unique<StaticScenario>(params);
 }
 
 }  // namespace aim

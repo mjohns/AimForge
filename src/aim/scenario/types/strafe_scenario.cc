@@ -112,11 +112,11 @@ class MovementControllerImpl : public MovementController {
 
 class StrafeScenario : public BaseScenario {
  public:
-  explicit StrafeScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit StrafeScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     if (def_.strafe_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, def_.strafe_def().target_placement_strategy(), &target_manager_, app);
+          wall_, def_.strafe_def().target_placement_strategy(), &target_manager_, &app_);
     }
   }
 
@@ -152,9 +152,8 @@ class StrafeScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateStrafeScenario(const CreateScenarioParams& params,
-                                               Application* app) {
-  return std::make_unique<StrafeScenario>(params, app);
+std::unique_ptr<Scenario> CreateStrafeScenario(const CreateScenarioParams& params) {
+  return std::make_unique<StrafeScenario>(params);
 }
 
 }  // namespace aim

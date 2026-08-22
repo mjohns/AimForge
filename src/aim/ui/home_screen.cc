@@ -157,7 +157,7 @@ class HomeScreen : public UiScreen {
       return;
     }
     params.def = *evaluated_def;
-    std::shared_ptr<Screen> running_scenario = CreateScenario(params, &app_);
+    std::shared_ptr<Screen> running_scenario = CreateScenario(params);
     if (!running_scenario) {
       // TODO: Error dialog for invalid scenarios.
       return;

@@ -182,8 +182,8 @@ class WanderMovementController : public BasicWallMovementController {
 
 class WallWanderScenario : public BaseScenario {
  public:
-  explicit WallWanderScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit WallWanderScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     auto& w = params.def.wall_wander_def();
     if (w.has_target_placement_strategy()) {
       target_placer_ =
@@ -210,9 +210,8 @@ class WallWanderScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallWanderScenario(const CreateScenarioParams& params,
-                                                   Application* app) {
-  return std::make_unique<WallWanderScenario>(params, app);
+std::unique_ptr<Scenario> CreateWallWanderScenario(const CreateScenarioParams& params) {
+  return std::make_unique<WallWanderScenario>(params);
 }
 
 }  // namespace aim

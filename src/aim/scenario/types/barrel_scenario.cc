@@ -41,8 +41,7 @@ class BarrelMovementController : public BasicWallMovementController {
 
 class BarrelScenario : public BaseScenario {
  public:
-  explicit BarrelScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app) {
+  explicit BarrelScenario(const CreateScenarioParams& params) : BaseScenario(params) {
     Wall wall = Wall::ForRoom(def_.room());
     TargetPlacementStrategy strat = params.def.barrel_def().target_placement_strategy();
     if (!params.def.barrel_def().has_target_placement_strategy()) {
@@ -72,9 +71,8 @@ class BarrelScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateBarrelScenario(const CreateScenarioParams& params,
-                                               Application* app) {
-  return std::make_unique<BarrelScenario>(params, app);
+std::unique_ptr<Scenario> CreateBarrelScenario(const CreateScenarioParams& params) {
+  return std::make_unique<BarrelScenario>(params);
 }
 
 }  // namespace aim

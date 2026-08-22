@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "aim/common/simple_types.h"
-#include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/database/aim_db.h"
 #include "aim/scenario/scenario.h"
@@ -27,8 +26,8 @@ struct ScenarioStats {
 
 class BaseScenario : public Scenario {
  public:
-  explicit BaseScenario(const CreateScenarioParams& params, Application* app)
-      : Scenario(params, app) {}
+  explicit BaseScenario(const CreateScenarioParams& params)
+      : Scenario(params) {}
   ~BaseScenario() {}
 
  protected:

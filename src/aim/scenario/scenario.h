@@ -47,7 +47,7 @@ struct DelayedTask {
 
 class Scenario : public Screen {
  public:
-  Scenario(const CreateScenarioParams& params, Application* app);
+  Scenario(const CreateScenarioParams& params);
   virtual ~Scenario();
 
   bool is_done() const {

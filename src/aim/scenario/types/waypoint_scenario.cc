@@ -14,8 +14,8 @@ namespace {
 
 class WaypointScenario : public BaseScenario {
  public:
-  explicit WaypointScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit WaypointScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     if (def_.target_def().num_targets() == 1 && !def_.waypoint_def().start_in_center()) {
       // Initialize the camera to look at the initial target.
       wall_target_placer_ = GetNewPlacer();
@@ -73,9 +73,8 @@ class WaypointScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWaypointScenario(const CreateScenarioParams& params,
-                                                 Application* app) {
-  return std::make_unique<WaypointScenario>(params, app);
+std::unique_ptr<Scenario> CreateWaypointScenario(const CreateScenarioParams& params) {
+  return std::make_unique<WaypointScenario>(params);
 }
 
 }  // namespace aim

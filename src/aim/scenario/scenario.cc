@@ -31,6 +31,7 @@
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "aim/ui/stats/stats_screen.h"
+#include "aim/ui/ui_app.h"
 #include "aim/ui/ui_screen.h"
 #include "glm/mat4x4.hpp"  // IWYU pragma: keep
 #include "glm/vec2.hpp"    // IWYU pragma: keep
@@ -109,8 +110,8 @@ void Scenario::FlushPlayTime() {
   }
 }
 
-Scenario::Scenario(const CreateScenarioParams& params, Application* app)
-    : Screen(*app),
+Scenario::Scenario(const CreateScenarioParams& params)
+    : Screen(GetUiApp()),
       scenario_name_(params.name),
       def_(params.def),
       timer_(kReplayFps),
@@ -119,7 +120,7 @@ Scenario::Scenario(const CreateScenarioParams& params, Application* app)
       force_start_immediately_(params.force_start_immediately),
       from_scenario_editor_(params.from_scenario_editor),
       create_params_(params) {
-  theme_ = app->settings_manager().GetCurrentTheme();
+  theme_ = app_.settings_manager().GetCurrentTheme();
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
 
   bool requires_per_frame_target_data = RequiresPerFrameTargetData(def_);
@@ -247,7 +248,7 @@ void Scenario::OnEvent(const SDL_Event& event) {
       PopSelf();
       // In scenario editing make the restart kebind just return to the editor.
       if (!from_scenario_editor_) {
-        std::shared_ptr<Screen> restart_running_scenario = CreateScenario(create_params_, &app_);
+        std::shared_ptr<Screen> restart_running_scenario = CreateScenario(create_params_);
         if (restart_running_scenario) {
           app_.scenario_manager().SetCurrentRunningScenario(restart_running_scenario);
           PushNextScreen(restart_running_scenario);

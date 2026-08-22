@@ -40,8 +40,8 @@ class CenteringWaypointSupplier : public WallWaypointSupplier {
 
 class CenteringScenario : public BaseScenario {
  public:
-  explicit CenteringScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit CenteringScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     const CenteringScenarioDef& c = def_.centering_def();
 
     if (c.has_angle()) {
@@ -102,9 +102,8 @@ class CenteringScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateCenteringScenario(const CreateScenarioParams& params,
-                                                  Application* app) {
-  return std::make_unique<CenteringScenario>(params, app);
+std::unique_ptr<Scenario> CreateCenteringScenario(const CreateScenarioParams& params) {
+  return std::make_unique<CenteringScenario>(params);
 }
 
 }  // namespace aim

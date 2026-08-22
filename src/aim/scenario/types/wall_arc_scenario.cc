@@ -13,8 +13,8 @@ namespace {
 
 class WallArcScenario : public BaseScenario {
  public:
-  explicit WallArcScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit WallArcScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     auto arc = params.def.wall_arc_def();
     width_ = wall_.GetRegionLength(arc.width());
     height_ = wall_.GetRegionLength(arc.height());
@@ -172,9 +172,8 @@ class WallArcScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params,
-                                                Application* app) {
-  return std::make_unique<WallArcScenario>(params, app);
+std::unique_ptr<Scenario> CreateWallArcScenario(const CreateScenarioParams& params) {
+  return std::make_unique<WallArcScenario>(params);
 }
 
 }  // namespace aim

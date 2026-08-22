@@ -13,8 +13,8 @@ namespace {
 
 class SineScenario : public BaseScenario {
  public:
-  explicit SineScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit SineScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     auto d = params.def.sine_def();
     going_left_ = d.going_left();
 
@@ -118,8 +118,8 @@ class SineScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params, Application* app) {
-  return std::make_unique<SineScenario>(params, app);
+std::unique_ptr<Scenario> CreateSineScenario(const CreateScenarioParams& params) {
+  return std::make_unique<SineScenario>(params);
 }
 
 }  // namespace aim

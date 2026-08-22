@@ -246,8 +246,8 @@ class StrafeMovementController : public BasicWallMovementController {
 
 class AngleStrafeScenario : public BaseScenario {
  public:
-  explicit AngleStrafeScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit AngleStrafeScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     auto& d = params.def.angle_strafe_def();
     if (d.has_target_placement_strategy()) {
       target_placer_ =
@@ -291,9 +291,8 @@ class AngleStrafeScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateAngleStrafeScenario(const CreateScenarioParams& params,
-                                                    Application* app) {
-  return std::make_unique<AngleStrafeScenario>(params, app);
+std::unique_ptr<Scenario> CreateAngleStrafeScenario(const CreateScenarioParams& params) {
+  return std::make_unique<AngleStrafeScenario>(params);
 }
 
 }  // namespace aim

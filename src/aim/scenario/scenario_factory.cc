@@ -4,35 +4,34 @@
 
 namespace aim {
 
-std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params,
-                                         Application* app) {
+std::unique_ptr<Scenario> CreateScenario(const CreateScenarioParams& unevaluated_params) {
   CreateScenarioParams params = unevaluated_params;
   params.def = ApplyScenarioOverrides(params.def);
   switch (params.def.type_case()) {
     case ScenarioDef::kStaticDef:
-      return CreateStaticScenario(params, app);
+      return CreateStaticScenario(params);
     case ScenarioDef::kCenteringDef:
-      return CreateCenteringScenario(params, app);
+      return CreateCenteringScenario(params);
     case ScenarioDef::kBarrelDef:
-      return CreateBarrelScenario(params, app);
+      return CreateBarrelScenario(params);
     case ScenarioDef::kLinearDef:
-      return CreateLinearScenario(params, app);
+      return CreateLinearScenario(params);
     case ScenarioDef::kAngleStrafeDef:
-      return CreateAngleStrafeScenario(params, app);
+      return CreateAngleStrafeScenario(params);
     case ScenarioDef::kWallArcDef:
-      return CreateWallArcScenario(params, app);
+      return CreateWallArcScenario(params);
     case ScenarioDef::kWallWanderDef:
-      return CreateWallWanderScenario(params, app);
+      return CreateWallWanderScenario(params);
     case ScenarioDef::kCircleDef:
-      return CreateCircleScenario(params, app);
+      return CreateCircleScenario(params);
     case ScenarioDef::kSineDef:
-      return CreateSineScenario(params, app);
+      return CreateSineScenario(params);
     case ScenarioDef::kWaypointDef:
-      return CreateWaypointScenario(params, app);
+      return CreateWaypointScenario(params);
     case ScenarioDef::kStrafeDef:
-      return CreateStrafeScenario(params, app);
+      return CreateStrafeScenario(params);
     case ScenarioDef::kBounceDef:
-      return CreateBounceScenario(params, app);
+      return CreateBounceScenario(params);
     default:
       break;
   }

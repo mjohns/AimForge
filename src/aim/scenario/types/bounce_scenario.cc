@@ -298,11 +298,11 @@ class MovementControllerImpl : public MovementController {
 
 class BounceScenario : public BaseScenario {
  public:
-  explicit BounceScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit BounceScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     if (def_.bounce_def().has_target_placement_strategy()) {
       wall_target_placer_ = CreateWallTargetPlacer(
-          wall_, def_.bounce_def().target_placement_strategy(), &target_manager_, app);
+          wall_, def_.bounce_def().target_placement_strategy(), &target_manager_, &app_);
     }
   }
 
@@ -349,9 +349,8 @@ class BounceScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params,
-                                               Application* app) {
-  return std::make_unique<BounceScenario>(params, app);
+std::unique_ptr<Scenario> CreateBounceScenario(const CreateScenarioParams& params) {
+  return std::make_unique<BounceScenario>(params);
 }
 
 }  // namespace aim

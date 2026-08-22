@@ -16,8 +16,8 @@ namespace {
 
 class CircleScenario : public BaseScenario {
  public:
-  explicit CircleScenario(const CreateScenarioParams& params, Application* app)
-      : BaseScenario(params, app), wall_(Wall::ForRoom(params.def.room())) {
+  explicit CircleScenario(const CreateScenarioParams& params)
+      : BaseScenario(params), wall_(Wall::ForRoom(params.def.room())) {
     c_ = def_.circle_def();
     radius_ = wall_.GetRegionLength(c_.radius());
 
@@ -135,9 +135,8 @@ class CircleScenario : public BaseScenario {
 
 }  // namespace
 
-std::unique_ptr<Scenario> CreateCircleScenario(const CreateScenarioParams& params,
-                                               Application* app) {
-  return std::make_unique<CircleScenario>(params, app);
+std::unique_ptr<Scenario> CreateCircleScenario(const CreateScenarioParams& params) {
+  return std::make_unique<CircleScenario>(params);
 }
 
 }  // namespace aim
