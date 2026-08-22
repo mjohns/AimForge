@@ -100,19 +100,19 @@ void DrawTopBar(UiScreen* screen) {
     auto normal_font = app.font_manager().UseDefault();
     if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str())) {
       std::string current_scenario_name = current_scenario ? current_scenario->name : "";
-      screen->PushNextScreen(CreateSettingsScreen(&app, current_scenario_name));
+      screen->PushNextScreen(CreateSettingsScreen(current_scenario_name));
     }
     if (ImGui::Selectable(std::format("{} Themes", icons::kPalette).c_str(), false)) {
-      screen->PushNextScreen(CreateThemeEditorScreen(&app));
+      screen->PushNextScreen(CreateThemeEditorScreen());
     }
     if (ImGui::Selectable(std::format("{} Crosshairs", icons::kMyLocation).c_str(), false)) {
-      screen->PushNextScreen(CreateCrosshairEditorScreen(&app));
+      screen->PushNextScreen(CreateCrosshairEditorScreen());
     }
     if (ImGui::Selectable(std::format("{} Play time", icons::kHourglassEmpty).c_str(), false)) {
-      screen->PushNextScreen(CreatePlayTimeScreen(&app));
+      screen->PushNextScreen(CreatePlayTimeScreen());
     }
     if (ImGui::Selectable(std::format("{} Reaction", icons::kTimer).c_str(), false)) {
-      screen->PushNextScreen(CreateReactionTimeScreen(&app));
+      screen->PushNextScreen(CreateReactionTimeScreen());
     }
 
     ImGui::SpacedSeparator();

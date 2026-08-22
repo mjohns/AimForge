@@ -7,13 +7,10 @@
 
 namespace aim {
 
-class Application;
-
 struct ThemeEditorOptions {
   std::string selected_theme;
 };
 
-std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app,
-                                                  ThemeEditorOptions options = {});
+std::unique_ptr<UiScreen> CreateThemeEditorScreen(ThemeEditorOptions options = {});
 
 }  // namespace aim

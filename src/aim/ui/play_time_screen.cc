@@ -12,7 +12,7 @@ namespace {
 
 class PlayTimeScreen : public UiScreen {
  public:
-  explicit PlayTimeScreen(Application& app) : UiScreen(app) {}
+  explicit PlayTimeScreen() : UiScreen() {}
 
  protected:
   void DrawScreen() override {
@@ -103,8 +103,8 @@ class PlayTimeScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreatePlayTimeScreen(Application* app) {
-  return std::make_unique<PlayTimeScreen>(*app);
+std::unique_ptr<UiScreen> CreatePlayTimeScreen() {
+  return std::make_unique<PlayTimeScreen>();
 }
 
 }  // namespace aim

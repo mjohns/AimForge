@@ -120,9 +120,9 @@ const char* kAdjustCrosshairSizeHelpText =
 
 class SettingsScreen : public UiScreen {
  public:
-  SettingsScreen(Application& app, const std::string& scenario_id)
-      : UiScreen(app), updater_(app.settings_manager().CreateUpdater()), scenario_id_(scenario_id) {
-    theme_names_ = app.settings_manager().ListThemes();
+  explicit SettingsScreen(const std::string& scenario_id)
+      : UiScreen(), updater_(app_.settings_manager().CreateUpdater()), scenario_id_(scenario_id) {
+    theme_names_ = app_.settings_manager().ListThemes();
     crosshair_names_ = app_.settings_manager().ListCrosshairs();
     Settings settings = app_.settings_manager().GetCurrentSettings();
 
@@ -216,7 +216,7 @@ class SettingsScreen : public UiScreen {
           "ThemeDropdown", updater_.settings.mutable_theme_name(), theme_names_, char_x_ * 20);
       ImGui::SameLine();
       if (ImGui::Button(std::format("{}##EditThemes", icons::kEdit))) {
-        PushNextScreen(CreateThemeEditorScreen(&app_));
+        PushNextScreen(CreateThemeEditorScreen());
       }
       ImGui::HelpTooltip("Open theme editor");
 
@@ -235,14 +235,14 @@ class SettingsScreen : public UiScreen {
       }
       ImGui::SameLine();
       if (ImGui::Button(std::format("{}##EditCrosshairs", icons::kEdit))) {
-        PushNextScreen(CreateCrosshairEditorScreen(&app_));
+        PushNextScreen(CreateCrosshairEditorScreen());
       }
       ImGui::HelpTooltip("Open crosshair editor");
       ImGui::SameLine();
       if (ImGui::Button(std::format("{}##EditCrosshairColor", icons::kPalette))) {
         ThemeEditorOptions opts;
         opts.selected_theme = updater_.settings.theme_name();
-        PushNextScreen(CreateThemeEditorScreen(&app_, opts));
+        PushNextScreen(CreateThemeEditorScreen(opts));
       }
       ImGui::HelpTooltip(
           "Edit the color of the crosshair in the current theme. Crosshair colors are stored with "
@@ -740,9 +740,8 @@ class SettingsScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateSettingsScreen(Application* app,
-                                               const std::string& current_scenario_id) {
-  return std::make_unique<SettingsScreen>(*app, current_scenario_id);
+std::unique_ptr<UiScreen> CreateSettingsScreen(const std::string& current_scenario_id) {
+  return std::make_unique<SettingsScreen>(current_scenario_id);
 }
 
 }  // namespace aim

@@ -26,7 +26,7 @@ const std::vector<std::pair<CrosshairLayer::TypeCase, std::string>> kCrosshairTy
 
 class CrosshairEditorScreen : public UiScreen {
  public:
-  explicit CrosshairEditorScreen(Application& app) : UiScreen(app) {
+  explicit CrosshairEditorScreen() : UiScreen() {
     LoadCrosshairList();
   }
 
@@ -506,8 +506,8 @@ class CrosshairEditorScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateCrosshairEditorScreen(Application* app) {
-  return std::make_unique<CrosshairEditorScreen>(*app);
+std::unique_ptr<UiScreen> CreateCrosshairEditorScreen() {
+  return std::make_unique<CrosshairEditorScreen>();
 }
 
 }  // namespace aim

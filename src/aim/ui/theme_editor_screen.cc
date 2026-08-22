@@ -339,9 +339,9 @@ class ThemeEditor {
 
 class ThemeEditorScreen : public UiScreen {
  public:
-  explicit ThemeEditorScreen(Application& app, ThemeEditorOptions options)
-      : UiScreen(app), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
-    texture_names_ = app.settings_manager().ListTextures();
+  explicit ThemeEditorScreen(ThemeEditorOptions options)
+      : UiScreen(), default_room_(GetDefaultRoom()), target_manager_(default_room_) {
+    texture_names_ = app_.settings_manager().ListTextures();
     LoadThemeList();
 
     projection_ = GetPerspectiveTransformation(app_.screen_info());
@@ -587,8 +587,8 @@ class ThemeEditorScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateThemeEditorScreen(Application* app, ThemeEditorOptions options) {
-  return std::make_unique<ThemeEditorScreen>(*app, options);
+std::unique_ptr<UiScreen> CreateThemeEditorScreen(ThemeEditorOptions options) {
+  return std::make_unique<ThemeEditorScreen>(options);
 }
 
 }  // namespace aim

@@ -141,9 +141,9 @@ class SingleReactionTimeScreen : public Screen {
 
 class ReactionTimeScreen : public UiScreen {
  public:
-  explicit ReactionTimeScreen(Application* app) : UiScreen(*app) {
-    settings_ = app->settings_manager().GetCurrentSettings();
-    app->sound_manager()->LoadSounds(settings_);
+  explicit ReactionTimeScreen() : UiScreen() {
+    settings_ = app_.settings_manager().GetCurrentSettings();
+    app_.sound_manager()->LoadSounds(settings_);
   }
 
  protected:
@@ -259,8 +259,8 @@ class ReactionTimeScreen : public UiScreen {
 
 }  // namespace
 
-std::unique_ptr<UiScreen> CreateReactionTimeScreen(Application* app) {
-  return std::make_unique<ReactionTimeScreen>(app);
+std::unique_ptr<UiScreen> CreateReactionTimeScreen() {
+  return std::make_unique<ReactionTimeScreen>();
 }
 
 }  // namespace aim
