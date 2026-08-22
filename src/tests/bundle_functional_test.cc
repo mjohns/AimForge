@@ -140,8 +140,8 @@ class BundleFunctionalTest : public ::testing::Test {
     scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
     guide_manager_ = CreateGuideManager();
-    bundle_manager_ =
-        CreateBundleManager(fs_.get(), playlist_manager_.get(), scenario_manager_.get());
+    bundle_manager_ = CreateBundleManager(
+        fs_.get(), playlist_manager_.get(), scenario_manager_.get(), guide_manager_.get());
 
     scenario_manager_->RegisterRenameListener(
         std::bind_front(&PlaylistManager::RenameScenarioInAllPlaylists, playlist_manager_.get()));
