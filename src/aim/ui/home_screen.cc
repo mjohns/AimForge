@@ -4,7 +4,6 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/core/history_manager.h"
-#include "aim/core/labels_manager.h"
 #include "aim/core/local_store.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
@@ -16,9 +15,7 @@
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/scenario_ui.h"
 #include "aim/ui/stats/stats_screen.h"
-#include "aim/ui/theme_editor_screen.h"
 #include "aim/ui/top_bar.h"
-#include "aim/ui/ui_app.h"
 #include "aim/ui/ui_screen.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 
@@ -302,27 +299,8 @@ class HomeScreen : public UiScreen {
       app_.local_store().PutInt(kSelectedAppScreenKey, (int)app_screen_);
     }
 
-    /*
-    const char* driverName = SDL_GetGPUDeviceDriver(app_.gpu_device());
-    ImGui::Text(driverName);
-    for (int i = 0; i < 30; ++i) {
-      ImGui::Spacing();
-    }
+    ImGui::SetCursorAtBottom();
     ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
-    ImGui::TextFmt("init {:.1f}s", app_.state().initialization_times.total.GetSeconds());
-    ImGui::TextFmt("load {:.1f}s", app_.state().initialization_times.load_bundles.GetSeconds());
-    ImGui::TextFmt("db {:.1f}s", app_.state().initialization_times.db.GetSeconds());
-    ImGui::TextFmt("sdl {:.1f}s", app_.state().initialization_times.sdl.GetSeconds());
-    ImGui::TextFmt("audio {:.1f}s", app_.state().initialization_times.audio.GetSeconds());
-    ImGui::TextFmt("window {:.1f}s", app_.state().initialization_times.window.GetSeconds());
-    // ImGui::TextFmt("scenario count: {}", app_.scenario_manager().scenarios().size());
-    for (const auto& item : app_.state().initialization_times.window_trace.GetTrace()) {
-      ImGui::Text(item);
-    }
-    */
-
-    // ImGui::SetCursorAtBottom();
-    // ImGui::Text("%s", kAimForgeVersion);
   }
 
   void DrawScenariosScreen() {
