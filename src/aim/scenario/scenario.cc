@@ -302,7 +302,6 @@ void Scenario::OnAttach() {
   SDL_SetWindowRelativeMouseMode(app_.sdl_window(), true);
   RefreshState();
   timer_.StartLoop();
-  // if running
   if (is_running()) {
     timer_.ResumeRun();
   }

@@ -2,6 +2,7 @@ edition = "2023";
 
 import "scenario.proto";
 import "playlist.proto";
+import "guide.proto";
 
 package aim;
 
@@ -15,9 +16,15 @@ message BundlePlaylist {
   PlaylistDef def = 2;
 }
 
+message BundleGuide {
+  string name = 1;
+  GuideDef def = 2;
+}
+
 message BundleFile {
   repeated BundleScenario scenarios = 1;
   repeated BundlePlaylist playlists = 2;
+  repeated BundleGuide guides = 3;
 }
 
 message BundleInfo {

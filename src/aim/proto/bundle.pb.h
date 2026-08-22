@@ -31,6 +31,7 @@
 #include "google/protobuf/unknown_field_set.h"
 #include "scenario.pb.h"
 #include "playlist.pb.h"
+#include "guide.pb.h"
 // @@protoc_insertion_point(includes)
 
 // Must be included last.
@@ -59,6 +60,10 @@ class BundleFile;
 struct BundleFileDefaultTypeInternal;
 extern BundleFileDefaultTypeInternal _BundleFile_default_instance_;
 extern const ::google::protobuf::internal::ClassDataFull BundleFile_class_data_;
+class BundleGuide;
+struct BundleGuideDefaultTypeInternal;
+extern BundleGuideDefaultTypeInternal _BundleGuide_default_instance_;
+extern const ::google::protobuf::internal::ClassDataFull BundleGuide_class_data_;
 class BundleInfo;
 struct BundleInfoDefaultTypeInternal;
 extern BundleInfoDefaultTypeInternal _BundleInfo_default_instance_;
@@ -143,7 +148,7 @@ class BundleInfo final : public ::google::protobuf::Message
     return *reinterpret_cast<const BundleInfo*>(
         &_BundleInfo_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 3;
+  static constexpr int kIndexInFileMessages = 4;
   friend void swap(BundleInfo& a, BundleInfo& b) { a.Swap(&b); }
   inline void Swap(BundleInfo* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -352,7 +357,7 @@ class BundleInfoFile final : public ::google::protobuf::Message
     return *reinterpret_cast<const BundleInfoFile*>(
         &_BundleInfoFile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 4;
+  static constexpr int kIndexInFileMessages = 5;
   friend void swap(BundleInfoFile& a, BundleInfoFile& b) { a.Swap(&b); }
   inline void Swap(BundleInfoFile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -707,6 +712,219 @@ class BundlePlaylist final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull BundlePlaylist_class_data_;
 // -------------------------------------------------------------------
 
+class BundleGuide final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:aim.BundleGuide) */ {
+ public:
+  inline BundleGuide() : BundleGuide(nullptr) {}
+  ~BundleGuide() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(BundleGuide* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(BundleGuide));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR BundleGuide(::google::protobuf::internal::ConstantInitialized);
+
+  inline BundleGuide(const BundleGuide& from) : BundleGuide(nullptr, from) {}
+  inline BundleGuide(BundleGuide&& from) noexcept
+      : BundleGuide(nullptr, ::std::move(from)) {}
+  inline BundleGuide& operator=(const BundleGuide& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BundleGuide& operator=(BundleGuide&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BundleGuide& default_instance() {
+    return *reinterpret_cast<const BundleGuide*>(
+        &_BundleGuide_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 2;
+  friend void swap(BundleGuide& a, BundleGuide& b) { a.Swap(&b); }
+  inline void Swap(BundleGuide* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BundleGuide* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BundleGuide* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<BundleGuide>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const BundleGuide& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const BundleGuide& from) { BundleGuide::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(BundleGuide* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "aim.BundleGuide"; }
+
+  explicit BundleGuide(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  BundleGuide(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const BundleGuide& from);
+  BundleGuide(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, BundleGuide&& from) noexcept
+      : BundleGuide(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kNameFieldNumber = 1,
+    kDefFieldNumber = 2,
+  };
+  // string name = 1;
+  bool has_name() const;
+  void clear_name() ;
+  const ::std::string& name() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_name(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_name();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_name();
+  void set_allocated_name(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_name() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_name(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_name();
+
+  public:
+  // .aim.GuideDef def = 2;
+  bool has_def() const;
+  void clear_def() ;
+  const ::aim::GuideDef& def() const;
+  [[nodiscard]] ::aim::GuideDef* PROTOBUF_NULLABLE release_def();
+  ::aim::GuideDef* PROTOBUF_NONNULL mutable_def();
+  void set_allocated_def(::aim::GuideDef* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_def(::aim::GuideDef* PROTOBUF_NULLABLE value);
+  ::aim::GuideDef* PROTOBUF_NULLABLE unsafe_arena_release_def();
+
+  private:
+  const ::aim::GuideDef& _internal_def() const;
+  ::aim::GuideDef* PROTOBUF_NONNULL _internal_mutable_def();
+
+  public:
+  // @@protoc_insertion_point(class_scope:aim.BundleGuide)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<1, 2,
+                                   1, 28,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const BundleGuide& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr name_;
+    ::aim::GuideDef* PROTOBUF_NULLABLE def_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_bundle_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull BundleGuide_class_data_;
+// -------------------------------------------------------------------
+
 class BundleScenario final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:aim.BundleScenario) */ {
  public:
@@ -975,7 +1193,7 @@ class BundleFile final : public ::google::protobuf::Message
     return *reinterpret_cast<const BundleFile*>(
         &_BundleFile_default_instance_);
   }
-  static constexpr int kIndexInFileMessages = 2;
+  static constexpr int kIndexInFileMessages = 3;
   friend void swap(BundleFile& a, BundleFile& b) { a.Swap(&b); }
   inline void Swap(BundleFile* PROTOBUF_NONNULL other) {
     if (other == this) return;
@@ -1064,6 +1282,7 @@ class BundleFile final : public ::google::protobuf::Message
   enum : int {
     kScenariosFieldNumber = 1,
     kPlaylistsFieldNumber = 2,
+    kGuidesFieldNumber = 3,
   };
   // repeated .aim.BundleScenario scenarios = 1;
   int scenarios_size() const;
@@ -1099,12 +1318,29 @@ class BundleFile final : public ::google::protobuf::Message
   const ::aim::BundlePlaylist& playlists(int index) const;
   ::aim::BundlePlaylist* PROTOBUF_NONNULL add_playlists();
   const ::google::protobuf::RepeatedPtrField<::aim::BundlePlaylist>& playlists() const;
+  // repeated .aim.BundleGuide guides = 3;
+  int guides_size() const;
+  private:
+  int _internal_guides_size() const;
+
+  public:
+  void clear_guides() ;
+  ::aim::BundleGuide* PROTOBUF_NONNULL mutable_guides(int index);
+  ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>* PROTOBUF_NONNULL mutable_guides();
+
+  private:
+  const ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>& _internal_guides() const;
+  ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>* PROTOBUF_NONNULL _internal_mutable_guides();
+  public:
+  const ::aim::BundleGuide& guides(int index) const;
+  ::aim::BundleGuide* PROTOBUF_NONNULL add_guides();
+  const ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>& guides() const;
   // @@protoc_insertion_point(class_scope:aim.BundleFile)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<1, 2,
-                                   2, 0,
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
+                                   3, 0,
                                    2>
       _table_;
 
@@ -1127,6 +1363,7 @@ class BundleFile final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::RepeatedPtrField< ::aim::BundleScenario > scenarios_;
     ::google::protobuf::RepeatedPtrField< ::aim::BundlePlaylist > playlists_;
+    ::google::protobuf::RepeatedPtrField< ::aim::BundleGuide > guides_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -1481,6 +1718,172 @@ inline void BundlePlaylist::set_allocated_def(::aim::PlaylistDef* PROTOBUF_NULLA
 
 // -------------------------------------------------------------------
 
+// BundleGuide
+
+// string name = 1;
+inline bool BundleGuide::has_name() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  return value;
+}
+inline void BundleGuide::clear_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.name_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline const ::std::string& BundleGuide::name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BundleGuide.name)
+  return _internal_name();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void BundleGuide::set_name(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.BundleGuide.name)
+}
+inline ::std::string* PROTOBUF_NONNULL BundleGuide::mutable_name()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:aim.BundleGuide.name)
+  return _s;
+}
+inline const ::std::string& BundleGuide::_internal_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.name_.Get();
+}
+inline void BundleGuide::_internal_set_name(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.name_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL BundleGuide::_internal_mutable_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.name_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE BundleGuide::release_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BundleGuide.name)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000001U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  auto* released = _impl_.name_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.name_.Set("", GetArena());
+  }
+  return released;
+}
+inline void BundleGuide::set_allocated_name(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+  _impl_.name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.name_.IsDefault()) {
+    _impl_.name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.BundleGuide.name)
+}
+
+// .aim.GuideDef def = 2;
+inline bool BundleGuide::has_def() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
+  PROTOBUF_ASSUME(!value || _impl_.def_ != nullptr);
+  return value;
+}
+inline const ::aim::GuideDef& BundleGuide::_internal_def() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  const ::aim::GuideDef* p = _impl_.def_;
+  return p != nullptr ? *p : reinterpret_cast<const ::aim::GuideDef&>(::aim::_GuideDef_default_instance_);
+}
+inline const ::aim::GuideDef& BundleGuide::def() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BundleGuide.def)
+  return _internal_def();
+}
+inline void BundleGuide::unsafe_arena_set_allocated_def(
+    ::aim::GuideDef* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.def_);
+  }
+  _impl_.def_ = reinterpret_cast<::aim::GuideDef*>(value);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.BundleGuide.def)
+}
+inline ::aim::GuideDef* PROTOBUF_NULLABLE BundleGuide::release_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::aim::GuideDef* released = _impl_.def_;
+  _impl_.def_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
+  }
+  return released;
+}
+inline ::aim::GuideDef* PROTOBUF_NULLABLE BundleGuide::unsafe_arena_release_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.BundleGuide.def)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::aim::GuideDef* temp = _impl_.def_;
+  _impl_.def_ = nullptr;
+  return temp;
+}
+inline ::aim::GuideDef* PROTOBUF_NONNULL BundleGuide::_internal_mutable_def() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.def_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::aim::GuideDef>(GetArena());
+    _impl_.def_ = reinterpret_cast<::aim::GuideDef*>(p);
+  }
+  return _impl_.def_;
+}
+inline ::aim::GuideDef* PROTOBUF_NONNULL BundleGuide::mutable_def()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::aim::GuideDef* _msg = _internal_mutable_def();
+  // @@protoc_insertion_point(field_mutable:aim.BundleGuide.def)
+  return _msg;
+}
+inline void BundleGuide::set_allocated_def(::aim::GuideDef* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.def_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = reinterpret_cast<::google::protobuf::Message*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+
+  _impl_.def_ = reinterpret_cast<::aim::GuideDef*>(value);
+  // @@protoc_insertion_point(field_set_allocated:aim.BundleGuide.def)
+}
+
+// -------------------------------------------------------------------
+
 // BundleFile
 
 // repeated .aim.BundleScenario scenarios = 1;
@@ -1593,6 +1996,62 @@ inline ::google::protobuf::RepeatedPtrField<::aim::BundlePlaylist>* PROTOBUF_NON
 BundleFile::_internal_mutable_playlists() {
   ::google::protobuf::internal::TSanRead(&_impl_);
   return &_impl_.playlists_;
+}
+
+// repeated .aim.BundleGuide guides = 3;
+inline int BundleFile::_internal_guides_size() const {
+  return _internal_guides().size();
+}
+inline int BundleFile::guides_size() const {
+  return _internal_guides_size();
+}
+inline void BundleFile::clear_guides() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.guides_.Clear();
+  ClearHasBitForRepeated(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::aim::BundleGuide* PROTOBUF_NONNULL BundleFile::mutable_guides(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:aim.BundleFile.guides)
+  return _internal_mutable_guides()->Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>* PROTOBUF_NONNULL BundleFile::mutable_guides()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_mutable_list:aim.BundleFile.guides)
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _internal_mutable_guides();
+}
+inline const ::aim::BundleGuide& BundleFile::guides(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.BundleFile.guides)
+  return _internal_guides().Get(index);
+}
+inline ::aim::BundleGuide* PROTOBUF_NONNULL BundleFile::add_guides()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  ::aim::BundleGuide* _add =
+      _internal_mutable_guides()->InternalAddWithArena(
+          ::google::protobuf::MessageLite::internal_visibility(), GetArena());
+  SetHasBitForRepeated(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_add:aim.BundleFile.guides)
+  return _add;
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>& BundleFile::guides() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:aim.BundleFile.guides)
+  return _internal_guides();
+}
+inline const ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>&
+BundleFile::_internal_guides() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.guides_;
+}
+inline ::google::protobuf::RepeatedPtrField<::aim::BundleGuide>* PROTOBUF_NONNULL
+BundleFile::_internal_mutable_guides() {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return &_impl_.guides_;
 }
 
 // -------------------------------------------------------------------

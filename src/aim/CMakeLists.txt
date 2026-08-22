@@ -97,6 +97,8 @@ set(SRCS
     "proto/common.pb.h"
     "proto/crosshair.pb.cc"
     "proto/crosshair.pb.h"
+    "proto/guide.pb.cc"
+    "proto/guide.pb.h"
     "proto/playlist.pb.cc"
     "proto/playlist.pb.h"
     "proto/scenario.pb.cc"
