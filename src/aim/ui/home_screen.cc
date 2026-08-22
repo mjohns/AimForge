@@ -345,9 +345,7 @@ class HomeScreen : public UiScreen {
     if (run == nullptr) {
       return;
     }
-    bool was_on_playlists_last_time =
-        last_app_screen_.has_value() && *last_app_screen_ == AppScreen::PLAYLISTS;
-    playlist_component_->Show(run, !was_on_playlists_last_time);
+    playlist_component_->Show(run);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

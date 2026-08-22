@@ -15,7 +15,7 @@ class PlaylistComponent {
  public:
   virtual ~PlaylistComponent() {}
 
-  virtual void Show(std::shared_ptr<PlaylistRun> run, bool new_page_display) = 0;
+  virtual void Show(std::shared_ptr<PlaylistRun> run) = 0;
 };
 
 std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen);
