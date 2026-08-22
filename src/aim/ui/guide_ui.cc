@@ -1,6 +1,7 @@
 #include "guide_ui.h"
 
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/playlist_manager.h"
@@ -18,8 +19,11 @@ class GuidesComponentImpl : public GuidesComponent {
     auto* section = guide_.add_sections();
     // section->set_text("Example playlists");
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 35cm";
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder 15cm";
+    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 25cm";
+    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 35cm";
+    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 45cm";
+    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 55cm";
   }
 
   void SetPlaylistRunIfInGuide() {
@@ -85,7 +89,7 @@ class GuidesComponentImpl : public GuidesComponent {
     ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
     // TODO: Only add this column if there is actually a level to show
-    float level_width = ImGui::CalcTextSize("L22.5").x;
+    float level_width = ImGui::CalcTextSize("L22.5_").x;
     ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, level_width);
 
     ImGui::LoopId loop_id;
@@ -103,7 +107,7 @@ class GuidesComponentImpl : public GuidesComponent {
             *maybe_playlist, app_.scenario_manager(), app_.stats_manager());
         if (highest_complete_level) {
           ImGui::TableNextColumn();
-          ImGui::TextFmt("L{}", MaybeIntToString(*highest_complete_level, 1));
+          ImGui::TextFmt("L{}{}", MaybeIntToString(*highest_complete_level, 1), icons::kVerified);
         }
       }
     }

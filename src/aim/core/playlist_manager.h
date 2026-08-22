@@ -63,7 +63,7 @@ struct PlaylistRun {
   std::optional<std::string> Next();
   std::optional<int> NextIndex();
 
-  int current_index = 0;
+  int current_index = -1;
   std::vector<PlaylistItemProgress> progress_list;
 };
 
