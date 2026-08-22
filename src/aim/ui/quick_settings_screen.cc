@@ -63,15 +63,14 @@ void DrawCenterTable(const std::string& name,
 class QuickSettingsScreen : public UiScreen {
  public:
   explicit QuickSettingsScreen(const std::string& scenario_name,
-                               Application& app,
                                QuickSettingsType type,
                                const std::string& release_key)
-      : UiScreen(app),
+      : UiScreen(),
         scenario_name_(scenario_name),
-        updater_(app.settings_manager().CreateUpdater()),
+        updater_(app_.settings_manager().CreateUpdater()),
         type_(type),
         release_key_(release_key) {
-    theme_names_ = app.settings_manager().ListThemes();
+    theme_names_ = app_.settings_manager().ListThemes();
     crosshair_names_ = app_.settings_manager().ListCrosshairs();
   }
 
@@ -273,9 +272,8 @@ class QuickSettingsScreen : public UiScreen {
 
 std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_name,
                                                     QuickSettingsType type,
-                                                    const std::string& release_key,
-                                                    Application* app) {
-  return std::make_unique<QuickSettingsScreen>(scenario_name, *app, type, release_key);
+                                                    const std::string& release_key) {
+  return std::make_unique<QuickSettingsScreen>(scenario_name, type, release_key);
 }
 
 }  // namespace aim

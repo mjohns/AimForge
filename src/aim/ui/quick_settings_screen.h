@@ -6,13 +6,10 @@
 
 namespace aim {
 
-class Application;
-
 enum class QuickSettingsType { DEFAULT, METRONOME };
 
 std::unique_ptr<UiScreen> CreateQuickSettingsScreen(const std::string& scenario_name,
                                                     QuickSettingsType type,
-                                                    const std::string& release_key,
-                                                    Application* app);
+                                                    const std::string& release_key);
 
 }  // namespace aim

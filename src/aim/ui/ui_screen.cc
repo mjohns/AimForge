@@ -82,11 +82,11 @@ void UiScreen::HandleDefaultScenarioEvents(const SDL_Event& event,
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_settings())) {
     PushNextScreen(
-        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::DEFAULT, event_name, &app_));
+        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::DEFAULT, event_name));
   }
   if (KeyMappingMatchesEvent(event_name, settings.keybinds().quick_metronome())) {
     PushNextScreen(
-        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::METRONOME, event_name, &app_));
+        CreateQuickSettingsScreen(scenario_name, QuickSettingsType::METRONOME, event_name));
   }
 }
 

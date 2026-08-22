@@ -256,11 +256,11 @@ void Scenario::OnEvent(const SDL_Event& event) {
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_settings())) {
       PushNextScreen(
-          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::DEFAULT, event_name, &app_));
+          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::DEFAULT, event_name));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().quick_metronome())) {
-      PushNextScreen(CreateQuickSettingsScreen(
-          scenario_name_, QuickSettingsType::METRONOME, event_name, &app_));
+      PushNextScreen(
+          CreateQuickSettingsScreen(scenario_name_, QuickSettingsType::METRONOME, event_name));
     }
     if (KeyMappingMatchesEvent(event_name, settings_.keybinds().adjust_crosshair_size())) {
       is_adjusting_crosshair_ = true;
