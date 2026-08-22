@@ -123,7 +123,9 @@ class PlaylistManagerImpl : public PlaylistManager {
     playlist_names_ = std::make_shared<std::vector<std::string>>();
   }
 
-  void StartReload() override {}
+  void StartReload() override {
+    playlist_map_.clear();
+  }
 
   void LoadPlaylistsFromBundle(const std::string& bundle_name, const BundleFile& bundle) override {
     for (const BundlePlaylist& playlist : bundle.playlists()) {

@@ -16,6 +16,7 @@
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/bundle_manager.h"
+#include "aim/core/guide_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
 #include "aim/core/local_store.h"
@@ -418,6 +419,7 @@ class ApplicationImpl : public Application {
     file_system_ = std::make_unique<FileSystem>();
     scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
+    guide_manager_ = CreateGuideManager();
 
     {
       auto max_size = 1048576 * 2;
@@ -560,6 +562,10 @@ class ApplicationImpl : public Application {
 
   PlaylistManager& playlist_manager() override {
     return *playlist_manager_;
+  }
+
+  GuideManager& guide_manager() override {
+    return *guide_manager_;
   }
 
   BundleManager& bundle_manager() override {
@@ -979,8 +985,8 @@ class ApplicationImpl : public Application {
 
     play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
     stats_manager_ = CreateStatsManager(db_.get());
-    bundle_manager_ =
-        CreateBundleManager(file_system_.get(), playlist_manager_.get(), scenario_manager_.get());
+    bundle_manager_ = CreateBundleManager(
+        file_system_.get(), playlist_manager_.get(), scenario_manager_.get(), guide_manager_.get());
     history_manager_ = CreateHistoryManager(db_.get());
     labels_manager_ = CreateLabelsManager(db_.get());
     settings_manager_ = CreateSettingsManager(file_system_->GetUserDataPath("settings.json"),
@@ -1163,6 +1169,7 @@ class ApplicationImpl : public Application {
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<BundleManager> bundle_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
+  std::unique_ptr<GuideManager> guide_manager_;
   std::unique_ptr<PlayTimeManager> play_time_manager_;
   std::unique_ptr<FontManager> font_manager_;
   std::unique_ptr<LocalStore> local_store_;

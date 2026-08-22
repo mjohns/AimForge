@@ -7,8 +7,6 @@
 #include <vector>
 
 #include "aim/common/name_util.h"
-#include "aim/common/simple_types.h"
-#include "aim/core/file_system.h"
 #include "aim/core/screen.h"
 #include "aim/proto/bundle.pb.h"
 #include "aim/proto/scenario.pb.h"

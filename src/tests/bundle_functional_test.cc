@@ -1,6 +1,4 @@
-#include <chrono>
 #include <filesystem>
-#include <fstream>
 #include <memory>
 #include <random>
 #include <string>
@@ -11,6 +9,7 @@
 #include "aim/common/times.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/file_system.h"
+#include "aim/core/guide_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 #include "gmock/gmock.h"
@@ -56,6 +55,7 @@ class BundleFunctionalTest : public ::testing::Test {
   std::unique_ptr<FileSystem> fs_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<PlaylistManager> playlist_manager_;
+  std::unique_ptr<GuideManager> guide_manager_;
   std::unique_ptr<BundleManager> bundle_manager_;
 
   std::filesystem::path base_bundle_path_;
@@ -139,6 +139,7 @@ class BundleFunctionalTest : public ::testing::Test {
 
     scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
+    guide_manager_ = CreateGuideManager();
     bundle_manager_ =
         CreateBundleManager(fs_.get(), playlist_manager_.get(), scenario_manager_.get());
 

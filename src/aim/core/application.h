@@ -21,6 +21,7 @@ namespace aim {
 class BundleManager;
 class ScenarioManager;
 class PlaylistManager;
+class GuideManager;
 class AimDb;
 class StatsManager;
 class SettingsManager;
@@ -85,6 +86,7 @@ class Application {
   virtual SettingsManager& settings_manager() = 0;
   virtual ScenarioManager& scenario_manager() = 0;
   virtual PlaylistManager& playlist_manager() = 0;
+  virtual GuideManager& guide_manager() = 0;
   virtual BundleManager& bundle_manager() = 0;
   virtual HistoryManager& history_manager() = 0;
   virtual LabelsManager& labels_manager() = 0;

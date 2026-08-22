@@ -60,6 +60,8 @@ set(SRCS
     "core/play_time_manager.h"
     "core/playlist_manager.cc"
     "core/playlist_manager.h"
+    "core/guide_manager.cc"
+    "core/guide_manager.h"
     "core/process_lock.cc"
     "core/process_lock.h"
     "core/profile_selection.h"

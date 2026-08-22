@@ -6,9 +6,10 @@
 #include "absl/algorithm/container.h"
 #include "absl/strings/strip.h"
 #include "aim/common/files.h"
-#include "aim/common/log.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/util.h"
+#include "aim/core/file_system.h"
+#include "aim/core/guide_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
 
@@ -75,10 +76,12 @@ class BundleManagerImpl : public BundleManager {
  public:
   explicit BundleManagerImpl(FileSystem* fs,
                              PlaylistManager* playlist_manager,
-                             ScenarioManager* scenario_manager)
+                             ScenarioManager* scenario_manager,
+                             GuideManager* guide_manager)
       : fs_(fs),
         playlist_manager_(playlist_manager),
         scenario_manager_(scenario_manager),
+        guide_manager_(guide_manager),
         bundle_info_file_path_(fs->GetUserDataPath("bundles/bundles.json")) {}
 
   std::vector<std::string> LoadBundlesFromDisk() override {
@@ -112,6 +115,7 @@ class BundleManagerImpl : public BundleManager {
 
     scenario_manager_->StartReload();
     playlist_manager_->StartReload();
+    guide_manager_->StartReload();
     for (auto& entry : bundle_path_map) {
       std::string bundle_name = entry.first;
       std::filesystem::path bundle_path = entry.second;
@@ -120,12 +124,14 @@ class BundleManagerImpl : public BundleManager {
       if (ReadJsonMessageFromFile(bundle_path, &bundle_file)) {
         scenario_manager_->LoadScenariosFromBundle(bundle_name, bundle_file);
         playlist_manager_->LoadPlaylistsFromBundle(bundle_name, bundle_file);
+        guide_manager_->LoadGuidesFromBundle(bundle_name, bundle_file);
       } else {
         error_messages.push_back(std::format("Unable to parse bundle \"{}\"", bundle_name));
       }
     }
     scenario_manager_->FinishReload();
     playlist_manager_->FinishReload();
+    guide_manager_->FinishReload();
     return error_messages;
   }
 
@@ -145,6 +151,7 @@ class BundleManagerImpl : public BundleManager {
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(bundle_name, &bundle_file);
+    guide_manager_->AddGuidesForBundle(bundle_name, &bundle_file);
     return WriteJsonMessageToFile(GetMutableBundleFilePath(bundle_name), bundle_file);
   }
 
@@ -156,6 +163,7 @@ class BundleManagerImpl : public BundleManager {
     BundleFile bundle_file;
     playlist_manager_->AddPlaylistsForBundle(source_bundle_name, &bundle_file);
     scenario_manager_->AddScenariosForBundle(source_bundle_name, &bundle_file);
+    guide_manager_->AddGuidesForBundle(source_bundle_name, &bundle_file);
 
     auto change_bundle_name = [&](const std::string& name) {
       std::string_view result_view = name;
@@ -197,6 +205,7 @@ class BundleManagerImpl : public BundleManager {
     std::unordered_set<std::string> dirty_bundles;
     InsertAll(&dirty_bundles, scenario_manager_->GetDirtyBundles());
     InsertAll(&dirty_bundles, playlist_manager_->GetDirtyBundles());
+    InsertAll(&dirty_bundles, guide_manager_->GetDirtyBundles());
     return dirty_bundles;
   }
 
@@ -212,6 +221,7 @@ class BundleManagerImpl : public BundleManager {
     // TODO: Maybe only clear the bundles that were actually saved.
     scenario_manager_->ClearDirtyBundles();
     playlist_manager_->ClearDirtyBundles();
+    guide_manager_->ClearDirtyBundles();
 
     return !some_failed;
   }
@@ -301,6 +311,7 @@ class BundleManagerImpl : public BundleManager {
   FileSystem* fs_;
   PlaylistManager* playlist_manager_;
   ScenarioManager* scenario_manager_;
+  GuideManager* guide_manager_;
   std::filesystem::path bundle_info_file_path_;
   std::unordered_map<std::string, BundleInfo> bundle_info_map_;
 };
@@ -309,8 +320,9 @@ class BundleManagerImpl : public BundleManager {
 
 std::unique_ptr<BundleManager> CreateBundleManager(FileSystem* fs,
                                                    PlaylistManager* playlist_manager,
-                                                   ScenarioManager* scenario_manager) {
-  return std::make_unique<BundleManagerImpl>(fs, playlist_manager, scenario_manager);
+                                                   ScenarioManager* scenario_manager,
+                                                   GuideManager* guide_manager) {
+  return std::make_unique<BundleManagerImpl>(fs, playlist_manager, scenario_manager, guide_manager);
 }
 
 bool IsValidBundleName(const std::string& bundle_name) {

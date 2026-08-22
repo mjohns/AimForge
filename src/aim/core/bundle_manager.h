@@ -8,6 +8,7 @@ namespace aim {
 
 class PlaylistManager;
 class ScenarioManager;
+class GuideManager;
 class FileSystem;
 
 inline const char* kUserBundleName = "USER";
@@ -38,7 +39,8 @@ class BundleManager {
 
 std::unique_ptr<BundleManager> CreateBundleManager(FileSystem* fs,
                                                    PlaylistManager* playlist_manager,
-                                                   ScenarioManager* scenario_manager);
+                                                   ScenarioManager* scenario_manager,
+                                                   GuideManager* guide_manager);
 
 bool IsValidBundleName(const std::string& bundle_name);
 
