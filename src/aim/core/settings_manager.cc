@@ -1,8 +1,6 @@
 #include "settings_manager.h"
 
-#include <fstream>
-
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "SDL3/SDL_mouse.h"
 #include "absl/status/status.h"
 #include "absl/strings/ascii.h"

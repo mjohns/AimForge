@@ -2,13 +2,11 @@
 
 #include <filesystem>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/status/status.h"
 #include "aim/common/simple_types.h"
-#include "aim/common/times.h"
 #include "aim/core/history_manager.h"
 #include "aim/database/aim_db.h"
 #include "aim/proto/crosshair.pb.h"

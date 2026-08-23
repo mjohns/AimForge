@@ -7,6 +7,7 @@
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "SDL3/SDL_gpu.h"
+#include "SDL3/SDL_video.h"
 #include "SDL3_mixer/SDL_mixer.h"
 #include "absl/cleanup/cleanup.h"
 #include "absl/log/log_sink.h"
@@ -16,6 +17,7 @@
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/bundle_manager.h"
+#include "aim/core/displays.h"
 #include "aim/core/guide_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
@@ -899,12 +901,42 @@ class ApplicationImpl : public Application {
 
     state_->initialization_times.audio.end = stopwatch.GetElapsedMicros();
 
-    SDL_WindowFlags window_flags =
-        (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-    trace.Add("SDL_CreateWindow");
-    sdl_window_ = SDL_CreateWindow("FpsAimForge", 0, 0, window_flags);
-    if (sdl_window_ == nullptr) {
-      return std::format("Failed to create window: {}", SDL_GetError());
+    {
+      auto displays = ListDisplays();
+      float highest_refresh_rate = 0;
+      for (const DisplayInfo& display : displays) {
+        if (display.refresh_rate < highest_refresh_rate) {
+          continue;
+        }
+        if (display.refresh_rate == highest_refresh_rate && !display.is_primary) {
+          continue;
+        }
+        display_ = display;
+        highest_refresh_rate = display.refresh_rate;
+      }
+
+      auto display_id = display_.display_id;
+      if (display_id == 0) {
+        return "Unable to find display";
+      }
+
+      SDL_Rect bounds;
+      SDL_GetDisplayBounds(display_id, &bounds);
+
+      SDL_PropertiesID props = SDL_CreateProperties();
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, bounds.x);
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, bounds.y);
+      SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
+
+      sdl_window_ = SDL_CreateWindowWithProperties(props);
+      SDL_DestroyProperties(props);
+      if (sdl_window_ == nullptr) {
+        return std::format("Failed to create window: {}", SDL_GetError());
+      }
+
+      if (!SDL_SetWindowFullscreen(sdl_window_, true)) {
+        return std::format("Failed to make window fullscreen: {}", SDL_GetError());
+      }
     }
 
     trace.Add("SDL_CreateGPUDevice");
@@ -1092,21 +1124,11 @@ class ApplicationImpl : public Application {
     Stopwatch stopwatch;
     stopwatch.Start();
 
-    /*
-    // Prime aggregate stats cache for all recent scenarios.
-    for (const std::string& scenario_name : history_manager_->recent_scenarios()) {
-      stats_manager_->GetAggregateStats(scenario_name);
-    }
-    */
-
     auto settings = settings_manager_->GetCurrentSettings();
     if (settings.max_render_fps() <= 0) {
-      const SDL_DisplayMode* display_mode = SDL_GetCurrentDisplayMode(SDL_GetPrimaryDisplay());
-      if (display_mode != nullptr) {
-        auto updater = settings_manager_->CreateUpdater();
-        updater.settings.set_max_render_fps(std::round(display_mode->refresh_rate * 2));
-        updater.SaveIfChangesMade("");
-      }
+      auto updater = settings_manager_->CreateUpdater();
+      updater.settings.set_max_render_fps(std::round(display_.refresh_rate * 2));
+      updater.SaveIfChangesMade("");
     }
 
     sound_manager_->LoadSounds(settings_manager_->GetCurrentSettings());
@@ -1150,6 +1172,7 @@ class ApplicationImpl : public Application {
   MIX_Mixer* sdl_mixer_ = nullptr;
   SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUSampleCount msaa_sample_count_;
+  DisplayInfo display_;
 
   int window_width_ = -1;
   int window_height_ = -1;

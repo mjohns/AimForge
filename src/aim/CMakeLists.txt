@@ -44,6 +44,7 @@ set(SRCS
     "core/bundle_manager.h"
     "core/camera.cc"
     "core/camera.h"
+    "core/displays.h"
     "core/file_system.cc"
     "core/file_system.h"
     "core/font_manager.cc"
