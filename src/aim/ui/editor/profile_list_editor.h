@@ -82,12 +82,6 @@ void DrawOrderListEditor(const std::string& type_name,
     if (ImGui::MenuButton()) {
       ImGui::OpenPopup(item_menu_id);
     }
-    /*
-    ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kClear)) {
-      remove_at_i = i;
-    }
-    */
 
     if (IsValidIndex(*profile_list, number)) {
       auto& profile = profile_list->at(number);
@@ -104,24 +98,7 @@ void DrawOrderListEditor(const std::string& type_name,
     order_list->erase(order_list->begin() + remove_at_i);
   }
   if (insert_at_i >= 0) {
-    if (insert_at_i >= order_list->size()) {
-      order_list->Add(0);
-    } else {
-      std::vector<int> new_order;
-      new_order.reserve(order_list->size() + 1);
-      for (int i = 0; i < order_list->size(); ++i) {
-        if (i == insert_at_i) {
-          new_order.push_back(0);
-        }
-        new_order.push_back((*order_list)[i]);
-      }
-
-      order_list->Clear();
-      order_list->Reserve(new_order.size());
-      for (int value : new_order) {
-        order_list->Add(value);
-      }
-    }
+    InsertAtIndex(order_list, 0, insert_at_i);
   }
 }
 
