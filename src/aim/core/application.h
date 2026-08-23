@@ -53,12 +53,6 @@ class Application {
 
   virtual bool BeginFullscreenWindow(const std::string& id = "Fullscreen") = 0;
 
-  virtual bool StartRender(RenderContext* render_context) = 0;
-  virtual void FinishRender(RenderContext* render_context) = 0;
-
-  // Render just ImGui screen.
-  virtual void Render(std::optional<ImVec4> clear_color = {}) = 0;
-
   virtual SDL_Window* sdl_window() = 0;
   virtual SDL_GPUDevice* gpu_device() = 0;
 
@@ -79,7 +73,7 @@ class Application {
   virtual SoundManager* sound_manager() = 0;
   virtual StatsManager& stats_manager() = 0;
   virtual PlayTimeManager& play_time_manager() = 0;
-  virtual Renderer* renderer() = 0;
+  virtual Renderer& renderer() = 0;
   virtual FileSystem* file_system() = 0;
   virtual FontManager& font_manager() = 0;
   virtual SettingsManager& settings_manager() = 0;

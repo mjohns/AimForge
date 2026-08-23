@@ -272,8 +272,8 @@ class ApplicationImpl : public Application {
     return *play_time_manager_;
   }
 
-  Renderer* renderer() override {
-    return renderer_.get();
+  Renderer& renderer() override {
+    return *renderer_.get();
   }
 
   FileSystem* file_system() override {
@@ -376,65 +376,9 @@ class ApplicationImpl : public Application {
   void RequestExit() override {
     should_exit_ = true;
   }
+
   void RequestRestart() override {
     should_restart_ = true;
-  }
-
-  // Render just ImGui screen.
-  void Render(std::optional<ImVec4> explicit_clear_color) override {
-    ImVec4 clear_color;
-    if (explicit_clear_color) {
-      clear_color = *explicit_clear_color;
-    } else {
-      ImGuiStyle& style = ImGui::GetStyle();
-      clear_color = style.Colors[ImGuiCol_WindowBg];
-    }
-    ImGui::Render();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-    const bool is_minimized =
-        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-
-    SDL_GPUCommandBuffer* command_buffer = SDL_AcquireGPUCommandBuffer(gpu_device_);
-
-    SDL_GPUTexture* swapchain_texture;
-    SDL_WaitAndAcquireGPUSwapchainTexture(command_buffer,
-                                          sdl_window_,
-                                          &swapchain_texture,
-                                          nullptr,
-                                          nullptr);  // Acquire a swapchain texture
-
-    if (swapchain_texture != nullptr && !is_minimized) {
-      // This is mandatory: call ImGui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
-      // buffer!
-      ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
-
-      // Setup and start a render pass
-      SDL_GPUColorTargetInfo target_info = {};
-      target_info.clear_color =
-          SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
-      target_info.load_op = SDL_GPU_LOADOP_CLEAR;
-      if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
-        target_info.texture = swapchain_texture;
-        target_info.store_op = SDL_GPU_STOREOP_STORE;
-      } else {
-        target_info.texture = msaa_render_texture_;
-        target_info.resolve_texture = swapchain_texture;
-        target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
-      }
-      target_info.mip_level = 0;
-      target_info.layer_or_depth_plane = 0;
-      target_info.cycle = false;
-      SDL_GPURenderPass* render_pass =
-          SDL_BeginGPURenderPass(command_buffer, &target_info, 1, nullptr);
-
-      // Render ImGui
-      ImGui_ImplSDLGPU3_RenderDrawData(draw_data, command_buffer, render_pass);
-
-      SDL_EndGPURenderPass(render_pass);
-    }
-
-    // Submit the command buffer
-    SDL_SubmitGPUCommandBuffer(command_buffer);
   }
 
   // Returns whether the program should exit.
@@ -529,69 +473,6 @@ class ApplicationImpl : public Application {
                             ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize |
                             ImGuiWindowFlags_NoScrollbar);
     // ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings);
-  }
-
-  bool StartRender(RenderContext* ctx) override {
-    ctx->times->start_render.start = ctx->stopwatch->GetElapsedMicros();
-    ImGui::Render();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-    const bool is_minimized =
-        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
-    ctx->command_buffer = SDL_AcquireGPUCommandBuffer(gpu_device_);
-    ctx->times->acquire_swapchain = ctx->stopwatch->GetElapsedMicros();
-    SDL_AcquireGPUSwapchainTexture(ctx->command_buffer,
-                                   sdl_window_,
-                                   &ctx->swapchain_texture,
-                                   nullptr,
-                                   nullptr);  // Acquire a swapchain texture
-
-    if (ctx->swapchain_texture == nullptr) {
-      ctx->times->submit_swapchain_command_buffer = ctx->stopwatch->GetElapsedMicros();
-      SDL_SubmitGPUCommandBuffer(ctx->command_buffer);
-      ctx->times->start_render.end = ctx->stopwatch->GetElapsedMicros();
-      return false;
-    }
-
-    ctx->times->imgui_prepare_draw_data = ctx->stopwatch->GetElapsedMicros();
-    ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, ctx->command_buffer);
-    ctx->times->start_render.end = ctx->stopwatch->GetElapsedMicros();
-    return true;
-  }
-
-  void FinishRender(RenderContext* ctx) override {
-    ctx->times->finish_render.start = ctx->stopwatch->GetElapsedMicros();
-    // Setup and start a render pass
-    SDL_GPUColorTargetInfo target_info = {};
-    target_info.load_op = SDL_GPU_LOADOP_LOAD;
-    if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
-      target_info.texture = ctx->swapchain_texture;
-      target_info.store_op = SDL_GPU_STOREOP_STORE;
-    } else {
-      target_info.texture = msaa_render_texture_;
-      target_info.resolve_texture = ctx->swapchain_texture;
-      target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
-    }
-    target_info.mip_level = 0;
-    target_info.layer_or_depth_plane = 0;
-    target_info.cycle = false;
-
-    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render ImGui");
-
-    ctx->times->imgui_begin_render_pass = ctx->stopwatch->GetElapsedMicros();
-    auto* imgui_render_pass = SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, nullptr);
-
-    ctx->times->imgui_render_draw_data = ctx->stopwatch->GetElapsedMicros();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-    ImGui_ImplSDLGPU3_RenderDrawData(draw_data, ctx->command_buffer, imgui_render_pass);
-
-    ctx->times->imgui_end_render_pass = ctx->stopwatch->GetElapsedMicros();
-    SDL_EndGPURenderPass(imgui_render_pass);
-    SDL_PopGPUDebugGroup(ctx->command_buffer);
-
-    ctx->times->finish_render_submit_command_buffer = ctx->stopwatch->GetElapsedMicros();
-    SDL_SubmitGPUCommandBuffer(ctx->command_buffer);
-
-    ctx->times->finish_render.end = ctx->stopwatch->GetElapsedMicros();
   }
 
   std::optional<std::string> InitializeWindow(const Stopwatch& stopwatch) {
@@ -697,8 +578,6 @@ class ApplicationImpl : public Application {
                    window_pixel_density);
 
     state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
-
-    // SDL_ShowWindow(sdl_window_);
 
     bool set_icon = true;
 #ifdef _WIN32

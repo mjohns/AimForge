@@ -545,21 +545,16 @@ class ThemeEditorScreen : public UiScreen {
       return;
     }
 
-    RenderContext ctx;
-    if (app_.StartRender(&ctx)) {
-      HealthBarSettings health_bar;
-      health_bar.set_show(true);
-      health_bar.set_size(1.5);
-      app_.renderer()->DrawScenario(projection_,
-                                    default_room_,
-                                    ShotType::kTrackingProximity,
-                                    theme_editor_->GetThemeToToRender(),
-                                    health_bar,
-                                    target_manager_.GetTargets(),
-                                    look_at_,
-                                    &ctx);
-      app_.FinishRender(&ctx);
-    }
+    HealthBarSettings health_bar;
+    health_bar.set_show(true);
+    health_bar.set_size(1.5);
+    app_.renderer().RenderScenario(projection_,
+                                   default_room_,
+                                   ShotType::kTrackingProximity,
+                                   theme_editor_->GetThemeToToRender(),
+                                   health_bar,
+                                   target_manager_.GetTargets(),
+                                   look_at_);
   }
 
  private:

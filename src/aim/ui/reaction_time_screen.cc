@@ -8,6 +8,7 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/settings_manager.h"
+#include "aim/graphics/renderer.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
 
 namespace aim {
@@ -98,7 +99,7 @@ class SingleReactionTimeScreen : public Screen {
       }
 
       ImGui::End();
-      app_.Render();
+      app_.renderer().RenderImGui();
       return;
     }
 
@@ -123,7 +124,7 @@ class SingleReactionTimeScreen : public Screen {
           app_.BeginFullscreenWindow();
           DrawSquare(IM_COL32(0, 255, 0, 255));
           ImGui::End();
-          app_.Render(ImColor(0.0f, 0.0f, 0.0f, 1.0f));
+          app_.renderer().RenderImGui(ImColor(0.0f, 0.0f, 0.0f, 1.0f));
           react_start_time_ = stopwatch_.GetElapsedMicros();
         }
       }

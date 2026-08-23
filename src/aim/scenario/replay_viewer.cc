@@ -548,19 +548,14 @@ class ReplayViewerScreen : public Screen {
     ImGui::EndChild();
     ImGui::End();
 
-    RenderContext ctx;
-    if (app_.StartRender(&ctx)) {
-      LookAtInfo look_at = replay_view_->camera.GetLookAt();
-      app_.renderer()->DrawScenario(projection_,
-                                    replay.room,
-                                    replay.shot_type,
-                                    theme_,
-                                    settings_.health_bar(),
-                                    replay_view_->target_manager.GetTargets(),
-                                    look_at,
-                                    &ctx);
-      app_.FinishRender(&ctx);
-    }
+    LookAtInfo look_at = replay_view_->camera.GetLookAt();
+    app_.renderer().RenderScenario(projection_,
+                                   replay.room,
+                                   replay.shot_type,
+                                   theme_,
+                                   settings_.health_bar(),
+                                   replay_view_->target_manager.GetTargets(),
+                                   look_at);
 
     if (replay_view_->IsDone()) {
       Pause();

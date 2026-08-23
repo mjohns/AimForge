@@ -429,18 +429,13 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::PopStyleColor();
   ImGui::End();
 
-  RenderContext ctx;
-  if (app_.StartRender(&ctx)) {
-    app_.renderer()->DrawScenario(projection_,
-                                  def_.room(),
-                                  def_.shot_type().type_case(),
-                                  theme_,
-                                  settings_.health_bar(),
-                                  target_manager_.GetTargets(),
-                                  look_at_,
-                                  &ctx);
-    app_.FinishRender(&ctx);
-  }
+  app_.renderer().RenderScenario(projection_,
+                                 def_.room(),
+                                 def_.shot_type().type_case(),
+                                 theme_,
+                                 settings_.health_bar(),
+                                 target_manager_.GetTargets(),
+                                 look_at_);
 }
 
 void Scenario::OnStartCountdownClickTick() {
@@ -508,18 +503,13 @@ void Scenario::OnStartCountdownClickTick() {
   ImGui::End();
 
   // Draw progress bar.
-  RenderContext ctx;
-  if (app_.StartRender(&ctx)) {
-    app_.renderer()->DrawScenario(projection_,
-                                  def_.room(),
-                                  def_.shot_type().type_case(),
-                                  theme_,
-                                  settings_.health_bar(),
-                                  target_manager_.GetTargets(),
-                                  look_at_,
-                                  &ctx);
-    app_.FinishRender(&ctx);
-  }
+  app_.renderer().RenderScenario(projection_,
+                                 def_.room(),
+                                 def_.shot_type().type_case(),
+                                 theme_,
+                                 settings_.health_bar(),
+                                 target_manager_.GetTargets(),
+                                 look_at_);
 }
 
 void Scenario::OnRunningTick() {
@@ -601,17 +591,15 @@ void Scenario::OnRunningTick() {
   RenderContext ctx;
   ctx.stopwatch = &timer_.run_stopwatch();
   ctx.times = &current_times_;
-  if (app_.StartRender(&ctx)) {
-    app_.renderer()->DrawScenario(projection_,
-                                  def_.room(),
-                                  def_.shot_type().type_case(),
-                                  theme_,
-                                  settings_.health_bar(),
-                                  target_manager_.GetTargets(),
-                                  look_at_,
-                                  &ctx);
-    app_.FinishRender(&ctx);
-  }
+  app_.renderer().RenderScenario(projection_,
+                                 def_.room(),
+                                 def_.shot_type().type_case(),
+                                 theme_,
+                                 settings_.health_bar(),
+                                 target_manager_.GetTargets(),
+                                 look_at_,
+                                 &ctx);
+
   current_times_.render.end = timer_.GetElapsedMicros();
   UpdatePerfStats();
 }

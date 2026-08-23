@@ -38,14 +38,16 @@ class Renderer {
   Renderer() {}
   virtual ~Renderer() {}
 
-  virtual void DrawScenario(const glm::mat4& projection,
-                            const Room& room,
-                            ShotType::TypeCase shot_type,
-                            const Theme& theme,
-                            const HealthBarSettings& health_bar,
-                            const std::vector<Target>& targets,
-                            const LookAtInfo& look_at,
-                            RenderContext* ctx) = 0;
+  virtual void RenderImGui(std::optional<ImVec4> explicit_clear_color = {}) = 0;
+
+  virtual void RenderScenario(const glm::mat4& projection,
+                              const Room& room,
+                              ShotType::TypeCase shot_type,
+                              const Theme& theme,
+                              const HealthBarSettings& health_bar,
+                              const std::vector<Target>& targets,
+                              const LookAtInfo& look_at,
+                              RenderContext* ctx = nullptr) = 0;
 
   virtual void Cleanup() = 0;
 };

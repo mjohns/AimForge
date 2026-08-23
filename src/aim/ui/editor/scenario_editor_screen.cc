@@ -549,19 +549,14 @@ class ScenarioEditorScreen : public UiScreen {
 
     auto look_at = camera.GetLookAt();
 
-    RenderContext ctx;
-    if (app_.StartRender(&ctx)) {
-      auto projection = GetPerspectiveTransformation(app_.screen_info(), room.horizontal_fov());
-      app_.renderer()->DrawScenario(projection,
-                                    room,
-                                    def_.shot_type().type_case(),
-                                    theme_,
-                                    settings_.health_bar(),
-                                    target_manager_.GetTargets(),
-                                    look_at,
-                                    &ctx);
-      app_.FinishRender(&ctx);
-    }
+    auto projection = GetPerspectiveTransformation(app_.screen_info(), room.horizontal_fov());
+    app_.renderer().RenderScenario(projection,
+                                   room,
+                                   def_.shot_type().type_case(),
+                                   theme_,
+                                   settings_.health_bar(),
+                                   target_manager_.GetTargets(),
+                                   look_at);
   }
 
   void OnEvent(const SDL_Event& event, bool user_is_typing) override {

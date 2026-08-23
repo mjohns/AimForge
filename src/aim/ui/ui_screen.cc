@@ -5,6 +5,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/times.h"
 #include "aim/core/settings_manager.h"
+#include "aim/graphics/renderer.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/quick_settings_screen.h"
 #include "imgui/backends/imgui_impl_sdl3.h"
@@ -42,7 +43,7 @@ void UiScreen::OnTick() {
 }
 
 void UiScreen::Render() {
-  app_.Render();
+  app_.renderer().RenderImGui();
   app_.logger()->flush();
 }
 

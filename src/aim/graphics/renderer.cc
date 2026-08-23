@@ -17,6 +17,8 @@
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
 #include "glm/gtx/vector_angle.hpp"
 #include "glm/mat4x4.hpp"  // IWYU pragma: keep
+#include "imgui/backends/imgui_impl_sdl3.h"
+#include "imgui/backends/imgui_impl_sdlgpu3.h"
 
 namespace aim {
 namespace {
@@ -880,7 +882,7 @@ class RendererImpl : public Renderer {
                     const HealthBarSettings& health_bar,
                     const std::vector<Target>& targets,
                     const LookAtInfo& look_at,
-                    RenderContext* ctx) override {
+                    RenderContext* ctx) {
     const Stopwatch& stopwatch = *ctx->stopwatch;
     FrameTimes* times = ctx->times;
     const glm::mat4 view_projection = projection * look_at.transform;
@@ -932,6 +934,144 @@ class RendererImpl : public Renderer {
     times->end_render_pass = stopwatch.GetElapsedMicros();
     SDL_EndGPURenderPass(ctx->render_pass);
     ctx->render_pass = nullptr;
+  }
+
+  void RenderImGui(std::optional<ImVec4> explicit_clear_color) override {
+    ImVec4 clear_color;
+    if (explicit_clear_color) {
+      clear_color = *explicit_clear_color;
+    } else {
+      ImGuiStyle& style = ImGui::GetStyle();
+      clear_color = style.Colors[ImGuiCol_WindowBg];
+    }
+    ImGui::Render();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+    const bool is_minimized =
+        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+
+    SDL_GPUCommandBuffer* command_buffer = SDL_AcquireGPUCommandBuffer(device_);
+
+    SDL_GPUTexture* swapchain_texture;
+    SDL_WaitAndAcquireGPUSwapchainTexture(command_buffer,
+                                          sdl_window_,
+                                          &swapchain_texture,
+                                          nullptr,
+                                          nullptr);  // Acquire a swapchain texture
+
+    if (swapchain_texture != nullptr && !is_minimized) {
+      // This is mandatory: call ImGui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
+      // buffer!
+      ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, command_buffer);
+
+      // Setup and start a render pass
+      SDL_GPUColorTargetInfo target_info = {};
+      target_info.clear_color =
+          SDL_FColor{clear_color.x, clear_color.y, clear_color.z, clear_color.w};
+      target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+      if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
+        target_info.texture = swapchain_texture;
+        target_info.store_op = SDL_GPU_STOREOP_STORE;
+      } else {
+        target_info.texture = msaa_render_texture_;
+        target_info.resolve_texture = swapchain_texture;
+        target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+      }
+      target_info.mip_level = 0;
+      target_info.layer_or_depth_plane = 0;
+      target_info.cycle = false;
+      SDL_GPURenderPass* render_pass =
+          SDL_BeginGPURenderPass(command_buffer, &target_info, 1, nullptr);
+
+      // Render ImGui
+      ImGui_ImplSDLGPU3_RenderDrawData(draw_data, command_buffer, render_pass);
+
+      SDL_EndGPURenderPass(render_pass);
+    }
+
+    // Submit the command buffer
+    SDL_SubmitGPUCommandBuffer(command_buffer);
+  }
+
+  void RenderScenario(const glm::mat4& projection,
+                      const Room& room,
+                      ShotType::TypeCase shot_type,
+                      const Theme& theme,
+                      const HealthBarSettings& health_bar,
+                      const std::vector<Target>& targets,
+                      const LookAtInfo& look_at,
+                      RenderContext* ctx) override {
+    RenderContext ctx_local;
+    if (ctx == nullptr) {
+      ctx = &ctx_local;
+    }
+
+    if (StartRender(ctx)) {
+      DrawScenario(projection, room, shot_type, theme, health_bar, targets, look_at, ctx);
+      FinishRender(ctx);
+    }
+  }
+
+  bool StartRender(RenderContext* ctx) {
+    ctx->times->start_render.start = ctx->stopwatch->GetElapsedMicros();
+    ImGui::Render();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+    const bool is_minimized =
+        (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f);
+    ctx->command_buffer = SDL_AcquireGPUCommandBuffer(device_);
+    ctx->times->acquire_swapchain = ctx->stopwatch->GetElapsedMicros();
+    SDL_AcquireGPUSwapchainTexture(ctx->command_buffer,
+                                   sdl_window_,
+                                   &ctx->swapchain_texture,
+                                   nullptr,
+                                   nullptr);  // Acquire a swapchain texture
+
+    if (ctx->swapchain_texture == nullptr) {
+      ctx->times->submit_swapchain_command_buffer = ctx->stopwatch->GetElapsedMicros();
+      SDL_SubmitGPUCommandBuffer(ctx->command_buffer);
+      ctx->times->start_render.end = ctx->stopwatch->GetElapsedMicros();
+      return false;
+    }
+
+    ctx->times->imgui_prepare_draw_data = ctx->stopwatch->GetElapsedMicros();
+    ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, ctx->command_buffer);
+    ctx->times->start_render.end = ctx->stopwatch->GetElapsedMicros();
+    return true;
+  }
+
+  void FinishRender(RenderContext* ctx) {
+    ctx->times->finish_render.start = ctx->stopwatch->GetElapsedMicros();
+    // Setup and start a render pass
+    SDL_GPUColorTargetInfo target_info = {};
+    target_info.load_op = SDL_GPU_LOADOP_LOAD;
+    if (msaa_sample_count_ == SDL_GPU_SAMPLECOUNT_1) {
+      target_info.texture = ctx->swapchain_texture;
+      target_info.store_op = SDL_GPU_STOREOP_STORE;
+    } else {
+      target_info.texture = msaa_render_texture_;
+      target_info.resolve_texture = ctx->swapchain_texture;
+      target_info.store_op = SDL_GPU_STOREOP_RESOLVE;
+    }
+    target_info.mip_level = 0;
+    target_info.layer_or_depth_plane = 0;
+    target_info.cycle = false;
+
+    SDL_PushGPUDebugGroup(ctx->command_buffer, "Render ImGui");
+
+    ctx->times->imgui_begin_render_pass = ctx->stopwatch->GetElapsedMicros();
+    auto* imgui_render_pass = SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, nullptr);
+
+    ctx->times->imgui_render_draw_data = ctx->stopwatch->GetElapsedMicros();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+    ImGui_ImplSDLGPU3_RenderDrawData(draw_data, ctx->command_buffer, imgui_render_pass);
+
+    ctx->times->imgui_end_render_pass = ctx->stopwatch->GetElapsedMicros();
+    SDL_EndGPURenderPass(imgui_render_pass);
+    SDL_PopGPUDebugGroup(ctx->command_buffer);
+
+    ctx->times->finish_render_submit_command_buffer = ctx->stopwatch->GetElapsedMicros();
+    SDL_SubmitGPUCommandBuffer(ctx->command_buffer);
+
+    ctx->times->finish_render.end = ctx->stopwatch->GetElapsedMicros();
   }
 
  private:
