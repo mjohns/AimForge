@@ -2,6 +2,7 @@
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "absl/strings/ascii.h"
+#include "aim/common/imgui_ext.h"
 #include "aim/common/times.h"
 #include "aim/core/settings_manager.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
@@ -28,7 +29,7 @@ void UiScreen::OnTick() {
   Stopwatch tick_timer;
   tick_timer.Start();
 
-  app_.NewImGuiFrame();
+  ImGui::NewSdlFrame();
   DrawScreen();
   Render();
 

@@ -520,12 +520,6 @@ class ApplicationImpl : public Application {
     return screen_stack_.size();
   }
 
-  void NewImGuiFrame() override {
-    ImGui_ImplSDLGPU3_NewFrame();
-    ImGui_ImplSDL3_NewFrame();
-    ImGui::NewFrame();
-  }
-
   bool BeginFullscreenWindow(const std::string& id) override {
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImVec2((float)window_width_, (float)window_height_));
@@ -559,10 +553,7 @@ class ApplicationImpl : public Application {
     }
 
     ctx->times->imgui_prepare_draw_data = ctx->stopwatch->GetElapsedMicros();
-    // This is mandatory: call Imgui_ImplSDLGPU3_PrepareDrawData() to upload the vertex/index
-    // buffer!
     ImGui_ImplSDLGPU3_PrepareDrawData(draw_data, ctx->command_buffer);
-
     ctx->times->start_render.end = ctx->stopwatch->GetElapsedMicros();
     return true;
   }

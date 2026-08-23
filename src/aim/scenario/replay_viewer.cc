@@ -435,7 +435,7 @@ class ReplayViewerScreen : public Screen {
     timer_.OnStartRender();
     auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-    app_.NewImGuiFrame();
+    ImGui::NewSdlFrame();
     app_.BeginFullscreenWindow();
     app_.crosshair_manager().Draw(
         crosshair_, settings_.crosshair_size(), theme_, app_.screen_info().center);

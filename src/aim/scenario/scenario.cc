@@ -385,7 +385,7 @@ void Scenario::OnWaitingForClickTick() {
   timer_.OnStartRender();
   auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-  app_.NewImGuiFrame();
+  ImGui::NewSdlFrame();
   app_.BeginFullscreenWindow();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
@@ -462,7 +462,7 @@ void Scenario::OnStartCountdownClickTick() {
   timer_.OnStartRender();
   auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-  app_.NewImGuiFrame();
+  ImGui::NewSdlFrame();
   app_.BeginFullscreenWindow();
   app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
@@ -577,7 +577,7 @@ void Scenario::OnRunningTick() {
   current_times_.render.start = timer_.GetElapsedMicros();
   auto end_render_guard = absl::MakeCleanup([&] { timer_.OnEndRender(); });
 
-  app_.NewImGuiFrame();
+  ImGui::NewSdlFrame();
   app_.BeginFullscreenWindow();
 
   current_times_.draw_crosshair = timer_.GetElapsedMicros();

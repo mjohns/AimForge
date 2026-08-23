@@ -12,6 +12,9 @@
 
 namespace ImGui {
 
+// Create a new ImGui frame backed by SDL3/GPU.
+void NewSdlFrame();
+
 // ImGui::Text but taking same arguments as std::format to product the text.
 template <class... _Types>
 static void TextFmt(const std::format_string<_Types...> fmt, _Types&&... args) {

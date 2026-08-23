@@ -5,6 +5,8 @@
 #include "aim/common/util.h"
 #include "aim/proto/common.pb.h"
 #include "imgui.h"
+#include "imgui/backends/imgui_impl_sdl3.h"
+#include "imgui/backends/imgui_impl_sdlgpu3.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace ImGui {
@@ -496,6 +498,12 @@ void Popup::Close() {
 
 void Popup::Open() {
   do_open_ = true;
+}
+
+void NewSdlFrame() {
+  ImGui_ImplSDLGPU3_NewFrame();
+  ImGui_ImplSDL3_NewFrame();
+  ImGui::NewFrame();
 }
 
 }  // namespace ImGui

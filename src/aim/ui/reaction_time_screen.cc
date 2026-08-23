@@ -81,7 +81,7 @@ class SingleReactionTimeScreen : public Screen {
       stopwatch_.Start();
       initial_wait_time_seconds_ = app_.rand().GetInRange(1, 3);
 
-      app_.NewImGuiFrame();
+      ImGui::NewSdlFrame();
       app_.BeginFullscreenWindow();
 
       if (options_.is_audio) {
@@ -119,7 +119,7 @@ class SingleReactionTimeScreen : public Screen {
         if (options_.is_audio) {
           app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
         } else {
-          app_.NewImGuiFrame();
+          ImGui::NewSdlFrame();
           app_.BeginFullscreenWindow();
           DrawSquare(IM_COL32(0, 255, 0, 255));
           ImGui::End();
