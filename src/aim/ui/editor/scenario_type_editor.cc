@@ -6,6 +6,7 @@
 
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
+#include "aim/common/mat_icons.h"
 #include "aim/core/application.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/scenario/scenario_overrides.h"

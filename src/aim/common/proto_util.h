@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include "google/protobuf/message.h"
 
 namespace aim {
@@ -9,6 +11,20 @@ bool IsEquivalentProto(const google::protobuf::Message& lhs, const google::proto
 template <typename T>
 bool IsDefaultInstance(const T& message) {
   return IsEquivalentProto(message, message.default_instance());
+}
+
+// Insert an element into a repeated field like proto.mutable_foo() at a given index.
+template <typename T, typename R>
+void InsertAtIndex(R* repeated_field, const T& value, int index) {
+  if (index < 0) {
+    index = 0;
+  }
+  bool is_last = index >= repeated_field->size();
+  // Add at the end and then rotate down to correct index if necessary.
+  *repeated_field->Add() = value;
+  if (!is_last) {
+    std::rotate(repeated_field->begin() + index, repeated_field->end() - 1, repeated_field->end());
+  }
 }
 
 }  // namespace aim

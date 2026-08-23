@@ -2,8 +2,10 @@
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
+#include "aim/common/proto_util.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
+#include "aim/core/guide_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/playlist_ui.h"
@@ -13,9 +15,97 @@
 namespace aim {
 namespace {
 
+class GuideEditor {
+ public:
+  GuideEditor(const GuideItem& original_guide)
+      : original_guide_(original_guide), updated_guide_(original_guide) {}
+
+  void Draw() {
+    ImGui::IdGuard cid("GuideEditor");
+
+    ImGui::LoopId loop_id;
+    GuideDef& def = updated_guide_.def;
+
+    int delete_i = -1;
+    int copy_i = -1;
+    int move_up_i = -1;
+    int move_down_i = -1;
+    int insert_at_i = -1;
+
+    for (int i = 0; i < def.sections_size(); ++i) {
+      auto lid = loop_id.Get("Section");
+      GuideSection* section = def.mutable_sections(i);
+
+      ImGui::AlignTextToFramePadding();
+      ImGui::TextFmt("Section {}", i + 1);
+
+      const char* menu_id = "GuideSectionMenu";
+      if (ImGui::BeginPopupContextItem(menu_id)) {
+        if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
+          copy_i = i;
+        }
+        if (ImGui::Selectable(std::format("{} Move up", icons::kArrowUpward))) {
+          move_up_i = i;
+        }
+        if (ImGui::Selectable(std::format("{} Move down", icons::kArrowDownward))) {
+          move_down_i = i;
+        }
+        ImGui::SpacedSeparator();
+        if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
+          delete_i = i;
+        }
+
+        ImGui::EndPopup();
+      }
+
+      ImGui::SameLine();
+      if (ImGui::MenuButton()) {
+        ImGui::OpenPopup(menu_id);
+      }
+
+      DrawSectionEditor(section);
+    }
+
+    if (ImGui::Button(std::format("{} Add section", icons::kAdd))) {
+      updated_guide_.def.add_sections();
+    }
+
+    auto& sections = *def.mutable_sections();
+    if (delete_i >= 0) {
+      sections.erase(sections.begin() + delete_i);
+    } else if (move_up_i > 0) {
+      int i1 = move_up_i;
+      int i2 = move_up_i - 1;
+      std::swap(sections[i1], sections[i2]);
+    } else if (move_down_i >= 0) {
+      int i1 = move_down_i;
+      int i2 = move_down_i + 1;
+      if (i2 < sections.size()) {
+        std::swap(sections[i1], sections[i2]);
+      }
+    } else if (copy_i >= 0) {
+      InsertAtIndex(&sections, sections[copy_i], copy_i);
+    }
+
+    // ImGui::
+  }
+
+ private:
+  void DrawSectionEditor(GuideSection* section) {
+    ImGui::InputTextMultiline("##DescriptionInput",
+                              section->mutable_text(),
+                              ImVec2(0, 0),
+                              ImGuiInputTextFlags_AllowTabInput);
+  }
+
+  Application& app_ = GetUiApp();
+  const GuideItem original_guide_;
+  GuideItem updated_guide_;
+};
+
 class GuidesComponentImpl : public GuidesComponent {
  public:
-  GuidesComponentImpl() : app_(GetUiApp()) {
+  GuidesComponentImpl() : app_(GetUiApp()), editor_({}) {
     auto* section = guide_.add_sections();
     // section->set_text("Example playlists");
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder";
@@ -47,6 +137,8 @@ class GuidesComponentImpl : public GuidesComponent {
   void Show() override {
     SetPlaylistRunIfInGuide();
 
+    editor_.Draw();
+
     // ImGui::BeginChild("GuideContainer", ImVec2(0, 0));
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (!ImGui::BeginTable("GuideColumns", 3, flags)) {
@@ -65,7 +157,7 @@ class GuidesComponentImpl : public GuidesComponent {
     ImGui::TableNextColumn();
     ImGui::BeginChild("PlaylistColumn");
     if (run_) {
-      playlist_component_->Show(run_, /*is_playlist_tab*/ false);
+      playlist_component_->Show(run_, /*is_playlist_screen*/ false);
     }
     ImGui::EndChild();
 
@@ -122,6 +214,7 @@ class GuidesComponentImpl : public GuidesComponent {
   GuideDef guide_;
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
+  GuideEditor editor_;
 };
 
 }  // namespace

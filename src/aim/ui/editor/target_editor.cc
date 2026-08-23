@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 
+#include "aim/common/mat_icons.h"
 #include "aim/common/field.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/proto/scenario.pb.h"
