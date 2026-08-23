@@ -4,7 +4,6 @@
 
 namespace aim {
 
-
 class GuidesComponent {
  public:
   virtual ~GuidesComponent() {}

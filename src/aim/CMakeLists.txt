@@ -44,6 +44,8 @@ set(SRCS
     "core/bundle_manager.h"
     "core/camera.cc"
     "core/camera.h"
+    "core/msaa.cc"
+    "core/msaa.h"
     "core/displays.h"
     "core/file_system.cc"
     "core/file_system.h"

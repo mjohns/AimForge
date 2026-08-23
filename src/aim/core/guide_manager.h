@@ -21,8 +21,7 @@ class GuideManager {
   virtual ~GuideManager() {}
 
   virtual void StartReload() = 0;
-  virtual void LoadGuidesFromBundle(const std::string& bundle_name,
-                                       const BundleFile& bundle) = 0;
+  virtual void LoadGuidesFromBundle(const std::string& bundle_name, const BundleFile& bundle) = 0;
   virtual void FinishReload() = 0;
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
   virtual void ClearDirtyBundles() = 0;

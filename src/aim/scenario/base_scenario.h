@@ -26,8 +26,7 @@ struct ScenarioStats {
 
 class BaseScenario : public Scenario {
  public:
-  explicit BaseScenario(const CreateScenarioParams& params)
-      : Scenario(params) {}
+  explicit BaseScenario(const CreateScenarioParams& params) : Scenario(params) {}
   ~BaseScenario() {}
 
  protected:
