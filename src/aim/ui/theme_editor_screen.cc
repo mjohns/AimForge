@@ -478,7 +478,7 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Themes");
     ImGui::SameLine();
-    auto folder = app_.file_system()->GetUserDataPath("resources/themes");
+    auto folder = app_.file_system().GetUserDataPath("resources/themes");
     if (ImGui::Button(icons::kOpenInNew)) {
       OpenFolderInExplorer(folder);
     }

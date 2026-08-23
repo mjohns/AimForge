@@ -118,7 +118,7 @@ class SingleReactionTimeScreen : public Screen {
         react_start_time_ = now_micros;
 
         if (options_.is_audio) {
-          app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
+          app_.sound_manager().PlayLoadedSound(settings_.sounds().kill());
         } else {
           ImGui::NewSdlFrame();
           app_.BeginFullscreenWindow();
@@ -144,7 +144,7 @@ class ReactionTimeScreen : public UiScreen {
  public:
   explicit ReactionTimeScreen() : UiScreen() {
     settings_ = app_.settings_manager().GetCurrentSettings();
-    app_.sound_manager()->LoadSounds(settings_);
+    app_.sound_manager().LoadSounds(settings_);
   }
 
  protected:

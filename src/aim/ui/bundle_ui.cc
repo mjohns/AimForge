@@ -134,7 +134,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
     }
 
     if (ImGui::Button(std::format("{} Folder", icons::kOpenInNew))) {
-      OpenFolderInExplorer(app_.file_system()->GetUserDataPath("bundles"));
+      OpenFolderInExplorer(app_.file_system().GetUserDataPath("bundles"));
     }
     ImGui::HelpTooltip("Open bundles folder in file explorer");
   }

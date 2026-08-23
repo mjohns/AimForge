@@ -140,7 +140,7 @@ Scenario::Scenario(const CreateScenarioParams& params)
 
 void Scenario::RefreshState() {
   settings_ = app_.settings_manager().GetCurrentSettingsForScenario(scenario_name_);
-  app_.sound_manager()->LoadSounds(settings_);
+  app_.sound_manager().LoadSounds(settings_);
   float render_fps = FirstGreaterThanZero(settings_.max_render_fps(), kDefaultTargetRenderFps);
   max_render_age_micros_ = (1 / (float)(render_fps + 1)) * 1000 * 1000;
   projection_ = GetPerspectiveTransformation(app_.screen_info(), def_.room().horizontal_fov());
@@ -688,35 +688,35 @@ void Scenario::AddRemoveTargetEvent(u16 target_id) {
 }
 
 void Scenario::PlayShootSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
+  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayReloadSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sounds().reload());
+  app_.sound_manager().PlayLoadedSound(settings_.sounds().reload());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::RELOAD);
   }
 }
 
 void Scenario::PlayHitSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
+  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::HIT);
   }
 }
 
 void Scenario::PlayMissSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sounds().shoot());
+  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
   }
 }
 
 void Scenario::PlayKillSound() {
-  app_.sound_manager()->PlayLoadedSound(settings_.sounds().kill());
+  app_.sound_manager().PlayLoadedSound(settings_.sounds().kill());
   if (replay_) {
     replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::KILL);
   }

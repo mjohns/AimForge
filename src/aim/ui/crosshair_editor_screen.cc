@@ -99,7 +99,7 @@ class CrosshairEditorScreen : public UiScreen {
     ImGui::AlignTextToFramePadding();
     ImGui::Text("Crosshairs");
     ImGui::SameLine();
-    auto folder = app_.file_system()->GetUserDataPath("resources/crosshairs");
+    auto folder = app_.file_system().GetUserDataPath("resources/crosshairs");
     if (ImGui::Button(icons::kOpenInNew)) {
       OpenFolderInExplorer(folder);
     }

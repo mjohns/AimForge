@@ -46,23 +46,23 @@ const std::vector<std::pair<PlaybackSpeed, std::string>> kPlaybackSpeeds{
     {PlaybackSpeed::SPEED_10, "0.10"},
 };
 
-void PlaySound(SoundManager* sound_manager, const SoundSettings& settings, ReplaySoundType type) {
+void PlaySound(SoundManager& sound_manager, const SoundSettings& settings, ReplaySoundType type) {
   switch (type) {
     case ReplaySoundType::KILL:
-      sound_manager->PlayLoadedSound(settings.kill());
+      sound_manager.PlayLoadedSound(settings.kill());
       break;
     case ReplaySoundType::HIT:
-      sound_manager->PlayLoadedSound(settings.hit());
+      sound_manager.PlayLoadedSound(settings.hit());
       break;
     case ReplaySoundType::SHOOT:
-      sound_manager->PlayLoadedSound(settings.shoot());
+      sound_manager.PlayLoadedSound(settings.shoot());
       break;
     case ReplaySoundType::SHOOT_AND_HIT:
-      sound_manager->PlayLoadedSound(settings.shoot(), kShootAndHitGainLevel);
-      sound_manager->PlayLoadedSound(settings.hit());
+      sound_manager.PlayLoadedSound(settings.shoot(), kShootAndHitGainLevel);
+      sound_manager.PlayLoadedSound(settings.hit());
       break;
     case ReplaySoundType::RELOAD:
-      sound_manager->PlayLoadedSound(settings.reload());
+      sound_manager.PlayLoadedSound(settings.reload());
       break;
   }
 }

@@ -256,8 +256,8 @@ class ApplicationImpl : public Application {
     return rand_;
   }
 
-  SoundManager* sound_manager() override {
-    return sound_manager_.get();
+  SoundManager& sound_manager() override {
+    return *sound_manager_.get();
   }
 
   StatsManager& stats_manager() override {
@@ -272,8 +272,8 @@ class ApplicationImpl : public Application {
     return *renderer_.get();
   }
 
-  FileSystem* file_system() override {
-    return file_system_.get();
+  FileSystem& file_system() override {
+    return *file_system_.get();
   }
 
   FontManager& font_manager() override {
@@ -644,11 +644,8 @@ class ApplicationImpl : public Application {
     if (!std::filesystem::exists(shader_dir)) {
       return std::format("Compiled shader folder missing at \"{}\".", shader_dir.string());
     }
-    renderer_ = CreateRenderer(texture_dirs,
-                               shader_dir,
-                               msaa_sample_count_,
-                               gpu_device_,
-                               sdl_window_);
+    renderer_ =
+        CreateRenderer(texture_dirs, shader_dir, msaa_sample_count_, gpu_device_, sdl_window_);
     if (!renderer_) {
       return "Failed to initialize renderer.";
     }

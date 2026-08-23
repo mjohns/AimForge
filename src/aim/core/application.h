@@ -70,11 +70,11 @@ class Application {
   virtual void RequestRestart() = 0;
 
   virtual Random& rand() = 0;
-  virtual SoundManager* sound_manager() = 0;
+  virtual SoundManager& sound_manager() = 0;
   virtual StatsManager& stats_manager() = 0;
   virtual PlayTimeManager& play_time_manager() = 0;
   virtual Renderer& renderer() = 0;
-  virtual FileSystem* file_system() = 0;
+  virtual FileSystem& file_system() = 0;
   virtual FontManager& font_manager() = 0;
   virtual SettingsManager& settings_manager() = 0;
   virtual ScenarioManager& scenario_manager() = 0;

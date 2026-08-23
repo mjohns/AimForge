@@ -32,7 +32,7 @@ class SoundInputDialog {
  public:
   void NotifyOpen(std::string* sound_name_out, Application& app) {
     sound_name_out_ = sound_name_out;
-    sound_names_ = app.sound_manager()->ListSounds();
+    sound_names_ = app.sound_manager().ListSounds();
     popup_.Open();
     search_text_ = "";
   }
@@ -62,7 +62,7 @@ class SoundInputDialog {
           if (ImGui::Button(icons::kPlayArrow)) {
             SoundItem item;
             item.set_name(sound_name);
-            app.sound_manager()->LoadAndPlaySound(item);
+            app.sound_manager().LoadAndPlaySound(item);
           }
           ImGui::SameLine();
           if (ImGui::Button(sound_name)) {
@@ -329,10 +329,9 @@ class SettingsScreen : public UiScreen {
       ImGui::SpacedSeparator();
 
       if (ImGui::Button(std::format("{} Folder", icons::kOpenInNew))) {
-        OpenFolderInExplorer(app_.file_system()->GetUserDataPath());
+        OpenFolderInExplorer(app_.file_system().GetUserDataPath());
       }
-      ImGui::HelpTooltip(
-          std::format("Open \"{}\"", app_.file_system()->GetUserDataPath().string()));
+      ImGui::HelpTooltip(std::format("Open \"{}\"", app_.file_system().GetUserDataPath().string()));
       ImGui::Text(kAimForgeVersion);
 
       ImGui::EndTabItem();
@@ -531,7 +530,7 @@ class SettingsScreen : public UiScreen {
 
         ImGui::TableNextColumn();
         if (ImGui::Button(icons::kPlayArrow)) {
-          app_.sound_manager()->LoadAndPlaySound(*item);
+          app_.sound_manager().LoadAndPlaySound(*item);
         }
         ImGui::SameLine();
         ImGui::SetNextItemWidth(25 * char_x);
@@ -580,7 +579,7 @@ class SettingsScreen : public UiScreen {
 
     ImGui::SpacedSeparator();
 
-    auto sounds_folder = app_.file_system()->GetUserDataPath("resources/sounds");
+    auto sounds_folder = app_.file_system().GetUserDataPath("resources/sounds");
     if (ImGui::Button(std::format("{} Sounds folder", icons::kOpenInNew))) {
       OpenFolderInExplorer(sounds_folder);
     }
