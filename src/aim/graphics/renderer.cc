@@ -17,7 +17,6 @@
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
 #include "glm/gtx/vector_angle.hpp"
 #include "glm/mat4x4.hpp"  // IWYU pragma: keep
-#include "imgui/backends/imgui_impl_sdl3.h"
 #include "imgui/backends/imgui_impl_sdlgpu3.h"
 
 namespace aim {
@@ -742,13 +741,11 @@ class RendererImpl : public Renderer {
  public:
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
                SDL_GPUSampleCount msaa_sample_count,
-               SDL_GPUTexture* msaa_render_texture,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
       : device_(device),
         sdl_window_(sdl_window),
         msaa_sample_count_(msaa_sample_count),
-        msaa_render_texture_(msaa_render_texture),
         texture_manager_(texture_dirs, device),
         draw_data_builder_(&texture_manager_) {
     SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
@@ -787,6 +784,10 @@ class RendererImpl : public Renderer {
     if (depth_texture_ != nullptr) {
       SDL_ReleaseGPUTexture(device_, depth_texture_);
       depth_texture_ = nullptr;
+    }
+    if (msaa_render_texture_ != nullptr) {
+      SDL_ReleaseGPUTexture(device_, msaa_render_texture_);
+      msaa_render_texture_ = nullptr;
     }
     texture_manager_.clear();
   }
@@ -831,6 +832,19 @@ class RendererImpl : public Renderer {
     depth_texture_info.format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT;
     depth_texture_info.usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET;
     depth_texture_ = SDL_CreateGPUTexture(device_, &depth_texture_info);
+
+    if (msaa_sample_count_ != SDL_GPU_SAMPLECOUNT_1) {
+      SDL_GPUTextureCreateInfo render_texture_info{};
+      render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+      render_texture_info.width = viewport_width_;
+      render_texture_info.height = viewport_height_;
+      render_texture_info.layer_count_or_depth = 1;
+      render_texture_info.num_levels = 1;
+      render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(device_, sdl_window_);
+      render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
+      render_texture_info.sample_count = msaa_sample_count_;
+      msaa_render_texture_ = SDL_CreateGPUTexture(device_, &render_texture_info);
+    }
 
     if (!CreateTextureQuadPipeline()) {
       return false;
@@ -1549,11 +1563,10 @@ class RendererImpl : public Renderer {
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
                                          SDL_GPUSampleCount msaa_sample_count,
-                                         SDL_GPUTexture* msaa_render_texture,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window) {
-  auto renderer = std::make_unique<RendererImpl>(
-      texture_dirs, msaa_sample_count, msaa_render_texture, device, sdl_window);
+  auto renderer =
+      std::make_unique<RendererImpl>(texture_dirs, msaa_sample_count, device, sdl_window);
   if (!renderer->Initialize(shader_dir)) {
     return {};
   }

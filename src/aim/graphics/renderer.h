@@ -55,7 +55,6 @@ class Renderer {
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
                                          SDL_GPUSampleCount msaa_sample_count,
-                                         SDL_GPUTexture* msaa_render_texture,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window);
 

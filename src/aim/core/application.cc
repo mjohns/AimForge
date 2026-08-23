@@ -211,10 +211,6 @@ class ApplicationImpl : public Application {
       if (renderer_) {
         renderer_->Cleanup();
       }
-      if (msaa_render_texture_ != nullptr) {
-        SDL_ReleaseGPUTexture(gpu_device_, msaa_render_texture_);
-        msaa_render_texture_ = nullptr;
-      }
       if (sdl_window_ != nullptr) {
         SDL_ReleaseWindowFromGPUDevice(gpu_device_, sdl_window_);
       }
@@ -639,18 +635,6 @@ class ApplicationImpl : public Application {
 
     msaa_sample_count_ = GetMsaaSampleCount(
         sdl_window_, gpu_device_, settings_manager_->GetCurrentSettings().msaa_level());
-    if (msaa_sample_count_ != SDL_GPU_SAMPLECOUNT_1) {
-      SDL_GPUTextureCreateInfo render_texture_info{};
-      render_texture_info.type = SDL_GPU_TEXTURETYPE_2D;
-      render_texture_info.width = window_pixel_width_;
-      render_texture_info.height = window_pixel_height_;
-      render_texture_info.layer_count_or_depth = 1;
-      render_texture_info.num_levels = 1;
-      render_texture_info.format = SDL_GetGPUSwapchainTextureFormat(gpu_device_, sdl_window_);
-      render_texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET;
-      render_texture_info.sample_count = msaa_sample_count_;
-      msaa_render_texture_ = SDL_CreateGPUTexture(gpu_device_, &render_texture_info);
-    }
 
     std::vector<std::filesystem::path> texture_dirs = {
         file_system_->GetUserDataPath("resources/textures"),
@@ -663,7 +647,6 @@ class ApplicationImpl : public Application {
     renderer_ = CreateRenderer(texture_dirs,
                                shader_dir,
                                msaa_sample_count_,
-                               msaa_render_texture_,
                                gpu_device_,
                                sdl_window_);
     if (!renderer_) {
@@ -739,7 +722,6 @@ class ApplicationImpl : public Application {
   SDL_Surface* icon_ = nullptr;
   SDL_GPUDevice* gpu_device_ = nullptr;
   MIX_Mixer* sdl_mixer_ = nullptr;
-  SDL_GPUTexture* msaa_render_texture_ = nullptr;
   SDL_GPUSampleCount msaa_sample_count_;
   DisplayInfo display_;
 
