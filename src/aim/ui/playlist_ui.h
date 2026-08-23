@@ -15,10 +15,10 @@ class PlaylistComponent {
  public:
   virtual ~PlaylistComponent() {}
 
-  virtual void Show(std::shared_ptr<PlaylistRun> run) = 0;
+  virtual void Show(std::shared_ptr<PlaylistRun> run, bool is_playlist_screen) = 0;
 };
 
-std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen);
+std::unique_ptr<PlaylistComponent> CreatePlaylistComponent();
 
 struct PlaylistListResult {
   std::optional<Playlist> open_playlist{};

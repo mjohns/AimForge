@@ -14,6 +14,7 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/ui/search_selector.h"
 #include "aim/ui/select_variation_dialog.h"
+#include "aim/ui/ui_app.h"
 #include "imgui.h"
 
 namespace aim {
@@ -31,8 +32,7 @@ const std::vector<std::pair<PlaylistType, std::string>> kPlaylistTypes{
 
 class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
  public:
-  explicit PlaylistEditorComponentImpl(Screen& screen, const std::string& playlist_name)
-      : app_(screen.app()), screen_(screen) {
+  explicit PlaylistEditorComponentImpl(const std::string& playlist_name) : app_(GetUiApp()) {
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetRun(playlist_name);
     if (run != nullptr) {
       ResourceName name = ResourceName::Parse(run->playlist.name);
@@ -427,7 +427,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
   }
 
   Application& app_;
-  Screen& screen_;
   std::vector<PlaylistItem> scenario_items_;
   int dragging_i_ = -1;
   int editing_i_ = -1;
@@ -452,8 +451,8 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
 }  // namespace
 
 std::unique_ptr<PlaylistEditorComponent> CreatePlaylistEditorComponent(
-    const std::string& playlist_name, UiScreen* screen) {
-  return std::make_unique<PlaylistEditorComponentImpl>(*screen, playlist_name);
+    const std::string& playlist_name) {
+  return std::make_unique<PlaylistEditorComponentImpl>(playlist_name);
 }
 
 }  // namespace aim

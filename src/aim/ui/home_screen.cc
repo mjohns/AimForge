@@ -91,7 +91,7 @@ class SetInitialDpiDialog {
 class HomeScreen : public UiScreen {
  public:
   HomeScreen() : UiScreen() {
-    playlist_component_ = CreatePlaylistComponent(this);
+    playlist_component_ = CreatePlaylistComponent();
     playlist_list_component_ = CreatePlaylistListComponent(this);
     bundle_ui_component_ = CreateBundleUiComponent(this);
     scenarios_component_ = CreateScenariosComponent(app_);
@@ -342,10 +342,9 @@ class HomeScreen : public UiScreen {
   void DrawCurrentPlaylistScreen() {
     ImVec2 sz = ImVec2(0.0f, 0.0f);
     std::shared_ptr<PlaylistRun> run = app_.playlist_manager().GetCurrentRun();
-    if (run == nullptr) {
-      return;
+    if (run) {
+      playlist_component_->Show(run, /*is_playlist_screen*/ true);
     }
-    playlist_component_->Show(run);
   }
 
   AppScreen app_screen_ = AppScreen::PLAYLISTS;

@@ -24,6 +24,8 @@ class GuidesComponentImpl : public GuidesComponent {
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder 35cm";
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder 45cm";
     *section->add_playlists() = "AF SmoothSwerve Precision Ladder 55cm";
+
+    playlist_component_ = CreatePlaylistComponent();
   }
 
   void SetPlaylistRunIfInGuide() {
@@ -47,7 +49,7 @@ class GuidesComponentImpl : public GuidesComponent {
 
     // ImGui::BeginChild("GuideContainer", ImVec2(0, 0));
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
-    if (!ImGui::BeginTable("GuideColumns", 2, flags)) {
+    if (!ImGui::BeginTable("GuideColumns", 3, flags)) {
       return;
     }
 
@@ -62,9 +64,8 @@ class GuidesComponentImpl : public GuidesComponent {
 
     ImGui::TableNextColumn();
     ImGui::BeginChild("PlaylistColumn");
-    // TODO: and playlist is in guide.
     if (run_) {
-      PlaylistRunComponent("PlaylistRun", run_);
+      playlist_component_->Show(run_, /*is_playlist_tab*/ false);
     }
     ImGui::EndChild();
 
@@ -119,6 +120,7 @@ class GuidesComponentImpl : public GuidesComponent {
   Application& app_;
 
   GuideDef guide_;
+  std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
 };
 

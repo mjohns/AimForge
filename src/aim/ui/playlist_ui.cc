@@ -93,28 +93,31 @@ class AddPlaylistDialog {
 
 class PlaylistComponentImpl : public PlaylistComponent {
  public:
-  explicit PlaylistComponentImpl(UiScreen& screen) : app_(screen.app()), screen_(screen) {}
+  explicit PlaylistComponentImpl() : app_(GetUiApp()) {}
 
-  void Show(std::shared_ptr<PlaylistRun> run) override {
+  void Show(std::shared_ptr<PlaylistRun> run, bool is_playlist_screen) override {
     ImGui::IdGuard cid("PlaylistComponent");
 
     const std::string& playlist_name = run->playlist.name;
 
     auto playlist_to_delete = delete_confirmation_dialog_.Draw("Delete");
     if (playlist_to_delete) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist_to_delete->name);
-      screen_.app().bundle_manager().SaveDirtyBundles();
+      app_.playlist_manager().DeletePlaylist(playlist_to_delete->name);
+      app_.bundle_manager().SaveDirtyBundles();
     }
     copy_dialog_.Draw(app_);
 
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
       ResetForNewCurrentPlaylist();
+      if (!is_playlist_screen) {
+        app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
+      }
     }
 
     if (showing_editor_) {
       if (!editor_component_) {
-        editor_component_ = CreatePlaylistEditorComponent(playlist_name, &screen_);
+        editor_component_ = CreatePlaylistEditorComponent(playlist_name);
       }
       EditorResult editor_result;
       editor_component_->Draw(&editor_result);
@@ -131,6 +134,9 @@ class PlaylistComponentImpl : public PlaylistComponent {
         app_.playlist_manager().SetCurrentPlaylist(updated_playlist_variation_name);
         app_.history_manager().UpdateRecentView(ObjectType::PLAYLIST,
                                                 updated_playlist_variation_name);
+        if (!is_playlist_screen) {
+          app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
+        }
       }
     }
 
@@ -235,7 +241,6 @@ class PlaylistComponentImpl : public PlaylistComponent {
   NameInfo current_playlist_name_info_;
   SelectVariationDialog select_variation_dialog_ =
       SelectVariationDialog::ForPlaylists("PlaylistVariation");
-  UiScreen& screen_;
   Application& app_;
 
   ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog1"};
@@ -567,8 +572,8 @@ void PlaylistRunComponent(const std::string& id, std::shared_ptr<PlaylistRun> ru
   ImGui::EndChild();
 }
 
-std::unique_ptr<PlaylistComponent> CreatePlaylistComponent(UiScreen* screen) {
-  return std::make_unique<PlaylistComponentImpl>(*screen);
+std::unique_ptr<PlaylistComponent> CreatePlaylistComponent() {
+  return std::make_unique<PlaylistComponentImpl>();
 }
 
 std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {

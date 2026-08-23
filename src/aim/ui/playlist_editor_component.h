@@ -3,8 +3,6 @@
 #include <memory>
 #include <string>
 
-#include "aim/ui/ui_screen.h"
-
 namespace aim {
 
 struct EditorResult {
@@ -21,6 +19,6 @@ class PlaylistEditorComponent {
 };
 
 std::unique_ptr<PlaylistEditorComponent> CreatePlaylistEditorComponent(
-    const std::string& playlist_name, UiScreen* screen);
+    const std::string& playlist_name);
 
 }  // namespace aim
