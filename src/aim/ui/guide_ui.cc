@@ -58,12 +58,17 @@ class GuideEditor {
         ImGui::EndPopup();
       }
 
+      ImGui::Indent();
       ImGui::SameLine();
       if (ImGui::MenuButton()) {
         ImGui::OpenPopup(menu_id);
       }
 
+      if (i != 0) {
+        ImGui::SpacedSeparator();
+      }
       DrawSectionEditor(section);
+      ImGui::Unindent();
     }
 
     if (ImGui::Button(std::format("{} Add section", icons::kAdd))) {
