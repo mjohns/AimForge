@@ -105,14 +105,16 @@ class PlaylistComponentImpl : public PlaylistComponent {
       app_.playlist_manager().DeletePlaylist(playlist_to_delete->name);
       app_.bundle_manager().SaveDirtyBundles();
     }
-    copy_dialog_.Draw(app_);
+
+    if (copy_dialog_.Draw(app_)) {
+      if (!is_playlist_screen) {
+        app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
+      }
+    }
 
     if (playlist_name != current_playlist_name_) {
       current_playlist_name_ = playlist_name;
       ResetForNewCurrentPlaylist();
-      if (!is_playlist_screen) {
-        app_.state().go_to_app_screen = AppScreen::PLAYLISTS;
-      }
     }
 
     if (showing_editor_) {
