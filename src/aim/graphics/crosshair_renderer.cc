@@ -1,7 +1,6 @@
 #include "crosshair_renderer.h"
 
 #include "aim/common/util.h"
-#include "aim/proto/settings.pb.h"
 
 namespace aim {
 namespace {

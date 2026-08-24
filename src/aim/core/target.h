@@ -1,7 +1,6 @@
 #pragma once
 
 #include <optional>
-#include <random>
 #include <vector>
 
 #include "aim/common/random.h"
@@ -10,7 +9,7 @@
 #include "aim/core/camera.h"
 #include "aim/core/profile_selection.h"
 #include "aim/proto/scenario.pb.h"
-#include "glm/vec3.hpp"
+#include "glm/vec3.hpp"  // IWYU pragma: keep
 
 namespace aim {
 
