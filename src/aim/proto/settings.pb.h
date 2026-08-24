@@ -2192,6 +2192,7 @@ class Settings final : public ::google::protobuf::Message
   enum : int {
     kThemeNameFieldNumber = 4,
     kCurrentCrosshairNameFieldNumber = 7,
+    kExplicitDisplayNameFieldNumber = 24,
     kKeybindsFieldNumber = 9,
     kHealthBarFieldNumber = 12,
     kSoundsFieldNumber = 16,
@@ -2243,6 +2244,22 @@ class Settings final : public ::google::protobuf::Message
   const ::std::string& _internal_current_crosshair_name() const;
   PROTOBUF_ALWAYS_INLINE void _internal_set_current_crosshair_name(const ::std::string& value);
   ::std::string* PROTOBUF_NONNULL _internal_mutable_current_crosshair_name();
+
+  public:
+  // string explicit_display_name = 24;
+  bool has_explicit_display_name() const;
+  void clear_explicit_display_name() ;
+  const ::std::string& explicit_display_name() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_explicit_display_name(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_explicit_display_name();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_explicit_display_name();
+  void set_allocated_explicit_display_name(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_explicit_display_name() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_explicit_display_name(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_explicit_display_name();
 
   public:
   // .aim.Keybinds keybinds = 9;
@@ -2481,8 +2498,8 @@ class Settings final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<5, 22,
-                                   4, 69,
+  static const ::google::protobuf::internal::TcParseTable<5, 23,
+                                   4, 90,
                                    2>
       _table_;
 
@@ -2505,6 +2522,7 @@ class Settings final : public ::google::protobuf::Message
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr theme_name_;
     ::google::protobuf::internal::ArenaStringPtr current_crosshair_name_;
+    ::google::protobuf::internal::ArenaStringPtr explicit_display_name_;
     ::aim::Keybinds* PROTOBUF_NULLABLE keybinds_;
     ::aim::HealthBarSettings* PROTOBUF_NULLABLE health_bar_;
     ::aim::SoundSettings* PROTOBUF_NULLABLE sounds_;
@@ -2634,14 +2652,14 @@ inline void HealthBarSettings::_internal_set_size(float value) {
 
 // float dpi = 1;
 inline bool Settings::has_dpi() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
   return value;
 }
 inline void Settings::clear_dpi() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.dpi_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000040U);
+                  0x00000080U);
 }
 inline float Settings::dpi() const {
   // @@protoc_insertion_point(field_get:aim.Settings.dpi)
@@ -2649,7 +2667,7 @@ inline float Settings::dpi() const {
 }
 inline void Settings::set_dpi(float value) {
   _internal_set_dpi(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
   // @@protoc_insertion_point(field_set:aim.Settings.dpi)
 }
 inline float Settings::_internal_dpi() const {
@@ -2663,14 +2681,14 @@ inline void Settings::_internal_set_dpi(float value) {
 
 // float cm_per_360 = 2;
 inline bool Settings::has_cm_per_360() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000080U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
   return value;
 }
 inline void Settings::clear_cm_per_360() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.cm_per_360_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000080U);
+                  0x00000100U);
 }
 inline float Settings::cm_per_360() const {
   // @@protoc_insertion_point(field_get:aim.Settings.cm_per_360)
@@ -2678,7 +2696,7 @@ inline float Settings::cm_per_360() const {
 }
 inline void Settings::set_cm_per_360(float value) {
   _internal_set_cm_per_360(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
   // @@protoc_insertion_point(field_set:aim.Settings.cm_per_360)
 }
 inline float Settings::_internal_cm_per_360() const {
@@ -2764,7 +2782,7 @@ inline void Settings::clear_enable_metronome() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.enable_metronome_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000400U);
+                  0x00000800U);
 }
 inline bool Settings::enable_metronome() const {
   // @@protoc_insertion_point(field_get:aim.Settings.enable_metronome)
@@ -2772,7 +2790,7 @@ inline bool Settings::enable_metronome() const {
 }
 inline void Settings::set_enable_metronome(bool value) {
   _internal_set_enable_metronome(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
   // @@protoc_insertion_point(field_set:aim.Settings.enable_metronome)
 }
 inline bool Settings::_internal_enable_metronome() const {
@@ -2786,14 +2804,14 @@ inline void Settings::_internal_set_enable_metronome(bool value) {
 
 // float metronome_bpm = 5;
 inline bool Settings::has_metronome_bpm() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000100U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
   return value;
 }
 inline void Settings::clear_metronome_bpm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.metronome_bpm_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000100U);
+                  0x00000200U);
 }
 inline float Settings::metronome_bpm() const {
   // @@protoc_insertion_point(field_get:aim.Settings.metronome_bpm)
@@ -2801,7 +2819,7 @@ inline float Settings::metronome_bpm() const {
 }
 inline void Settings::set_metronome_bpm(float value) {
   _internal_set_metronome_bpm(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000100U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
   // @@protoc_insertion_point(field_set:aim.Settings.metronome_bpm)
 }
 inline float Settings::_internal_metronome_bpm() const {
@@ -2815,14 +2833,14 @@ inline void Settings::_internal_set_metronome_bpm(float value) {
 
 // float crosshair_size = 6;
 inline bool Settings::has_crosshair_size() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000200U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000400U);
   return value;
 }
 inline void Settings::clear_crosshair_size() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.crosshair_size_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000200U);
+                  0x00000400U);
 }
 inline float Settings::crosshair_size() const {
   // @@protoc_insertion_point(field_get:aim.Settings.crosshair_size)
@@ -2830,7 +2848,7 @@ inline float Settings::crosshair_size() const {
 }
 inline void Settings::set_crosshair_size(float value) {
   _internal_set_crosshair_size(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000200U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000400U);
   // @@protoc_insertion_point(field_set:aim.Settings.crosshair_size)
 }
 inline float Settings::_internal_crosshair_size() const {
@@ -2916,7 +2934,7 @@ inline void Settings::clear_disable_click_to_start() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_click_to_start_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000800U);
+                  0x00001000U);
 }
 inline bool Settings::disable_click_to_start() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_click_to_start)
@@ -2924,7 +2942,7 @@ inline bool Settings::disable_click_to_start() const {
 }
 inline void Settings::set_disable_click_to_start(bool value) {
   _internal_set_disable_click_to_start(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
   // @@protoc_insertion_point(field_set:aim.Settings.disable_click_to_start)
 }
 inline bool Settings::_internal_disable_click_to_start() const {
@@ -2938,7 +2956,7 @@ inline void Settings::_internal_set_disable_click_to_start(bool value) {
 
 // .aim.Keybinds keybinds = 9;
 inline bool Settings::has_keybinds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
   PROTOBUF_ASSUME(!value || _impl_.keybinds_ != nullptr);
   return value;
 }
@@ -2946,7 +2964,7 @@ inline void Settings::clear_keybinds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.keybinds_ != nullptr) _impl_.keybinds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000008U);
 }
 inline const ::aim::Keybinds& Settings::_internal_keybinds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -2965,16 +2983,16 @@ inline void Settings::unsafe_arena_set_allocated_keybinds(
   }
   _impl_.keybinds_ = reinterpret_cast<::aim::Keybinds*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.keybinds)
 }
 inline ::aim::Keybinds* PROTOBUF_NULLABLE Settings::release_keybinds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Keybinds* released = _impl_.keybinds_;
   _impl_.keybinds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -2994,7 +3012,7 @@ inline ::aim::Keybinds* PROTOBUF_NULLABLE Settings::unsafe_arena_release_keybind
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.keybinds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Keybinds* temp = _impl_.keybinds_;
   _impl_.keybinds_ = nullptr;
   return temp;
@@ -3009,7 +3027,7 @@ inline ::aim::Keybinds* PROTOBUF_NONNULL Settings::_internal_mutable_keybinds() 
 }
 inline ::aim::Keybinds* PROTOBUF_NONNULL Settings::mutable_keybinds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   ::aim::Keybinds* _msg = _internal_mutable_keybinds();
   // @@protoc_insertion_point(field_mutable:aim.Settings.keybinds)
   return _msg;
@@ -3026,9 +3044,9 @@ inline void Settings::set_allocated_keybinds(::aim::Keybinds* PROTOBUF_NULLABLE 
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
   }
 
   _impl_.keybinds_ = reinterpret_cast<::aim::Keybinds*>(value);
@@ -3040,7 +3058,7 @@ inline void Settings::clear_auto_hold_tracking() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.auto_hold_tracking_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00001000U);
+                  0x00002000U);
 }
 inline bool Settings::auto_hold_tracking() const {
   // @@protoc_insertion_point(field_get:aim.Settings.auto_hold_tracking)
@@ -3048,7 +3066,7 @@ inline bool Settings::auto_hold_tracking() const {
 }
 inline void Settings::set_auto_hold_tracking(bool value) {
   _internal_set_auto_hold_tracking(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00001000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
   // @@protoc_insertion_point(field_set:aim.Settings.auto_hold_tracking)
 }
 inline bool Settings::_internal_auto_hold_tracking() const {
@@ -3062,7 +3080,7 @@ inline void Settings::_internal_set_auto_hold_tracking(bool value) {
 
 // .aim.HealthBarSettings health_bar = 12;
 inline bool Settings::has_health_bar() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000008U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
   PROTOBUF_ASSUME(!value || _impl_.health_bar_ != nullptr);
   return value;
 }
@@ -3070,7 +3088,7 @@ inline void Settings::clear_health_bar() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.health_bar_ != nullptr) _impl_.health_bar_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000010U);
 }
 inline const ::aim::HealthBarSettings& Settings::_internal_health_bar() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -3089,16 +3107,16 @@ inline void Settings::unsafe_arena_set_allocated_health_bar(
   }
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.health_bar)
 }
 inline ::aim::HealthBarSettings* PROTOBUF_NULLABLE Settings::release_health_bar() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::HealthBarSettings* released = _impl_.health_bar_;
   _impl_.health_bar_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -3118,7 +3136,7 @@ inline ::aim::HealthBarSettings* PROTOBUF_NULLABLE Settings::unsafe_arena_releas
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.health_bar)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::HealthBarSettings* temp = _impl_.health_bar_;
   _impl_.health_bar_ = nullptr;
   return temp;
@@ -3133,7 +3151,7 @@ inline ::aim::HealthBarSettings* PROTOBUF_NONNULL Settings::_internal_mutable_he
 }
 inline ::aim::HealthBarSettings* PROTOBUF_NONNULL Settings::mutable_health_bar()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   ::aim::HealthBarSettings* _msg = _internal_mutable_health_bar();
   // @@protoc_insertion_point(field_mutable:aim.Settings.health_bar)
   return _msg;
@@ -3150,9 +3168,9 @@ inline void Settings::set_allocated_health_bar(::aim::HealthBarSettings* PROTOBU
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000008U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
   }
 
   _impl_.health_bar_ = reinterpret_cast<::aim::HealthBarSettings*>(value);
@@ -3164,7 +3182,7 @@ inline void Settings::clear_disable_per_scenario_settings() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_per_scenario_settings_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00002000U);
+                  0x00004000U);
 }
 inline bool Settings::disable_per_scenario_settings() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_per_scenario_settings)
@@ -3172,7 +3190,7 @@ inline bool Settings::disable_per_scenario_settings() const {
 }
 inline void Settings::set_disable_per_scenario_settings(bool value) {
   _internal_set_disable_per_scenario_settings(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00002000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
   // @@protoc_insertion_point(field_set:aim.Settings.disable_per_scenario_settings)
 }
 inline bool Settings::_internal_disable_per_scenario_settings() const {
@@ -3186,14 +3204,14 @@ inline void Settings::_internal_set_disable_per_scenario_settings(bool value) {
 
 // float max_render_fps = 14;
 inline bool Settings::has_max_render_fps() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00004000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00008000U);
   return value;
 }
 inline void Settings::clear_max_render_fps() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.max_render_fps_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00004000U);
+                  0x00008000U);
 }
 inline float Settings::max_render_fps() const {
   // @@protoc_insertion_point(field_get:aim.Settings.max_render_fps)
@@ -3201,7 +3219,7 @@ inline float Settings::max_render_fps() const {
 }
 inline void Settings::set_max_render_fps(float value) {
   _internal_set_max_render_fps(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00004000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00008000U);
   // @@protoc_insertion_point(field_set:aim.Settings.max_render_fps)
 }
 inline float Settings::_internal_max_render_fps() const {
@@ -3215,14 +3233,14 @@ inline void Settings::_internal_set_max_render_fps(float value) {
 
 // .aim.PresentMode present_mode = 15;
 inline bool Settings::has_present_mode() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00008000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00010000U);
   return value;
 }
 inline void Settings::clear_present_mode() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.present_mode_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00008000U);
+                  0x00010000U);
 }
 inline ::aim::PresentMode Settings::present_mode() const {
   // @@protoc_insertion_point(field_get:aim.Settings.present_mode)
@@ -3230,7 +3248,7 @@ inline ::aim::PresentMode Settings::present_mode() const {
 }
 inline void Settings::set_present_mode(::aim::PresentMode value) {
   _internal_set_present_mode(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00008000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00010000U);
   // @@protoc_insertion_point(field_set:aim.Settings.present_mode)
 }
 inline ::aim::PresentMode Settings::_internal_present_mode() const {
@@ -3244,7 +3262,7 @@ inline void Settings::_internal_set_present_mode(::aim::PresentMode value) {
 
 // .aim.SoundSettings sounds = 16;
 inline bool Settings::has_sounds() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000010U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
   PROTOBUF_ASSUME(!value || _impl_.sounds_ != nullptr);
   return value;
 }
@@ -3252,7 +3270,7 @@ inline void Settings::clear_sounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.sounds_ != nullptr) _impl_.sounds_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000010U);
+                  0x00000020U);
 }
 inline const ::aim::SoundSettings& Settings::_internal_sounds() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -3271,16 +3289,16 @@ inline void Settings::unsafe_arena_set_allocated_sounds(
   }
   _impl_.sounds_ = reinterpret_cast<::aim::SoundSettings*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.sounds)
 }
 inline ::aim::SoundSettings* PROTOBUF_NULLABLE Settings::release_sounds() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::SoundSettings* released = _impl_.sounds_;
   _impl_.sounds_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -3300,7 +3318,7 @@ inline ::aim::SoundSettings* PROTOBUF_NULLABLE Settings::unsafe_arena_release_so
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.sounds)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::SoundSettings* temp = _impl_.sounds_;
   _impl_.sounds_ = nullptr;
   return temp;
@@ -3315,7 +3333,7 @@ inline ::aim::SoundSettings* PROTOBUF_NONNULL Settings::_internal_mutable_sounds
 }
 inline ::aim::SoundSettings* PROTOBUF_NONNULL Settings::mutable_sounds()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   ::aim::SoundSettings* _msg = _internal_mutable_sounds();
   // @@protoc_insertion_point(field_mutable:aim.Settings.sounds)
   return _msg;
@@ -3332,9 +3350,9 @@ inline void Settings::set_allocated_sounds(::aim::SoundSettings* PROTOBUF_NULLAB
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000010U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000010U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
   }
 
   _impl_.sounds_ = reinterpret_cast<::aim::SoundSettings*>(value);
@@ -3343,14 +3361,14 @@ inline void Settings::set_allocated_sounds(::aim::SoundSettings* PROTOBUF_NULLAB
 
 // float start_countdown_time = 17;
 inline bool Settings::has_start_countdown_time() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00010000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00020000U);
   return value;
 }
 inline void Settings::clear_start_countdown_time() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.start_countdown_time_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00010000U);
+                  0x00020000U);
 }
 inline float Settings::start_countdown_time() const {
   // @@protoc_insertion_point(field_get:aim.Settings.start_countdown_time)
@@ -3358,7 +3376,7 @@ inline float Settings::start_countdown_time() const {
 }
 inline void Settings::set_start_countdown_time(float value) {
   _internal_set_start_countdown_time(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00010000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00020000U);
   // @@protoc_insertion_point(field_set:aim.Settings.start_countdown_time)
 }
 inline float Settings::_internal_start_countdown_time() const {
@@ -3372,7 +3390,7 @@ inline void Settings::_internal_set_start_countdown_time(float value) {
 
 // .aim.ScenarioSettingsConfig scenario_settings_config = 18;
 inline bool Settings::has_scenario_settings_config() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000020U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000040U);
   PROTOBUF_ASSUME(!value || _impl_.scenario_settings_config_ != nullptr);
   return value;
 }
@@ -3380,7 +3398,7 @@ inline void Settings::clear_scenario_settings_config() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   if (_impl_.scenario_settings_config_ != nullptr) _impl_.scenario_settings_config_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000020U);
+                  0x00000040U);
 }
 inline const ::aim::ScenarioSettingsConfig& Settings::_internal_scenario_settings_config() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
@@ -3399,16 +3417,16 @@ inline void Settings::unsafe_arena_set_allocated_scenario_settings_config(
   }
   _impl_.scenario_settings_config_ = reinterpret_cast<::aim::ScenarioSettingsConfig*>(value);
   if (value != nullptr) {
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
   // @@protoc_insertion_point(field_unsafe_arena_set_allocated:aim.Settings.scenario_settings_config)
 }
 inline ::aim::ScenarioSettingsConfig* PROTOBUF_NULLABLE Settings::release_scenario_settings_config() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScenarioSettingsConfig* released = _impl_.scenario_settings_config_;
   _impl_.scenario_settings_config_ = nullptr;
   if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
@@ -3428,7 +3446,7 @@ inline ::aim::ScenarioSettingsConfig* PROTOBUF_NULLABLE Settings::unsafe_arena_r
   ::google::protobuf::internal::TSanWrite(&_impl_);
   // @@protoc_insertion_point(field_release:aim.Settings.scenario_settings_config)
 
-  ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+  ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScenarioSettingsConfig* temp = _impl_.scenario_settings_config_;
   _impl_.scenario_settings_config_ = nullptr;
   return temp;
@@ -3443,7 +3461,7 @@ inline ::aim::ScenarioSettingsConfig* PROTOBUF_NONNULL Settings::_internal_mutab
 }
 inline ::aim::ScenarioSettingsConfig* PROTOBUF_NONNULL Settings::mutable_scenario_settings_config()
     ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   ::aim::ScenarioSettingsConfig* _msg = _internal_mutable_scenario_settings_config();
   // @@protoc_insertion_point(field_mutable:aim.Settings.scenario_settings_config)
   return _msg;
@@ -3460,9 +3478,9 @@ inline void Settings::set_allocated_scenario_settings_config(::aim::ScenarioSett
     if (message_arena != submessage_arena) {
       value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
     }
-    SetHasBit(_impl_._has_bits_[0], 0x00000020U);
+    SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   } else {
-    ClearHasBit(_impl_._has_bits_[0], 0x00000020U);
+    ClearHasBit(_impl_._has_bits_[0], 0x00000040U);
   }
 
   _impl_.scenario_settings_config_ = reinterpret_cast<::aim::ScenarioSettingsConfig*>(value);
@@ -3471,14 +3489,14 @@ inline void Settings::set_allocated_scenario_settings_config(::aim::ScenarioSett
 
 // float tracking_shots_per_second = 19;
 inline bool Settings::has_tracking_shots_per_second() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00020000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00040000U);
   return value;
 }
 inline void Settings::clear_tracking_shots_per_second() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.tracking_shots_per_second_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00020000U);
+                  0x00040000U);
 }
 inline float Settings::tracking_shots_per_second() const {
   // @@protoc_insertion_point(field_get:aim.Settings.tracking_shots_per_second)
@@ -3486,7 +3504,7 @@ inline float Settings::tracking_shots_per_second() const {
 }
 inline void Settings::set_tracking_shots_per_second(float value) {
   _internal_set_tracking_shots_per_second(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00020000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00040000U);
   // @@protoc_insertion_point(field_set:aim.Settings.tracking_shots_per_second)
 }
 inline float Settings::_internal_tracking_shots_per_second() const {
@@ -3500,14 +3518,14 @@ inline void Settings::_internal_set_tracking_shots_per_second(float value) {
 
 // float proximity_min_shots_per_second = 20;
 inline bool Settings::has_proximity_min_shots_per_second() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00040000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00080000U);
   return value;
 }
 inline void Settings::clear_proximity_min_shots_per_second() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.proximity_min_shots_per_second_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00040000U);
+                  0x00080000U);
 }
 inline float Settings::proximity_min_shots_per_second() const {
   // @@protoc_insertion_point(field_get:aim.Settings.proximity_min_shots_per_second)
@@ -3515,7 +3533,7 @@ inline float Settings::proximity_min_shots_per_second() const {
 }
 inline void Settings::set_proximity_min_shots_per_second(float value) {
   _internal_set_proximity_min_shots_per_second(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00040000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00080000U);
   // @@protoc_insertion_point(field_set:aim.Settings.proximity_min_shots_per_second)
 }
 inline float Settings::_internal_proximity_min_shots_per_second() const {
@@ -3529,14 +3547,14 @@ inline void Settings::_internal_set_proximity_min_shots_per_second(float value) 
 
 // float proximity_max_shots_per_second = 21;
 inline bool Settings::has_proximity_max_shots_per_second() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00080000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00100000U);
   return value;
 }
 inline void Settings::clear_proximity_max_shots_per_second() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.proximity_max_shots_per_second_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00080000U);
+                  0x00100000U);
 }
 inline float Settings::proximity_max_shots_per_second() const {
   // @@protoc_insertion_point(field_get:aim.Settings.proximity_max_shots_per_second)
@@ -3544,7 +3562,7 @@ inline float Settings::proximity_max_shots_per_second() const {
 }
 inline void Settings::set_proximity_max_shots_per_second(float value) {
   _internal_set_proximity_max_shots_per_second(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00080000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00100000U);
   // @@protoc_insertion_point(field_set:aim.Settings.proximity_max_shots_per_second)
 }
 inline float Settings::_internal_proximity_max_shots_per_second() const {
@@ -3558,14 +3576,14 @@ inline void Settings::_internal_set_proximity_max_shots_per_second(float value) 
 
 // bool disable_replays = 22;
 inline bool Settings::has_disable_replays() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00100000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00200000U);
   return value;
 }
 inline void Settings::clear_disable_replays() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.disable_replays_ = false;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00100000U);
+                  0x00200000U);
 }
 inline bool Settings::disable_replays() const {
   // @@protoc_insertion_point(field_get:aim.Settings.disable_replays)
@@ -3573,7 +3591,7 @@ inline bool Settings::disable_replays() const {
 }
 inline void Settings::set_disable_replays(bool value) {
   _internal_set_disable_replays(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00100000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00200000U);
   // @@protoc_insertion_point(field_set:aim.Settings.disable_replays)
 }
 inline bool Settings::_internal_disable_replays() const {
@@ -3587,14 +3605,14 @@ inline void Settings::_internal_set_disable_replays(bool value) {
 
 // .aim.MsaaLevel msaa_level = 23;
 inline bool Settings::has_msaa_level() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00200000U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00400000U);
   return value;
 }
 inline void Settings::clear_msaa_level() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.msaa_level_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00200000U);
+                  0x00400000U);
 }
 inline ::aim::MsaaLevel Settings::msaa_level() const {
   // @@protoc_insertion_point(field_get:aim.Settings.msaa_level)
@@ -3602,7 +3620,7 @@ inline ::aim::MsaaLevel Settings::msaa_level() const {
 }
 inline void Settings::set_msaa_level(::aim::MsaaLevel value) {
   _internal_set_msaa_level(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00200000U);
+  SetHasBit(_impl_._has_bits_[0], 0x00400000U);
   // @@protoc_insertion_point(field_set:aim.Settings.msaa_level)
 }
 inline ::aim::MsaaLevel Settings::_internal_msaa_level() const {
@@ -3612,6 +3630,75 @@ inline ::aim::MsaaLevel Settings::_internal_msaa_level() const {
 inline void Settings::_internal_set_msaa_level(::aim::MsaaLevel value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.msaa_level_ = value;
+}
+
+// string explicit_display_name = 24;
+inline bool Settings::has_explicit_display_name() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  return value;
+}
+inline void Settings::clear_explicit_display_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.explicit_display_name_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline const ::std::string& Settings::explicit_display_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:aim.Settings.explicit_display_name)
+  return _internal_explicit_display_name();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void Settings::set_explicit_display_name(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  _impl_.explicit_display_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:aim.Settings.explicit_display_name)
+}
+inline ::std::string* PROTOBUF_NONNULL Settings::mutable_explicit_display_name()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ::std::string* _s = _internal_mutable_explicit_display_name();
+  // @@protoc_insertion_point(field_mutable:aim.Settings.explicit_display_name)
+  return _s;
+}
+inline const ::std::string& Settings::_internal_explicit_display_name() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.explicit_display_name_.Get();
+}
+inline void Settings::_internal_set_explicit_display_name(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.explicit_display_name_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL Settings::_internal_mutable_explicit_display_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.explicit_display_name_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE Settings::release_explicit_display_name() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:aim.Settings.explicit_display_name)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000004U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  auto* released = _impl_.explicit_display_name_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.explicit_display_name_.Set("", GetArena());
+  }
+  return released;
+}
+inline void Settings::set_allocated_explicit_display_name(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  }
+  _impl_.explicit_display_name_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.explicit_display_name_.IsDefault()) {
+    _impl_.explicit_display_name_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:aim.Settings.explicit_display_name)
 }
 
 // -------------------------------------------------------------------

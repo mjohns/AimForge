@@ -8,6 +8,7 @@
 #include "SDL3/SDL_video.h"
 #include "absl/cleanup/cleanup.h"
 #include "aim/common/log.h"
+#include "aim/proto/settings.pb.h"
 
 namespace aim {
 
@@ -58,6 +59,43 @@ static std::vector<DisplayInfo> ListDisplays() {
     if (display) {
       result.push_back(*display);
     }
+  }
+
+  return result;
+}
+
+static std::optional<DisplayInfo> SelectDisplay(const std::optional<Settings>& settings) {
+  std::string explicit_display_name;
+  if (settings) {
+    explicit_display_name = settings->explicit_display_name();
+  }
+
+  auto displays = ListDisplays();
+  if (displays.empty()) {
+    return {};
+  }
+
+  if (!explicit_display_name.empty()) {
+    // Try to find a a display with matching name.
+    for (const DisplayInfo& display : displays) {
+      if (display.name == explicit_display_name) {
+        return display;
+      }
+    }
+  }
+
+  // Select the monitor with the highest refresh rate.
+  DisplayInfo result;
+  float highest_refresh_rate = 0;
+  for (const DisplayInfo& display : displays) {
+    if (display.refresh_rate < highest_refresh_rate) {
+      continue;
+    }
+    if (display.refresh_rate == highest_refresh_rate && !display.is_primary) {
+      continue;
+    }
+    result = display;
+    highest_refresh_rate = display.refresh_rate;
   }
 
   return result;

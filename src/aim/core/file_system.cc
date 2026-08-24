@@ -1,13 +1,10 @@
 #include "file_system.h"
 
-#include <algorithm>
 #include <filesystem>
-#include <vector>
 
 #include "SDL3/SDL_filesystem.h"
 #include "absl/flags/flag.h"
 #include "aim/common/files.h"
-#include "aim/common/util.h"
 
 ABSL_FLAG(std::string, af_user_path, "", "An explicit path to use for the user folder.");
 ABSL_FLAG(std::string, af_user_app_name, "FpsAimForge", "App name to use for the user folder.");

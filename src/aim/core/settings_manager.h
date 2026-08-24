@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -23,6 +24,10 @@ bool KeyMappingMatchesEvent(const std::string& event_name, const KeyMapping& map
 bool IsMappableKeyDownEvent(const SDL_Event& event);
 bool IsMappableKeyUpEvent(const SDL_Event& event);
 bool IsEscapeKeyDown(const SDL_Event& event);
+
+// Returns false if the settings file was invalid. The settings will be empty if the file does
+// not exist.
+bool ReadSettingsFile(const std::filesystem::path& path, std::optional<Settings>* maybe_settings);
 
 Theme GetDefaultTheme();
 Crosshair GetDefaultCrosshair();

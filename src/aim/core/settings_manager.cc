@@ -615,4 +615,24 @@ std::unique_ptr<SettingsManager> CreateSettingsManager(const std::filesystem::pa
       settings_path, theme_dir, texture_dir, crosshair_dir, db, history_manager);
 }
 
+bool ReadSettingsFile(const std::filesystem::path& path, std::optional<Settings>* maybe_settings) {
+  auto maybe_content = ReadFileContentAsString(path);
+  if (!maybe_content.has_value()) {
+    return true;
+  }
+  google::protobuf::json::ParseOptions opts;
+  opts.ignore_unknown_fields = true;
+  opts.case_insensitive_enum_parsing = true;
+  std::string json = *maybe_content;
+
+  Settings settings;
+  auto status = google::protobuf::util::JsonStringToMessage(json, &settings, opts);
+  if (!status.ok()) {
+    return false;
+  }
+
+  *maybe_settings = settings;
+  return true;
+}
+
 }  // namespace aim

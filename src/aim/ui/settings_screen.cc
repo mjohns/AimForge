@@ -11,6 +11,7 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/search.h"
 #include "aim/core/application.h"
+#include "aim/core/displays.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/version.h"
 #include "aim/proto/common.pb.h"
@@ -201,6 +202,35 @@ class SettingsScreen : public UiScreen {
       ImGui::SameLine();
       ImGui::TextDisabled("requires restart");
 
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text("Choose display");
+      bool has_explicit_display = !updater_.settings.explicit_display_name().empty();
+      ImGui::SameLine();
+      ImGui::Checkbox("##DisplayCheck", &has_explicit_display);
+      if (has_explicit_display) {
+        if (!read_display_names_) {
+          read_display_names_ = true;
+          auto displays = ListDisplays();
+          for (const auto& display : displays) {
+            display_names_.push_back(display.name);
+          }
+        }
+        if (!display_names_.empty()) {
+          std::string& display_name = *updater_.settings.mutable_explicit_display_name();
+          if (display_name.empty()) {
+            display_name = display_names_[0];
+          }
+          ImGui::SameLine();
+          ImGui::SimpleDropdown(
+              "##DisplayNameDropdown", &display_name, display_names_, char_x_ * 30);
+          ImGui::SameLine();
+          ImGui::TextDisabled("requires restart");
+        }
+      } else {
+        updater_.settings.clear_explicit_display_name();
+        ImGui::SameLine();
+        ImGui::HelpMarker("By default the monitor with the highest refresh rate is used");
+      }
       const char* driver_name = SDL_GetGPUDeviceDriver(app_.gpu_device());
       if (driver_name != nullptr) {
         ImGui::AlignTextToFramePadding();
@@ -735,6 +765,9 @@ class SettingsScreen : public UiScreen {
 
   int edit_crosshair_index_ = 0;
   SoundInputDialog sound_input_dialog_;
+
+  bool read_display_names_ = false;
+  std::vector<std::string> display_names_;
 };
 
 }  // namespace

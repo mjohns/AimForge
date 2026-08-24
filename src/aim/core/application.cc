@@ -152,6 +152,7 @@ class ApplicationImpl : public Application {
     scenario_manager_ = CreateScenarioManager();
     playlist_manager_ = CreatePlaylistManager();
     guide_manager_ = CreateGuideManager();
+    settings_path_ = file_system_->GetUserDataPath("settings.json");
 
     {
       auto max_size = 1048576 * 2;
@@ -499,27 +500,20 @@ class ApplicationImpl : public Application {
 
     state_->initialization_times.audio.end = stopwatch.GetElapsedMicros();
 
-    {
-      auto displays = ListDisplays();
-      float highest_refresh_rate = 0;
-      for (const DisplayInfo& display : displays) {
-        if (display.refresh_rate < highest_refresh_rate) {
-          continue;
-        }
-        if (display.refresh_rate == highest_refresh_rate && !display.is_primary) {
-          continue;
-        }
-        display_ = display;
-        highest_refresh_rate = display.refresh_rate;
-      }
+    std::optional<Settings> settings_from_file;
+    if (!ReadSettingsFile(settings_path_, &settings_from_file)) {
+      return std::format("Settings file is invalid: {}", settings_path_.string());
+    }
 
-      auto display_id = display_.display_id;
-      if (display_id == 0) {
+    {
+      auto display = SelectDisplay(settings_from_file);
+      if (!display) {
         return "Unable to find display";
       }
+      display_ = *display;
 
       SDL_Rect bounds;
-      SDL_GetDisplayBounds(display_id, &bounds);
+      SDL_GetDisplayBounds(display_.display_id, &bounds);
 
       SDL_PropertiesID props = SDL_CreateProperties();
       SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, bounds.x);
@@ -591,6 +585,16 @@ class ApplicationImpl : public Application {
       }
     }
 
+    auto msaa_level = MsaaLevel::MSAA_LEVEL_UNKNOWN;
+    if (settings_from_file) {
+      msaa_level = settings_from_file->msaa_level();
+    }
+    msaa_sample_count_ = GetMsaaSampleCount(sdl_window_, gpu_device_, msaa_level);
+
+    imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
+    InitializeImGui(imgui_ini_filename_, sdl_window_, gpu_device_, msaa_sample_count_);
+    imgui_initialized_ = true;
+
     trace.Add("InitDone");
     return {};
   }
@@ -612,12 +616,12 @@ class ApplicationImpl : public Application {
     replay_manager_ = CreateReplayManager();
 
     play_time_manager_ = std::make_unique<PlayTimeManager>(db_.get());
-    stats_manager_ = CreateStatsManager(db_.get());
     bundle_manager_ = CreateBundleManager(
         file_system_.get(), playlist_manager_.get(), scenario_manager_.get(), guide_manager_.get());
+    stats_manager_ = CreateStatsManager(db_.get());
     history_manager_ = CreateHistoryManager(db_.get());
     labels_manager_ = CreateLabelsManager(db_.get());
-    settings_manager_ = CreateSettingsManager(file_system_->GetUserDataPath("settings.json"),
+    settings_manager_ = CreateSettingsManager(settings_path_,
                                               file_system_->GetUserDataPath("resources/themes"),
                                               file_system_->GetUserDataPath("resources/textures"),
                                               file_system_->GetUserDataPath("resources/crosshairs"),
@@ -632,9 +636,6 @@ class ApplicationImpl : public Application {
     if (!settings_status.ok()) {
       return "Unable to load settings.json";
     }
-
-    msaa_sample_count_ = GetMsaaSampleCount(
-        sdl_window_, gpu_device_, settings_manager_->GetCurrentSettings().msaa_level());
 
     std::vector<std::filesystem::path> texture_dirs = {
         file_system_->GetUserDataPath("resources/textures"),
@@ -655,10 +656,6 @@ class ApplicationImpl : public Application {
 
     logo_texture_ = std::make_unique<Texture>(
         file_system_->GetBasePath("resources/images/logo.png"), gpu_device_);
-
-    imgui_ini_filename_ = file_system_->GetUserDataPath(kImguiIniFile).string();
-    InitializeImGui(imgui_ini_filename_, sdl_window_, gpu_device_, msaa_sample_count_);
-    imgui_initialized_ = true;
 
     auto fonts_path = file_system_->GetBasePath("resources/fonts");
     font_manager_ = std::make_unique<FontManager>(fonts_path);
@@ -758,6 +755,7 @@ class ApplicationImpl : public Application {
   bool should_restart_ = false;
   i64 application_start_time_micros_ = 0;
   bool imgui_initialized_ = false;
+  std::filesystem::path settings_path_;
 };
 
 }  // namespace

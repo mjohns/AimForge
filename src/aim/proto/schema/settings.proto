@@ -66,6 +66,10 @@ message Settings {
   bool disable_replays = 22;
 
   MsaaLevel msaa_level = 23;
+
+  // By default the display with the highest refresh rate will be chosen.
+  // Specify the name of a different display to use here if that is not correct.
+  string explicit_display_name = 24;
 }
 
 message SoundItem {
