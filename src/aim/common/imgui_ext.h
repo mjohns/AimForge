@@ -371,6 +371,8 @@ bool SelectableButton(const std::string& label);
 float GetMenuButtonWidth();
 bool MenuButton();
 
+bool IconButton(const char* icon, float scale = 0.7);
+
 bool BeginDefaultPopupModal(const char* id, bool* draw);
 
 class Popup {

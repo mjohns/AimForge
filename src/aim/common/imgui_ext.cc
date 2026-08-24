@@ -45,6 +45,24 @@ float GetMenuButtonWidth() {
   return ImGui::CalcTextSize(aim::icons::kMoreVert).x * kMenuButtonWidthMultiplier;
 }
 
+bool IconButton(const char* icon, float scale) {
+  // auto cleanup = absl::MakeCleanup([]() { ImGui::PopStyleVar(2); });
+
+  auto full_size = ImGui::CalcTextSize(icon);
+  // full_size.y = ImGui::GetFrameHeight();
+  auto size = full_size;
+  size.x *= scale;
+
+  auto pos = GetCursorPos();
+  pos.x -= ((full_size.x - size.x) * 0.5);
+  IdGuard cid(std::format("SelectIcon{}", icon));
+  bool selected = Selectable("##SelectableIcon", false, 0, size);
+  ImGui::SameLine();
+  ImGui::SetCursorPos(pos);
+  ImGui::Text("%s", icon);
+  return selected;
+}
+
 bool MenuButton() {
   // auto cleanup = absl::MakeCleanup([]() { ImGui::PopStyleVar(2); });
 

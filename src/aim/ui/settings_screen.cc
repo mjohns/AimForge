@@ -392,7 +392,10 @@ class SettingsScreen : public UiScreen {
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, char_x_ * 20);
       ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
 
+      ImGui::LoopId loop_id;
       for (KeybindItem& item : keybind_items_) {
+        auto lid = loop_id.Get("KeyMapItem");
+
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
         ImGui::AlignTextToFramePadding();
@@ -408,9 +411,15 @@ class SettingsScreen : public UiScreen {
         ImGui::SameLine();
         KeyMappingEntry(&item, 1, entry_width);
         ImGui::SameLine();
+        ImGui::Text("  ");
+        ImGui::SameLine();
         KeyMappingEntry(&item, 2, entry_width);
         ImGui::SameLine();
+        ImGui::Text("  ");
+        ImGui::SameLine();
         KeyMappingEntry(&item, 3, entry_width);
+        ImGui::SameLine();
+        ImGui::Text("  ");
         ImGui::SameLine();
         KeyMappingEntry(&item, 4, entry_width);
       }
@@ -648,6 +657,7 @@ class SettingsScreen : public UiScreen {
   }
 
   void KeyMappingEntry(KeybindItem* item, int i, float width) {
+    ImGui::IdGuard cid(std::format("KeymapEntry{}", i));
     std::string value;
     if (item->is_capturing_index == i) {
       value = "...";
@@ -661,8 +671,7 @@ class SettingsScreen : public UiScreen {
       value = item->mapping->mapping4();
     }
 
-    if (ImGui::Button(std::format("{}##key{}_{}", value, i, item->label).c_str(),
-                      ImVec2(width, 0))) {
+    if (ImGui::Button(value, ImVec2(width, 0))) {
       for (KeybindItem& other_item : keybind_items_) {
         other_item.is_capturing_index = 0;
       }
@@ -686,7 +695,7 @@ class SettingsScreen : public UiScreen {
       };
     }
     ImGui::SameLine();
-    if (ImGui::Button(std::format("x##clear_{}_{}", i, item->label).c_str(), ImVec2(0, 0))) {
+    if (ImGui::IconButton(icons::kClear)) {
       if (i == 1) {
         item->mapping->set_mapping1("");
       } else if (i == 2) {
