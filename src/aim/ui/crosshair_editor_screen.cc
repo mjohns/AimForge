@@ -10,7 +10,7 @@
 #include "aim/common/name_util.h"
 #include "aim/common/util.h"
 #include "aim/core/settings_manager.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/graphics/crosshair_renderer.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 namespace aim {
@@ -270,7 +270,7 @@ class CrosshairEditorScreen : public UiScreen {
     back_max.y += height_spacing;
 
     ImGui::GetWindowDrawList()->AddRectFilled(back_min, back_max, ToImCol32(ToStoredColor(0.3)));
-    app_.crosshair_manager().Draw(c, 30, theme, center);
+    app_.crosshair_renderer().Draw(c, 30, theme, center);
 
     auto* list = c.mutable_layers();
     if (remove_at_i >= 0) {

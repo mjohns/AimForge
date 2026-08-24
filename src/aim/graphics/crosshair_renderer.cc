@@ -1,4 +1,4 @@
-#include "crosshair.h"
+#include "crosshair_renderer.h"
 
 #include "aim/common/util.h"
 #include "aim/proto/settings.pb.h"
@@ -76,11 +76,11 @@ void DrawPlusWithLengths(float horizontal_length,
 
 }  // namespace
 
-CrosshairManager::CrosshairManager(const std::filesystem::path& crosshair_dir,
+CrosshairRenderer::CrosshairRenderer(const std::filesystem::path& crosshair_dir,
                                    SDL_GPUDevice* gpu_device)
     : texture_manager_({crosshair_dir}, gpu_device) {}
 
-void CrosshairManager::Draw(const Crosshair& crosshair,
+void CrosshairRenderer::Draw(const Crosshair& crosshair,
                             float crosshair_size,
                             const Theme& theme,
                             const ImVec2& center) {
@@ -89,7 +89,7 @@ void CrosshairManager::Draw(const Crosshair& crosshair,
   }
 }
 
-void CrosshairManager::DrawLayer(const CrosshairLayer& layer,
+void CrosshairRenderer::DrawLayer(const CrosshairLayer& layer,
                                  float crosshair_size,
                                  const Theme& theme,
                                  const ImVec2& center) {

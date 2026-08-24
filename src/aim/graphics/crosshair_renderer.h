@@ -1,10 +1,8 @@
 #pragma once
 
 #include <filesystem>
-#include <memory>
-#include <unordered_map>
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/common/simple_types.h"
 #include "aim/graphics/textures.h"
 #include "aim/proto/crosshair.pb.h"
@@ -13,10 +11,10 @@
 
 namespace aim {
 
-class CrosshairManager {
+class CrosshairRenderer {
  public:
-  explicit CrosshairManager(const std::filesystem::path& crosshair_dir, SDL_GPUDevice* gpu_device);
-  AIM_NO_COPY(CrosshairManager);
+  explicit CrosshairRenderer(const std::filesystem::path& crosshair_dir, SDL_GPUDevice* gpu_device);
+  AIM_NO_COPY(CrosshairRenderer);
 
   void Draw(const Crosshair& crosshair,
             float crosshair_size,

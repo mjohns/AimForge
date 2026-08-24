@@ -206,8 +206,8 @@ class ApplicationImpl : public Application {
     }
 
     if (gpu_device_ != nullptr) {
-      if (crosshair_manager_) {
-        crosshair_manager_ = {};
+      if (crosshair_renderer_) {
+        crosshair_renderer_ = {};
       }
       if (renderer_) {
         renderer_->Cleanup();
@@ -313,8 +313,8 @@ class ApplicationImpl : public Application {
     return *local_store_;
   }
 
-  CrosshairManager& crosshair_manager() override {
-    return *crosshair_manager_;
+  CrosshairRenderer& crosshair_renderer() override {
+    return *crosshair_renderer_;
   }
 
   ReplayManager& replay_manager() override {
@@ -651,7 +651,7 @@ class ApplicationImpl : public Application {
       return "Failed to initialize renderer.";
     }
 
-    crosshair_manager_ = std::make_unique<CrosshairManager>(
+    crosshair_renderer_ = std::make_unique<CrosshairRenderer>(
         file_system_->GetUserDataPath("resources/crosshairs"), gpu_device_);
 
     logo_texture_ = std::make_unique<Texture>(
@@ -732,7 +732,7 @@ class ApplicationImpl : public Application {
   std::unique_ptr<LabelsManager> labels_manager_;
   std::unique_ptr<HistoryManager> history_manager_;
   std::unique_ptr<Renderer> renderer_;
-  std::unique_ptr<CrosshairManager> crosshair_manager_;
+  std::unique_ptr<CrosshairRenderer> crosshair_renderer_;
   std::unique_ptr<FileSystem> file_system_;
   std::unique_ptr<ScenarioManager> scenario_manager_;
   std::unique_ptr<BundleManager> bundle_manager_;

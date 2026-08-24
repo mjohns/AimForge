@@ -20,7 +20,7 @@
 #include "aim/core/scenario_manager.h"
 #include "aim/core/settings_manager.h"
 #include "aim/core/stats_manager.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/graphics/crosshair_renderer.h"
 #include "aim/graphics/renderer.h"
 #include "aim/proto/common.pb.h"
 #include "aim/proto/settings.pb.h"
@@ -387,7 +387,7 @@ void Scenario::OnWaitingForClickTick() {
 
   ImGui::NewSdlFrame();
   app_.BeginFullscreenWindow();
-  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  app_.crosshair_renderer().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
   ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
 
@@ -460,7 +460,7 @@ void Scenario::OnStartCountdownClickTick() {
 
   ImGui::NewSdlFrame();
   app_.BeginFullscreenWindow();
-  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  app_.crosshair_renderer().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
   ImGui::PushStyleColor(ImGuiCol_Text, ToImCol32(theme_.target_color()));
   ImGui::Text("%s", scenario_name_.c_str());
@@ -572,7 +572,7 @@ void Scenario::OnRunningTick() {
   app_.BeginFullscreenWindow();
 
   current_times_.draw_crosshair = timer_.GetElapsedMicros();
-  app_.crosshair_manager().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
+  app_.crosshair_renderer().Draw(crosshair_, crosshair_size_, theme_, app_.screen_info().center);
 
   DrawAdditionalUiElements();
 

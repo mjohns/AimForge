@@ -11,7 +11,7 @@
 #include "aim/core/file_system.h"
 #include "aim/core/font_manager.h"
 #include "aim/core/screen.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/graphics/crosshair_renderer.h"
 #include "aim/graphics/textures.h"
 #include "imgui.h"
 #include "spdlog/logger.h"
@@ -84,7 +84,7 @@ class Application {
   virtual HistoryManager& history_manager() = 0;
   virtual LabelsManager& labels_manager() = 0;
   virtual LocalStore& local_store() = 0;
-  virtual CrosshairManager& crosshair_manager() = 0;
+  virtual CrosshairRenderer& crosshair_renderer() = 0;
   virtual ReplayManager& replay_manager() = 0;
   virtual AimDb& db() = 0;
   virtual spdlog::logger* logger() = 0;

@@ -10,7 +10,7 @@
 #include "aim/core/application.h"
 #include "aim/core/local_store.h"
 #include "aim/core/settings_manager.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/graphics/crosshair_renderer.h"
 #include "aim/graphics/renderer.h"
 #include "aim/scenario/replay.h"
 #include "aim/scenario/scenario_timer.h"
@@ -437,7 +437,7 @@ class ReplayViewerScreen : public Screen {
 
     ImGui::NewSdlFrame();
     app_.BeginFullscreenWindow();
-    app_.crosshair_manager().Draw(
+    app_.crosshair_renderer().Draw(
         crosshair_, settings_.crosshair_size(), theme_, app_.screen_info().center);
 
     float elapsed_seconds = timer_.GetElapsedSeconds();

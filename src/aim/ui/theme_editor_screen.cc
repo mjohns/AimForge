@@ -12,7 +12,7 @@
 #include "aim/core/application.h"
 #include "aim/core/camera.h"
 #include "aim/core/settings_manager.h"
-#include "aim/graphics/crosshair.h"
+#include "aim/graphics/crosshair_renderer.h"
 #include "aim/graphics/renderer.h"
 
 namespace aim {
@@ -457,7 +457,7 @@ class ThemeEditorScreen : public UiScreen {
     ImGui::Begin(
         "CrosshairWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    app_.crosshair_manager().Draw(
+    app_.crosshair_renderer().Draw(
         crosshair, 25, theme_editor_->GetThemeToToRender(), app_.screen_info().center);
     ImGui::End();
     ImGui::PopStyleVar();
