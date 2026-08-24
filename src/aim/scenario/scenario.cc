@@ -413,7 +413,8 @@ void Scenario::OnWaitingForClickTick() {
   ImGui::SetCursorPosY(app_.screen_info().center.y + text_size.y * 1);
   ImGui::Text("%s", scenario_name_.c_str());
 
-  float score_target = def_.score_targets().end();
+  // TODO: This target score should factor in playlist override.
+  float score_target = def_.score_targets().target_score();
   if (score_target > 0) {
     std::string message = std::format("Target score: {}", MaybeIntToString(score_target, 2));
     text_size = ImGui::CalcTextSize(message.c_str());

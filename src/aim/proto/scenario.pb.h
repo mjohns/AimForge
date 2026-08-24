@@ -669,33 +669,9 @@ class ScoreTargets final : public ::google::protobuf::Message
 
   // accessors -------------------------------------------------------
   enum : int {
-    kStartFieldNumber = 1,
-    kEndFieldNumber = 2,
-    kTargetScoreFieldNumber = 3,
+    kTargetScoreFieldNumber = 1,
   };
-  // float start = 1 [deprecated = true];
-  [[deprecated]]  bool has_start() const;
-  [[deprecated]]  void clear_start() ;
-  [[deprecated]] float start() const;
-  [[deprecated]] void set_start(float value);
-
-  private:
-  float _internal_start() const;
-  void _internal_set_start(float value);
-
-  public:
-  // float end = 2;
-  bool has_end() const;
-  void clear_end() ;
-  float end() const;
-  void set_end(float value);
-
-  private:
-  float _internal_end() const;
-  void _internal_set_end(float value);
-
-  public:
-  // float target_score = 3;
+  // float target_score = 1;
   bool has_target_score() const;
   void clear_target_score() ;
   float target_score() const;
@@ -710,7 +686,7 @@ class ScoreTargets final : public ::google::protobuf::Message
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 3,
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
                                    0, 0,
                                    2>
       _table_;
@@ -732,8 +708,6 @@ class ScoreTargets final : public ::google::protobuf::Message
         const ScoreTargets& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
-    float start_;
-    float end_;
     float target_score_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -16081,74 +16055,16 @@ inline ShotType::TypeCase ShotType::type_case() const {
 
 // ScoreTargets
 
-// float start = 1 [deprecated = true];
-inline bool ScoreTargets::has_start() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
-  return value;
-}
-inline void ScoreTargets::clear_start() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.start_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
-}
-inline float ScoreTargets::start() const {
-  // @@protoc_insertion_point(field_get:aim.ScoreTargets.start)
-  return _internal_start();
-}
-inline void ScoreTargets::set_start(float value) {
-  _internal_set_start(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  // @@protoc_insertion_point(field_set:aim.ScoreTargets.start)
-}
-inline float ScoreTargets::_internal_start() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.start_;
-}
-inline void ScoreTargets::_internal_set_start(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.start_ = value;
-}
-
-// float end = 2;
-inline bool ScoreTargets::has_end() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000002U);
-  return value;
-}
-inline void ScoreTargets::clear_end() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.end_ = 0;
-  ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
-}
-inline float ScoreTargets::end() const {
-  // @@protoc_insertion_point(field_get:aim.ScoreTargets.end)
-  return _internal_end();
-}
-inline void ScoreTargets::set_end(float value) {
-  _internal_set_end(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
-  // @@protoc_insertion_point(field_set:aim.ScoreTargets.end)
-}
-inline float ScoreTargets::_internal_end() const {
-  ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.end_;
-}
-inline void ScoreTargets::_internal_set_end(float value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.end_ = value;
-}
-
-// float target_score = 3;
+// float target_score = 1;
 inline bool ScoreTargets::has_target_score() const {
-  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000004U);
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
   return value;
 }
 inline void ScoreTargets::clear_target_score() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.target_score_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000001U);
 }
 inline float ScoreTargets::target_score() const {
   // @@protoc_insertion_point(field_get:aim.ScoreTargets.target_score)
@@ -16156,7 +16072,7 @@ inline float ScoreTargets::target_score() const {
 }
 inline void ScoreTargets::set_target_score(float value) {
   _internal_set_target_score(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
   // @@protoc_insertion_point(field_set:aim.ScoreTargets.target_score)
 }
 inline float ScoreTargets::_internal_target_score() const {

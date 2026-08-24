@@ -492,12 +492,6 @@ void DrawScoreTargetsEditor(PtrField<ScoreTargets> score_targets) {
   ImGui::Checkbox("##ScoreTargetsCheckbox", &has_score_targets);
   if (has_score_targets) {
     ScoreTargets* t = score_targets.get_mutable();
-    if (t->has_end()) {
-      if (!t->has_target_score()) {
-        t->set_target_score(t->end());
-      }
-      t->clear_end();
-    }
     ImGui::SameLine();
     ImGui::InputFloat(ImGui::InputFloatParams("TargetScoreInput")
                           .set_min(0.1)

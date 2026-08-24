@@ -215,9 +215,7 @@ message ShotType {
 // You get a score of 5 if you hit the target score. 4 for 95% of target. 3=90%, 2=85%, 1=80%.
 // 0-1 is proportionally scored from 0 up to 80%. So a 40% score would get 0.5.
 message ScoreTargets {
-  float start = 1 [deprecated = true];
-  float end = 2;
-  float target_score = 3;
+  float target_score = 1;
 }
 
 message ScenarioDef {
