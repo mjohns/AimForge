@@ -2,10 +2,14 @@
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
+#include "aim/common/object_type.h"
 #include "aim/common/proto_util.h"
+#include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
+#include "aim/core/bundle_manager.h"
 #include "aim/core/guide_manager.h"
+#include "aim/core/history_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/playlist_ui.h"
@@ -15,6 +19,64 @@
 
 namespace aim {
 namespace {
+
+class AddGuideDialog {
+ public:
+  explicit AddGuideDialog(const std::string& id) : id_(id) {}
+
+  void NotifyOpen() {
+    open_ = true;
+  }
+
+  bool Draw(Application& app) {
+    ImGui::IdGuard cid("AddGuideDialogContent");
+    bool did_add = false;
+    if (is_open_) {
+      if (ImGui::BeginDefaultPopupModal(id_.c_str(), &is_open_)) {
+        ImGui::SimpleDropdown("BundlePicker",
+                              name_.mutable_bundle_name(),
+                              bundle_names_,
+                              ImGui::GetFrameHeight() * 9);
+        ImGui::SameLine();
+        ImGui::InputText("##RelativeNameInput", name_.mutable_relative_name());
+
+        ImGui::Spacing();
+        if (ImGui::Button("Add")) {
+          auto taken_names = app.guide_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
+          *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
+          app.guide_manager().UpdateGuide(name_.full_name(), GuideDef());
+          // app.guide_manager().SetCurrentGuide(name_.full_name());
+          app.history_manager().UpdateRecentView(ObjectType::GUIDE, name_.full_name());
+          did_add = true;
+          ImGui::CloseCurrentPopup();
+          is_open_ = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel")) {
+          is_open_ = false;
+          ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+      }
+    }
+    if (open_) {
+      ImGui::OpenPopup(id_.c_str());
+      open_ = false;
+      is_open_ = true;
+      bundle_names_ = app.bundle_manager().GetWritableBundleNames();
+      name_.set(kUserBundleName, "New guide");
+    }
+    return did_add;
+  }
+
+ private:
+  bool open_ = false;
+  bool is_open_ = false;
+
+  ResourceName name_;
+  std::vector<std::string> bundle_names_;
+  std::string id_;
+};
 
 class GuideEditor {
  public:
@@ -94,8 +156,6 @@ class GuideEditor {
     } else if (copy_i >= 0) {
       InsertAtIndex(&sections, sections[copy_i], copy_i);
     }
-
-    // ImGui::
   }
 
  private:
@@ -104,6 +164,11 @@ class GuideEditor {
                               section.mutable_text(),
                               ImVec2(0, 0),
                               ImGuiInputTextFlags_AllowTabInput);
+    DrawPlaylistsEditor(section);
+  }
+
+  void DrawPlaylistsEditor(GuideSection& section) {
+    ImGui::IdGuard cid("Playlists");
     ImGui::LoopId loop_id;
     int remove_i = -1;
     for (int i = 0; i < section.playlists_size(); ++i) {
@@ -190,6 +255,14 @@ class GuidesComponentImpl : public GuidesComponent {
   void Show() override {
     SetPlaylistRunIfInGuide();
 
+    if (add_dialog_.Draw(app_)) {
+      app_.bundle_manager().SaveDirtyBundles();
+    }
+
+    if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
+      add_dialog_.NotifyOpen();
+    }
+
     editor_.Draw();
 
     // ImGui::BeginChild("GuideContainer", ImVec2(0, 0));
@@ -268,6 +341,7 @@ class GuidesComponentImpl : public GuidesComponent {
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
   GuideEditor editor_;
+  AddGuideDialog add_dialog_{"AddGuideDialog"};
 };
 
 }  // namespace

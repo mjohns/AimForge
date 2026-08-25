@@ -32,6 +32,14 @@ class GuideManager {
 
   virtual std::shared_ptr<std::vector<std::string>> guide_names() const = 0;
 
+  virtual std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) = 0;
+
+  virtual void UpdateGuide(const std::string& name, const GuideDef& def) = 0;
+
+  virtual bool DeleteGuide(const std::string& name) = 0;
+
+  virtual bool RenameGuide(const std::string& old_name, const std::string& new_name) = 0;
+
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;
 };

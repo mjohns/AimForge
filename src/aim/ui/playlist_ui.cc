@@ -268,10 +268,10 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     }
 
     if (copy_dialog_.Draw(app_)) {
-      // result->reload_playlists = true;
+      screen_.app().bundle_manager().SaveDirtyBundles();
     }
     if (add_dialog_.Draw(app_)) {
-      // result->reload_playlists = true;
+      screen_.app().bundle_manager().SaveDirtyBundles();
     }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");

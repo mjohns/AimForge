@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "aim/common/name_util.h"
 #include "aim/common/resource_name.h"
 
 namespace aim {
@@ -57,56 +58,53 @@ class GuideManagerImpl : public GuideManager {
     return {};
   }
 
-  // void UpdateGuide(const std::string& name, const GuideDef& def) override {
-  //   NameInfo info = GetGuideNameInfo(name);
-  //   if (info.HasDynamicSuffix()) {
-  //     assert(false && "Trying to update guide with dynamic suffix");
-  //     return;
-  //   }
-  //
-  //   auto& p = guide_map_[name];
-  //   p.name = name;
-  //   *p.mutable_def() = def;
-  //   UpdateGuideListFromMap();
-  //   UpdateGuideRun(p.name, def);
-  //   dirty_bundles_.insert(GetBundleName(name));
-  // }
+  std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
+    std::vector<std::string> names;
+    for (const GuideItem& playlist : *guides_) {
+      ResourceName name = ResourceName::Parse(playlist.name);
+      if (name.bundle_name() == bundle_name) {
+        names.push_back(name.relative_name());
+      }
+    }
+    return names;
+  }
 
-  // bool DeleteGuide(const std::string& name) override {
-  //   guide_map_.erase(name);
-  //   guide_run_map_.erase(name);
-  //   UpdateGuideListFromMap();
-  //   dirty_bundles_.insert(GetBundleName(name));
-  //   return true;
-  // }
+  void UpdateGuide(const std::string& name, const GuideDef& def) override {
+    auto& g = guide_map_[name];
+    g.name = name;
+    g.def = def;
+    UpdateGuideListFromMap();
+    dirty_bundles_.insert(GetBundleName(name));
+  }
 
-  // bool RenameGuide(const std::string& old_name, const std::string& new_name) override {
-  //   if (guide_map_.contains(new_name)) {
-  //     return false;
-  //   }
-  //   if (current_guide_name_ == old_name) {
-  //     current_guide_name_ = new_name;
-  //   }
-  //   if (guide_run_map_.contains(old_name)) {
-  //     auto run = guide_run_map_[old_name];
-  //     run->guide.name = new_name;
-  //     guide_run_map_[new_name] = run;
-  //     guide_run_map_.erase(old_name);
-  //   }
-  //   auto it = guide_map_.find(old_name);
-  //   if (it != guide_map_.end()) {
-  //     auto& new_guide = guide_map_[new_name];
-  //     new_guide.name = new_name;
-  //     *new_guide.mutable_def() = *it->second.mutable_def();
-  //     guide_map_.erase(old_name);
-  //     UpdateGuideListFromMap();
-  //   }
-  //
-  //   for (auto& listener : rename_listeners_) {
-  //     listener(old_name, new_name);
-  //   }
-  //   return true;
-  // }
+  bool DeleteGuide(const std::string& name) override {
+    guide_map_.erase(name);
+    UpdateGuideListFromMap();
+    dirty_bundles_.insert(GetBundleName(name));
+    return true;
+  }
+
+  bool RenameGuide(const std::string& old_name, const std::string& new_name) override {
+    if (guide_map_.contains(new_name)) {
+      return false;
+    }
+    // if (current_guide_name_ == old_name) {
+    //   current_guide_name_ = new_name;
+    // }
+    auto it = guide_map_.find(old_name);
+    if (it != guide_map_.end()) {
+      auto& new_guide = guide_map_[new_name];
+      new_guide.name = new_name;
+      new_guide.def = it->second.def;
+      guide_map_.erase(old_name);
+      UpdateGuideListFromMap();
+    }
+
+    for (auto& listener : rename_listeners_) {
+      listener(old_name, new_name);
+    }
+    return true;
+  }
 
   // void RenameScenarioInAllGuides(const std::string& old_name,
   //                                const std::string& new_name) override {
@@ -140,17 +138,6 @@ class GuideManagerImpl : public GuideManager {
   //       UpdateGuide(guide.name, def);
   //     }
   //   }
-  // }
-
-  // std::vector<std::string> GetAllRelativeNamesInBundle(const std::string& bundle_name) override {
-  //   std::vector<std::string> names;
-  //   for (const Guide& guide : *guides_) {
-  //     ResourceName name = ResourceName::Parse(guide.name);
-  //     if (name.bundle_name() == bundle_name) {
-  //       names.push_back(name.relative_name());
-  //     }
-  //   }
-  //   return names;
   // }
 
   std::unordered_set<std::string> GetDirtyBundles() override {
