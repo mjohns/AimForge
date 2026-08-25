@@ -352,7 +352,7 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
     ImGui::SetNextItemWidth(char_x_ * 18);
     ImGui::InputText("###AddScenarioInput", &scenario_search_text_);
     ImGui::SameLine();
-    if (ImGui::SelectableButton(icons::kClear)) {
+    if (ImGui::ClearButton()) {
       scenario_search_text_ = "";
     }
     if (scenario_search_text_.size() > 0) {

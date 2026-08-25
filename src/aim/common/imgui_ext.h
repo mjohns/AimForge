@@ -373,6 +373,8 @@ bool MenuButton();
 
 bool IconButton(const char* icon, float scale = 0.7);
 
+bool ClearButton();
+
 bool BeginDefaultPopupModal(const char* id, bool* draw);
 
 class Popup {

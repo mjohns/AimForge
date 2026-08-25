@@ -93,6 +93,10 @@ bool MenuButton() {
   return selected;
 }
 
+bool ClearButton() {
+  return IconButton(aim::icons::kClear);
+}
+
 bool SimpleDropdown(const std::string& id,
                     std::string* value,
                     const std::vector<std::string>& values,

@@ -9,6 +9,7 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/playlist_ui.h"
+#include "aim/ui/search_selector.h"
 #include "aim/ui/ui_app.h"
 #include "imgui.h"
 
@@ -22,6 +23,8 @@ class GuideEditor {
 
   void Draw() {
     ImGui::IdGuard cid("GuideEditor");
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+    char_x_ = char_size.x;
 
     ImGui::LoopId loop_id;
     GuideDef& def = updated_guide_.def;
@@ -67,7 +70,7 @@ class GuideEditor {
       if (i != 0) {
         ImGui::SpacedSeparator();
       }
-      DrawSectionEditor(section);
+      DrawSectionEditor(*section);
       ImGui::Unindent();
     }
 
@@ -96,13 +99,58 @@ class GuideEditor {
   }
 
  private:
-  void DrawSectionEditor(GuideSection* section) {
+  void DrawSectionEditor(GuideSection& section) {
     ImGui::InputTextMultiline("##DescriptionInput",
-                              section->mutable_text(),
+                              section.mutable_text(),
                               ImVec2(0, 0),
                               ImGuiInputTextFlags_AllowTabInput);
+    ImGui::LoopId loop_id;
+    int remove_i = -1;
+    for (int i = 0; i < section.playlists_size(); ++i) {
+      auto lid = loop_id.Get("Playlist");
+      const std::string& playlist_name = section.playlists(i);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(playlist_name);
+      ImGui::SameLine();
+      if (ImGui::ClearButton()) {
+        remove_i = i;
+      }
+    }
+
+    if (remove_i >= 0) {
+      section.mutable_playlists()->erase(section.mutable_playlists()->begin() + remove_i);
+    }
+    ImGui::Text("Add playlist");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(char_x_ * 18);
+    ImGui::InputText("###AddPlaylistInput", &playlist_search_text_);
+    ImGui::SameLine();
+    if (ImGui::ClearButton()) {
+      playlist_search_text_ = "";
+    }
+    if (playlist_search_text_.size() > 0) {
+      ImGui::Indent();
+      auto names = app_.playlist_manager().playlist_names();
+      SearchSelectorOptions options;
+      // options.additional_predicate = [&](const std::string& scenario_name) {
+      //   bool already_in_guide =
+      //       std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
+      //         return item.scenario() == scenario_name;
+      //       });
+      //   return !already_in_playlist;
+      // };
+
+      std::optional<std::string> selected_playlist =
+          SearchSelector(playlist_search_text_, *names, options);
+      if (selected_playlist) {
+        section.add_playlists(*selected_playlist);
+      }
+      ImGui::Unindent();
+    }
   }
 
+  float char_x_ = 0;
+  std::string playlist_search_text_;
   Application& app_ = GetUiApp();
   const GuideItem original_guide_;
   GuideItem updated_guide_;
