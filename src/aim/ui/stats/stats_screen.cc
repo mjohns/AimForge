@@ -4,6 +4,7 @@
 #include <cassert>
 #include <optional>
 
+#include "absl/cleanup/cleanup.h"
 #include "absl/time/time.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
@@ -75,16 +76,24 @@ void DrawScoresOverTimePlot(const std::string& scenario_name,
   double threshold = scores.back();
   double double_score_target = score_target;
 
-  ImPlot::PushStyleColor(ImPlotCol_PlotBg, ImVec4(0, 0, 0, 0));
-  ImPlotFlags plot_flags =
-      ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoTitle | ImPlotFlags_None;
-  std::string id = std::format("Scores Over Time ##{}_{}", scenario_name, run_id);
+  auto crust = HexToImColor("#181926");
+  ImPlot::PushStyleColor(ImPlotCol_PlotBg, crust.Value);
+  ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
+  auto style_cleanup = absl::MakeCleanup([]() {
+    ImPlot::PopStyleColor(1);
+    ImPlot::PopStyleVar(1);
+  });
+  std::string id = std::format("Scores Over Time##{}_{}", scenario_name, run_id);
+  ImPlotFlags plot_flags = ImPlotFlags_NoTitle | ImPlotFlags_NoLegend | ImPlotFlags_NoMenus |
+                           ImPlotFlags_NoBoxSelect | ImPlotFlags_NoMouseText;
   if (!ImPlot::BeginPlot(id.c_str(), ImVec2(-1, 0), plot_flags)) {
     return;
   }
 
-  ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_NoDecorations);
-  ImPlot::SetupAxis(ImAxis_Y1, "Score", ImPlotAxisFlags_NoDecorations);
+  auto axis_flags =
+      ImPlotAxisFlags_NoDecorations | ImPlotAxisFlags_NoHighlight | ImPlotAxisFlags_NoSideSwitch;
+  ImPlot::SetupAxis(ImAxis_X1, "Time", axis_flags);
+  ImPlot::SetupAxis(ImAxis_Y1, "Score", axis_flags);
 
   ImPlot::SetupAxisLimits(ImAxis_X1, times.front(), times.back(), ImPlotCond_Always);
   ImPlot::SetupAxisLimits(

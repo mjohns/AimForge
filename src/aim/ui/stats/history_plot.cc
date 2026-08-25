@@ -26,18 +26,15 @@ void DrawHistoryPlot(const std::string& id,
     return;
   }
 
-  auto mantle = HexToImColor("#1e2030");
   auto crust = HexToImColor("#181926");
   ImPlot::PushStyleColor(ImPlotCol_PlotBg, crust.Value);
-  // ImPlot::PushStyleColor(ImPlotCol_PlotBorder, mantle.Value);
-  // ImPlot::PushStyleVar(ImPlotStyleVar_PlotBorderSize, 0.f);
   ImPlot::PushStyleVar(ImPlotStyleVar_PlotPadding, ImVec2(0, 0));
   auto style_cleanup = absl::MakeCleanup([]() {
     ImPlot::PopStyleColor(1);
     ImPlot::PopStyleVar(1);
   });
-  ImPlotFlags plot_flags =
-      ImPlotFlags_NoTitle | ImPlotFlags_NoLegend | ImPlotFlags_NoMenus | ImPlotFlags_NoBoxSelect;
+  ImPlotFlags plot_flags = ImPlotFlags_NoTitle | ImPlotFlags_NoLegend | ImPlotFlags_NoMenus |
+                           ImPlotFlags_NoBoxSelect | ImPlotFlags_NoMouseText;
   if (!ImPlot::BeginPlot("##ScoreHistory", ImVec2(-1, 0), plot_flags)) {
     return;
   }
