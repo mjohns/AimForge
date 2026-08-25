@@ -505,39 +505,30 @@ class ApplicationImpl : public Application {
       return std::format("Settings file is invalid: {}", settings_path_.string());
     }
 
-    // {
-    //   auto display = SelectDisplay(settings_from_file);
-    //   if (!display) {
-    //     return "Unable to find display";
-    //   }
-    //   display_ = *display;
-    //
-    //   SDL_Rect bounds;
-    //   SDL_GetDisplayBounds(display_.display_id, &bounds);
-    //
-    //   SDL_PropertiesID props = SDL_CreateProperties();
-    //   SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, bounds.x);
-    //   SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, bounds.y);
-    //   SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, 0);
-    //   SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, 0);
-    //   SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
-    //
-    //   sdl_window_ = SDL_CreateWindowWithProperties(props);
-    //   SDL_DestroyProperties(props);
-    //   if (sdl_window_ == nullptr) {
-    //     return std::format("Failed to create window: {}", SDL_GetError());
-    //   }
-    //
-    //   if (!SDL_SetWindowFullscreen(sdl_window_, true)) {
-    //     return std::format("Failed to make window fullscreen: {}", SDL_GetError());
-    //   }
-    // }
-     SDL_WindowFlags window_flags =
-        (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-    trace.Add("SDL_CreateWindow");
-    sdl_window_ = SDL_CreateWindow("FpsAimForge", 0, 0, window_flags);
-    if (sdl_window_ == nullptr) {
-      return std::format("Failed to create window: {}", SDL_GetError());
+    {
+      auto display = SelectDisplay(settings_from_file);
+      if (!display) {
+        return "Unable to find display";
+      }
+      display_ = *display;
+
+      SDL_Rect bounds;
+      SDL_GetDisplayBounds(display_.display_id, &bounds);
+
+      SDL_PropertiesID props = SDL_CreateProperties();
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, bounds.x);
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, bounds.y);
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, 0);
+      SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, 0);
+      SDL_WindowFlags window_flags =
+          (SDL_WindowFlags)(SDL_WINDOW_FULLSCREEN | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+      SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_FLAGS_NUMBER, window_flags);
+
+      sdl_window_ = SDL_CreateWindowWithProperties(props);
+      SDL_DestroyProperties(props);
+      if (sdl_window_ == nullptr) {
+        return std::format("Failed to create window: {}", SDL_GetError());
+      }
     }
 
     trace.Add("SDL_CreateGPUDevice");
