@@ -16,6 +16,8 @@ class HistoryManagerImpl : public HistoryManager {
       scenarios_need_reload_ = true;
     } else if (type == ObjectType::PLAYLIST) {
       playlists_need_reload_ = true;
+    } else if (type == ObjectType::GUIDE) {
+      guides_need_reload_ = true;
     }
     db_->UpdateRecentView(type, name);
   }
@@ -25,6 +27,8 @@ class HistoryManagerImpl : public HistoryManager {
       scenarios_need_reload_ = true;
     } else if (type == ObjectType::PLAYLIST) {
       playlists_need_reload_ = true;
+    } else if (type == ObjectType::GUIDE) {
+      guides_need_reload_ = true;
     }
     db_->DeleteRecentView(type, name);
   }
@@ -40,6 +44,7 @@ class HistoryManagerImpl : public HistoryManager {
   void ClearCache() override {
     scenarios_need_reload_ = true;
     playlists_need_reload_ = true;
+    guides_need_reload_ = true;
   }
 
   const std::vector<std::string>& recent_playlists() override {
@@ -48,6 +53,14 @@ class HistoryManagerImpl : public HistoryManager {
       recent_playlists_ = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
     }
     return recent_playlists_;
+  }
+
+  const std::vector<std::string>& recent_guides() override {
+    if (guides_need_reload_) {
+      guides_need_reload_ = false;
+      recent_guides_ = GetRecentUniqueNames(ObjectType::GUIDE, kCachedRecentNamesSize);
+    }
+    return recent_guides_;
   }
 
   std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) override {
@@ -70,8 +83,10 @@ class HistoryManagerImpl : public HistoryManager {
 
   std::vector<std::string> recent_scenarios_;
   std::vector<std::string> recent_playlists_;
+  std::vector<std::string> recent_guides_;
   bool scenarios_need_reload_ = true;
   bool playlists_need_reload_ = true;
+  bool guides_need_reload_ = true;
 };
 
 }  // namespace

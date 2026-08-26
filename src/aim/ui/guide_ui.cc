@@ -10,6 +10,7 @@
 #include "aim/core/bundle_manager.h"
 #include "aim/core/guide_manager.h"
 #include "aim/core/history_manager.h"
+#include "aim/core/labels_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/playlist_ui.h"
@@ -221,28 +222,19 @@ class GuideEditor {
   GuideItem updated_guide_;
 };
 
-class GuidesComponentImpl : public GuidesComponent {
+class GuideViewer {
  public:
-  GuidesComponentImpl() : app_(GetUiApp()), editor_({}) {
-    auto* section = guide_.add_sections();
-    // section->set_text("Example playlists");
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 15cm";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 25cm";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 35cm";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 45cm";
-    *section->add_playlists() = "AF SmoothSwerve Precision Ladder 55cm";
-
+  GuideViewer() : app_(GetUiApp()) {
     playlist_component_ = CreatePlaylistComponent();
   }
 
-  void SetPlaylistRunIfInGuide() {
+  void SetPlaylistRunIfInGuide(const GuideDef& guide) {
     run_ = {};
     auto current_run = app_.playlist_manager().GetCurrentRun();
     if (!current_run) {
       return;
     }
-    for (const auto& section : guide_.sections()) {
+    for (const auto& section : guide.sections()) {
       for (const std::string& playlist : section.playlists()) {
         if (playlist == current_run->playlist.name) {
           run_ = current_run;
@@ -252,18 +244,8 @@ class GuidesComponentImpl : public GuidesComponent {
     }
   }
 
-  void Show() override {
-    SetPlaylistRunIfInGuide();
-
-    if (add_dialog_.Draw(app_)) {
-      app_.bundle_manager().SaveDirtyBundles();
-    }
-
-    if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
-      add_dialog_.NotifyOpen();
-    }
-
-    editor_.Draw();
+  void Draw(const std::string& name, const GuideDef& guide) {
+    SetPlaylistRunIfInGuide(guide);
 
     // ImGui::BeginChild("GuideContainer", ImVec2(0, 0));
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
@@ -274,7 +256,7 @@ class GuidesComponentImpl : public GuidesComponent {
     ImGui::TableNextColumn();
     ImGui::BeginChild("GuideColumn");
     ImGui::LoopId loop_id;
-    for (const auto& section : guide_.sections()) {
+    for (const auto& section : guide.sections()) {
       auto lid = loop_id.Get("Section");
       DrawSection(section);
     }
@@ -336,8 +318,107 @@ class GuidesComponentImpl : public GuidesComponent {
 
  private:
   Application& app_;
+  std::unique_ptr<PlaylistComponent> playlist_component_;
+  std::shared_ptr<PlaylistRun> run_;
+};
 
-  GuideDef guide_;
+struct GuideBrowserResult {
+  std::optional<GuideItem> open_guide{};
+};
+
+class GuideBrowser {
+ public:
+  GuideBrowser() : app_(GetUiApp()) {}
+
+  void Draw(GuideBrowserResult* result) {
+    ImGui::LoopId loop_id;
+    for (const std::string& name : *app_.guide_manager().guide_names()) {
+      auto lid = loop_id.Get("Guide");
+      DrawGuideItem(name, result);
+    }
+  }
+
+ private:
+  void DrawGuideItem(const std::string& guide_name, GuideBrowserResult* result) {
+    auto guide = app_.guide_manager().GetGuide(guide_name);
+    if (!guide) {
+      return;
+    }
+    if (ImGui::Button(guide_name.c_str())) {
+      result->open_guide = *guide;
+    }
+    // const char* menu_id = "GuideItemMenu";
+    // if (ImGui::BeginPopupContextItem(menu_id)) {
+    //   if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
+    //     auto guide = app_.guide_manager().GetGuide(guide_name);
+    //     if (guide) {
+    //       copy_dialog_.NotifyOpen(*guide);
+    //     }
+    //   }
+    //   if (ImGui::Selectable(std::format("{} Recents", icons::kClose))) {
+    //     app_.history_manager().DeleteRecentView(ObjectType::GUIDE, guide_name);
+    //   }
+    //
+    //   ImGui::SpacedSeparator();
+    //   if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
+    //     auto guide = app_.guide_manager().GetGuide(guide_name);
+    //     if (guide) {
+    //       delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", guide_name),
+    //                                              *guide);
+    //     }
+    //   }
+    //   ImGui::EndPopup();
+    // }
+    // ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
+
+    ImGui::SameLine();
+    if (app_.labels_manager().IsStarred(ObjectType::GUIDE, guide_name)) {
+      if (ImGui::IconButton(icons::kStar)) {
+        app_.labels_manager().UnstarItem(ObjectType::GUIDE, guide_name);
+      }
+    } else {
+      if (ImGui::IconButton(icons::kStarOutline)) {
+        app_.labels_manager().StarItem(ObjectType::GUIDE, guide_name);
+      }
+    }
+  }
+  Application& app_;
+};
+
+class GuidesComponentImpl : public GuidesComponent {
+ public:
+  GuidesComponentImpl() : app_(GetUiApp()), editor_({}) {
+    playlist_component_ = CreatePlaylistComponent();
+  }
+
+  void Show() override {
+    ImGui::IdGuard cid("Guides");
+    if (add_dialog_.Draw(app_)) {
+      app_.bundle_manager().SaveDirtyBundles();
+    }
+
+    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
+    if (!ImGui::BeginTable("GuideColumns", 3, flags)) {
+      return;
+    }
+
+    ImGui::TableNextColumn();
+    ImGui::BeginChild("GuideColumn");
+    if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
+      add_dialog_.NotifyOpen();
+    }
+
+    GuideBrowserResult browser_result;
+    guide_browser_.Draw(&browser_result);
+
+    ImGui::EndChild();
+    ImGui::EndTable();
+  }
+
+ private:
+  Application& app_;
+
+  GuideBrowser guide_browser_;
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
   GuideEditor editor_;

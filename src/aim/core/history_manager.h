@@ -21,6 +21,7 @@ class HistoryManager {
 
   virtual const std::vector<std::string>& recent_scenarios() = 0;
   virtual const std::vector<std::string>& recent_playlists() = 0;
+  virtual const std::vector<std::string>& recent_guides() = 0;
 
   virtual void ClearCache() = 0;
 };

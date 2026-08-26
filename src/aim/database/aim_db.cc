@@ -204,6 +204,13 @@ JOIN Playlists ON LabeledItems.Id = Playlists.PlaylistId
 WHERE LabeledItems.Label = ? AND LabeledItems.Type = ?;
 )AIMS";
 
+const char* kGetLabeledGuideItemsSql = R"AIMS(
+SELECT Guides.GuideName
+FROM LabeledItems
+JOIN Guides ON LabeledItems.Id = Guides.GuideId
+WHERE LabeledItems.Label = ? AND LabeledItems.Type = ?;
+)AIMS";
+
 const char* kCreatePlayTimeTable = R"AIMS(
 CREATE TABLE IF NOT EXISTS PlayTime (
     PlayTimeId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -298,6 +305,15 @@ const char* kGetRecentViewsForPlaylistSql = R"AIMS(
 SELECT Playlists.PlaylistName, RecentIdViews.TimestampMicros
 FROM RecentIdViews
 JOIN Playlists ON RecentIdViews.Id = Playlists.PlaylistId
+WHERE RecentIdViews.Type = ?
+ORDER BY RecentIdViews.TimestampMicros DESC
+LIMIT ?;
+)AIMS";
+
+const char* kGetRecentViewsForGuideSql = R"AIMS(
+SELECT Guides.GuideName, RecentIdViews.TimestampMicros
+FROM RecentIdViews
+JOIN Guides ON RecentIdViews.Id = Guide.GuideId
 WHERE RecentIdViews.Type = ?
 ORDER BY RecentIdViews.TimestampMicros DESC
 LIMIT ?;
@@ -827,6 +843,9 @@ class AimDbImpl : public AimDb {
     if (type == ObjectType::PLAYLIST) {
       return UpdateRecentIdView(type, GetPlaylistId(name));
     }
+    if (type == ObjectType::GUIDE) {
+      return UpdateRecentIdView(type, GetGuideId(name));
+    }
 
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kInsertRecentViewsSql, -1, &stmt, nullptr);
@@ -872,6 +891,9 @@ class AimDbImpl : public AimDb {
     if (type == ObjectType::PLAYLIST) {
       return DeleteRecentIdView(type, GetPlaylistId(name));
     }
+    if (type == ObjectType::GUIDE) {
+      return DeleteRecentIdView(type, GetGuideId(name));
+    }
 
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, kDeleteRecentViewSql, -1, &stmt, nullptr);
@@ -908,6 +930,8 @@ class AimDbImpl : public AimDb {
       sql = kGetRecentViewsForScenarioSql;
     } else if (t == ObjectType::PLAYLIST) {
       sql = kGetRecentViewsForPlaylistSql;
+    } else if (t == ObjectType::GUIDE) {
+      sql = kGetRecentViewsForGuideSql;
     }
     sqlite3_stmt* stmt;
     int rc = sqlite3_prepare_v2(db_, sql, -1, &stmt, nullptr);
@@ -967,12 +991,14 @@ class AimDbImpl : public AimDb {
   std::vector<std::string> GetLabeledItems(int label, ObjectType type) override {
     sqlite3_stmt* stmt;
 
-    int rc = sqlite3_prepare_v2(
-        db_,
-        type == ObjectType::SCENARIO ? kGetLabeledScenarioItemsSql : kGetLabeledPlaylistItemsSql,
-        -1,
-        &stmt,
-        nullptr);
+    const char* query = kGetLabeledScenarioItemsSql;
+    if (type == ObjectType::PLAYLIST) {
+      query = kGetLabeledPlaylistItemsSql;
+    } else if (type == ObjectType::GUIDE) {
+      query = kGetLabeledGuideItemsSql;
+    }
+
+    int rc = sqlite3_prepare_v2(db_, query, -1, &stmt, nullptr);
     if (rc != SQLITE_OK) {
       Logger::get()->warn("Failed to fetch data: {}", sqlite3_errmsg(db_));
       return {};

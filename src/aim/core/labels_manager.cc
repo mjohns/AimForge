@@ -42,6 +42,8 @@ class LabelsManagerImpl : public LabelsManager {
         return db_->GetScenarioId(object_id);
       case ObjectType::PLAYLIST:
         return db_->GetPlaylistId(object_id);
+      case ObjectType::GUIDE:
+        return db_->GetGuideId(object_id);
       default:
         break;
     }
