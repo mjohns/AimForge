@@ -4,18 +4,16 @@
 #include "aim/common/mat_icons.h"
 #include "aim/common/name_util.h"
 #include "aim/common/resource_name.h"
-#include "aim/common/search.h"
 #include "aim/common/times.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/history_manager.h"
-#include "aim/core/labels_manager.h"
-#include "aim/core/local_store.h"
 #include "aim/core/scenario_manager.h"
 #include "aim/core/stats_manager.h"
 #include "aim/ui/copy_playlist_dialog.h"
 #include "aim/ui/editor/scenario_editor_screen.h"
+#include "aim/ui/object_browser.h"
 #include "aim/ui/playlist_editor_component.h"
 #include "aim/ui/select_variation_dialog.h"
 #include "aim/ui/ui_app.h"
@@ -24,14 +22,6 @@
 
 namespace aim {
 namespace {
-
-const char* kPlaylistViewTypeKey = "PlaylistViewType";
-
-enum class PlaylistViewType : int {
-  RECENT = 1,
-  ALL = 2,
-  STARRED = 3,
-};
 
 class AddPlaylistDialog {
  public:
@@ -252,27 +242,14 @@ class PlaylistComponentImpl : public PlaylistComponent {
 
 class PlaylistListComponentImpl : public PlaylistListComponent {
  public:
-  explicit PlaylistListComponentImpl(UiScreen& screen) : screen_(screen), app_(screen.app()) {
-    auto maybe_initial_view_type = app_.local_store().GetInt(kPlaylistViewTypeKey);
-    if (maybe_initial_view_type) {
-      view_type_ = static_cast<PlaylistViewType>(*maybe_initial_view_type);
-    } else {
-      view_type_ = PlaylistViewType::ALL;
-    }
-  }
+  explicit PlaylistListComponentImpl() {}
 
   void Show(PlaylistListResult* result) override {
-    auto playlist_to_delete = delete_confirmation_dialog_.Draw("Delete");
-    if (playlist_to_delete) {
-      screen_.app().playlist_manager().DeletePlaylist(playlist_to_delete->name);
-      screen_.app().bundle_manager().SaveDirtyBundles();
-    }
-
     if (copy_dialog_.Draw(app_)) {
-      screen_.app().bundle_manager().SaveDirtyBundles();
+      app_.bundle_manager().SaveDirtyBundles();
     }
     if (add_dialog_.Draw(app_)) {
-      screen_.app().bundle_manager().SaveDirtyBundles();
+      app_.bundle_manager().SaveDirtyBundles();
     }
 
     ImVec2 char_size = ImGui::CalcTextSize("A");
@@ -282,136 +259,29 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       add_dialog_.NotifyOpen();
     }
 
-    auto recent_playlists = app_.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
-    if (recent_playlists->size() > 0) {
-      ImGui::SpacedSeparator();
-
-      // Draw the 10 most recent items.
-      ImGui::LoopId loop_id;
-      int i = 0;
-      for (const std::string& name : *recent_playlists) {
-        i++;
-        if (i >= 10) {
-          break;
-        }
-        auto id_guard = loop_id.Get();
-        DrawPlaylistItem(name, result);
-      }
-    }
-
     ImGui::SpacedSeparator();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("%s", icons::kFilterList);
-    ImGui::SameLine();
-    if (ImGui::ChipSelector("##PlaylistViewType",
-                            &view_type_,
-                            {
-                                {PlaylistViewType::ALL, "All"},
-                                {PlaylistViewType::RECENT, "Recent"},
-                                {PlaylistViewType::STARRED, "Starred"},
-                            })) {
-      app_.local_store().PutInt(kPlaylistViewTypeKey, (int)view_type_);
-    }
+    ObjectBrowser::Result browser_result;
+    browser_.Draw(&browser_result);
 
-    ImGui::Spacing();
-
-    ImGui::SetNextItemWidth(char_size.x * 30);
-    ImGui::InputTextWithHint("##PlaylistSearchInput", icons::kSearch, &playlist_search_text_);
-    if (playlist_search_text_.size() > 0) {
-      ImGui::SameLine();
-      if (ImGui::SelectableButton(icons::kClear)) {
-        playlist_search_text_ = "";
+    if (browser_result.copy_object_name) {
+      auto playlist = app_.playlist_manager().GetPlaylist(*browser_result.copy_object_name);
+      if (playlist) {
+        copy_dialog_.NotifyOpen(*playlist);
       }
     }
 
-    ImGui::Spacing();
-
-    ImGui::BeginChild("PlaylistsContent");
-
-    auto search_words = GetSearchWords(playlist_search_text_);
-    ImGui::LoopId loop_id;
-
-    if (view_type_ == PlaylistViewType::RECENT) {
-      auto recent_playlists = app_.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
-      for (const std::string& name : *recent_playlists) {
-        auto id_guard = loop_id.Get();
-        if (StringMatchesSearch(name, search_words)) {
-          DrawPlaylistItem(name, result);
-        }
-      }
-    } else if (view_type_ == PlaylistViewType::STARRED) {
-      auto items = app_.labels_manager().ListStarredItems(ObjectType::PLAYLIST);
-      for (const std::string& name : items->items) {
-        auto id_guard = loop_id.Get();
-        if (StringMatchesSearch(name, search_words)) {
-          DrawPlaylistItem(name, result);
-        }
-      }
-    } else {
-      for (const std::string& name : *app_.playlist_manager().playlist_names()) {
-        auto id_guard = loop_id.Get();
-        if (StringMatchesSearch(name, search_words)) {
-          DrawPlaylistItem(name, result);
-        }
-      }
-    }
-
-    ImGui::EndChild();
-  }
-
-  void DrawPlaylistItem(const std::string& playlist_name, PlaylistListResult* result) {
-    auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
-    if (!playlist) {
-      return;
-    }
-    if (ImGui::Button(playlist_name.c_str())) {
-      result->open_playlist = *playlist;
-    }
-    const char* menu_id = "PlaylistItemMenu";
-    if (ImGui::BeginPopupContextItem(menu_id)) {
-      if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
-        auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
-        if (playlist) {
-          copy_dialog_.NotifyOpen(*playlist);
-        }
-      }
-      if (ImGui::Selectable(std::format("{} Recents", icons::kClose))) {
-        app_.history_manager().DeleteRecentView(ObjectType::PLAYLIST, playlist_name);
-      }
-
-      ImGui::SpacedSeparator();
-      if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
-        auto playlist = app_.playlist_manager().GetPlaylist(playlist_name);
-        if (playlist) {
-          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", playlist_name),
-                                                 *playlist);
-        }
-      }
-      ImGui::EndPopup();
-    }
-    ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
-
-    ImGui::SameLine();
-    if (app_.labels_manager().IsStarred(ObjectType::PLAYLIST, playlist_name)) {
-      if (ImGui::Selectable(icons::kStar, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-        app_.labels_manager().UnstarItem(ObjectType::PLAYLIST, playlist_name);
-      }
-    } else {
-      if (ImGui::Selectable(icons::kStarOutline, false, 0, ImVec2(ImGui::GetTextLineHeight(), 0))) {
-        app_.labels_manager().StarItem(ObjectType::PLAYLIST, playlist_name);
-      }
+    if (browser_result.selected_object_name) {
+      result->open_playlist =
+          app_.playlist_manager().GetPlaylist(*browser_result.selected_object_name);
     }
   }
 
  private:
-  ImGui::ConfirmationDialog<Playlist> delete_confirmation_dialog_{"DeleteConfirmationDialog2"};
-  std::string playlist_search_text_;
-  UiScreen& screen_;
-  Application& app_;
+  Application& app_ = GetUiApp();
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
   AddPlaylistDialog add_dialog_{"AddPlaylistDialog"};
-  PlaylistViewType view_type_ = PlaylistViewType::ALL;
+  ObjectBrowser browser_{ObjectType::PLAYLIST};
 };
 
 }  // namespace
@@ -578,7 +448,7 @@ std::unique_ptr<PlaylistComponent> CreatePlaylistComponent() {
 }
 
 std::unique_ptr<PlaylistListComponent> CreatePlaylistListComponent(UiScreen* screen) {
-  return std::make_unique<PlaylistListComponentImpl>(*screen);
+  return std::make_unique<PlaylistListComponentImpl>();
 }
 
 }  // namespace aim
