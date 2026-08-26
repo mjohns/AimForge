@@ -8,7 +8,6 @@
 
 #include "aim/common/object_type.h"
 #include "aim/common/simple_types.h"
-#include "aim/common/util.h"
 #include "aim/proto/scenario.pb.h"
 #include "aim/proto/settings.pb.h"
 #include "aim/proto/stats.pb.h"

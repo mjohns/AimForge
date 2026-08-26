@@ -5,13 +5,16 @@
 #include "aim/common/object_type.h"
 #include "aim/common/proto_util.h"
 #include "aim/common/resource_name.h"
+#include "aim/common/search.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/guide_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/labels_manager.h"
+#include "aim/core/local_store.h"
 #include "aim/core/playlist_manager.h"
+#include "aim/core/scenario_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/search_selector.h"
@@ -326,63 +329,142 @@ struct GuideBrowserResult {
   std::optional<GuideItem> open_guide{};
 };
 
-class GuideBrowser {
- public:
-  GuideBrowser() : app_(GetUiApp()) {}
+enum class ViewType : int {
+  RECENT = 1,
+  ALL = 2,
+  STARRED = 3,
+};
 
-  void Draw(GuideBrowserResult* result) {
-    ImGui::LoopId loop_id;
-    for (const std::string& name : *app_.guide_manager().guide_names()) {
-      auto lid = loop_id.Get("Guide");
-      DrawGuideItem(name, result);
+std::string GetViewTypeKey(ObjectType type) {
+  switch (type) {
+    case ObjectType::SCENARIO:
+      return "ScenarioViewType";
+    case ObjectType::PLAYLIST:
+      return "PlaylistViewType";
+    case ObjectType::GUIDE:
+      return "GuideViewType";
+    case ObjectType::THEME:
+    case ObjectType::CROSSHAIR:
+      break;
+  }
+  assert(false && "Unsupported object for ViewType");
+  return "UnknownViewType";
+}
+
+struct ObjectBrowserResult {
+  std::optional<std::string> selected_object_name{};
+};
+
+class ObjectBrowser {
+ public:
+  explicit ObjectBrowser(ObjectType type) : type_(type) {}
+
+  // std::function<void(const std::string& name, ObjectBrowserResult*)> draw_item,
+  void Draw(ObjectBrowserResult* result) {
+    ImGui::IdGuard cid(ObjectTypeToString(type_) + "SearchList");
+
+    auto to_delete = delete_confirmation_dialog_.Draw("Delete");
+    if (to_delete) {
+      if (type_ == ObjectType::GUIDE) {
+        app_.guide_manager().DeleteGuide(*to_delete);
+      } else if (type_ == ObjectType::PLAYLIST) {
+        app_.playlist_manager().DeletePlaylist(*to_delete);
+      } else if (type_ == ObjectType::SCENARIO) {
+        app_.scenario_manager().DeleteScenario(*to_delete);
+      }
+      app_.bundle_manager().SaveDirtyBundles();
     }
+
+    ImVec2 char_size = ImGui::CalcTextSize("A");
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", icons::kFilterList);
+    ImGui::SameLine();
+    if (ImGui::ChipSelector("##ViewType",
+                            &view_type_,
+                            {
+                                {ViewType::ALL, "All"},
+                                {ViewType::RECENT, "Recent"},
+                                {ViewType::STARRED, "Starred"},
+                            })) {
+      app_.local_store().PutInt(GetViewTypeKey(type_), (int)view_type_);
+    }
+
+    ImGui::SetNextItemWidth(char_size.x * 30);
+    ImGui::InputTextWithHint("##SearchInput", icons::kSearch, &search_text_);
+    if (search_text_.size() > 0) {
+      ImGui::SameLine();
+      if (ImGui::ClearButton()) {
+        search_text_ = "";
+      }
+    }
+
+    ImGui::BeginChild("SearchContent");
+
+    auto search_words = GetSearchWords(search_text_);
+    ImGui::LoopId loop_id;
+
+    std::shared_ptr<std::vector<std::string>> names = GetNames();
+    if (names != nullptr) {
+      for (const std::string& name : *names) {
+        auto id_guard = loop_id.Get();
+        if (StringMatchesSearch(name, search_words)) {
+          DrawItem(name, result);
+        }
+      }
+    }
+    ImGui::EndChild();
   }
 
  private:
-  void DrawGuideItem(const std::string& guide_name, GuideBrowserResult* result) {
-    auto guide = app_.guide_manager().GetGuide(guide_name);
+  void DrawItem(const std::string& name, ObjectBrowserResult* result) {
+    auto guide = app_.guide_manager().GetGuide(name);
     if (!guide) {
       return;
     }
-    if (ImGui::Button(guide_name.c_str())) {
-      result->open_guide = *guide;
+    if (ImGui::Button(name.c_str())) {
+      result->selected_object_name = name;
     }
-    // const char* menu_id = "GuideItemMenu";
-    // if (ImGui::BeginPopupContextItem(menu_id)) {
-    //   if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
-    //     auto guide = app_.guide_manager().GetGuide(guide_name);
-    //     if (guide) {
-    //       copy_dialog_.NotifyOpen(*guide);
-    //     }
-    //   }
-    //   if (ImGui::Selectable(std::format("{} Recents", icons::kClose))) {
-    //     app_.history_manager().DeleteRecentView(ObjectType::GUIDE, guide_name);
-    //   }
-    //
-    //   ImGui::SpacedSeparator();
-    //   if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
-    //     auto guide = app_.guide_manager().GetGuide(guide_name);
-    //     if (guide) {
-    //       delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", guide_name),
-    //                                              *guide);
-    //     }
-    //   }
-    //   ImGui::EndPopup();
-    // }
-    // ImGui::OpenPopupOnItemClick(menu_id, ImGuiPopupFlags_MouseButtonRight);
-
     ImGui::SameLine();
-    if (app_.labels_manager().IsStarred(ObjectType::GUIDE, guide_name)) {
+    if (app_.labels_manager().IsStarred(type_, name)) {
       if (ImGui::IconButton(icons::kStar)) {
-        app_.labels_manager().UnstarItem(ObjectType::GUIDE, guide_name);
+        app_.labels_manager().UnstarItem(type_, name);
       }
     } else {
       if (ImGui::IconButton(icons::kStarOutline)) {
-        app_.labels_manager().StarItem(ObjectType::GUIDE, guide_name);
+        app_.labels_manager().StarItem(type_, name);
       }
     }
   }
-  Application& app_;
+
+  std::shared_ptr<std::vector<std::string>> GetNames() {
+    if (view_type_ == ViewType::RECENT) {
+      return app_.history_manager().GetCachedRecentNames(type_);
+    }
+    if (view_type_ == ViewType::STARRED) {
+      auto items = app_.labels_manager().ListStarredItems(type_);
+      return std::shared_ptr<std::vector<std::string>>(items, &items->items);
+    }
+    switch (type_) {
+      case ObjectType::SCENARIO:
+        return app_.scenario_manager().scenario_names();
+      case ObjectType::PLAYLIST:
+        return app_.playlist_manager().playlist_names();
+      case ObjectType::GUIDE:
+        return app_.guide_manager().guide_names();
+      case ObjectType::THEME:
+      case ObjectType::CROSSHAIR:
+        break;
+    }
+    assert(false && "Unsupported object type");
+    return nullptr;
+  }
+
+  Application& app_ = GetUiApp();
+  std::string search_text_;
+  ObjectType type_;
+  ViewType view_type_ = ViewType::ALL;
+  ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
 };
 
 class GuidesComponentImpl : public GuidesComponent {
@@ -408,7 +490,9 @@ class GuidesComponentImpl : public GuidesComponent {
       add_dialog_.NotifyOpen();
     }
 
-    GuideBrowserResult browser_result;
+    ImGui::SpacedSeparator();
+
+    ObjectBrowserResult browser_result;
     guide_browser_.Draw(&browser_result);
 
     ImGui::EndChild();
@@ -418,11 +502,12 @@ class GuidesComponentImpl : public GuidesComponent {
  private:
   Application& app_;
 
-  GuideBrowser guide_browser_;
+  ObjectBrowser guide_browser_{ObjectType::GUIDE};
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
   GuideEditor editor_;
   AddGuideDialog add_dialog_{"AddGuideDialog"};
+  std::string current_guide_name_;
 };
 
 }  // namespace

@@ -1,6 +1,10 @@
 #include "history_manager.h"
 
 #include <memory>
+#include <unordered_map>
+#include <unordered_set>
+
+#include "aim/common/util.h"
 
 namespace aim {
 namespace {
@@ -12,55 +16,39 @@ class HistoryManagerImpl : public HistoryManager {
   explicit HistoryManagerImpl(AimDb* db) : db_(db) {}
 
   void UpdateRecentView(ObjectType type, const std::string& name) override {
-    if (type == ObjectType::SCENARIO) {
-      scenarios_need_reload_ = true;
-    } else if (type == ObjectType::PLAYLIST) {
-      playlists_need_reload_ = true;
-    } else if (type == ObjectType::GUIDE) {
-      guides_need_reload_ = true;
-    }
     db_->UpdateRecentView(type, name);
+    needs_reload_set_.insert(type);
   }
 
   void DeleteRecentView(ObjectType type, const std::string& name) override {
-    if (type == ObjectType::SCENARIO) {
-      scenarios_need_reload_ = true;
-    } else if (type == ObjectType::PLAYLIST) {
-      playlists_need_reload_ = true;
-    } else if (type == ObjectType::GUIDE) {
-      guides_need_reload_ = true;
-    }
     db_->DeleteRecentView(type, name);
-  }
-
-  const std::vector<std::string>& recent_scenarios() override {
-    if (scenarios_need_reload_) {
-      scenarios_need_reload_ = false;
-      recent_scenarios_ = GetRecentUniqueNames(ObjectType::SCENARIO, kCachedRecentNamesSize);
-    }
-    return recent_scenarios_;
+    needs_reload_set_.insert(type);
   }
 
   void ClearCache() override {
-    scenarios_need_reload_ = true;
-    playlists_need_reload_ = true;
-    guides_need_reload_ = true;
+    recents_cache_.clear();
   }
 
-  const std::vector<std::string>& recent_playlists() override {
-    if (playlists_need_reload_) {
-      playlists_need_reload_ = false;
-      recent_playlists_ = GetRecentUniqueNames(ObjectType::PLAYLIST, kCachedRecentNamesSize);
+  std::shared_ptr<std::vector<std::string>> GetCachedRecentNames(ObjectType type) override {
+    bool needs_reload = needs_reload_set_.contains(type);
+    if (needs_reload) {
+      needs_reload_set_.erase(type);
+      auto recents = std::make_shared<std::vector<std::string>>(
+          GetRecentUniqueNames(type, kCachedRecentNamesSize));
+      recents_cache_[type] = recents;
+      return recents;
     }
-    return recent_playlists_;
-  }
 
-  const std::vector<std::string>& recent_guides() override {
-    if (guides_need_reload_) {
-      guides_need_reload_ = false;
-      recent_guides_ = GetRecentUniqueNames(ObjectType::GUIDE, kCachedRecentNamesSize);
+    auto it = recents_cache_.find(type);
+    if (it != recents_cache_.end()) {
+      return it->second;
     }
-    return recent_guides_;
+
+    // Not in cache. Add value.
+    auto recents = std::make_shared<std::vector<std::string>>(
+        GetRecentUniqueNames(type, kCachedRecentNamesSize));
+    recents_cache_[type] = recents;
+    return recents;
   }
 
   std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) override {
@@ -81,12 +69,8 @@ class HistoryManagerImpl : public HistoryManager {
  private:
   AimDb* db_;
 
-  std::vector<std::string> recent_scenarios_;
-  std::vector<std::string> recent_playlists_;
-  std::vector<std::string> recent_guides_;
-  bool scenarios_need_reload_ = true;
-  bool playlists_need_reload_ = true;
-  bool guides_need_reload_ = true;
+  std::unordered_map<ObjectType, std::shared_ptr<std::vector<std::string>>> recents_cache_;
+  std::unordered_set<ObjectType> needs_reload_set_;
 };
 
 }  // namespace

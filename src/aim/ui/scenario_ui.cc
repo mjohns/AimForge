@@ -10,6 +10,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
+#include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/history_manager.h"
@@ -141,13 +142,13 @@ void DrawScenarioRightClickMenu(const char* popup_id,
     if (ImGui::BeginMenu("Add to")) {
       ImGui::LoopId playlist_loop_id;
       std::string selected_playlist;
-      const auto& recent_playlists = app.history_manager().recent_playlists();
+      auto recent_playlists = app.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
       int playlist_count = 0;
-      for (int i = 0; i < recent_playlists.size(); ++i) {
+      for (int i = 0; i < recent_playlists->size(); ++i) {
         if (playlist_count >= 6) {
           break;
         }
-        const std::string& playlist_name = recent_playlists[i];
+        const std::string& playlist_name = (*recent_playlists)[i];
         auto id = playlist_loop_id.Get("AddToPlaylist");
         auto maybe_playlist = app.playlist_manager().GetPlaylist(playlist_name);
         if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
@@ -472,7 +473,8 @@ class ScenarioBrowserComponent {
         }
       }
     } else if (view_type_ == ScenarioViewType::RECENT) {
-      for (const std::string& scenario_name : app_->history_manager().recent_scenarios()) {
+      for (const std::string& scenario_name :
+           *app_->history_manager().GetCachedRecentNames(ObjectType::SCENARIO)) {
         if (scenario_name_matches(scenario_name)) {
           filtered_scenario_names_.push_back(scenario_name);
         }

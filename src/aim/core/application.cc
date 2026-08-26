@@ -698,7 +698,7 @@ class ApplicationImpl : public Application {
     scenario_manager_->RegisterRenameListener(clear_caches_on_rename);
     playlist_manager_->RegisterRenameListener(clear_caches_on_rename);
 
-    bool no_recent_playlist = history_manager_->recent_playlists().empty();
+    bool no_recent_playlist = history_manager_->GetCachedRecentNames(ObjectType::PLAYLIST)->empty();
     if (no_recent_playlist) {
       // Initialize first startup to have a playlist selected and in recents.
       history_manager_->UpdateRecentView(ObjectType::PLAYLIST, "VDIM Intermediate S5 - Clicking I");

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "aim/common/object_type.h"
 #include "aim/database/aim_db.h"
@@ -19,9 +20,7 @@ class HistoryManager {
   virtual std::vector<RecentViewV2> GetRecentViews(ObjectType type, int limit) = 0;
   virtual std::vector<std::string> GetRecentUniqueNames(ObjectType type, int limit) = 0;
 
-  virtual const std::vector<std::string>& recent_scenarios() = 0;
-  virtual const std::vector<std::string>& recent_playlists() = 0;
-  virtual const std::vector<std::string>& recent_guides() = 0;
+  virtual std::shared_ptr<std::vector<std::string>> GetCachedRecentNames(ObjectType type) = 0;
 
   virtual void ClearCache() = 0;
 };

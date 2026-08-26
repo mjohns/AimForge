@@ -6,6 +6,7 @@
 #include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/common/times.h"
+#include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
 #include "aim/core/history_manager.h"
@@ -281,15 +282,14 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       add_dialog_.NotifyOpen();
     }
 
-    if (app_.history_manager().recent_playlists().size() > 0) {
-      ImGui::Spacing();
-      ImGui::Separator();
-      ImGui::Spacing();
+    auto recent_playlists = app_.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
+    if (recent_playlists->size() > 0) {
+      ImGui::SpacedSeparator();
 
       // Draw the 10 most recent items.
       ImGui::LoopId loop_id;
       int i = 0;
-      for (const std::string& name : app_.history_manager().recent_playlists()) {
+      for (const std::string& name : *recent_playlists) {
         i++;
         if (i >= 10) {
           break;
@@ -299,9 +299,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
       }
     }
 
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
+    ImGui::SpacedSeparator();
 
     ImGui::AlignTextToFramePadding();
     ImGui::Text("%s", icons::kFilterList);
@@ -335,7 +333,8 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::LoopId loop_id;
 
     if (view_type_ == PlaylistViewType::RECENT) {
-      for (const std::string& name : app_.history_manager().recent_playlists()) {
+      auto recent_playlists = app_.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
+      for (const std::string& name : *recent_playlists) {
         auto id_guard = loop_id.Get();
         if (StringMatchesSearch(name, search_words)) {
           DrawPlaylistItem(name, result);
@@ -451,9 +450,9 @@ void PlaylistRunRightClickMenu(const std::string& scenario_name, PlaylistRun& ru
     if (ImGui::BeginMenu("Add to")) {
       std::string selected_playlist;
       int playlist_count = 0;
-      const auto& recent_playlists = app.history_manager().recent_playlists();
-      for (int i = 0; i < recent_playlists.size(); ++i) {
-        const std::string& playlist_name = recent_playlists[i];
+      auto recent_playlists = app.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
+      for (int i = 0; i < recent_playlists->size(); ++i) {
+        const std::string& playlist_name = (*recent_playlists)[i];
         auto maybe_playlist = app.playlist_manager().GetPlaylist(playlist_name);
         if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
           continue;
