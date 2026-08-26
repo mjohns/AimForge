@@ -3,6 +3,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/object_type.h"
+#include "aim/common/resource_name.h"
 #include "aim/common/search.h"
 #include "aim/core/application.h"
 #include "aim/core/bundle_manager.h"
@@ -138,6 +139,9 @@ class ObjectBrowser {
 
     const char* menu_id = "ItemMenu";
     if (ImGui::BeginPopupContextItem(menu_id)) {
+      auto resource_name = ResourceName::Parse(name);
+      bool is_readonly = app_.bundle_manager().IsBundleReadonly(resource_name.bundle_name());
+
       if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
         result->copy_object_name = name;
       }
@@ -145,9 +149,11 @@ class ObjectBrowser {
         app_.history_manager().DeleteRecentView(type_, name);
       }
 
-      ImGui::SpacedSeparator();
-      if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
-        delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), name);
+      if (!is_readonly) {
+        ImGui::SpacedSeparator();
+        if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
+          delete_confirmation_dialog_.NotifyOpen(std::format("Delete \"{}\"?", name), name);
+        }
       }
       ImGui::EndPopup();
     }
