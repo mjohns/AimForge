@@ -1,5 +1,6 @@
 #include "guide_editor_screen.h"
 
+#include "absl/strings/ascii.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/proto_util.h"
@@ -27,7 +28,7 @@ class GuideEditorScreen : public UiScreen {
 
       auto initial_guide = app_.guide_manager().GetGuide(opts.name);
       if (initial_guide) {
-        original_guide_ = *initial_guide;
+        original_guide_ = initial_guide->def;
         updated_guide_ = original_guide_;
       } else {
         notification_popup_.NotifyOpen(std::format("Guide \"{}\" does not exist.", opts.name));
@@ -58,7 +59,7 @@ class GuideEditorScreen : public UiScreen {
     char_x_ = char_size.x;
 
     ImGui::LoopId loop_id;
-    GuideDef& def = updated_guide_.def;
+    GuideDef& def = updated_guide_;
 
     int delete_i = -1;
     int copy_i = -1;
@@ -106,7 +107,7 @@ class GuideEditorScreen : public UiScreen {
     }
 
     if (ImGui::Button(std::format("{} Add section", icons::kAdd))) {
-      updated_guide_.def.add_sections();
+      updated_guide_.add_sections();
     }
 
     auto& sections = *def.mutable_sections();
@@ -167,6 +168,41 @@ class GuideEditorScreen : public UiScreen {
   }
 
   bool SaveGuide() {
+    if (name_.bundle_name().size() == 0 || name_.relative_name().size() == 0) {
+      SetErrorMessage("Missing guide name");
+      return false;
+    }
+
+    absl::StripAsciiWhitespace(name_.mutable_relative_name());
+
+    auto& mgr = app_.guide_manager();
+
+    bool is_rename = original_name_.has_value() && original_name_->full_name() != name_.full_name();
+    if (is_rename || options_.is_new_guide) {
+      // Make sure new name is not taken.
+      auto existing_with_name = mgr.GetGuide(name_.full_name());
+      if (existing_with_name.has_value()) {
+        SetErrorMessage(std::format("Guide \"{}\" already exists", name_.full_name()));
+        return false;
+      }
+    }
+
+    if (is_rename) {
+      mgr.RenameGuide(original_name_->full_name(), name_.full_name());
+    }
+
+    mgr.UpdateGuide(name_.full_name(), updated_guide_);
+    if (!app_.bundle_manager().SaveDirtyBundles()) {
+      SetErrorMessage("Unable to save bundle to disk.");
+      return false;
+    }
+
+    {
+      // Make sure we preserve the original level/sens in the name for the current scenario.
+      // app_.scenario_manager().SetCurrentScenario(current_name.GetFullName());
+      app_.history_manager().UpdateRecentView(ObjectType::GUIDE, name_.full_name());
+    }
+
     return true;
   }
 
@@ -245,8 +281,8 @@ class GuideEditorScreen : public UiScreen {
   Application& app_ = GetUiApp();
   float char_x_ = 0;
   std::string playlist_search_text_;
-  GuideItem original_guide_;
-  GuideItem updated_guide_;
+  GuideDef original_guide_;
+  GuideDef updated_guide_;
   GuideEditorOptions options_;
   std::vector<std::string> bundle_names_;
   std::optional<ResourceName> original_name_;

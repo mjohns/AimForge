@@ -690,6 +690,7 @@ class ApplicationImpl : public Application {
 
     scenario_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameScenario, db_.get()));
     playlist_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenamePlaylist, db_.get()));
+    guide_manager_->RegisterRenameListener(std::bind_front(&AimDb::RenameGuide, db_.get()));
 
     auto clear_caches_on_rename = [this](const std::string& old_name, const std::string& new_name) {
       history_manager_->ClearCache();
@@ -697,6 +698,7 @@ class ApplicationImpl : public Application {
     };
     scenario_manager_->RegisterRenameListener(clear_caches_on_rename);
     playlist_manager_->RegisterRenameListener(clear_caches_on_rename);
+    guide_manager_->RegisterRenameListener(clear_caches_on_rename);
 
     bool no_recent_playlist = history_manager_->GetCachedRecentNames(ObjectType::PLAYLIST)->empty();
     if (no_recent_playlist) {
