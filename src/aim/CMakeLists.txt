@@ -184,6 +184,8 @@ set(SRCS
     "ui/scenario_ui.h"
     "ui/guide_ui.cc"
     "ui/guide_ui.h"
+    "ui/guide_editor_screen.cc"
+    "ui/guide_editor_screen.h"
     "ui/object_browser.h"
     "ui/object_browser.cc"
     "ui/search_selector.cc"

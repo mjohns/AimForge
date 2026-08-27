@@ -15,6 +15,7 @@
 #include "aim/ui/object_browser.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/search_selector.h"
+#include "aim/ui/guide_editor_screen.h"
 #include "aim/ui/ui_app.h"
 #include "imgui.h"
 
@@ -46,7 +47,7 @@ class AddGuideDialog {
           auto taken_names = app.guide_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
           *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
           app.guide_manager().UpdateGuide(name_.full_name(), GuideDef());
-          // app.guide_manager().SetCurrentGuide(name_.full_name());
+          // current_guide_name_ = name_.full_name();
           app.history_manager().UpdateRecentView(ObjectType::GUIDE, name_.full_name());
           did_add = true;
           ImGui::CloseCurrentPopup();
@@ -79,155 +80,18 @@ class AddGuideDialog {
   std::string id_;
 };
 
-class GuideEditor {
- public:
-  GuideEditor(const GuideItem& original_guide)
-      : original_guide_(original_guide), updated_guide_(original_guide) {}
-
-  void Draw() {
-    ImGui::IdGuard cid("GuideEditor");
-    ImVec2 char_size = ImGui::CalcTextSize("A");
-    char_x_ = char_size.x;
-
-    ImGui::LoopId loop_id;
-    GuideDef& def = updated_guide_.def;
-
-    int delete_i = -1;
-    int copy_i = -1;
-    int move_up_i = -1;
-    int move_down_i = -1;
-    int insert_at_i = -1;
-
-    for (int i = 0; i < def.sections_size(); ++i) {
-      auto lid = loop_id.Get("Section");
-      GuideSection* section = def.mutable_sections(i);
-
-      ImGui::AlignTextToFramePadding();
-      ImGui::TextFmt("Section {}", i + 1);
-
-      const char* menu_id = "GuideSectionMenu";
-      if (ImGui::BeginPopupContextItem(menu_id)) {
-        if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
-          copy_i = i;
-        }
-        if (ImGui::Selectable(std::format("{} Move up", icons::kArrowUpward))) {
-          move_up_i = i;
-        }
-        if (ImGui::Selectable(std::format("{} Move down", icons::kArrowDownward))) {
-          move_down_i = i;
-        }
-        ImGui::SpacedSeparator();
-        if (ImGui::Selectable(std::format("{} Delete", icons::kDelete))) {
-          delete_i = i;
-        }
-
-        ImGui::EndPopup();
-      }
-
-      ImGui::Indent();
-      ImGui::SameLine();
-      if (ImGui::MenuButton()) {
-        ImGui::OpenPopup(menu_id);
-      }
-
-      if (i != 0) {
-        ImGui::SpacedSeparator();
-      }
-      DrawSectionEditor(*section);
-      ImGui::Unindent();
-    }
-
-    if (ImGui::Button(std::format("{} Add section", icons::kAdd))) {
-      updated_guide_.def.add_sections();
-    }
-
-    auto& sections = *def.mutable_sections();
-    if (delete_i >= 0) {
-      sections.erase(sections.begin() + delete_i);
-    } else if (move_up_i > 0) {
-      int i1 = move_up_i;
-      int i2 = move_up_i - 1;
-      std::swap(sections[i1], sections[i2]);
-    } else if (move_down_i >= 0) {
-      int i1 = move_down_i;
-      int i2 = move_down_i + 1;
-      if (i2 < sections.size()) {
-        std::swap(sections[i1], sections[i2]);
-      }
-    } else if (copy_i >= 0) {
-      InsertAtIndex(&sections, sections[copy_i], copy_i);
-    }
-  }
-
- private:
-  void DrawSectionEditor(GuideSection& section) {
-    ImGui::InputTextMultiline("##DescriptionInput",
-                              section.mutable_text(),
-                              ImVec2(0, 0),
-                              ImGuiInputTextFlags_AllowTabInput);
-    DrawPlaylistsEditor(section);
-  }
-
-  void DrawPlaylistsEditor(GuideSection& section) {
-    ImGui::IdGuard cid("Playlists");
-    ImGui::LoopId loop_id;
-    int remove_i = -1;
-    for (int i = 0; i < section.playlists_size(); ++i) {
-      auto lid = loop_id.Get("Playlist");
-      const std::string& playlist_name = section.playlists(i);
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(playlist_name);
-      ImGui::SameLine();
-      if (ImGui::ClearButton()) {
-        remove_i = i;
-      }
-    }
-
-    if (remove_i >= 0) {
-      section.mutable_playlists()->erase(section.mutable_playlists()->begin() + remove_i);
-    }
-    ImGui::Text("Add playlist");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 18);
-    ImGui::InputText("###AddPlaylistInput", &playlist_search_text_);
-    ImGui::SameLine();
-    if (ImGui::ClearButton()) {
-      playlist_search_text_ = "";
-    }
-    if (playlist_search_text_.size() > 0) {
-      ImGui::Indent();
-      auto names = app_.playlist_manager().playlist_names();
-      SearchSelectorOptions options;
-      // options.additional_predicate = [&](const std::string& scenario_name) {
-      //   bool already_in_guide =
-      //       std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-      //         return item.scenario() == scenario_name;
-      //       });
-      //   return !already_in_playlist;
-      // };
-
-      std::optional<std::string> selected_playlist =
-          SearchSelector(playlist_search_text_, *names, options);
-      if (selected_playlist) {
-        section.add_playlists(*selected_playlist);
-      }
-      ImGui::Unindent();
-    }
-  }
-
-  float char_x_ = 0;
-  std::string playlist_search_text_;
-  Application& app_ = GetUiApp();
-  const GuideItem original_guide_;
-  GuideItem updated_guide_;
-};
-
 class GuideViewer {
  public:
   void Draw(const GuideItem& guide_item) {
     const GuideDef& guide = guide_item.def;
     ImGui::AlignTextToFramePadding();
     ImGui::Text(guide_item.name);
+    ImGui::SameLine();
+    if (ImGui::Button(icons::kEdit)) {
+      GuideEditorOptions opts;
+      opts.name = guide_item.name;
+      app_.PushNextScreen(CreateGuideEditorScreen(opts));
+    }
     ImGui::LoopId loop_id;
     for (const auto& section : guide.sections()) {
       auto lid = loop_id.Get("Section");
@@ -285,7 +149,7 @@ class GuideViewer {
 
 class GuidesComponentImpl : public GuidesComponent {
  public:
-  GuidesComponentImpl() : editor_({}) {
+  GuidesComponentImpl() {
     auto last_guide = app_.history_manager().GetRecentViews(ObjectType::GUIDE, 1);
     if (last_guide.size() > 0) {
       current_guide_name_ = last_guide[0].name;
@@ -360,13 +224,10 @@ class GuidesComponentImpl : public GuidesComponent {
     return {};
   }
 
-  void DrawCurrentGuide() {}
-
   Application& app_ = GetUiApp();
 
   std::unique_ptr<ObjectBrowser> browser_ = CreateObjectBrowser(ObjectType::GUIDE);
   std::unique_ptr<PlaylistComponent> playlist_component_ = CreatePlaylistComponent();
-  GuideEditor editor_;
   AddGuideDialog add_dialog_{"AddGuideDialog"};
   std::string current_guide_name_;
   GuideViewer viewer_;
