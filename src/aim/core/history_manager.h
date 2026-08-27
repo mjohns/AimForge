@@ -1,8 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "aim/common/object_type.h"
 #include "aim/database/aim_db.h"

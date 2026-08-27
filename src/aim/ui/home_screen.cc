@@ -94,7 +94,7 @@ class HomeScreen : public UiScreen {
     playlist_component_ = CreatePlaylistComponent();
     playlist_list_component_ = CreatePlaylistListComponent(this);
     bundle_ui_component_ = CreateBundleUiComponent(this);
-    scenarios_component_ = CreateScenariosComponent(app_);
+    scenarios_component_ = CreateScenariosComponent();
     guides_component_ = CreateGuidesComponent();
 
     auto selected_app_screen = app_.local_store().GetInt(kSelectedAppScreenKey);
@@ -179,9 +179,7 @@ class HomeScreen : public UiScreen {
     ImGui::End();
   }
 
-  void OnAttachUi() override {
-    scenarios_component_->Reload();
-  }
+  void OnAttachUi() override {}
 
   void DrawScreenInternal() {
     ImGui::IdGuard cid("HomePage");
@@ -300,8 +298,7 @@ class HomeScreen : public UiScreen {
     auto latest_run = app_.stats_manager().GetLatestRun();
     if (latest_run) {
       if (ImGui::Selectable(std::format("{} Results", icons::kAssignment).c_str(), false)) {
-        PushNextScreen(
-            CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, false, &app_));
+        PushNextScreen(CreateStatsScreen(latest_run->scenario_name, latest_run->run_id, false));
       }
     }
 

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <optional>
 #include <string>
-#include <vector>
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"
-#include "aim/ui/ui_screen.h"
 
 namespace aim {
 

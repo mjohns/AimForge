@@ -15,6 +15,9 @@ class ObjectBrowser {
   struct Result {
     std::optional<std::string> selected_object_name{};
     std::optional<std::string> copy_object_name{};
+    std::optional<std::string> select_variation_object_name{};
+    std::optional<std::string> edit_object_name{};
+    std::optional<std::string> create_level_playlist_for_scenario{};
   };
 
   virtual void Draw(Result* result) = 0;

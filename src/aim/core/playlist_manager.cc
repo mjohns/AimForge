@@ -242,6 +242,7 @@ class PlaylistManagerImpl : public PlaylistManager {
     auto* item = playlist.mutable_def()->add_items();
     item->set_scenario(scenario_name);
     item->set_num_plays(1);
+    dirty_bundles_.insert(GetBundleName(playlist.name));
 
     auto run = GetOptionalExistingRun(playlist_name);
     if (run) {

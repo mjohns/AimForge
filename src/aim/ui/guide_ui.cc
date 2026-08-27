@@ -12,10 +12,10 @@
 #include "aim/core/history_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
+#include "aim/ui/object_browser.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/search_selector.h"
 #include "aim/ui/ui_app.h"
-#include "aim/ui/object_browser.h"
 #include "imgui.h"
 
 namespace aim {
@@ -341,6 +341,7 @@ class GuidesComponentImpl : public GuidesComponent {
 
     ImGui::TableNextColumn();
     ImGui::BeginChild("GuideColumn");
+    ImGui::Spacing();
     if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
       add_dialog_.NotifyOpen();
     }

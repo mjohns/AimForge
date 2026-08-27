@@ -1,7 +1,6 @@
 #include "select_variation_dialog.h"
 
 #include <optional>
-#include <vector>
 
 #include "aim/common/imgui_ext.h"
 #include "aim/common/name_util.h"

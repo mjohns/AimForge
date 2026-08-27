@@ -188,15 +188,15 @@ StatsComparison GetStatsComparison(const StatsDbRow& current_stats,
 
 class StatsScreen : public UiScreen {
  public:
-  StatsScreen(std::string scenario_name, i64 run_id, bool delay_display, Application* app)
-      : UiScreen(*app),
+  StatsScreen(std::string scenario_name, i64 run_id, bool delay_display)
+      : UiScreen(),
         scenario_name_(scenario_name),
         run_id_(run_id),
-        replay_(app->replay_manager().GetReplay(run_id)),
+        replay_(app_.replay_manager().GetReplay(run_id)),
         delay_display_(delay_display) {
     screen_start_time_millis_ = GetNowEpochMillis();
-    scenario_ = app->scenario_manager().GetScenario(scenario_name);
-    evaluated_scenario_def_ = app->scenario_manager().GetEvaluatedScenarioDef(scenario_name);
+    scenario_ = app_.scenario_manager().GetScenario(scenario_name);
+    evaluated_scenario_def_ = app_.scenario_manager().GetEvaluatedScenarioDef(scenario_name);
     if (scenario_) {
       reference_scenario_name_ = scenario_->unevaluated_def.reference_def().scenario_name();
     }
@@ -878,9 +878,8 @@ class StatsScreen : public UiScreen {
 
 std::unique_ptr<UiScreen> CreateStatsScreen(const std::string& scenario_name,
                                             i64 run_id,
-                                            bool delay_display,
-                                            Application* app) {
-  return std::make_unique<StatsScreen>(scenario_name, run_id, delay_display, app);
+                                            bool delay_display) {
+  return std::make_unique<StatsScreen>(scenario_name, run_id, delay_display);
 }
 
 }  // namespace aim

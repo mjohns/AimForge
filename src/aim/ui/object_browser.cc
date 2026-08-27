@@ -14,7 +14,10 @@
 #include "aim/core/local_store.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/core/scenario_manager.h"
+#include "aim/core/stats_manager.h"
+#include "aim/ui/editor/scenario_editor_screen.h"
 #include "aim/ui/search_selector.h"
+#include "aim/ui/stats/stats_screen.h"
 #include "aim/ui/ui_app.h"
 #include "imgui.h"
 
@@ -155,6 +158,9 @@ class ObjectBrowserImpl : public ObjectBrowser {
       return;
     }
 
+    bool is_scenario = type_ == ObjectType::SCENARIO;
+    bool is_playlist = type_ == ObjectType::PLAYLIST;
+
     if (ImGui::Button(name)) {
       result->selected_object_name = name;
     }
@@ -164,11 +170,34 @@ class ObjectBrowserImpl : public ObjectBrowser {
       auto resource_name = ResourceName::Parse(name);
       bool is_readonly = app_.bundle_manager().IsBundleReadonly(resource_name.bundle_name());
 
+      if (is_scenario && !is_readonly) {
+        if (ImGui::Selectable(std::format("{} Edit", icons::kEdit))) {
+          result->edit_object_name = name;
+        }
+      }
+
       if (ImGui::Selectable(std::format("{} Copy", icons::kContentCopy))) {
         result->copy_object_name = name;
       }
+      if (type_ != ObjectType::GUIDE) {
+        if (ImGui::Selectable(std::format("{} Select variation", icons::kTune))) {
+          result->select_variation_object_name = name;
+        }
+      }
+
       if (ImGui::Selectable(std::format("{} Recents", icons::kClose))) {
         app_.history_manager().DeleteRecentView(type_, name);
+      }
+
+      if (is_scenario) {
+        if (ImGui::BeginMenu("Add to")) {
+          DrawAddScenarioToPlaylistMenu(name);
+          ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Advanced")) {
+          DrawAdvancedScenarioMenu(name, result);
+          ImGui::EndMenu();
+        }
       }
 
       if (!is_readonly) {
@@ -190,6 +219,49 @@ class ObjectBrowserImpl : public ObjectBrowser {
       if (ImGui::IconButton(icons::kStarOutline)) {
         app_.labels_manager().StarItem(type_, name);
       }
+    }
+  }
+
+  void DrawAddScenarioToPlaylistMenu(const std::string& name) {
+    ImGui::LoopId playlist_loop_id;
+    std::string selected_playlist;
+    auto recent_playlists = app_.history_manager().GetCachedRecentNames(ObjectType::PLAYLIST);
+    int playlist_count = 0;
+    for (int i = 0; i < recent_playlists->size(); ++i) {
+      if (playlist_count >= 6) {
+        break;
+      }
+      const std::string& playlist_name = (*recent_playlists)[i];
+      auto id = playlist_loop_id.Get("AddToPlaylist");
+      auto maybe_playlist = app_.playlist_manager().GetPlaylist(playlist_name);
+      if (!maybe_playlist.has_value() || maybe_playlist->def().has_levels()) {
+        continue;
+      }
+      playlist_count++;
+      if (ImGui::MenuItem(playlist_name.c_str())) {
+        selected_playlist = playlist_name;
+      }
+    }
+    if (selected_playlist.size() > 0) {
+      app_.playlist_manager().AddScenarioToPlaylist(selected_playlist, name);
+      app_.bundle_manager().SaveDirtyBundles();
+    }
+  }
+
+  void DrawAdvancedScenarioMenu(const std::string& name, Result* result) {
+    if (ImGui::Selectable("View stats")) {
+      app_.PushNextScreen(
+          CreateStatsScreen(name, app_.stats_manager().GetLatestRunId(name), false));
+    }
+    if (ImGui::Selectable("Copy as reference")) {
+      ScenarioEditorOptions opts;
+      opts.scenario_name = name;
+      opts.is_new_copy = true;
+      opts.copy_as_reference = true;
+      app_.PushNextScreen(CreateScenarioEditorScreen(opts));
+    }
+    if (ImGui::Selectable("Create levels playlist")) {
+      result->create_level_playlist_for_scenario = name;
     }
   }
 
