@@ -102,6 +102,7 @@ class ObjectBrowserImpl : public ObjectBrowser {
       app_.local_store().PutInt(GetViewTypeKey(type_), (int)view_type_);
     }
 
+    // TODO: take full size - clear button width (if shown).
     ImGui::SetNextItemWidth(char_size.x * 30);
     ImGui::InputTextWithHint("##SearchInput", icons::kSearch, &search_text_);
     if (search_text_.size() > 0) {
@@ -126,15 +127,23 @@ class ObjectBrowserImpl : public ObjectBrowser {
     }
 
     ImGui::LoopId loop_id;
+    ImGuiListClipper clipper;
     if (filtered_names_indices_) {
-      for (int i : *filtered_names_indices_) {
-        auto id_guard = loop_id.Get();
-        DrawItem((*all_names_)[i], result);
+      clipper.Begin(filtered_names_indices_->size());
+      while (clipper.Step()) {
+        for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+          auto id_guard = loop_id.Get();
+          int names_i = (*filtered_names_indices_)[i];
+          DrawItem((*all_names_)[names_i], result);
+        }
       }
     } else {
-      for (const std::string& name : *all_names_) {
-        auto id_guard = loop_id.Get();
-        DrawItem(name, result);
+      clipper.Begin(all_names_->size());
+      while (clipper.Step()) {
+        for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+          auto id_guard = loop_id.Get();
+          DrawItem((*all_names_)[i], result);
+        }
       }
     }
   }
