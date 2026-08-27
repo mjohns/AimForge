@@ -1,5 +1,6 @@
 #include "object_browser.h"
 
+#include "absl/cleanup/cleanup.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/object_type.h"
@@ -53,7 +54,7 @@ class ObjectBrowserImpl : public ObjectBrowser {
 
   // std::function<void(const std::string& name, ObjectBrowserResult*)> draw_item,
   void Draw(Result* result) override {
-    ImGui::IdGuard cid(ObjectTypeToString(type_) + "SearchList");
+    ImGui::IdGuard cid(type_name_ + "SearchList");
 
     auto to_delete = delete_confirmation_dialog_.Draw("Delete");
     if (to_delete) {
@@ -111,25 +112,42 @@ class ObjectBrowserImpl : public ObjectBrowser {
     }
 
     ImGui::BeginChild("SearchContent");
+    auto child_cleanup = absl::MakeCleanup([] { ImGui::EndChild(); });
 
     auto search_words = GetSearchWords(search_text_);
 
-    std::shared_ptr<std::vector<std::string>> names = GetNames();
-    if (names != nullptr) {
-      ImGui::LoopId loop_id;
+    auto new_names = GetNames();
+    if (new_names == nullptr) {
+      return;
+    }
+    if (new_names != all_names_) {
+      all_names_ = new_names;
+
+      if (search_text_.empty()) {
+        filtered_names_ = all_names_;
+      } else {
+        // Refilter
+        filtered_names_.clear();
+        filtered_names_.reserve(all_names_.size());
+
       for (const std::string& name : *names) {
-        auto id_guard = loop_id.Get();
         if (StringMatchesSearch(name, search_words)) {
-          DrawItem(name, result);
+          // TODO: Check if it exists?
+          filtered_names_.push_back(name);
         }
       }
     }
-    ImGui::EndChild();
+
+    ImGui::LoopId loop_id;
+    for (const std::string_view& name : filtered_names_) {
+      auto id_guard = loop_id.Get();
+      DrawItem(name, result);
+    }
   }
 
  private:
-  void DrawItem(const std::string& name, Result* result) {
-    if (ImGui::Button(name.c_str())) {
+  void DrawItem(std::string_view name, Result* result) {
+    if (ImGui::Button(name)) {
       result->selected_object_name = name;
     }
 
@@ -192,9 +210,12 @@ class ObjectBrowserImpl : public ObjectBrowser {
 
   Application& app_ = GetUiApp();
   std::string search_text_;
-  ObjectType type_;
+  const ObjectType type_;
+  const std::string type_name_ = ObjectTypeToString(type_);
   ViewType view_type_ = ViewType::ALL;
   ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
+  std::shared_ptr<std::vector<std::string>> all_names_;
+  std::shared_ptr<std::vector<std::string>> filtered_names_;
 };
 
 }  // namespace
