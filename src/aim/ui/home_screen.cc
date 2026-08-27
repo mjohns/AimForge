@@ -308,7 +308,7 @@ class HomeScreen : public UiScreen {
 
     if (kIsDebugBuild) {
       ImGui::SetCursorAtBottom();
-      ImGui::Text("fps: %d", (int)ImGui::GetIO().Framerate);
+      ImGui::Text("%d", (int)ImGui::GetIO().Framerate);
     }
   }
 

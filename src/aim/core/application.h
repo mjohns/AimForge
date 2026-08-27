@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
 #include "aim/audio/sound_manager.h"
@@ -13,7 +12,6 @@
 #include "aim/core/screen.h"
 #include "aim/graphics/crosshair_renderer.h"
 #include "aim/graphics/textures.h"
-#include "imgui.h"
 #include "spdlog/logger.h"
 
 namespace aim {

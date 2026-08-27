@@ -1,9 +1,11 @@
 #include "guide_ui.h"
 
+#include <deque>
+#include <string>
+
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/object_type.h"
-#include "aim/common/proto_util.h"
 #include "aim/common/resource_name.h"
 #include "aim/common/util.h"
 #include "aim/core/application.h"
@@ -12,15 +14,17 @@
 #include "aim/core/history_manager.h"
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
+#include "aim/ui/guide_editor_screen.h"
 #include "aim/ui/object_browser.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/search_selector.h"
-#include "aim/ui/guide_editor_screen.h"
 #include "aim/ui/ui_app.h"
 #include "imgui.h"
 
 namespace aim {
 namespace {
+
+constexpr int kMaxHistorySize = 100;
 
 class AddGuideDialog {
  public:
@@ -82,29 +86,28 @@ class AddGuideDialog {
 
 class GuideViewer {
  public:
-  void Draw(const GuideItem& guide_item) {
+  struct Result {
+    std::optional<std::string> selected_guide;
+  };
+
+  void Draw(const GuideItem& guide_item, Result* result) {
     const GuideDef& guide = guide_item.def;
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text(guide_item.name);
-    ImGui::SameLine();
-    if (ImGui::Button(icons::kEdit)) {
-      GuideEditorOptions opts;
-      opts.name = guide_item.name;
-      app_.PushNextScreen(CreateGuideEditorScreen(opts));
-    }
     ImGui::LoopId loop_id;
     for (const auto& section : guide.sections()) {
       auto lid = loop_id.Get("Section");
-      DrawSection(section);
+      DrawSection(section, result);
     }
   }
 
-  void DrawSection(const GuideSection& section) {
+  void DrawSection(const GuideSection& section, Result* result) {
     if (!section.text().empty()) {
       ImGui::TextWrapped(section.text());
     }
     if (section.playlists_size() > 0) {
       DrawPlaylists(section);
+    }
+    if (section.guides_size() > 0) {
+      DrawGuides(section, result);
     }
   }
 
@@ -126,7 +129,7 @@ class GuideViewer {
       auto lid = loop_id.Get("Playlist");
       ImGui::TableNextColumn();
       bool is_selected = playlist == app_.playlist_manager().current_playlist_name();
-      if (ImGui::Selectable(playlist, is_selected)) {
+      if (ImGui::Selectable(std::format("{} {}", icons::kList, playlist, is_selected))) {
         app_.playlist_manager().SetCurrentPlaylist(playlist);
       }
       auto maybe_playlist = app_.playlist_manager().GetPlaylist(playlist);
@@ -143,6 +146,27 @@ class GuideViewer {
     ImGui::EndTable();
   }
 
+  void DrawGuides(const GuideSection& section, Result* result) {
+    ImGuiTableFlags flags =
+        ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersV | ImGuiTableFlags_Borders;
+    if (!ImGui::BeginTable("Guides", 1, flags)) {
+      return;
+    }
+    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);
+
+    ImGui::LoopId loop_id;
+    for (const std::string& guide : section.guides()) {
+      ImGui::TableNextRow();
+      auto lid = loop_id.Get("Guide");
+      ImGui::TableNextColumn();
+      if (ImGui::Selectable(std::format("{} {}", icons::kMap, guide))) {
+        result->selected_guide = guide;
+      }
+    }
+
+    ImGui::EndTable();
+  }
+
  private:
   Application& app_ = GetUiApp();
 };
@@ -153,13 +177,26 @@ class GuidesComponentImpl : public GuidesComponent {
     auto last_guide = app_.history_manager().GetRecentViews(ObjectType::GUIDE, 1);
     if (last_guide.size() > 0) {
       current_guide_name_ = last_guide[0].name;
+      guide_history_.push_back(current_guide_name_);
     }
   }
 
   void Show() override {
+    bool go_back = false;
     ImGui::IdGuard cid("Guides");
     if (add_dialog_.Draw(app_)) {
       app_.bundle_manager().SaveDirtyBundles();
+    }
+
+    if (!current_guide_name_.empty()) {
+      if (guide_history_.empty()) {
+        guide_history_.push_back(current_guide_name_);
+      } else if (guide_history_.back() != current_guide_name_) {
+        guide_history_.push_back(current_guide_name_);
+      }
+      if (guide_history_.size() > kMaxHistorySize) {
+        guide_history_.pop_front();
+      }
     }
 
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
@@ -187,7 +224,27 @@ class GuidesComponentImpl : public GuidesComponent {
 
       std::optional<GuideItem> guide = app_.guide_manager().GetGuide(current_guide_name_);
       if (guide) {
-        viewer_.Draw(*guide);
+        if (guide_history_.size() > 1) {
+          ImGui::AlignTextToFramePadding();
+          if (ImGui::Button(icons::kArrowBack)) {
+            go_back = true;
+          }
+          ImGui::SameLine();
+        }
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text(guide->name);
+        ImGui::SameLine();
+        if (ImGui::Button(icons::kEdit)) {
+          GuideEditorOptions opts;
+          opts.name = guide->name;
+          app_.PushNextScreen(CreateGuideEditorScreen(opts));
+        }
+
+        GuideViewer::Result result;
+        viewer_.Draw(*guide, &result);
+        if (result.selected_guide) {
+          current_guide_name_ = *result.selected_guide;
+        }
       }
 
       ImGui::EndChild();
@@ -205,6 +262,11 @@ class GuidesComponentImpl : public GuidesComponent {
       ImGui::EndChild();
 
       ImGui::EndTable();
+    }
+
+    if (go_back && guide_history_.size() > 1) {
+      guide_history_.pop_back();
+      current_guide_name_ = guide_history_.back();
     }
   }
 
@@ -231,6 +293,7 @@ class GuidesComponentImpl : public GuidesComponent {
   AddGuideDialog add_dialog_{"AddGuideDialog"};
   std::string current_guide_name_;
   GuideViewer viewer_;
+  std::deque<std::string> guide_history_;
 };
 
 }  // namespace
