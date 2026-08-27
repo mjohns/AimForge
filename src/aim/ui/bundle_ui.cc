@@ -107,6 +107,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("BundleColumns", 2, flags)) {
       ImGui::TableNextColumn();
+      ImGui::BeginChild("BundleListColumn");
 
       ImGui::Spacing();
 
@@ -119,6 +120,7 @@ class BundleUiComponentImpl : public BundleUiComponent {
       ImGui::Spacing();
 
       DrawBundlesList();
+      ImGui::EndChild();
 
       ImGui::TableNextColumn();
       DrawRightPanel();

@@ -335,24 +335,22 @@ class GuidesComponentImpl : public GuidesComponent {
     }
 
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
-    if (!ImGui::BeginTable("GuideColumns", 3, flags)) {
-      return;
+    if (ImGui::BeginTable("GuideColumns", 3, flags)) {
+      ImGui::TableNextColumn();
+      ImGui::BeginChild("GuideColumn");
+      ImGui::Spacing();
+      if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
+        add_dialog_.NotifyOpen();
+      }
+
+      ImGui::SpacedSeparator();
+
+      ObjectBrowser::Result browser_result;
+      browser_->Draw(&browser_result);
+
+      ImGui::EndChild();
+      ImGui::EndTable();
     }
-
-    ImGui::TableNextColumn();
-    ImGui::BeginChild("GuideColumn");
-    ImGui::Spacing();
-    if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
-      add_dialog_.NotifyOpen();
-    }
-
-    ImGui::SpacedSeparator();
-
-    ObjectBrowser::Result browser_result;
-    browser_->Draw(&browser_result);
-
-    ImGui::EndChild();
-    ImGui::EndTable();
   }
 
  private:
