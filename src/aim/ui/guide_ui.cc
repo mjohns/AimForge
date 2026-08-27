@@ -1,5 +1,6 @@
 #include "guide_ui.h"
 
+#include "absl/cleanup/cleanup.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/object_type.h"
@@ -224,52 +225,15 @@ class GuideEditor {
 
 class GuideViewer {
  public:
-  GuideViewer() : app_(GetUiApp()) {
-    playlist_component_ = CreatePlaylistComponent();
-  }
-
-  void SetPlaylistRunIfInGuide(const GuideDef& guide) {
-    run_ = {};
-    auto current_run = app_.playlist_manager().GetCurrentRun();
-    if (!current_run) {
-      return;
-    }
-    for (const auto& section : guide.sections()) {
-      for (const std::string& playlist : section.playlists()) {
-        if (playlist == current_run->playlist.name) {
-          run_ = current_run;
-          return;
-        }
-      }
-    }
-  }
-
-  void Draw(const std::string& name, const GuideDef& guide) {
-    SetPlaylistRunIfInGuide(guide);
-
-    // ImGui::BeginChild("GuideContainer", ImVec2(0, 0));
-    ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
-    if (!ImGui::BeginTable("GuideColumns", 3, flags)) {
-      return;
-    }
-
-    ImGui::TableNextColumn();
-    ImGui::BeginChild("GuideColumn");
+  void Draw(const GuideItem& guide_item) {
+    const GuideDef& guide = guide_item.def;
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(guide_item.name);
     ImGui::LoopId loop_id;
     for (const auto& section : guide.sections()) {
       auto lid = loop_id.Get("Section");
       DrawSection(section);
     }
-    ImGui::EndChild();
-
-    ImGui::TableNextColumn();
-    ImGui::BeginChild("PlaylistColumn");
-    if (run_) {
-      playlist_component_->Show(run_, /*is_playlist_screen*/ false);
-    }
-    ImGui::EndChild();
-
-    ImGui::EndTable();
   }
 
   void DrawSection(const GuideSection& section) {
@@ -298,7 +262,7 @@ class GuideViewer {
       ImGui::TableNextRow();
       auto lid = loop_id.Get("Playlist");
       ImGui::TableNextColumn();
-      bool is_selected = run_ && playlist == run_->playlist.name;
+      bool is_selected = playlist == app_.playlist_manager().current_playlist_name();
       if (ImGui::Selectable(playlist, is_selected)) {
         app_.playlist_manager().SetCurrentPlaylist(playlist);
       }
@@ -317,14 +281,12 @@ class GuideViewer {
   }
 
  private:
-  Application& app_;
-  std::unique_ptr<PlaylistComponent> playlist_component_;
-  std::shared_ptr<PlaylistRun> run_;
+  Application& app_ = GetUiApp();
 };
 
 class GuidesComponentImpl : public GuidesComponent {
  public:
-  GuidesComponentImpl() : app_(GetUiApp()), editor_({}) {
+  GuidesComponentImpl() : editor_({}) {
     playlist_component_ = CreatePlaylistComponent();
   }
 
@@ -337,7 +299,7 @@ class GuidesComponentImpl : public GuidesComponent {
     ImGuiTableFlags flags = ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_Resizable;
     if (ImGui::BeginTable("GuideColumns", 3, flags)) {
       ImGui::TableNextColumn();
-      ImGui::BeginChild("GuideColumn");
+      ImGui::BeginChild("GuideBrowserColumn");
       ImGui::Spacing();
       if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
         add_dialog_.NotifyOpen();
@@ -345,23 +307,66 @@ class GuidesComponentImpl : public GuidesComponent {
 
       ImGui::SpacedSeparator();
 
-      ObjectBrowser::Result browser_result;
-      browser_->Draw(&browser_result);
+      ObjectBrowser::Result result;
+      browser_->Draw(&result);
+      if (result.selected_object_name) {
+        current_guide_name_ = *result.selected_object_name;
+      }
 
       ImGui::EndChild();
+
+      ImGui::TableNextColumn();
+      ImGui::BeginChild("GuideColumn");
+
+      std::optional<GuideItem> guide = app_.guide_manager().GetGuide(current_guide_name_);
+      if (guide) {
+        viewer_.Draw(*guide);
+      }
+
+      ImGui::EndChild();
+
+      ImGui::TableNextColumn();
+      ImGui::BeginChild("PlaylistColumn");
+
+      if (guide) {
+        auto playlist_run = GetPlaylistRunIfInGuide(guide->def);
+        if (playlist_run) {
+          playlist_component_->Show(playlist_run, /*is_playlist_screen*/ false);
+        }
+      }
+
+      ImGui::EndChild();
+
       ImGui::EndTable();
     }
   }
 
  private:
-  Application& app_;
+  std::shared_ptr<PlaylistRun> GetPlaylistRunIfInGuide(const GuideDef& guide) {
+    auto current_run = app_.playlist_manager().GetCurrentRun();
+    if (!current_run) {
+      return {};
+    }
+    for (const auto& section : guide.sections()) {
+      for (const std::string& playlist : section.playlists()) {
+        if (playlist == current_run->playlist.name) {
+          return current_run;
+        }
+      }
+    }
+    return {};
+  }
+
+  void DrawCurrentGuide() {}
+
+  Application& app_ = GetUiApp();
 
   std::unique_ptr<ObjectBrowser> browser_ = CreateObjectBrowser(ObjectType::GUIDE);
-  std::unique_ptr<PlaylistComponent> playlist_component_;
-  std::shared_ptr<PlaylistRun> run_;
+  std::unique_ptr<PlaylistComponent> playlist_component_ = CreatePlaylistComponent();
   GuideEditor editor_;
   AddGuideDialog add_dialog_{"AddGuideDialog"};
   std::string current_guide_name_;
+  GuideViewer viewer_;
 };
 
 }  // namespace

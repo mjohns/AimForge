@@ -105,8 +105,13 @@ class ObjectBrowserImpl : public ObjectBrowser {
       app_.local_store().PutInt(GetViewTypeKey(type_), (int)view_type_);
     }
 
-    // TODO: take full size - clear button width (if shown).
-    ImGui::SetNextItemWidth(char_size.x * 30);
+    float available_width = ImGui::GetContentRegionAvail().x;
+    if (search_text_.size() > 0) {
+      float spacing = ImGui::GetStyle().ItemSpacing.x;
+      ImGui::SetNextItemWidth(available_width - spacing - ImGui::GetIconButtonWidth(icons::kClear));
+    } else {
+      ImGui::SetNextItemWidth(available_width);
+    }
     ImGui::InputTextWithHint("##SearchInput", icons::kSearch, &search_text_);
     if (search_text_.size() > 0) {
       ImGui::SameLine();

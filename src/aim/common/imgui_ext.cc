@@ -45,6 +45,10 @@ float GetMenuButtonWidth() {
   return ImGui::CalcTextSize(aim::icons::kMoreVert).x * kMenuButtonWidthMultiplier;
 }
 
+float GetIconButtonWidth(const char* icon, float scale) {
+  return ImGui::CalcTextSize(icon).x * scale;
+}
+
 bool IconButton(const char* icon, float scale) {
   // auto cleanup = absl::MakeCleanup([]() { ImGui::PopStyleVar(2); });
 
