@@ -338,6 +338,8 @@ TEST_F(AimDbTest, RecentViews) {
   db_->UpdateRecentView(ObjectType::SCENARIO, "s2");
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c1");
   db_->UpdateRecentView(ObjectType::CROSSHAIR, "c2");
+  db_->UpdateRecentView(ObjectType::GUIDE, "g1");
+  db_->UpdateRecentView(ObjectType::GUIDE, "g2");
 
   EXPECT_THAT(db_->GetRecentViews(ObjectType::PLAYLIST, 10), IsEmpty());
   EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10),
@@ -361,6 +363,19 @@ TEST_F(AimDbTest, RecentViews) {
 
   db_->DeleteRecentView(ObjectType::SCENARIO, "s2");
   EXPECT_THAT(db_->GetRecentViews(ObjectType::SCENARIO, 10), ElementsAre(EqualsViewName("s1")));
+
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::GUIDE, 10),
+              ElementsAre(EqualsViewName("g2"), EqualsViewName("g1")));
+  db_->UpdateRecentView(ObjectType::GUIDE, "g3");
+  db_->UpdateRecentView(ObjectType::GUIDE, "g1");
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::GUIDE, 10),
+              ElementsAre(EqualsViewName("g1"), EqualsViewName("g3"), EqualsViewName("g2")));
+
+  db_->DeleteRecentView(ObjectType::GUIDE, "g3");
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::GUIDE, 10),
+              ElementsAre(EqualsViewName("g1"), EqualsViewName("g2")));
+
+  EXPECT_THAT(db_->GetRecentViews(ObjectType::GUIDE, 1), ElementsAre(EqualsViewName("g1")));
 }
 
 TEST_F(AimDbTest, LabeledItems) {

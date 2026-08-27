@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS Stats (
 
 const char* kAddStatsSql = R"AIMS(
 INSERT INTO Stats (
-	StatsId,
+  StatsId,
   ScenarioId,
   TimestampSeconds,
   Score,
@@ -145,7 +145,7 @@ VALUES (NULL, ?, ?, ?, ?, ?);
 )AIMS";
 
 const char* kGetStatsSql = R"AIMS(
-SELECT 
+SELECT
   StatsId,
   TimestampSeconds,
   Score,
@@ -313,7 +313,7 @@ LIMIT ?;
 const char* kGetRecentViewsForGuideSql = R"AIMS(
 SELECT Guides.GuideName, RecentIdViews.TimestampMicros
 FROM RecentIdViews
-JOIN Guides ON RecentIdViews.Id = Guide.GuideId
+JOIN Guides ON RecentIdViews.Id = Guides.GuideId
 WHERE RecentIdViews.Type = ?
 ORDER BY RecentIdViews.TimestampMicros DESC
 LIMIT ?;

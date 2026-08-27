@@ -1,6 +1,5 @@
 #include "guide_ui.h"
 
-#include "absl/cleanup/cleanup.h"
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/object_type.h"
@@ -287,7 +286,10 @@ class GuideViewer {
 class GuidesComponentImpl : public GuidesComponent {
  public:
   GuidesComponentImpl() : editor_({}) {
-    playlist_component_ = CreatePlaylistComponent();
+    auto last_guide = app_.history_manager().GetRecentViews(ObjectType::GUIDE, 1);
+    if (last_guide.size() > 0) {
+      current_guide_name_ = last_guide[0].name;
+    }
   }
 
   void Show() override {
@@ -311,6 +313,7 @@ class GuidesComponentImpl : public GuidesComponent {
       browser_->Draw(&result);
       if (result.selected_object_name) {
         current_guide_name_ = *result.selected_object_name;
+        app_.history_manager().UpdateRecentView(ObjectType::GUIDE, current_guide_name_);
       }
 
       ImGui::EndChild();
