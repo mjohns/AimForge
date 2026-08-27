@@ -150,6 +150,11 @@ class ObjectBrowserImpl : public ObjectBrowser {
 
  private:
   void DrawItem(const std::string& name, Result* result) {
+    if (!ItemExists(name)) {
+      DrawMissingItem(name);
+      return;
+    }
+
     if (ImGui::Button(name)) {
       result->selected_object_name = name;
     }
@@ -186,6 +191,39 @@ class ObjectBrowserImpl : public ObjectBrowser {
         app_.labels_manager().StarItem(type_, name);
       }
     }
+  }
+
+  void DrawMissingItem(const std::string& name) {
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(name);
+    ImGui::SameLine();
+    if (view_type_ == ViewType::RECENT) {
+      if (ImGui::IconButton(icons::kDelete)) {
+        app_.history_manager().DeleteRecentView(type_, name);
+      }
+      ImGui::HelpTooltip("Delete from recents");
+    }
+    if (view_type_ == ViewType::STARRED) {
+      if (ImGui::IconButton(icons::kStar)) {
+        app_.labels_manager().UnstarItem(type_, name);
+      }
+    }
+  }
+
+  bool ItemExists(const std::string& name) {
+    switch (type_) {
+      case ObjectType::SCENARIO:
+        return app_.scenario_manager().GetScenario(name).has_value();
+      case ObjectType::PLAYLIST:
+        return app_.playlist_manager().GetPlaylist(name).has_value();
+      case ObjectType::GUIDE:
+        return app_.guide_manager().GetGuide(name).has_value();
+      case ObjectType::THEME:
+      case ObjectType::CROSSHAIR:
+        break;
+    }
+    assert(false && "Unsupported object type");
+    return false;
   }
 
   std::shared_ptr<std::vector<std::string>> GetNames() {
