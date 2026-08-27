@@ -262,7 +262,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
     ImGui::SpacedSeparator();
 
     ObjectBrowser::Result browser_result;
-    browser_.Draw(&browser_result);
+    browser_->Draw(&browser_result);
 
     if (browser_result.copy_object_name) {
       auto playlist = app_.playlist_manager().GetPlaylist(*browser_result.copy_object_name);
@@ -281,7 +281,7 @@ class PlaylistListComponentImpl : public PlaylistListComponent {
   Application& app_ = GetUiApp();
   CopyPlaylistDialog copy_dialog_{"CopyPlaylistDialog"};
   AddPlaylistDialog add_dialog_{"AddPlaylistDialog"};
-  ObjectBrowser browser_{ObjectType::PLAYLIST};
+  std::unique_ptr<ObjectBrowser> browser_ = CreateObjectBrowser(ObjectType::PLAYLIST);
 };
 
 }  // namespace

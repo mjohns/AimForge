@@ -348,7 +348,7 @@ class GuidesComponentImpl : public GuidesComponent {
     ImGui::SpacedSeparator();
 
     ObjectBrowser::Result browser_result;
-    guide_browser_.Draw(&browser_result);
+    browser_->Draw(&browser_result);
 
     ImGui::EndChild();
     ImGui::EndTable();
@@ -357,7 +357,7 @@ class GuidesComponentImpl : public GuidesComponent {
  private:
   Application& app_;
 
-  ObjectBrowser guide_browser_{ObjectType::GUIDE};
+  std::unique_ptr<ObjectBrowser> browser_ = CreateObjectBrowser(ObjectType::GUIDE);
   std::unique_ptr<PlaylistComponent> playlist_component_;
   std::shared_ptr<PlaylistRun> run_;
   GuideEditor editor_;
