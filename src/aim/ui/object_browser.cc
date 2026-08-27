@@ -114,39 +114,33 @@ class ObjectBrowserImpl : public ObjectBrowser {
     ImGui::BeginChild("SearchContent");
     auto child_cleanup = absl::MakeCleanup([] { ImGui::EndChild(); });
 
-    auto search_words = GetSearchWords(search_text_);
-
     auto new_names = GetNames();
     if (new_names == nullptr) {
       return;
     }
     if (new_names != all_names_) {
       all_names_ = new_names;
-
-      if (search_text_.empty()) {
-        filtered_names_ = all_names_;
-      } else {
-        // Refilter
-        filtered_names_.clear();
-        filtered_names_.reserve(all_names_.size());
-
-      for (const std::string& name : *names) {
-        if (StringMatchesSearch(name, search_words)) {
-          // TODO: Check if it exists?
-          filtered_names_.push_back(name);
-        }
-      }
+      UpdateFilteredNames();
+    } else if (search_text_ != handled_search_text_) {
+      UpdateFilteredNames();
     }
 
     ImGui::LoopId loop_id;
-    for (const std::string_view& name : filtered_names_) {
-      auto id_guard = loop_id.Get();
-      DrawItem(name, result);
+    if (filtered_names_indices_) {
+      for (int i : *filtered_names_indices_) {
+        auto id_guard = loop_id.Get();
+        DrawItem((*all_names_)[i], result);
+      }
+    } else {
+      for (const std::string& name : *all_names_) {
+        auto id_guard = loop_id.Get();
+        DrawItem(name, result);
+      }
     }
   }
 
  private:
-  void DrawItem(std::string_view name, Result* result) {
+  void DrawItem(const std::string& name, Result* result) {
     if (ImGui::Button(name)) {
       result->selected_object_name = name;
     }
@@ -208,14 +202,38 @@ class ObjectBrowserImpl : public ObjectBrowser {
     return nullptr;
   }
 
+  void UpdateFilteredNames() {
+    handled_search_text_ = search_text_;
+    if (search_text_.empty()) {
+      // All match. Clear the filter.
+      filtered_names_indices_ = {};
+      return;
+    }
+
+    auto search_words = GetSearchWords(search_text_);
+    if (!filtered_names_indices_) {
+      filtered_names_indices_ = std::vector<int>{};
+    }
+    auto& indices = *filtered_names_indices_;
+    indices.clear();
+    indices.reserve(all_names_->size());
+
+    for (int i = 0; i < all_names_->size(); ++i) {
+      if (StringMatchesSearch((*all_names_)[i], search_words)) {
+        indices.push_back(i);
+      }
+    }
+  }
+
   Application& app_ = GetUiApp();
   std::string search_text_;
+  std::string handled_search_text_;
   const ObjectType type_;
   const std::string type_name_ = ObjectTypeToString(type_);
   ViewType view_type_ = ViewType::ALL;
   ImGui::ConfirmationDialog<std::string> delete_confirmation_dialog_{"DeleteConfirmationDialog"};
   std::shared_ptr<std::vector<std::string>> all_names_;
-  std::shared_ptr<std::vector<std::string>> filtered_names_;
+  std::optional<std::vector<int>> filtered_names_indices_;
 };
 
 }  // namespace
