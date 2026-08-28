@@ -81,6 +81,9 @@ class ObjectBrowserImpl : public ObjectBrowser {
       ImGui::LoopId loop_id;
       int i = 0;
       for (const std::string& name : *recents) {
+        if (!ItemExists(name)) {
+          continue;
+        }
         i++;
         if (i >= 10) {
           break;
