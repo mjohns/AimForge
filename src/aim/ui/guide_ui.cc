@@ -129,7 +129,7 @@ class GuideViewer {
       auto lid = loop_id.Get("Playlist");
       ImGui::TableNextColumn();
       bool is_selected = playlist == app_.playlist_manager().current_playlist_name();
-      if (ImGui::Selectable(std::format("{} {}", icons::kList, playlist, is_selected))) {
+      if (ImGui::Selectable(std::format("{} {}", icons::kList, playlist), is_selected)) {
         app_.playlist_manager().SetCurrentPlaylist(playlist);
       }
       auto maybe_playlist = app_.playlist_manager().GetPlaylist(playlist);
@@ -224,11 +224,13 @@ class GuidesComponentImpl : public GuidesComponent {
 
       std::optional<GuideItem> guide = app_.guide_manager().GetGuide(current_guide_name_);
       if (guide) {
+        ImGui::Spacing();
         if (guide_history_.size() > 1) {
           ImGui::AlignTextToFramePadding();
           if (ImGui::Button(icons::kArrowBack)) {
             go_back = true;
           }
+          ImGui::HelpTooltip("Back to last guide");
           ImGui::SameLine();
         }
         ImGui::AlignTextToFramePadding();
@@ -239,6 +241,8 @@ class GuidesComponentImpl : public GuidesComponent {
           opts.name = guide->name;
           app_.PushNextScreen(CreateGuideEditorScreen(opts));
         }
+
+        ImGui::SpacedSeparator();
 
         GuideViewer::Result result;
         viewer_.Draw(*guide, &result);

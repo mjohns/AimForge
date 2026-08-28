@@ -36,8 +36,9 @@ class GuideEditorScreen : public UiScreen {
       }
     }
 
-    // GuideEditor(const GuideItem& original_guide)
-    //     : original_guide_(original_guide), updated_guide_(original_guide) {}
+    if (updated_guide_.sections().empty()) {
+      updated_guide_.add_sections();
+    }
   }
 
   void DrawScreen() override {
