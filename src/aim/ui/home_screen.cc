@@ -279,7 +279,6 @@ class HomeScreen : public UiScreen {
 
   void DrawLeftNav() {
     AppScreen original_app_screen = app_screen_;
-    ImGui::Spacing();
     if (ImGui::Selectable(std::format("{} Guides", icons::kMap).c_str(),
                           app_screen_ == AppScreen::GUIDES)) {
       app_screen_ = AppScreen::GUIDES;

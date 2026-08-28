@@ -6,6 +6,7 @@ file(GLOB_RECURSE TEST_SOURCES
   "geometry_test.cc"
   "name_util_test.cc"
   "playlist_manager_test.cc"
+  "guide_manager_test.cc"
   "scenario_manager_test.cc"
   "textures_test.cc"
   "times_test.cc"

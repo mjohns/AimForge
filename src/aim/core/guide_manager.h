@@ -40,6 +40,9 @@ class GuideManager {
 
   virtual bool RenameGuide(const std::string& old_name, const std::string& new_name) = 0;
 
+  virtual void RenamePlaylistInAllGuides(const std::string& old_name,
+                                         const std::string& new_name) = 0;
+
   virtual void RegisterRenameListener(
       std::function<void(const std::string& old_name, const std::string& new_name)> listener) = 0;
 };
