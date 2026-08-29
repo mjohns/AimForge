@@ -118,7 +118,7 @@ bool StringMatchesContainsSearch(const std::string& input,
   return true;
 }
 
-bool FuzzyMatch(const std::string& pattern, const std::string& str) {
+bool FuzzyMatch(const std::string& str, const std::string& pattern) {
   size_t p_idx = 0;
   size_t s_idx = 0;
 

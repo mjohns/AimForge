@@ -53,11 +53,11 @@ class SoundInputDialog {
       float max_height = ImGui::GetIO().DisplaySize.y * 0.4f;
       ImGui::BeginChild("SoundsContent", ImVec2(0, max_height));
 
-      auto search_words = GetSearchWords(search_text_);
+      // auto search_words = GetSearchWords(search_text_);
 
       ImGui::LoopId loop_id;
       for (const std::string& sound_name : sound_names_) {
-        if (StringMatchesContainsSearch(sound_name, search_words)) {
+        if (FuzzyMatch(sound_name, search_text_)) {
           auto lid = loop_id.Get();
 
           if (ImGui::Button(icons::kPlayArrow)) {
