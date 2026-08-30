@@ -59,26 +59,13 @@ class TopBarImpl : public TopBar {
       ImGui::Text("                ");
       ImGui::SameLine();
 
-      {
-        // Draw the play button slightly smaller and circular.
-        //
-        // Alternatively we could just change the font size and still do the cursor.y
-        // adjustments.
-        ImVec2 cursor = ImGui::GetCursorPos();
-        float frame_height = ImGui::GetFrameHeight();
-        float play_height = frame_height * 0.9;
-        float height_diff = frame_height - play_height;
-        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, play_height / 2.8f);
-        ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.0f, 0.0f));
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(play_height * 0.05f, 0.0f));
-        ImGui::SetCursorPosY(cursor.y + height_diff / 2.0);
-        if (ImGui::Button(std::format("{}", icons::kPlayArrow), ImVec2(play_height, play_height))) {
-          app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
-          app_.GetCurrentScreen()->ReturnHome();
-        }
-        ImGui::PopStyleVar(3);
-        ImGui::SetCursorPosY(cursor.y);
+      float frame_height = ImGui::GetFrameHeight();
+      ImGui::PushStyleVar(ImGuiStyleVar_SelectableRounding, frame_height / 2.0f);
+      if (ImGui::IconButton(icons::kPlayArrow, 0.9)) {
+        app_.state().scenario_run_option = ScenarioRunOption::START_CURRENT;
+        app_.GetCurrentScreen()->ReturnHome();
       }
+      ImGui::PopStyleVar();
 
       ImGui::SameLine();
       ImGui::Text(current_scenario->name + "  ");
@@ -91,18 +78,6 @@ class TopBarImpl : public TopBar {
         auto normal_font = app_.font_manager().UseDefault();
         ImGui::HelpTooltip("Select scenario variation");
       }
-
-      /*
-      ImGui::SameLine();
-      if (ImGui::Button(std::format("{}", icons::kArrowForward))) {
-        app.state().scenario_run_option = ScenarioRunOption::PLAYLIST_NEXT;
-        screen->ReturnHome();
-      }
-      {
-        auto normal_font = app.font_manager().UseDefault();
-        ImGui::HelpTooltip("Playlist next");
-      }
-      */
     }
 
     ImGui::SameLine();

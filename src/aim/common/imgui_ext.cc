@@ -49,7 +49,7 @@ float GetIconButtonWidth(const char* icon, float scale) {
   return ImGui::CalcTextSize(icon).x * scale;
 }
 
-bool IconButton(const char* icon, float scale) {
+bool IconButtonImpl(const char* icon, float scale, bool is_circle) {
   // auto cleanup = absl::MakeCleanup([]() { ImGui::PopStyleVar(2); });
 
   auto full_size = ImGui::CalcTextSize(icon);
@@ -60,11 +60,27 @@ bool IconButton(const char* icon, float scale) {
   auto pos = GetCursorPos();
   pos.x -= ((full_size.x - size.x) * 0.5);
   IdGuard cid(std::format("SelectIcon{}", icon));
+  if (is_circle) {
+    ImVec2 frame_padding = ImGui::GetStyle().FramePadding;
+    float total_width = size.x + 2 * frame_padding.x;
+    ImGui::PushStyleVar(ImGuiStyleVar_SelectableRounding, total_width / 2.0f);
+  }
   bool selected = Selectable("##SelectableIcon", false, 0, size);
+  if (is_circle) {
+    ImGui::PopStyleVar();
+  }
   ImGui::SameLine();
   ImGui::SetCursorPos(pos);
   ImGui::Text("%s", icon);
   return selected;
+}
+
+bool IconButton(const char* icon, float scale) {
+  return IconButtonImpl(icon, scale, false);
+}
+
+bool CircleIconButton(const char* icon, float scale) {
+  return IconButtonImpl(icon, scale, true);
 }
 
 bool MenuButton() {
