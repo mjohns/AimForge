@@ -36,3 +36,30 @@ TEST(GuideManagerTest, RenamePlaylistInAllGuides) {
   ASSERT_TRUE(guide.has_value());
   EXPECT_THAT(guide->def, EqualsProto(expected_updated_guide));
 }
+
+TEST(GuideManagerTest, RenameGuide) {
+  auto mgr = CreateGuideManager();
+
+  GuideDef original_guide;
+  auto* section = original_guide.add_sections();
+  section->add_playlists("B P1");
+  section->add_guides("B Guide");
+  section->add_guides("B G2");
+  section->add_guides("B Guide Other");
+
+  mgr->UpdateGuide("B Guide", original_guide);
+
+  mgr->RenameGuide("B Guide", "B Guide Updated");
+
+  auto guide = mgr->GetGuide("B Guide Updated");
+
+  GuideDef expected_updated_guide;
+  section = expected_updated_guide.add_sections();
+  section->add_playlists("B P1");
+  section->add_guides("B Guide Updated");
+  section->add_guides("B G2");
+  section->add_guides("B Guide Other");
+
+  ASSERT_TRUE(guide.has_value());
+  EXPECT_THAT(guide->def, EqualsProto(expected_updated_guide));
+}

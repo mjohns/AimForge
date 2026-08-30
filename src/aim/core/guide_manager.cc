@@ -88,9 +88,6 @@ class GuideManagerImpl : public GuideManager {
     if (guide_map_.contains(new_name)) {
       return false;
     }
-    // if (current_guide_name_ == old_name) {
-    //   current_guide_name_ = new_name;
-    // }
     auto it = guide_map_.find(old_name);
     if (it != guide_map_.end()) {
       auto& new_guide = guide_map_[new_name];
@@ -99,46 +96,14 @@ class GuideManagerImpl : public GuideManager {
       guide_map_.erase(old_name);
       UpdateGuideListFromMap();
     }
+    RenameGuideInAllGuides(old_name, new_name);
 
     for (auto& listener : rename_listeners_) {
       listener(old_name, new_name);
     }
+
     return true;
   }
-
-  // void RenameScenarioInAllGuides(const std::string& old_name,
-  //                                const std::string& new_name) override {
-  //   std::string old_base_name = GetScenarioNameInfo(old_name).base_name;
-  //   std::string new_base_name = GetScenarioNameInfo(new_name).base_name;
-  //
-  //   auto guides_copy = guides_;
-  //   for (const Guide& guide : *guides_copy) {
-  //     bool changed = false;
-  //     GuideDef def = guide.def();
-  //     for (auto& item : *def.mutable_items()) {
-  //       NameInfo item_name_info = GetScenarioNameInfo(item.scenario());
-  //       if (item_name_info.base_name == old_base_name) {
-  //         changed = true;
-  //         item_name_info.base_name = new_base_name;
-  //         item.set_scenario(item_name_info.GetFullName());
-  //       }
-  //     }
-  //
-  //     const std::string& level_scenario = def.levels().base_scenario();
-  //     if (level_scenario.size() > 0) {
-  //       NameInfo item_name_info = GetScenarioNameInfo(level_scenario);
-  //       if (item_name_info.base_name == old_base_name) {
-  //         changed = true;
-  //         item_name_info.base_name = new_base_name;
-  //         def.mutable_levels()->set_base_scenario(item_name_info.GetFullName());
-  //       }
-  //     }
-  //
-  //     if (changed) {
-  //       UpdateGuide(guide.name, def);
-  //     }
-  //   }
-  // }
 
   std::unordered_set<std::string> GetDirtyBundles() override {
     return dirty_bundles_;
@@ -164,6 +129,27 @@ class GuideManagerImpl : public GuideManager {
             changed = true;
             item_name_info.base_name = new_base_name;
             playlist = item_name_info.GetFullName();
+          }
+        }
+      }
+
+      if (changed) {
+        UpdateGuide(guide.name, def);
+      }
+    }
+  }
+
+  // Renames references to the guide from within guides.
+  void RenameGuideInAllGuides(const std::string& old_name, const std::string& new_name) {
+    auto guides_copy = guides_;
+    for (const GuideItem& guide : *guides_copy) {
+      bool changed = false;
+      GuideDef def = guide.def;
+      for (auto& section : *def.mutable_sections()) {
+        for (std::string& guide : *section.mutable_guides()) {
+          if (guide == old_name) {
+            changed = true;
+            guide = new_name;
           }
         }
       }
