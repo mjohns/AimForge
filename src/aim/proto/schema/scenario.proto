@@ -140,6 +140,7 @@ message ScenarioOverrides {
   float min_distance_multiplier = 11;
   float wall_width_multiplier = 12;
   float wall_height_multiplier = 13;
+  float level_offset = 14;
 }
 
 message ReloadInfo {

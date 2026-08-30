@@ -467,6 +467,18 @@ void DrawOverridesEditor(const char* id, ScenarioOverrides* overrides, bool is_l
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, wall_width_multiplier));
   ImGui::InputFloat(default_params.clone().set_id_and_label("Wall height multiplier"),
                     PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, wall_height_multiplier));
+  if (is_levels) {
+    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Level offset")
+                          .set_step(1, 2)
+                          .set_default(0)
+                          .set_is_optional()
+                          .set_width(char_x * 10),
+                      PROTO_FLOAT_FIELD(ScenarioOverrides, overrides, level_offset));
+    ImGui::SameLine();
+    ImGui::HelpMarker(
+        "Add this offset when evaluating levels. With +2 offset L1 is now equivalent to L3 "
+        "(without offset). Or think of it as L2 is now the equivalent to the base scenario.");
+  }
 }
 
 ImGui::InputFloatParams GetDefaultMultiplierInputParams(const std::string& label) {

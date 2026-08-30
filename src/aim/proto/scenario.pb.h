@@ -871,6 +871,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     kMinDistanceMultiplierFieldNumber = 11,
     kWallWidthMultiplierFieldNumber = 12,
     kWallHeightMultiplierFieldNumber = 13,
+    kLevelOffsetFieldNumber = 14,
   };
   // float target_radius_multiplier = 3;
   bool has_target_radius_multiplier() const;
@@ -993,11 +994,22 @@ class ScenarioOverrides final : public ::google::protobuf::Message
   void _internal_set_wall_height_multiplier(float value);
 
   public:
+  // float level_offset = 14;
+  bool has_level_offset() const;
+  void clear_level_offset() ;
+  float level_offset() const;
+  void set_level_offset(float value);
+
+  private:
+  float _internal_level_offset() const;
+  void _internal_set_level_offset(float value);
+
+  public:
   // @@protoc_insertion_point(class_scope:aim.ScenarioOverrides)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<4, 11,
+  static const ::google::protobuf::internal::TcParseTable<4, 12,
                                    0, 0,
                                    2>
       _table_;
@@ -1030,6 +1042,7 @@ class ScenarioOverrides final : public ::google::protobuf::Message
     float min_distance_multiplier_;
     float wall_width_multiplier_;
     float wall_height_multiplier_;
+    float level_offset_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -15308,6 +15321,35 @@ inline float ScenarioOverrides::_internal_wall_height_multiplier() const {
 inline void ScenarioOverrides::_internal_set_wall_height_multiplier(float value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.wall_height_multiplier_ = value;
+}
+
+// float level_offset = 14;
+inline bool ScenarioOverrides::has_level_offset() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000800U);
+  return value;
+}
+inline void ScenarioOverrides::clear_level_offset() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.level_offset_ = 0;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000800U);
+}
+inline float ScenarioOverrides::level_offset() const {
+  // @@protoc_insertion_point(field_get:aim.ScenarioOverrides.level_offset)
+  return _internal_level_offset();
+}
+inline void ScenarioOverrides::set_level_offset(float value) {
+  _internal_set_level_offset(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000800U);
+  // @@protoc_insertion_point(field_set:aim.ScenarioOverrides.level_offset)
+}
+inline float ScenarioOverrides::_internal_level_offset() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.level_offset_;
+}
+inline void ScenarioOverrides::_internal_set_level_offset(float value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.level_offset_ = value;
 }
 
 // -------------------------------------------------------------------
