@@ -154,11 +154,14 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr SoundSettings::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        hit_{nullptr},
-        kill_{nullptr},
-        metronome_{nullptr},
-        shoot_{nullptr},
+        click_miss_{nullptr},
+        click_hit_{nullptr},
+        click_kill_{nullptr},
         reload_{nullptr},
+        tracking_miss_{nullptr},
+        tracking_hit_{nullptr},
+        tracking_kill_{nullptr},
+        metronome_{nullptr},
         master_volume_level_{0} {}
 
 template <typename>
@@ -378,19 +381,25 @@ const ::uint32_t
         2,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_._has_bits_),
-        9, // hasbit index offset
+        12, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.master_volume_level_),
-        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.hit_),
-        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.kill_),
-        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.metronome_),
-        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.shoot_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.click_miss_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.click_hit_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.click_kill_),
         PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.reload_),
-        5,
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.tracking_miss_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.tracking_hit_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.tracking_kill_),
+        PROTOBUF_FIELD_OFFSET(::aim::SoundSettings, _impl_.metronome_),
+        8,
         0,
         1,
         2,
         3,
         4,
+        5,
+        6,
+        7,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::ScenarioSettings, _impl_._has_bits_),
         12, // hasbit index offset
@@ -469,10 +478,10 @@ static const ::_pbi::MigrationSchema
         {9, sizeof(::aim::Settings)},
         {58, sizeof(::aim::SoundItem)},
         {67, sizeof(::aim::SoundSettings)},
-        {82, sizeof(::aim::ScenarioSettings)},
-        {103, sizeof(::aim::ScenarioSettingsConfig)},
-        {124, sizeof(::aim::KeyMapping)},
-        {135, sizeof(::aim::Keybinds)},
+        {88, sizeof(::aim::ScenarioSettings)},
+        {109, sizeof(::aim::ScenarioSettingsConfig)},
+        {130, sizeof(::aim::KeyMapping)},
+        {141, sizeof(::aim::Keybinds)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_HealthBarSettings_default_instance_._instance,
@@ -510,48 +519,52 @@ const char descriptor_table_protodef_settings_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\030\026 \001(\010\022\"\n\nmsaa_level\030\027 \001(\0162\016.aim.MsaaLev"
     "el\022\035\n\025explicit_display_name\030\030 \001(\t\"G\n\tSou"
     "ndItem\022\014\n\004name\030\001 \001(\t\022\024\n\014volume_level\030\002 \001"
-    "(\002\022\026\n\016pitch_modifier\030\003 \001(\002\"\311\001\n\rSoundSett"
-    "ings\022\033\n\023master_volume_level\030\001 \001(\002\022\033\n\003hit"
-    "\030\n \001(\0132\016.aim.SoundItem\022\034\n\004kill\030\013 \001(\0132\016.a"
-    "im.SoundItem\022!\n\tmetronome\030\014 \001(\0132\016.aim.So"
-    "undItem\022\035\n\005shoot\030\r \001(\0132\016.aim.SoundItem\022\036"
-    "\n\006reload\030\016 \001(\0132\016.aim.SoundItem\"\232\002\n\020Scena"
-    "rioSettings\022\022\n\ncm_per_360\030\001 \001(\002\022\022\n\ntheme"
-    "_name\030\002 \001(\t\022\025\n\rmetronome_bpm\030\003 \001(\002\022\026\n\016cr"
-    "osshair_size\030\004 \001(\002\022\026\n\016crosshair_name\030\005 \001"
-    "(\t\022!\n\022auto_hold_tracking\030\007 \001(\010B\005\252\001\002\010\002\022*\n"
-    "\nhealth_bar\030\010 \001(\0132\026.aim.HealthBarSetting"
-    "s\022\037\n\020enable_metronome\030\t \001(\010B\005\252\001\002\010\002\022!\n\031tr"
-    "acking_shots_per_second\030\n \001(\002J\004\010\006\020\007\"\224\004\n\026"
-    "ScenarioSettingsConfig\0222\n\ncm_per_360\030\001 \001"
-    "(\0162\036.aim.ScenarioSettingsStoreType\0222\n\nth"
-    "eme_name\030\002 \001(\0162\036.aim.ScenarioSettingsSto"
-    "reType\0225\n\rmetronome_bpm\030\003 \001(\0162\036.aim.Scen"
-    "arioSettingsStoreType\0226\n\016crosshair_size\030"
-    "\004 \001(\0162\036.aim.ScenarioSettingsStoreType\0226\n"
-    "\016crosshair_name\030\005 \001(\0162\036.aim.ScenarioSett"
-    "ingsStoreType\022:\n\022auto_hold_tracking\030\006 \001("
-    "\0162\036.aim.ScenarioSettingsStoreType\0222\n\nhea"
-    "lth_bar\030\007 \001(\0162\036.aim.ScenarioSettingsStor"
-    "eType\0228\n\020enable_metronome\030\010 \001(\0162\036.aim.Sc"
-    "enarioSettingsStoreType\022A\n\031tracking_shot"
-    "s_per_second\030\t \001(\0162\036.aim.ScenarioSetting"
-    "sStoreType\"T\n\nKeyMapping\022\020\n\010mapping1\030\001 \001"
-    "(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010mapping3\030\003 \001(\t\022\020"
-    "\n\010mapping4\030\004 \001(\t\"\247\002\n\010Keybinds\022\035\n\004fire\030\001 "
-    "\001(\0132\017.aim.KeyMapping\022)\n\020restart_scenario"
-    "\030\002 \001(\0132\017.aim.KeyMapping\022&\n\rnext_scenario"
-    "\030\003 \001(\0132\017.aim.KeyMapping\022\'\n\016quick_setting"
-    "s\030\004 \001(\0132\017.aim.KeyMapping\022.\n\025adjust_cross"
-    "hair_size\030\005 \001(\0132\017.aim.KeyMapping\022(\n\017quic"
-    "k_metronome\030\006 \001(\0132\017.aim.KeyMapping\022&\n\red"
-    "it_scenario\030\007 \001(\0132\017.aim.KeyMapping*p\n\tMs"
-    "aaLevel\022\026\n\022MSAA_LEVEL_UNKNOWN\020\000\022\022\n\016MSAA_"
-    "LEVEL_OFF\020\001\022\021\n\rMSAA_LEVEL_2X\020\002\022\021\n\rMSAA_L"
-    "EVEL_4X\020\004\022\021\n\rMSAA_LEVEL_8X\020\010*q\n\031Scenario"
-    "SettingsStoreType\022(\n$SCENARIO_SETTINGS_S"
-    "TORE_TYPE_UNKNOWN\020\000\022\026\n\022STORE_PER_SCENARI"
-    "O\020\001\022\022\n\016STORE_GLOBALLY\020\002b\010editionsp\350\007"
+    "(\002\022\026\n\016pitch_modifier\030\003 \001(\002\"\316\002\n\rSoundSett"
+    "ings\022\033\n\023master_volume_level\030\001 \001(\002\022\"\n\ncli"
+    "ck_miss\030\002 \001(\0132\016.aim.SoundItem\022!\n\tclick_h"
+    "it\030\003 \001(\0132\016.aim.SoundItem\022\"\n\nclick_kill\030\004"
+    " \001(\0132\016.aim.SoundItem\022\036\n\006reload\030\005 \001(\0132\016.a"
+    "im.SoundItem\022%\n\rtracking_miss\030\006 \001(\0132\016.ai"
+    "m.SoundItem\022$\n\014tracking_hit\030\007 \001(\0132\016.aim."
+    "SoundItem\022%\n\rtracking_kill\030\010 \001(\0132\016.aim.S"
+    "oundItem\022!\n\tmetronome\030\014 \001(\0132\016.aim.SoundI"
+    "tem\"\232\002\n\020ScenarioSettings\022\022\n\ncm_per_360\030\001"
+    " \001(\002\022\022\n\ntheme_name\030\002 \001(\t\022\025\n\rmetronome_bp"
+    "m\030\003 \001(\002\022\026\n\016crosshair_size\030\004 \001(\002\022\026\n\016cross"
+    "hair_name\030\005 \001(\t\022!\n\022auto_hold_tracking\030\007 "
+    "\001(\010B\005\252\001\002\010\002\022*\n\nhealth_bar\030\010 \001(\0132\026.aim.Hea"
+    "lthBarSettings\022\037\n\020enable_metronome\030\t \001(\010"
+    "B\005\252\001\002\010\002\022!\n\031tracking_shots_per_second\030\n \001"
+    "(\002J\004\010\006\020\007\"\224\004\n\026ScenarioSettingsConfig\0222\n\nc"
+    "m_per_360\030\001 \001(\0162\036.aim.ScenarioSettingsSt"
+    "oreType\0222\n\ntheme_name\030\002 \001(\0162\036.aim.Scenar"
+    "ioSettingsStoreType\0225\n\rmetronome_bpm\030\003 \001"
+    "(\0162\036.aim.ScenarioSettingsStoreType\0226\n\016cr"
+    "osshair_size\030\004 \001(\0162\036.aim.ScenarioSetting"
+    "sStoreType\0226\n\016crosshair_name\030\005 \001(\0162\036.aim"
+    ".ScenarioSettingsStoreType\022:\n\022auto_hold_"
+    "tracking\030\006 \001(\0162\036.aim.ScenarioSettingsSto"
+    "reType\0222\n\nhealth_bar\030\007 \001(\0162\036.aim.Scenari"
+    "oSettingsStoreType\0228\n\020enable_metronome\030\010"
+    " \001(\0162\036.aim.ScenarioSettingsStoreType\022A\n\031"
+    "tracking_shots_per_second\030\t \001(\0162\036.aim.Sc"
+    "enarioSettingsStoreType\"T\n\nKeyMapping\022\020\n"
+    "\010mapping1\030\001 \001(\t\022\020\n\010mapping2\030\002 \001(\t\022\020\n\010map"
+    "ping3\030\003 \001(\t\022\020\n\010mapping4\030\004 \001(\t\"\247\002\n\010Keybin"
+    "ds\022\035\n\004fire\030\001 \001(\0132\017.aim.KeyMapping\022)\n\020res"
+    "tart_scenario\030\002 \001(\0132\017.aim.KeyMapping\022&\n\r"
+    "next_scenario\030\003 \001(\0132\017.aim.KeyMapping\022\'\n\016"
+    "quick_settings\030\004 \001(\0132\017.aim.KeyMapping\022.\n"
+    "\025adjust_crosshair_size\030\005 \001(\0132\017.aim.KeyMa"
+    "pping\022(\n\017quick_metronome\030\006 \001(\0132\017.aim.Key"
+    "Mapping\022&\n\redit_scenario\030\007 \001(\0132\017.aim.Key"
+    "Mapping*p\n\tMsaaLevel\022\026\n\022MSAA_LEVEL_UNKNO"
+    "WN\020\000\022\022\n\016MSAA_LEVEL_OFF\020\001\022\021\n\rMSAA_LEVEL_2"
+    "X\020\002\022\021\n\rMSAA_LEVEL_4X\020\004\022\021\n\rMSAA_LEVEL_8X\020"
+    "\010*q\n\031ScenarioSettingsStoreType\022(\n$SCENAR"
+    "IO_SETTINGS_STORE_TYPE_UNKNOWN\020\000\022\026\n\022STOR"
+    "E_PER_SCENARIO\020\001\022\022\n\016STORE_GLOBALLY\020\002b\010ed"
+    "itionsp\350\007"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_settings_2eproto_deps[1] = {
@@ -561,7 +574,7 @@ static ::absl::once_flag descriptor_table_settings_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_settings_2eproto = {
     false,
     false,
-    2636,
+    2769,
     descriptor_table_protodef_settings_2eproto,
     "settings.proto",
     &descriptor_table_settings_2eproto_once,
@@ -2086,20 +2099,29 @@ SoundSettings::SoundSettings(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
   ::uint32_t cached_has_bits = _impl_._has_bits_[0];
-  _impl_.hit_ = (CheckHasBit(cached_has_bits, 0x00000001U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.hit_)
+  _impl_.click_miss_ = (CheckHasBit(cached_has_bits, 0x00000001U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_miss_)
                 : nullptr;
-  _impl_.kill_ = (CheckHasBit(cached_has_bits, 0x00000002U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.kill_)
+  _impl_.click_hit_ = (CheckHasBit(cached_has_bits, 0x00000002U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_hit_)
                 : nullptr;
-  _impl_.metronome_ = (CheckHasBit(cached_has_bits, 0x00000004U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.metronome_)
+  _impl_.click_kill_ = (CheckHasBit(cached_has_bits, 0x00000004U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_kill_)
                 : nullptr;
-  _impl_.shoot_ = (CheckHasBit(cached_has_bits, 0x00000008U))
-                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.shoot_)
-                : nullptr;
-  _impl_.reload_ = (CheckHasBit(cached_has_bits, 0x00000010U))
+  _impl_.reload_ = (CheckHasBit(cached_has_bits, 0x00000008U))
                 ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.reload_)
+                : nullptr;
+  _impl_.tracking_miss_ = (CheckHasBit(cached_has_bits, 0x00000010U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_miss_)
+                : nullptr;
+  _impl_.tracking_hit_ = (CheckHasBit(cached_has_bits, 0x00000020U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_hit_)
+                : nullptr;
+  _impl_.tracking_kill_ = (CheckHasBit(cached_has_bits, 0x00000040U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_kill_)
+                : nullptr;
+  _impl_.metronome_ = (CheckHasBit(cached_has_bits, 0x00000080U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.metronome_)
                 : nullptr;
   _impl_.master_volume_level_ = from._impl_.master_volume_level_;
 
@@ -2113,10 +2135,10 @@ PROTOBUF_NDEBUG_INLINE SoundSettings::Impl_::Impl_(
 inline void SoundSettings::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char*>(&_impl_) +
-               offsetof(Impl_, hit_),
+               offsetof(Impl_, click_miss_),
            0,
            offsetof(Impl_, master_volume_level_) -
-               offsetof(Impl_, hit_) +
+               offsetof(Impl_, click_miss_) +
                sizeof(Impl_::master_volume_level_));
 }
 SoundSettings::~SoundSettings() {
@@ -2130,11 +2152,14 @@ inline void SoundSettings::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  delete this_._impl_.hit_;
-  delete this_._impl_.kill_;
-  delete this_._impl_.metronome_;
-  delete this_._impl_.shoot_;
+  delete this_._impl_.click_miss_;
+  delete this_._impl_.click_hit_;
+  delete this_._impl_.click_kill_;
   delete this_._impl_.reload_;
+  delete this_._impl_.tracking_miss_;
+  delete this_._impl_.tracking_hit_;
+  delete this_._impl_.tracking_kill_;
+  delete this_._impl_.metronome_;
   this_._impl_.~Impl_();
 }
 
@@ -2181,17 +2206,17 @@ SoundSettings::GetClassData() const {
   return SoundSettings_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 5, 0, 2>
+const ::_pbi::TcParseTable<4, 9, 8, 0, 2>
 SoundSettings::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_._has_bits_),
     0, // no _extensions_
-    14, 56,  // max_field_number, fast_idx_mask
+    12, 120,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294951422,  // skipmap
+    4294964992,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
-    5,  // num_aux_entries
+    9,  // num_field_entries
+    8,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     SoundSettings_class_data_.base(),
     nullptr,  // post_loop_handler
@@ -2203,46 +2228,72 @@ SoundSettings::_table_ = {
     {::_pbi::TcParser::MiniParse, {}},
     // float master_volume_level = 1;
     {::_pbi::TcParser::FastF32S1,
-     {13, 5, 0,
+     {13, 8, 0,
       PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_)}},
-    // .aim.SoundItem hit = 10;
+    // .aim.SoundItem click_miss = 2;
     {::_pbi::TcParser::FastMtS1,
-     {82, 0, 0,
-      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_)}},
-    // .aim.SoundItem kill = 11;
+     {18, 0, 0,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_miss_)}},
+    // .aim.SoundItem click_hit = 3;
     {::_pbi::TcParser::FastMtS1,
-     {90, 1, 1,
-      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.kill_)}},
+     {26, 1, 1,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_hit_)}},
+    // .aim.SoundItem click_kill = 4;
+    {::_pbi::TcParser::FastMtS1,
+     {34, 2, 2,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_kill_)}},
+    // .aim.SoundItem reload = 5;
+    {::_pbi::TcParser::FastMtS1,
+     {42, 3, 3,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.reload_)}},
+    // .aim.SoundItem tracking_miss = 6;
+    {::_pbi::TcParser::FastMtS1,
+     {50, 4, 4,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_miss_)}},
+    // .aim.SoundItem tracking_hit = 7;
+    {::_pbi::TcParser::FastMtS1,
+     {58, 5, 5,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_hit_)}},
+    // .aim.SoundItem tracking_kill = 8;
+    {::_pbi::TcParser::FastMtS1,
+     {66, 6, 6,
+      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_kill_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
     // .aim.SoundItem metronome = 12;
     {::_pbi::TcParser::FastMtS1,
-     {98, 2, 2,
+     {98, 7, 7,
       PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_)}},
-    // .aim.SoundItem shoot = 13;
-    {::_pbi::TcParser::FastMtS1,
-     {106, 3, 3,
-      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.shoot_)}},
-    // .aim.SoundItem reload = 14;
-    {::_pbi::TcParser::FastMtS1,
-     {114, 4, 4,
-      PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.reload_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
   }}, {{
     // float master_volume_level = 1;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
-    // .aim.SoundItem hit = 10;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.SoundItem kill = 11;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.kill_), _Internal::kHasBitsOffset + 1, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_), _Internal::kHasBitsOffset + 8, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
+    // .aim.SoundItem click_miss = 2;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_miss_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem click_hit = 3;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_hit_), _Internal::kHasBitsOffset + 1, 1, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem click_kill = 4;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_kill_), _Internal::kHasBitsOffset + 2, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem reload = 5;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.reload_), _Internal::kHasBitsOffset + 3, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem tracking_miss = 6;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_miss_), _Internal::kHasBitsOffset + 4, 4, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem tracking_hit = 7;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_hit_), _Internal::kHasBitsOffset + 5, 5, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .aim.SoundItem tracking_kill = 8;
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.tracking_kill_), _Internal::kHasBitsOffset + 6, 6, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
     // .aim.SoundItem metronome = 12;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_), _Internal::kHasBitsOffset + 2, 2, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.SoundItem shoot = 13;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.shoot_), _Internal::kHasBitsOffset + 3, 3, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
-    // .aim.SoundItem reload = 14;
-    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.reload_), _Internal::kHasBitsOffset + 4, 4, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    {PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.metronome_), _Internal::kHasBitsOffset + 7, 7, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
   {{
+      {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
+      {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
+      {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
       {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
       {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
       {::_pbi::TcParser::GetTable<::aim::SoundItem>()},
@@ -2260,26 +2311,38 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      ABSL_DCHECK(_impl_.hit_ != nullptr);
-      _impl_.hit_->Clear();
+      ABSL_DCHECK(_impl_.click_miss_ != nullptr);
+      _impl_.click_miss_->Clear();
     }
     if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      ABSL_DCHECK(_impl_.kill_ != nullptr);
-      _impl_.kill_->Clear();
+      ABSL_DCHECK(_impl_.click_hit_ != nullptr);
+      _impl_.click_hit_->Clear();
     }
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
-      ABSL_DCHECK(_impl_.metronome_ != nullptr);
-      _impl_.metronome_->Clear();
+      ABSL_DCHECK(_impl_.click_kill_ != nullptr);
+      _impl_.click_kill_->Clear();
     }
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      ABSL_DCHECK(_impl_.shoot_ != nullptr);
-      _impl_.shoot_->Clear();
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       ABSL_DCHECK(_impl_.reload_ != nullptr);
       _impl_.reload_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+      ABSL_DCHECK(_impl_.tracking_miss_ != nullptr);
+      _impl_.tracking_miss_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      ABSL_DCHECK(_impl_.tracking_hit_ != nullptr);
+      _impl_.tracking_hit_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      ABSL_DCHECK(_impl_.tracking_kill_ != nullptr);
+      _impl_.tracking_kill_->Clear();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      ABSL_DCHECK(_impl_.metronome_ != nullptr);
+      _impl_.metronome_->Clear();
     }
   }
   _impl_.master_volume_level_ = 0;
@@ -2307,44 +2370,65 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
 
   cached_has_bits = this_._impl_._has_bits_[0];
   // float master_volume_level = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
     target = stream->EnsureSpace(target);
     target = ::_pbi::WireFormatLite::WriteFloatToArray(
         1, this_._internal_master_volume_level(), target);
   }
 
-  // .aim.SoundItem hit = 10;
+  // .aim.SoundItem click_miss = 2;
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        10, *this_._impl_.hit_, this_._impl_.hit_->GetCachedSize(), target,
+        2, *this_._impl_.click_miss_, this_._impl_.click_miss_->GetCachedSize(), target,
         stream);
   }
 
-  // .aim.SoundItem kill = 11;
+  // .aim.SoundItem click_hit = 3;
   if (CheckHasBit(cached_has_bits, 0x00000002U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        11, *this_._impl_.kill_, this_._impl_.kill_->GetCachedSize(), target,
+        3, *this_._impl_.click_hit_, this_._impl_.click_hit_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.SoundItem click_kill = 4;
+  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        4, *this_._impl_.click_kill_, this_._impl_.click_kill_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.SoundItem reload = 5;
+  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        5, *this_._impl_.reload_, this_._impl_.reload_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.SoundItem tracking_miss = 6;
+  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        6, *this_._impl_.tracking_miss_, this_._impl_.tracking_miss_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.SoundItem tracking_hit = 7;
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        7, *this_._impl_.tracking_hit_, this_._impl_.tracking_hit_->GetCachedSize(), target,
+        stream);
+  }
+
+  // .aim.SoundItem tracking_kill = 8;
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        8, *this_._impl_.tracking_kill_, this_._impl_.tracking_kill_->GetCachedSize(), target,
         stream);
   }
 
   // .aim.SoundItem metronome = 12;
-  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
     target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
         12, *this_._impl_.metronome_, this_._impl_.metronome_->GetCachedSize(), target,
-        stream);
-  }
-
-  // .aim.SoundItem shoot = 13;
-  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        13, *this_._impl_.shoot_, this_._impl_.shoot_->GetCachedSize(), target,
-        stream);
-  }
-
-  // .aim.SoundItem reload = 14;
-  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
-    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
-        14, *this_._impl_.reload_, this_._impl_.reload_->GetCachedSize(), target,
         stream);
   }
 
@@ -2373,32 +2457,47 @@ PROTOBUF_NOINLINE void SoundSettings::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += static_cast<bool>(0x00000020U & cached_has_bits) * 5;
-  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
-    // .aim.SoundItem hit = 10;
+  total_size += static_cast<bool>(0x00000100U & cached_has_bits) * 5;
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
+    // .aim.SoundItem click_miss = 2;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.hit_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.click_miss_);
     }
-    // .aim.SoundItem kill = 11;
+    // .aim.SoundItem click_hit = 3;
     if (CheckHasBit(cached_has_bits, 0x00000002U)) {
       total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.kill_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.click_hit_);
     }
-    // .aim.SoundItem metronome = 12;
+    // .aim.SoundItem click_kill = 4;
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
       total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.metronome_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.click_kill_);
     }
-    // .aim.SoundItem shoot = 13;
+    // .aim.SoundItem reload = 5;
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.shoot_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.reload_);
     }
-    // .aim.SoundItem reload = 14;
+    // .aim.SoundItem tracking_miss = 6;
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       total_size += 1 +
-                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.reload_);
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.tracking_miss_);
+    }
+    // .aim.SoundItem tracking_hit = 7;
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.tracking_hit_);
+    }
+    // .aim.SoundItem tracking_kill = 8;
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.tracking_kill_);
+    }
+    // .aim.SoundItem metronome = 12;
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.metronome_);
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -2420,40 +2519,32 @@ void SoundSettings::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      ABSL_DCHECK(from._impl_.hit_ != nullptr);
-      if (_this->_impl_.hit_ == nullptr) {
-        _this->_impl_.hit_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.hit_);
+      ABSL_DCHECK(from._impl_.click_miss_ != nullptr);
+      if (_this->_impl_.click_miss_ == nullptr) {
+        _this->_impl_.click_miss_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_miss_);
       } else {
-        _this->_impl_.hit_->MergeFrom(*from._impl_.hit_);
+        _this->_impl_.click_miss_->MergeFrom(*from._impl_.click_miss_);
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000002U)) {
-      ABSL_DCHECK(from._impl_.kill_ != nullptr);
-      if (_this->_impl_.kill_ == nullptr) {
-        _this->_impl_.kill_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.kill_);
+      ABSL_DCHECK(from._impl_.click_hit_ != nullptr);
+      if (_this->_impl_.click_hit_ == nullptr) {
+        _this->_impl_.click_hit_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_hit_);
       } else {
-        _this->_impl_.kill_->MergeFrom(*from._impl_.kill_);
+        _this->_impl_.click_hit_->MergeFrom(*from._impl_.click_hit_);
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000004U)) {
-      ABSL_DCHECK(from._impl_.metronome_ != nullptr);
-      if (_this->_impl_.metronome_ == nullptr) {
-        _this->_impl_.metronome_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.metronome_);
+      ABSL_DCHECK(from._impl_.click_kill_ != nullptr);
+      if (_this->_impl_.click_kill_ == nullptr) {
+        _this->_impl_.click_kill_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.click_kill_);
       } else {
-        _this->_impl_.metronome_->MergeFrom(*from._impl_.metronome_);
+        _this->_impl_.click_kill_->MergeFrom(*from._impl_.click_kill_);
       }
     }
     if (CheckHasBit(cached_has_bits, 0x00000008U)) {
-      ABSL_DCHECK(from._impl_.shoot_ != nullptr);
-      if (_this->_impl_.shoot_ == nullptr) {
-        _this->_impl_.shoot_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.shoot_);
-      } else {
-        _this->_impl_.shoot_->MergeFrom(*from._impl_.shoot_);
-      }
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       ABSL_DCHECK(from._impl_.reload_ != nullptr);
       if (_this->_impl_.reload_ == nullptr) {
         _this->_impl_.reload_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.reload_);
@@ -2461,9 +2552,41 @@ void SoundSettings::MergeImpl(::google::protobuf::MessageLite& to_msg,
         _this->_impl_.reload_->MergeFrom(*from._impl_.reload_);
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-      _this->_impl_.master_volume_level_ = from._impl_.master_volume_level_;
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
+      ABSL_DCHECK(from._impl_.tracking_miss_ != nullptr);
+      if (_this->_impl_.tracking_miss_ == nullptr) {
+        _this->_impl_.tracking_miss_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_miss_);
+      } else {
+        _this->_impl_.tracking_miss_->MergeFrom(*from._impl_.tracking_miss_);
+      }
     }
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
+      ABSL_DCHECK(from._impl_.tracking_hit_ != nullptr);
+      if (_this->_impl_.tracking_hit_ == nullptr) {
+        _this->_impl_.tracking_hit_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_hit_);
+      } else {
+        _this->_impl_.tracking_hit_->MergeFrom(*from._impl_.tracking_hit_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
+      ABSL_DCHECK(from._impl_.tracking_kill_ != nullptr);
+      if (_this->_impl_.tracking_kill_ == nullptr) {
+        _this->_impl_.tracking_kill_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.tracking_kill_);
+      } else {
+        _this->_impl_.tracking_kill_->MergeFrom(*from._impl_.tracking_kill_);
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      ABSL_DCHECK(from._impl_.metronome_ != nullptr);
+      if (_this->_impl_.metronome_ == nullptr) {
+        _this->_impl_.metronome_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.metronome_);
+      } else {
+        _this->_impl_.metronome_->MergeFrom(*from._impl_.metronome_);
+      }
+    }
+  }
+  if (CheckHasBit(cached_has_bits, 0x00000100U)) {
+    _this->_impl_.master_volume_level_ = from._impl_.master_volume_level_;
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
   _this->_internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
@@ -2485,9 +2608,9 @@ void SoundSettings::InternalSwap(SoundSettings* PROTOBUF_RESTRICT PROTOBUF_NONNU
   ::google::protobuf::internal::memswap<
       PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.master_volume_level_)
       + sizeof(SoundSettings::_impl_.master_volume_level_)
-      - PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.hit_)>(
-          reinterpret_cast<char*>(&_impl_.hit_),
-          reinterpret_cast<char*>(&other->_impl_.hit_));
+      - PROTOBUF_FIELD_OFFSET(SoundSettings, _impl_.click_miss_)>(
+          reinterpret_cast<char*>(&_impl_.click_miss_),
+          reinterpret_cast<char*>(&other->_impl_.click_miss_));
 }
 
 ::google::protobuf::Metadata SoundSettings::GetMetadata() const {

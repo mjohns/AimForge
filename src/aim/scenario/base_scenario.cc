@@ -164,8 +164,7 @@ void BaseScenario::HandleProximityTrackingHits(UpdateStateData* data) {
       proximity_tracking_sound_ =
           std::make_unique<ProximityTrackingSound>(settings_.sounds(),
                                                    settings_.proximity_min_shots_per_second(),
-                                                   settings_.proximity_max_shots_per_second(),
-                                                   &app_);
+                                                   settings_.proximity_max_shots_per_second());
     }
     std::optional<float> normalized_distance_from_center;
     const auto& targets = target_manager_.GetTargets();
@@ -213,8 +212,8 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
   if (data->is_click_held) {
     auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
     if (!tracking_sound_) {
-      tracking_sound_ = std::make_unique<TrackingSound>(
-          settings_.sounds(), settings_.tracking_shots_per_second(), &app_);
+      tracking_sound_ = std::make_unique<TrackingSound>(settings_.sounds(),
+                                                        settings_.tracking_shots_per_second());
     }
     stats_.shot_stopwatch.Start();
     if (maybe_hit_target_id.has_value()) {
@@ -236,7 +235,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
           float remaining_health_seconds = target.GetHealthPercent() * target.health_seconds;
           if (remaining_health_seconds <= remove_if_below_health_seconds) {
             if (!target.kill_sound_played) {
-              PlayKillSound();
+              PlaySound(SoundType::TRACKING_KILL);
               target.kill_sound_played = true;
             }
           }
@@ -247,7 +246,7 @@ void BaseScenario::HandleTrackingHits(UpdateStateData* data,
             stats_.num_hits++;
             stats_.num_kills++;
             if (!target.kill_sound_played) {
-              PlayKillSound();
+              PlaySound(SoundType::TRACKING_KILL);
               target.kill_sound_played = true;
             }
             AddNewTarget(target.id);
@@ -332,7 +331,7 @@ void BaseScenario::HandlePokeInstantHits(UpdateStateData* data) {
     stats_.num_hits++;
     stats_.num_shots++;
     stats_.num_kills++;
-    PlayKillSound();
+    PlaySound(SoundType::CLICK_KILL);
     data->force_render = true;
 
     auto hit_target_id = *maybe_hit_target_id;
@@ -374,7 +373,7 @@ void BaseScenario::HandlePokeHits(UpdateStateData* data) {
     stats_.num_hits++;
     stats_.num_shots++;
     stats_.num_kills++;
-    PlayKillSound();
+    PlaySound(SoundType::CLICK_KILL);
     data->force_render = true;
 
     auto hit_target_id = *maybe_hit_target_id;
@@ -405,7 +404,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
       available_shots_ = def_.shot_type().reload().max_shots();
     }
     if (available_shots_ <= 0) {
-      PlayReloadSound();
+      PlaySound(SoundType::RELOAD);
       return;
     }
   }
@@ -423,13 +422,13 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
   last_shot_time_micros_ = now_micros;
   stats_.num_shots++;
   auto maybe_hit_target_id = target_manager_.GetNearestHitTarget(camera_, look_at_.front);
-  PlayShootSound();
   if (replay_) {
     replay_->AddMouseClick(timer_.GetElapsedMicros(), maybe_hit_target_id.has_value());
   }
 
   bool is_hit = maybe_hit_target_id.has_value();
   if (!is_hit) {
+    PlaySound(SoundType::CLICK_MISS);
     // Missed shot
     if (def_.shot_type().remove_closest_on_miss()) {
       // TODO(mjohns): Count partial kill for multi click?
@@ -482,7 +481,7 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
   if (GetShotType() == ShotType::kClickMulti) {
     Target* hit_target = target_manager_.GetMutableTarget(*maybe_hit_target_id);
     hit_target->click_count++;
-    PlayHitSound();
+    PlaySound(SoundType::CLICK_HIT);
     if (hit_target->radius_at_kill.has_value()) {
       float radius_diff =
           hit_target->radius_at_kill->start_radius - hit_target->radius_at_kill->end_radius;
@@ -495,10 +494,12 @@ void BaseScenario::HandleClickHits(UpdateStateData* data) {
 
   if (is_kill) {
     stats_.num_kills++;
-    PlayKillSound();
     data->force_render = true;
     auto hit_target_id = *maybe_hit_target_id;
     AddNewTarget(hit_target_id);
+    PlaySound(SoundType::CLICK_KILL);
+  } else {
+    PlaySound(SoundType::CLICK_HIT);
   }
 }
 

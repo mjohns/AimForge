@@ -103,7 +103,7 @@ void ReplayRecorder::AddTarget(i64 now_micros, const Target& target) {
   }
 }
 
-void ReplayRecorder::PlaySound(i64 now_micros, ReplaySoundType sound) {
+void ReplayRecorder::PlaySound(i64 now_micros, SoundType sound) {
   ReplayEvent& event = AddEvent(now_micros, ReplayEventType::PLAY_SOUND);
   event.data.play_sound.sound = sound;
 }

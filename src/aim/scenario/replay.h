@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "aim/audio/sound_manager.h"
 #include "aim/common/simple_types.h"
 #include "aim/proto/scenario.pb.h"
 
@@ -25,16 +26,8 @@ enum class ReplayEventType : u16 {
   MOUSE_CLICK = 3,
 };
 
-enum class ReplaySoundType : u16 {
-  KILL = 1,
-  HIT = 2,
-  SHOOT = 3,
-  RELOAD = 4,
-  SHOOT_AND_HIT = 5,
-};
-
 struct PlaySoundEvent {
-  ReplaySoundType sound;
+  SoundType sound;
 };
 
 struct ReplayTargetMetadata {
@@ -87,7 +80,7 @@ class ReplayRecorder {
 
   void AddTarget(i64 now_micros, const Target& target);
   void RemoveTarget(i64 now_micros, u16 target_id);
-  void PlaySound(i64 now_micros, ReplaySoundType sound);
+  void PlaySound(i64 now_micros, SoundType sound);
   void SetPitchYaw(i64 frame_number, float pitch, float yaw);
   void AddMouseClick(i64 now_micros, bool is_hit);
   void AddScore(float score);

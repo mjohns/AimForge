@@ -3,13 +3,16 @@
 #include <functional>
 #include <optional>
 
-#include "aim/core/application.h"
+#include "aim/audio/sound_manager.h"
 #include "aim/core/camera.h"
 #include "aim/core/perf.h"
 #include "aim/core/screen.h"
 #include "aim/core/target.h"
 #include "aim/database/aim_db.h"
+#include "aim/proto/crosshair.pb.h"
 #include "aim/proto/scenario.pb.h"
+#include "aim/proto/settings.pb.h"
+#include "aim/proto/theme.pb.h"
 #include "aim/scenario/metronome.h"
 #include "aim/scenario/replay.h"
 #include "aim/scenario/scenario_timer.h"
@@ -99,11 +102,7 @@ class Scenario : public Screen {
   void AddNewTargetEvent(const Target& target);
   void AddRemoveTargetEvent(u16 target_id);
 
-  void PlayShootSound();
-  void PlayHitSound();
-  void PlayMissSound();
-  void PlayKillSound();
-  void PlayReloadSound();
+  void PlaySound(SoundType type);
 
   TargetProfile GetNextTargetProfile();
   Target GetTargetTemplate(const TargetProfile& profile);

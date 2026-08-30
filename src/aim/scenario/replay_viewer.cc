@@ -46,27 +46,6 @@ const std::vector<std::pair<PlaybackSpeed, std::string>> kPlaybackSpeeds{
     {PlaybackSpeed::SPEED_10, "0.10"},
 };
 
-void PlaySound(SoundManager& sound_manager, const SoundSettings& settings, ReplaySoundType type) {
-  switch (type) {
-    case ReplaySoundType::KILL:
-      sound_manager.PlayLoadedSound(settings.kill());
-      break;
-    case ReplaySoundType::HIT:
-      sound_manager.PlayLoadedSound(settings.hit());
-      break;
-    case ReplaySoundType::SHOOT:
-      sound_manager.PlayLoadedSound(settings.shoot());
-      break;
-    case ReplaySoundType::SHOOT_AND_HIT:
-      sound_manager.PlayLoadedSound(settings.shoot(), kShootAndHitGainLevel);
-      sound_manager.PlayLoadedSound(settings.hit());
-      break;
-    case ReplaySoundType::RELOAD:
-      sound_manager.PlayLoadedSound(settings.reload());
-      break;
-  }
-}
-
 std::vector<float> GetMouseSpeeds(const Replay& replay) {
   std::vector<float> result;
   result.reserve(replay.pitch_yaws.size());
@@ -274,7 +253,7 @@ class ReplayView {
           break;
         case ReplayEventType::PLAY_SOUND:
           if (sound_settings.has_value()) {
-            PlaySound(app_.sound_manager(), *sound_settings, event.data.play_sound.sound);
+            app_.sound_manager().PlayLoadedSound(*sound_settings, event.data.play_sound.sound);
           }
           break;
         case ReplayEventType::MOUSE_CLICK:

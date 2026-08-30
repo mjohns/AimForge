@@ -4,6 +4,7 @@
 #include "aim/common/util.h"
 #include "aim/core/application.h"
 #include "aim/scenario/replay.h"
+#include "aim/ui/ui_app.h"
 
 namespace aim {
 
@@ -14,38 +15,28 @@ constexpr const float kDefaultFastHitSoundsPerSecond = 15;
 
 class TrackingSound {
  public:
-  TrackingSound(SoundSettings settings, float hits_per_second, Application* app)
-      : app_(app),
-        settings_(settings),
+  TrackingSound(SoundSettings settings, float hits_per_second)
+      : settings_(settings),
         invoker_(TimedInvokerParams::TimesPerSecond(
                      FirstGreaterThanZero(hits_per_second, kDefaultHitSoundsPerSecond)),
-                 std::bind(&TrackingSound::PlaySound, this)) {
+                 [] {}) {
     stopwatch_.Start();
   }
 
   void DoTick(i64 now_micros, bool is_hitting, ReplayRecorder* replay) {
     is_hitting_ = is_hitting;
     bool invoked = invoker_.MaybeInvoke(stopwatch_.GetElapsedMicros());
-    if (invoked && replay) {
-      if (is_hitting) {
-        replay->PlaySound(now_micros, ReplaySoundType::HIT);
-      } else {
-        replay->PlaySound(now_micros, ReplaySoundType::SHOOT);
+    if (invoked) {
+      SoundType type = is_hitting ? SoundType::TRACKING_HIT : SoundType::TRACKING_MISS;
+      app_.sound_manager().PlayLoadedSound(settings_, type);
+      if (replay != nullptr) {
+        replay->PlaySound(now_micros, type);
       }
     }
   }
 
  private:
-  void PlaySound() {
-    if (is_hitting_) {
-      // app_->sound_manager()->PlayLoadedSound(settings_.shoot(), kShootAndHitGainLevel);
-      app_->sound_manager().PlayLoadedSound(settings_.hit());
-    } else {
-      app_->sound_manager().PlayLoadedSound(settings_.shoot());
-    }
-  }
-
-  Application* app_;
+  Application& app_ = GetUiApp();
   SoundSettings settings_;
   Stopwatch stopwatch_;
   TimedInvoker invoker_;
@@ -56,10 +47,8 @@ class ProximityTrackingSound {
  public:
   ProximityTrackingSound(SoundSettings settings,
                          float slow_hits_per_second,
-                         float fast_hits_per_second,
-                         Application* app)
-      : app_(app),
-        settings_(settings),
+                         float fast_hits_per_second)
+      : settings_(settings),
         slow_interval_micros_(TimesPerSecondToIntervalMicros(
             FirstGreaterThanZero(slow_hits_per_second, kDefaultSlowHitSoundsPerSecond))),
         fast_interval_micros_(TimesPerSecondToIntervalMicros(
@@ -96,22 +85,14 @@ class ProximityTrackingSound {
 
  private:
   void PlaySound(bool is_hitting, i64 replay_now_micros, ReplayRecorder* replay) {
-    if (is_hitting) {
-      // app_->sound_manager()->PlayLoadedSound(settings_.shoot(), kShootAndHitGainLevel);
-      app_->sound_manager().PlayLoadedSound(settings_.hit());
-    } else {
-      app_->sound_manager().PlayLoadedSound(settings_.shoot());
-    }
-    if (replay) {
-      if (is_hitting) {
-        replay->PlaySound(replay_now_micros, ReplaySoundType::HIT);
-      } else {
-        replay->PlaySound(replay_now_micros, ReplaySoundType::SHOOT);
-      }
+    SoundType type = is_hitting ? SoundType::TRACKING_HIT : SoundType::TRACKING_MISS;
+    app_.sound_manager().PlayLoadedSound(settings_, type);
+    if (replay != nullptr) {
+      replay->PlaySound(replay_now_micros, type);
     }
   }
 
-  Application* app_;
+  Application& app_ = GetUiApp();
   SoundSettings settings_;
   Stopwatch stopwatch_;
 

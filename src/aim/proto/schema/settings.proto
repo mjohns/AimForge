@@ -84,11 +84,16 @@ message SoundSettings {
   // Percent value from 0 to 1.
   float master_volume_level = 1;
 
-  SoundItem hit = 10;
-  SoundItem kill = 11;
+  SoundItem click_miss = 2;
+  SoundItem click_hit = 3;
+  SoundItem click_kill = 4;
+  SoundItem reload = 5;
+
+  SoundItem tracking_miss = 6;
+  SoundItem tracking_hit = 7;
+  SoundItem tracking_kill = 8;
+
   SoundItem metronome = 12;
-  SoundItem shoot = 13;
-  SoundItem reload = 14;
 }
 
 message ScenarioSettings {

@@ -59,10 +59,13 @@ void SoundManager::LoadSounds(const Settings& settings) {
     MIX_SetMixerGain(mixer_, level);
   }
   std::vector<SoundItem> sounds{
-      s.hit(),
-      s.kill(),
+      s.click_hit(),
+      s.click_miss(),
+      s.click_kill(),
+      s.tracking_hit(),
+      s.tracking_miss(),
+      s.tracking_kill(),
       s.metronome(),
-      s.shoot(),
       s.reload(),
   };
   for (const SoundItem& item : sounds) {
@@ -107,6 +110,28 @@ bool SoundManager::PlayLoadedSound(const SoundItem& item, float gain) {
     }
   }
 
+  return false;
+}
+
+bool SoundManager::PlayLoadedSound(const SoundSettings& settings, SoundType type, float gain) {
+  switch (type) {
+    case SoundType::CLICK_MISS:
+      return PlayLoadedSound(settings.click_miss(), gain);
+    case SoundType::CLICK_HIT:
+      return PlayLoadedSound(settings.click_hit(), gain);
+    case SoundType::CLICK_KILL:
+      return PlayLoadedSound(settings.click_kill(), gain);
+    case SoundType::TRACKING_MISS:
+      return PlayLoadedSound(settings.tracking_miss(), gain);
+    case SoundType::TRACKING_HIT:
+      return PlayLoadedSound(settings.tracking_hit(), gain);
+    case SoundType::TRACKING_KILL:
+      return PlayLoadedSound(settings.tracking_kill(), gain);
+    case SoundType::METRONOME:
+      return PlayLoadedSound(settings.metronome(), gain);
+    case SoundType::RELOAD:
+      return PlayLoadedSound(settings.reload(), gain);
+  }
   return false;
 }
 

@@ -687,38 +687,10 @@ void Scenario::AddRemoveTargetEvent(u16 target_id) {
   }
 }
 
-void Scenario::PlayShootSound() {
-  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
+void Scenario::PlaySound(SoundType type) {
+  app_.sound_manager().PlayLoadedSound(settings_.sounds(), type);
   if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
-  }
-}
-
-void Scenario::PlayReloadSound() {
-  app_.sound_manager().PlayLoadedSound(settings_.sounds().reload());
-  if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::RELOAD);
-  }
-}
-
-void Scenario::PlayHitSound() {
-  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
-  if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::HIT);
-  }
-}
-
-void Scenario::PlayMissSound() {
-  app_.sound_manager().PlayLoadedSound(settings_.sounds().shoot());
-  if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::SHOOT);
-  }
-}
-
-void Scenario::PlayKillSound() {
-  app_.sound_manager().PlayLoadedSound(settings_.sounds().kill());
-  if (replay_) {
-    replay_->PlaySound(timer_.GetElapsedMicros(), ReplaySoundType::KILL);
+    replay_->PlaySound(timer_.GetElapsedMicros(), type);
   }
 }
 

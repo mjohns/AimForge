@@ -607,9 +607,14 @@ class SettingsScreen : public UiScreen {
                           PROTO_FLOAT_FIELD(SoundItem, item, pitch_modifier));
       };
 
-      sound_input("Shoot", s.mutable_shoot());
-      sound_input("Hit", s.mutable_hit());
-      sound_input("Kill", s.mutable_kill());
+      sound_input("Click miss", s.mutable_click_miss());
+      sound_input("Click hit", s.mutable_click_hit());
+      sound_input("Click kill", s.mutable_click_kill());
+
+      sound_input("Tracking miss", s.mutable_tracking_miss());
+      sound_input("Tracking hit", s.mutable_tracking_hit());
+      sound_input("Tracking kill", s.mutable_tracking_kill());
+
       sound_input("Metronome", s.mutable_metronome());
       sound_input("Reload", s.mutable_reload());
 
