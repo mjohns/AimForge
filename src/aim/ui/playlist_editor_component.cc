@@ -186,15 +186,6 @@ class PlaylistEditorComponentImpl : public PlaylistEditorComponent {
                     PROTO_INT_FIELD(LevelsPlaylistDef, &levels, num_plays_per_level));
 
     ImGui::Separator();
-    ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Target score")
-                          .set_is_optional()
-                          .set_step(1, 2)
-                          .set_default(100)
-                          .set_width(char_x_ * 10),
-                      PROTO_FLOAT_FIELD(LevelsPlaylistDef, &levels, target_score));
-    ImGui::SameLine();
-    ImGui::HelpMarker(
-        "Override the target score for the scenario when playing using this playlist.");
 
     ImGui::InputFloat(ImGui::InputFloatParams::WithLabelAsId("Min level")
                           .set_is_optional()

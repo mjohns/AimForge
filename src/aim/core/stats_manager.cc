@@ -183,14 +183,6 @@ class StatsManagerImpl : public StatsManager {
 
 }  // namespace
 
-float GetTargetScore(const ScoreTargets& score_targets, const PlaylistDef& def) {
-  float target_score = def.levels().target_score();
-  if (target_score > 0) {
-    return target_score;
-  }
-  return score_targets.target_score();
-}
-
 float GetScenarioScoreLevel(float score, float target_score) {
   if (target_score <= 0 || score <= 0) {
     return 0;

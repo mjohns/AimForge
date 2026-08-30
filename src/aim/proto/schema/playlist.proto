@@ -22,9 +22,6 @@ message LevelsPlaylistDef {
   float level_step = 4;
 
   int32 num_plays_per_level = 5;
-
-  // Override the target score of the base scenario.
-  float target_score = 6;
 }
 
 message PlaylistItem {

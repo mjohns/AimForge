@@ -6,12 +6,9 @@
 
 #include "aim/common/simple_types.h"
 #include "aim/database/aim_db.h"
-#include "aim/proto/playlist.pb.h"
-#include "aim/proto/scenario.pb.h"
 
 namespace aim {
 
-float GetTargetScore(const ScoreTargets& score_targets, const PlaylistDef& def);
 float GetScenarioScoreLevel(float score, float target_score);
 
 struct AggregateScenarioStats {

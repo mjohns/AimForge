@@ -461,9 +461,8 @@ class PlaylistManagerImpl : public PlaylistManager {
       if (!scenario_def) {
         continue;
       }
-      float level =
-          GetScenarioScoreLevel(stats.high_score_stats.score,
-                                GetTargetScore(scenario_def->score_targets(), playlist.def()));
+      float level = GetScenarioScoreLevel(stats.high_score_stats.score,
+                                          scenario_def->score_targets().target_score());
       if (level < 5) {
         continue;
       }

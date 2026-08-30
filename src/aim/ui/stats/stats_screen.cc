@@ -279,12 +279,7 @@ class StatsScreen : public UiScreen {
 
   void DrawScreenInternal() {
     if (evaluated_scenario_def_) {
-      if (playlist_run_) {
-        score_target_ =
-            GetTargetScore(evaluated_scenario_def_->score_targets(), playlist_run_->playlist.def());
-      } else {
-        score_target_ = evaluated_scenario_def_->score_targets().target_score();
-      }
+      score_target_ = evaluated_scenario_def_->score_targets().target_score();
     }
 
     DrawTopBar(this);

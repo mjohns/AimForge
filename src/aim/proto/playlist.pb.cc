@@ -63,8 +63,7 @@ inline constexpr LevelsPlaylistDef::Impl_::Impl_(
         min_level_{0},
         max_level_{0},
         level_step_{0},
-        num_plays_per_level_{0},
-        target_score_{0} {}
+        num_plays_per_level_{0} {}
 
 template <typename>
 PROTOBUF_CONSTEXPR LevelsPlaylistDef::LevelsPlaylistDef(::_pbi::ConstantInitialized)
@@ -133,19 +132,17 @@ const ::uint32_t
         2,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_._has_bits_),
-        9, // hasbit index offset
+        8, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.base_scenario_),
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.min_level_),
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.max_level_),
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.level_step_),
         PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.num_plays_per_level_),
-        PROTOBUF_FIELD_OFFSET(::aim::LevelsPlaylistDef, _impl_.target_score_),
         0,
         1,
         2,
         3,
         4,
-        5,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::aim::PlaylistItem, _impl_._has_bits_),
         5, // hasbit index offset
@@ -159,7 +156,7 @@ static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::aim::PlaylistDef)},
         {9, sizeof(::aim::LevelsPlaylistDef)},
-        {24, sizeof(::aim::PlaylistItem)},
+        {22, sizeof(::aim::PlaylistItem)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::aim::_PlaylistDef_default_instance_._instance,
@@ -171,18 +168,18 @@ const char descriptor_table_protodef_playlist_2eproto[] ABSL_ATTRIBUTE_SECTION_V
     "\n\016playlist.proto\022\003aim\"l\n\013PlaylistDef\022\023\n\013"
     "description\030\001 \001(\t\022 \n\005items\030\002 \003(\0132\021.aim.P"
     "laylistItem\022&\n\006levels\030\004 \001(\0132\026.aim.Levels"
-    "PlaylistDef\"\227\001\n\021LevelsPlaylistDef\022\025\n\rbas"
+    "PlaylistDef\"\201\001\n\021LevelsPlaylistDef\022\025\n\rbas"
     "e_scenario\030\001 \001(\t\022\021\n\tmin_level\030\002 \001(\002\022\021\n\tm"
     "ax_level\030\003 \001(\002\022\022\n\nlevel_step\030\004 \001(\002\022\033\n\023nu"
-    "m_plays_per_level\030\005 \001(\005\022\024\n\014target_score\030"
-    "\006 \001(\002\"3\n\014PlaylistItem\022\020\n\010scenario\030\001 \001(\t\022"
-    "\021\n\tnum_plays\030\002 \001(\005b\010editionsp\350\007"
+    "m_plays_per_level\030\005 \001(\005\"3\n\014PlaylistItem\022"
+    "\020\n\010scenario\030\001 \001(\t\022\021\n\tnum_plays\030\002 \001(\005b\010ed"
+    "itionsp\350\007"
 };
 static ::absl::once_flag descriptor_table_playlist_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_playlist_2eproto = {
     false,
     false,
-    351,
+    329,
     descriptor_table_protodef_playlist_2eproto,
     "playlist.proto",
     &descriptor_table_playlist_2eproto_once,
@@ -601,9 +598,9 @@ LevelsPlaylistDef::LevelsPlaylistDef(
                offsetof(Impl_, min_level_),
            reinterpret_cast<const char*>(&from._impl_) +
                offsetof(Impl_, min_level_),
-           offsetof(Impl_, target_score_) -
+           offsetof(Impl_, num_plays_per_level_) -
                offsetof(Impl_, min_level_) +
-               sizeof(Impl_::target_score_));
+               sizeof(Impl_::num_plays_per_level_));
 
   // @@protoc_insertion_point(copy_constructor:aim.LevelsPlaylistDef)
 }
@@ -618,9 +615,9 @@ inline void LevelsPlaylistDef::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena)
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, min_level_),
            0,
-           offsetof(Impl_, target_score_) -
+           offsetof(Impl_, num_plays_per_level_) -
                offsetof(Impl_, min_level_) +
-               sizeof(Impl_::target_score_));
+               sizeof(Impl_::num_plays_per_level_));
 }
 LevelsPlaylistDef::~LevelsPlaylistDef() {
   // @@protoc_insertion_point(destructor:aim.LevelsPlaylistDef)
@@ -680,16 +677,16 @@ LevelsPlaylistDef::GetClassData() const {
   return LevelsPlaylistDef_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 6, 0, 43, 2>
+const ::_pbi::TcParseTable<3, 5, 0, 43, 2>
 LevelsPlaylistDef::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_._has_bits_),
     0, // no _extensions_
-    6, 56,  // max_field_number, fast_idx_mask
+    5, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967232,  // skipmap
+    4294967264,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    6,  // num_field_entries
+    5,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     LevelsPlaylistDef_class_data_.base(),
@@ -720,10 +717,7 @@ LevelsPlaylistDef::_table_ = {
     {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(LevelsPlaylistDef, _impl_.num_plays_per_level_), 4>(),
      {40, 4, 0,
       PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.num_plays_per_level_)}},
-    // float target_score = 6;
-    {::_pbi::TcParser::FastF32S1,
-     {53, 5, 0,
-      PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.target_score_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     {::_pbi::TcParser::MiniParse, {}},
   }}, {{
     65535, 65535
@@ -738,8 +732,6 @@ LevelsPlaylistDef::_table_ = {
     {PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.level_step_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
     // int32 num_plays_per_level = 5;
     {PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.num_plays_per_level_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
-    // float target_score = 6;
-    {PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.target_score_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kFloat)},
   }},
   // no aux_entries
   {{
@@ -759,10 +751,10 @@ PROTOBUF_NOINLINE void LevelsPlaylistDef::Clear() {
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
     _impl_.base_scenario_.ClearNonDefaultToEmpty();
   }
-  if (BatchCheckHasBit(cached_has_bits, 0x0000003eU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000001eU)) {
     ::memset(&_impl_.min_level_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.target_score_) -
-        reinterpret_cast<char*>(&_impl_.min_level_)) + sizeof(_impl_.target_score_));
+        reinterpret_cast<char*>(&_impl_.num_plays_per_level_) -
+        reinterpret_cast<char*>(&_impl_.min_level_)) + sizeof(_impl_.num_plays_per_level_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -823,13 +815,6 @@ PROTOBUF_NOINLINE void LevelsPlaylistDef::Clear() {
             stream, this_._internal_num_plays_per_level(), target);
   }
 
-  // float target_score = 6;
-  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteFloatToArray(
-        6, this_._internal_target_score(), target);
-  }
-
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -855,7 +840,7 @@ PROTOBUF_NOINLINE void LevelsPlaylistDef::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  total_size += ::absl::popcount(0x0000002eU & cached_has_bits) * 5;
+  total_size += ::absl::popcount(0x0000000eU & cached_has_bits) * 5;
   if (BatchCheckHasBit(cached_has_bits, 0x00000011U)) {
     // string base_scenario = 1;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
@@ -886,7 +871,7 @@ void LevelsPlaylistDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000003fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x0000001fU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       _this->_internal_set_base_scenario(from._internal_base_scenario());
     }
@@ -901,9 +886,6 @@ void LevelsPlaylistDef::MergeImpl(::google::protobuf::MessageLite& to_msg,
     }
     if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       _this->_impl_.num_plays_per_level_ = from._impl_.num_plays_per_level_;
-    }
-    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
-      _this->_impl_.target_score_ = from._impl_.target_score_;
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -927,8 +909,8 @@ void LevelsPlaylistDef::InternalSwap(LevelsPlaylistDef* PROTOBUF_RESTRICT PROTOB
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.base_scenario_, &other->_impl_.base_scenario_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.target_score_)
-      + sizeof(LevelsPlaylistDef::_impl_.target_score_)
+      PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.num_plays_per_level_)
+      + sizeof(LevelsPlaylistDef::_impl_.num_plays_per_level_)
       - PROTOBUF_FIELD_OFFSET(LevelsPlaylistDef, _impl_.min_level_)>(
           reinterpret_cast<char*>(&_impl_.min_level_),
           reinterpret_cast<char*>(&other->_impl_.min_level_));
