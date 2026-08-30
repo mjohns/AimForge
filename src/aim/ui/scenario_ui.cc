@@ -103,8 +103,6 @@ struct ScenarioDialogs {
   CreateLevelsPlaylistDialog create_levels_playlist_dialog;
   SelectVariationDialog select_variation_dialog =
       SelectVariationDialog::ForScenarios("SelectScenarioVariation");
-  // TODO: This should not be in dialogs. Maybe use events to communicate somehow?
-  bool update_filtered_scenarios = false;
 };
 
 // TODO: Share with ObjectBrowser menu somehow.
@@ -133,7 +131,6 @@ void DrawScenarioRightClickMenu(const char* popup_id,
   }
   if (ImGui::Selectable("Remove from recents")) {
     app.history_manager().DeleteRecentView(ObjectType::SCENARIO, scenario_name);
-    dialogs->update_filtered_scenarios = true;
   }
   if (ImGui::BeginMenu("Add to")) {
     ImGui::LoopId playlist_loop_id;

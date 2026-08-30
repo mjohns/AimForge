@@ -96,7 +96,7 @@ void DrawTopBar(UiScreen* screen) {
   ImGui::SameLine();
 
   const char* menu_id = "top_bar_menu";
-  if (ImGui::BeginPopupContextItem(menu_id)) {
+  if (ImGui::BeginPopup(menu_id)) {
     auto normal_font = app.font_manager().UseDefault();
     if (ImGui::Selectable(std::format("{} Settings", icons::kSettings).c_str())) {
       std::string current_scenario_name = current_scenario ? current_scenario->name : "";
