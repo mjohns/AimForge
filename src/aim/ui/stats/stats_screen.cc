@@ -282,7 +282,7 @@ class StatsScreen : public UiScreen {
       score_target_ = evaluated_scenario_def_->score_targets().target_score();
     }
 
-    DrawTopBar(this);
+    top_bar_->Draw();
     ImGui::Spacing();
     ImGui::Spacing();
 
@@ -867,6 +867,7 @@ class StatsScreen : public UiScreen {
   std::optional<ScoresOverTime> scores_over_time_;
   float score_target_ = 0;
   bool delay_display_;
+  std::unique_ptr<TopBar> top_bar_ = CreateTopBar();
 };
 
 }  // namespace

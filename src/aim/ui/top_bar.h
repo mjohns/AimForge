@@ -1,9 +1,16 @@
 #pragma once
 
-#include "aim/ui/ui_screen.h"
+#include <memory>
 
 namespace aim {
 
-void DrawTopBar(UiScreen* screen);
+class TopBar {
+ public:
+  ~TopBar() {}
+
+  virtual void Draw() = 0;
+};
+
+std::unique_ptr<TopBar> CreateTopBar();
 
 }  // namespace aim

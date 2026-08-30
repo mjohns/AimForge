@@ -196,7 +196,7 @@ class HomeScreen : public UiScreen {
       set_dpi_dialog_.NotifyOpen();
     }
 
-    DrawTopBar(this);
+    top_bar_->Draw();
     ImGui::Spacing();
     ImGui::Spacing();
 
@@ -354,6 +354,7 @@ class HomeScreen : public UiScreen {
   std::unique_ptr<GuidesComponent> guides_component_;
   bool request_dpi_ = false;
   SetInitialDpiDialog set_dpi_dialog_;
+  std::unique_ptr<TopBar> top_bar_ = CreateTopBar();
 };
 
 }  // namespace
