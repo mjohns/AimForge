@@ -31,15 +31,15 @@ std::string GetBaseNameForScenarioSettings(const std::string& full_name) {
 
 SoundSettings GetDefaultSoundSettings() {
   SoundSettings sounds;
-  sounds.mutable_click_miss()->set_name("AF Shoot.ogg");
-  sounds.mutable_click_hit()->set_name("AF Hit.ogg");
-  sounds.mutable_click_kill()->set_name("AF Kill.ogg");
+  sounds.mutable_click_miss()->set_name("miss.ogg");
+  sounds.mutable_click_hit()->set_name("hit.ogg");
+  sounds.mutable_click_kill()->set_name("kill.ogg");
 
   sounds.mutable_tracking_hit()->set_name("apa-hit-4.ogg");
-  sounds.mutable_tracking_kill()->set_name("AF Kill.ogg");
+  sounds.mutable_tracking_kill()->set_name("kill.ogg");
 
-  sounds.mutable_reload()->set_name("AF Reload.ogg");
-  sounds.mutable_metronome()->set_name("AF Metronome.ogg");
+  sounds.mutable_reload()->set_name("reload.ogg");
+  sounds.mutable_metronome()->set_name("metronome.ogg");
   return sounds;
 }
 

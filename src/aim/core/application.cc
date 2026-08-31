@@ -629,6 +629,7 @@ class ApplicationImpl : public Application {
                                               history_manager_.get());
     std::vector<std::filesystem::path> sound_dirs = {
         file_system_->GetUserDataPath("resources/sounds"),
+        file_system_->GetBasePath("resources/sounds"),
     };
     sound_manager_ = std::make_unique<SoundManager>(sdl_mixer_, sound_dirs);
 
