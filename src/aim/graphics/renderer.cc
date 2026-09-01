@@ -251,7 +251,7 @@ class RendererImpl : public Renderer {
     const glm::mat4 view_projection = projection * look_at.transform;
 
     times->build_draw_data.start = stopwatch.GetElapsedMicros();
-    DrawData draw_data;
+    draw_data_.Clear();
     GetDrawDataForScenario(view_projection,
                            room,
                            shot_type == ShotType::kTrackingProximity,
@@ -260,11 +260,11 @@ class RendererImpl : public Renderer {
                            targets,
                            look_at,
                            texture_manager_,
-                           &draw_data);
+                           &draw_data_);
     times->build_draw_data.end = stopwatch.GetElapsedMicros();
 
     SolidColorInstances solid_color_instances;
-    UploadSolidColorInstanceData(draw_data, &solid_color_instances, times, stopwatch, ctx);
+    UploadSolidColorInstanceData(draw_data_, &solid_color_instances, times, stopwatch, ctx);
 
     // Setup and start a render pass
     SDL_GPUColorTargetInfo target_info = {};
@@ -292,7 +292,7 @@ class RendererImpl : public Renderer {
         SDL_BeginGPURenderPass(ctx->command_buffer, &target_info, 1, &depth_stencil_target_info);
 
     times->render_draw_data.start = stopwatch.GetElapsedMicros();
-    RenderDrawData(draw_data, solid_color_instances, ctx);
+    RenderDrawData(draw_data_, solid_color_instances, ctx);
     times->render_draw_data.end = stopwatch.GetElapsedMicros();
 
     times->end_render_pass = stopwatch.GetElapsedMicros();
@@ -905,6 +905,7 @@ class RendererImpl : public Renderer {
   int viewport_height_ = 0;
 
   TextureManager texture_manager_;
+  DrawData draw_data_;
 };
 
 }  // namespace

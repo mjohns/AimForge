@@ -75,6 +75,15 @@ struct DrawData {
   std::vector<SolidColorInstanceData> solid_quads;
   std::vector<SolidColorInstanceData> solid_cylinder_walls;
   std::vector<SolidColorInstanceData> solid_circles;
+
+  void Clear() {
+    texture_walls.clear();
+    solid_spheres.clear();
+    solid_cylinders.clear();
+    solid_quads.clear();
+    solid_cylinder_walls.clear();
+    solid_circles.clear();
+  }
 };
 
 // Turns the scenario scene description into normalized and sorted draw data that can be easily
