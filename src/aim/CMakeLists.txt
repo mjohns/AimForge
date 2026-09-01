@@ -92,6 +92,8 @@ set(SRCS
     "graphics/image.h"
     "graphics/renderer.cc"
     "graphics/renderer.h"
+    "graphics/draw_data.cc"
+    "graphics/draw_data.h"
     "graphics/shapes.cc"
     "graphics/shapes.h"
     "graphics/textures.cc"
