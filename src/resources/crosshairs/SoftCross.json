@@ -1,0 +1,18 @@
+{
+ "name": "Dot",
+ "layers": [
+  {
+   "overrideColor": {
+    "r": 0,
+    "g": 0,
+    "b": 0
+   },
+   "scale": 0.95,
+   "alpha": 1,
+   "image": {
+    "fileName": "snowi_softcross.png"
+   }
+  }
+ ]
+}
+

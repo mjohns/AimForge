@@ -1,59 +1,59 @@
 {
  "roofAppearance": {
   "texture": {
-   "textureName": "AF Dark Grid.png",
-   "scale": 5.4
+   "textureName": "Solarized Grid.jpg",
+   "scale": 5.15
   },
   "mixColor": {},
   "mixPercent": 0.259999961
  },
  "sideAppearance": {
   "texture": {
-   "textureName": "AF Dark Grid.png",
-   "scale": 5.4
+   "textureName": "Solarized Grid.jpg",
+   "scale": 5.15
   },
   "mixColor": {},
   "mixPercent": 0.159999982
  },
  "frontAppearance": {
   "texture": {
-   "textureName": "AF Dark Grid.png",
-   "scale": 5.4
+   "textureName": "Solarized Grid.jpg",
+   "scale": 5.15
   },
   "mixColor": {}
  },
  "floorAppearance": {
   "texture": {
-   "textureName": "AF Dark Grid.png",
-   "scale": 5.4
+   "textureName": "Solarized Grid.jpg",
+   "scale": 5.15
   },
   "mixColor": {},
   "mixPercent": 0.239999965
  },
  "crosshair": {
   "color": {
-   "hex": "#ffffff"
+   "hex": "#cb4b16"
   },
   "outlineColor": {
    "hex": "#000000"
   }
  },
  "targetColor": {
-  "r": 166,
-  "g": 227,
-  "b": 161
+  "r": 0,
+  "g": 43,
+  "b": 54
  },
  "ghostTargetColor": {
-  "r": 166,
-  "g": 227,
-  "b": 161,
-  "multiplier": 0.5
+  "r": 88,
+  "g": 110,
+  "b": 117,
+  "multiplier": 0.73
  },
  "healthBar": {
   "healthColor": {
-   "r": 148,
-   "g": 226,
-   "b": 213
+   "r": 211,
+   "g": 54,
+   "b": 130
   },
   "backgroundColor": {
    "r": 101,

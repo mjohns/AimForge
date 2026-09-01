@@ -46,10 +46,10 @@ SoundSettings GetDefaultSoundSettings() {
 Settings GetDefaultSettings() {
   Settings settings;
   settings.set_cm_per_360(45);
-  settings.set_current_crosshair_name("AF AlphaDot");
+  settings.set_current_crosshair_name("Dot");
   settings.set_crosshair_size(15);
   settings.mutable_health_bar()->set_show(true);
-  settings.set_theme_name("AF Marble");
+  settings.set_theme_name("Marble");
 
   Keybinds* binds = settings.mutable_keybinds();
   binds->mutable_fire()->set_mapping1("Left Click");

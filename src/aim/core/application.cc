@@ -136,10 +136,10 @@ std::optional<std::string> InitializeAimForgeFolder(FileSystem* fs) {
   CopyInitialDirIfNotExists("sounds", "resources/sounds", fs);
   CopyInitialDirIfNotExists("crosshairs", "resources/crosshairs", fs);
 
-  std::error_code ec;
-  std::filesystem::copy(fs->GetBasePath("resources/sounds/AF Reload.ogg"),
-                        fs->GetUserDataPath("resources/sounds/AF Reload.ogg"),
-                        ec);
+  // std::error_code ec;
+  // std::filesystem::copy(fs->GetBasePath("resources/sounds/AF Reload.ogg"),
+  //                       fs->GetUserDataPath("resources/sounds/AF Reload.ogg"),
+  //                       ec);
   return {};
 }
 
