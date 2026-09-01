@@ -1,13 +1,12 @@
 #include "geometry.h"
 
-// For glm intersect
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include "glm/geometric.hpp"
 #include "glm/glm.hpp"                   // IWYU pragma: keep
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
-#include "glm/gtx/intersect.hpp"
 #include "glm/trigonometric.hpp"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/intersect.hpp"
 
 namespace aim {
 

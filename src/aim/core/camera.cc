@@ -1,7 +1,5 @@
 ﻿#include "camera.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include "aim/common/geometry.h"
 #include "aim/common/util.h"
 #include "aim/common/wall.h"
@@ -10,11 +8,13 @@
 #include "glm/geometric.hpp"
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
-#include "glm/gtx/rotate_vector.hpp"
-#include "glm/gtx/vector_angle.hpp"
-#include "glm/mat4x4.hpp"  // IWYU pragma: keep
+#include "glm/mat4x4.hpp"                // IWYU pragma: keep
 #include "glm/trigonometric.hpp"
 #include "glm/vec3.hpp"  // IWYU pragma: keep
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/vector_angle.hpp"
 
 namespace aim {
 namespace {

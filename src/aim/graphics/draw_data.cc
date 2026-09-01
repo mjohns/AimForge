@@ -1,12 +1,5 @@
 #include "draw_data.h"
 
-#include "aim/core/camera.h"
-#include "aim/core/target.h"
-#include "aim/proto/settings.pb.h"
-#include "aim/proto/theme.pb.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <cassert>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
@@ -14,10 +7,16 @@
 #include "aim/common/geometry.h"
 #include "aim/common/simple_types.h"
 #include "aim/common/util.h"
+#include "aim/core/camera.h"
+#include "aim/core/target.h"
 #include "aim/graphics/textures.h"
+#include "aim/proto/settings.pb.h"
+#include "aim/proto/theme.pb.h"
 #include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
+#include "glm/mat4x4.hpp"                // IWYU pragma: keep
+                                         //
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/vector_angle.hpp"
-#include "glm/mat4x4.hpp"  // IWYU pragma: keep
 
 namespace aim {
 namespace {

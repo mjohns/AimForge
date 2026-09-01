@@ -1,19 +1,14 @@
 #include "renderer.h"
 
-#include "SDL3/SDL_gpu.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <cassert>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
+#include "SDL3/SDL_gpu.h"
 #include "aim/common/log.h"
 #include "aim/common/simple_types.h"
 #include "aim/graphics/draw_data.h"
 #include "aim/graphics/shapes.h"
 #include "aim/graphics/textures.h"
-#include "glm/gtc/matrix_transform.hpp"  // IWYU pragma: keep
-#include "glm/gtx/vector_angle.hpp"
 #include "glm/mat4x4.hpp"  // IWYU pragma: keep
 #include "imgui/backends/imgui_impl_sdlgpu3.h"
 
