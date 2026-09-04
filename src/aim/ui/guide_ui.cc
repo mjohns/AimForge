@@ -34,7 +34,7 @@ class AddGuideDialog {
     open_ = true;
   }
 
-  bool Draw(Application& app) {
+  bool Draw(Application& app, std::string* guide_name) {
     ImGui::IdGuard cid("AddGuideDialogContent");
     bool did_add = false;
     if (is_open_) {
@@ -51,8 +51,8 @@ class AddGuideDialog {
           auto taken_names = app.guide_manager().GetAllRelativeNamesInBundle(name_.bundle_name());
           *name_.mutable_relative_name() = MakeUniqueName(name_.relative_name(), taken_names);
           app.guide_manager().UpdateGuide(name_.full_name(), GuideDef());
-          // current_guide_name_ = name_.full_name();
           app.history_manager().UpdateRecentView(ObjectType::GUIDE, name_.full_name());
+          *guide_name = name_.full_name();
           did_add = true;
           ImGui::CloseCurrentPopup();
           is_open_ = false;
@@ -184,8 +184,15 @@ class GuidesComponentImpl : public GuidesComponent {
   void Show() override {
     bool go_back = false;
     ImGui::IdGuard cid("Guides");
-    if (add_dialog_.Draw(app_)) {
+    std::string added_guide_name;
+    if (add_dialog_.Draw(app_, &added_guide_name)) {
       app_.bundle_manager().SaveDirtyBundles();
+
+      current_guide_name_ = added_guide_name;
+
+      GuideEditorOptions opts;
+      opts.name = added_guide_name;
+      app_.PushNextScreen(CreateGuideEditorScreen(opts));
     }
 
     if (!current_guide_name_.empty()) {
