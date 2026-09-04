@@ -26,9 +26,16 @@ class GuideManager {
   virtual std::unordered_set<std::string> GetDirtyBundles() = 0;
   virtual void ClearDirtyBundles() = 0;
 
+  virtual void SetCurrentGuide(const std::string& name) = 0;
+  virtual const std::string& current_guide_name() const = 0;
+
   virtual void AddGuidesForBundle(const std::string& bundle_name, BundleFile* bundle_file) = 0;
 
   virtual std::optional<GuideItem> GetGuide(const std::string& guide_name) = 0;
+
+  std::optional<GuideItem> GetCurrentGuide()  {
+    return GetGuide(current_guide_name());
+  }
 
   virtual std::shared_ptr<std::vector<std::string>> guide_names() const = 0;
 

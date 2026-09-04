@@ -173,14 +173,6 @@ class GuideViewer {
 
 class GuidesComponentImpl : public GuidesComponent {
  public:
-  GuidesComponentImpl() {
-    auto last_guide = app_.history_manager().GetRecentViews(ObjectType::GUIDE, 1);
-    if (last_guide.size() > 0) {
-      current_guide_name_ = last_guide[0].name;
-      guide_history_.push_back(current_guide_name_);
-    }
-  }
-
   void Show() override {
     bool go_back = false;
     ImGui::IdGuard cid("Guides");
@@ -188,21 +180,24 @@ class GuidesComponentImpl : public GuidesComponent {
     if (add_dialog_.Draw(app_, &added_guide_name)) {
       app_.bundle_manager().SaveDirtyBundles();
 
-      current_guide_name_ = added_guide_name;
+      app_.guide_manager().SetCurrentGuide(added_guide_name);
 
       GuideEditorOptions opts;
       opts.name = added_guide_name;
       app_.PushNextScreen(CreateGuideEditorScreen(opts));
     }
 
-    if (!current_guide_name_.empty()) {
-      if (guide_history_.empty()) {
-        guide_history_.push_back(current_guide_name_);
-      } else if (guide_history_.back() != current_guide_name_) {
-        guide_history_.push_back(current_guide_name_);
-      }
-      if (guide_history_.size() > kMaxHistorySize) {
-        guide_history_.pop_front();
+    {
+      const std::string& current_guide_name = app_.guide_manager().current_guide_name();
+      if (!current_guide_name.empty()) {
+        if (guide_history_.empty()) {
+          guide_history_.push_back(current_guide_name);
+        } else if (guide_history_.back() != current_guide_name) {
+          guide_history_.push_back(current_guide_name);
+        }
+        if (guide_history_.size() > kMaxHistorySize) {
+          guide_history_.pop_front();
+        }
       }
     }
 
@@ -220,8 +215,8 @@ class GuidesComponentImpl : public GuidesComponent {
       ObjectBrowser::Result result;
       browser_->Draw(&result);
       if (result.selected_object_name) {
-        current_guide_name_ = *result.selected_object_name;
-        app_.history_manager().UpdateRecentView(ObjectType::GUIDE, current_guide_name_);
+        app_.guide_manager().SetCurrentGuide(*result.selected_object_name);
+        app_.history_manager().UpdateRecentView(ObjectType::GUIDE, *result.selected_object_name);
       }
 
       ImGui::EndChild();
@@ -229,7 +224,7 @@ class GuidesComponentImpl : public GuidesComponent {
       ImGui::TableNextColumn();
       ImGui::BeginChild("GuideColumn");
 
-      std::optional<GuideItem> guide = app_.guide_manager().GetGuide(current_guide_name_);
+      std::optional<GuideItem> guide = app_.guide_manager().GetCurrentGuide();
       if (guide) {
         ImGui::Spacing();
         if (guide_history_.size() > 1) {
@@ -254,7 +249,7 @@ class GuidesComponentImpl : public GuidesComponent {
         GuideViewer::Result result;
         viewer_.Draw(*guide, &result);
         if (result.selected_guide) {
-          current_guide_name_ = *result.selected_guide;
+          app_.guide_manager().SetCurrentGuide(*result.selected_guide);
         }
       }
 
@@ -277,7 +272,7 @@ class GuidesComponentImpl : public GuidesComponent {
 
     if (go_back && guide_history_.size() > 1) {
       guide_history_.pop_back();
-      current_guide_name_ = guide_history_.back();
+      app_.guide_manager().SetCurrentGuide(guide_history_.back());
     }
   }
 
@@ -302,7 +297,6 @@ class GuidesComponentImpl : public GuidesComponent {
   std::unique_ptr<ObjectBrowser> browser_ = CreateObjectBrowser(ObjectType::GUIDE);
   std::unique_ptr<PlaylistComponent> playlist_component_ = CreatePlaylistComponent();
   AddGuideDialog add_dialog_{"AddGuideDialog"};
-  std::string current_guide_name_;
   GuideViewer viewer_;
   std::deque<std::string> guide_history_;
 };

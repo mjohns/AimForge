@@ -4,6 +4,7 @@
 #include "aim/common/imgui_ext.h"
 #include "aim/common/mat_icons.h"
 #include "aim/common/simple_types.h"
+#include "aim/core/guide_manager.h"
 #include "aim/core/history_manager.h"
 #include "aim/core/local_store.h"
 #include "aim/core/scenario_manager.h"
@@ -103,16 +104,21 @@ class HomeScreen : public UiScreen {
     }
 
     auto last_playlist = app_.history_manager().GetRecentViews(ObjectType::PLAYLIST, 1);
-
     if (last_playlist.size() > 0) {
       std::string name = last_playlist[0].name;
       if (name.size() > 0) {
         app_.playlist_manager().SetCurrentPlaylist(name);
       }
     }
+
     auto last_scenario = app_.history_manager().GetRecentViews(ObjectType::SCENARIO, 1);
     if (last_scenario.size() > 0) {
       app_.scenario_manager().SetCurrentScenario(last_scenario[0].name);
+    }
+
+    auto last_guide = app_.history_manager().GetRecentViews(ObjectType::GUIDE, 1);
+    if (last_guide.size() > 0) {
+      app_.guide_manager().SetCurrentGuide(last_guide[0].name);
     }
   }
 

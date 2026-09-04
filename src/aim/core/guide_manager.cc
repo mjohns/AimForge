@@ -69,6 +69,14 @@ class GuideManagerImpl : public GuideManager {
     return names;
   }
 
+  void SetCurrentGuide(const std::string& name) override {
+    current_guide_name_ = name;
+  }
+
+  const std::string& current_guide_name() const override {
+    return current_guide_name_;
+  }
+
   void UpdateGuide(const std::string& name, const GuideDef& def) override {
     auto& g = guide_map_[name];
     g.name = name;
@@ -85,6 +93,9 @@ class GuideManagerImpl : public GuideManager {
   }
 
   bool RenameGuide(const std::string& old_name, const std::string& new_name) override {
+    if (current_guide_name_ == old_name) {
+      current_guide_name_ = new_name;
+    }
     if (guide_map_.contains(new_name)) {
       return false;
     }
@@ -192,6 +203,7 @@ class GuideManagerImpl : public GuideManager {
   std::unordered_set<std::string> dirty_bundles_;
   std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
       rename_listeners_;
+  std::string current_guide_name_;
 };
 
 }  // namespace
