@@ -6,7 +6,7 @@ namespace aim {
 
 class TopBar {
  public:
-  ~TopBar() {}
+  virtual ~TopBar() {}
 
   virtual void Draw() = 0;
 };
