@@ -85,6 +85,7 @@ SDL_GPUShader* LoadShader(SDL_GPUDevice* device,
 class RendererImpl : public Renderer {
  public:
   RendererImpl(const std::vector<std::filesystem::path>& texture_dirs,
+               ScreenInfo screen_info,
                SDL_GPUSampleCount msaa_sample_count,
                SDL_GPUDevice* device,
                SDL_Window* sdl_window)
@@ -92,7 +93,8 @@ class RendererImpl : public Renderer {
         sdl_window_(sdl_window),
         msaa_sample_count_(msaa_sample_count),
         texture_manager_(texture_dirs, device) {
-    SDL_GetWindowSizeInPixels(sdl_window_, &viewport_width_, &viewport_height_);
+    viewport_width_ = screen_info.width;
+    viewport_height_ = screen_info.height;
   }
 
   ~RendererImpl() override {
@@ -907,11 +909,12 @@ class RendererImpl : public Renderer {
 
 std::unique_ptr<Renderer> CreateRenderer(const std::vector<std::filesystem::path>& texture_dirs,
                                          const std::filesystem::path& shader_dir,
+                                         ScreenInfo screen_info,
                                          SDL_GPUSampleCount msaa_sample_count,
                                          SDL_GPUDevice* device,
                                          SDL_Window* sdl_window) {
-  auto renderer =
-      std::make_unique<RendererImpl>(texture_dirs, msaa_sample_count, device, sdl_window);
+  auto renderer = std::make_unique<RendererImpl>(
+      texture_dirs, screen_info, msaa_sample_count, device, sdl_window);
   if (!renderer->Initialize(shader_dir)) {
     return {};
   }

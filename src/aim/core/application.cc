@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include <functional>
+#include <iostream>
 #include <memory>
 
 #include "SDL3/SDL.h"  // IWYU pragma: keep
@@ -558,14 +559,12 @@ class ApplicationImpl : public Application {
     EnableVsync();
 
     trace.Add("SDL_GetWindowSize");
-    SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
-    float window_display_scale = SDL_GetWindowDisplayScale(sdl_window_);
-    float window_pixel_density = SDL_GetWindowPixelDensity(sdl_window_);
-    window_pixel_width_ = window_width_ * window_pixel_density;
-    window_pixel_height_ = window_height_ * window_pixel_density;
-    logger_->debug("SDL_GetWindowDisplayScale: {}, SDL_GetWindowPixelDensity: {}",
-                   window_display_scale,
-                   window_pixel_density);
+
+    // SDL_GetWindowSize(sdl_window_, &window_width_, &window_height_);
+    SDL_Rect safe_area;
+    SDL_GetDisplayUsableBounds(display_.display_id, &safe_area);
+    window_width_ = safe_area.w;
+    window_height_ = safe_area.h;
 
     state_->initialization_times.sdl.end = stopwatch.GetElapsedMicros();
 
@@ -646,8 +645,8 @@ class ApplicationImpl : public Application {
     if (!std::filesystem::exists(shader_dir)) {
       return std::format("Compiled shader folder missing at \"{}\".", shader_dir.string());
     }
-    renderer_ =
-        CreateRenderer(texture_dirs, shader_dir, msaa_sample_count_, gpu_device_, sdl_window_);
+    renderer_ = CreateRenderer(
+        texture_dirs, shader_dir, screen_info(), msaa_sample_count_, gpu_device_, sdl_window_);
     if (!renderer_) {
       return "Failed to initialize renderer.";
     }

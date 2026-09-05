@@ -26,7 +26,7 @@ class SelectObjectDialogImpl : public SelectObjectDialog {
 
     if (popup_.Begin()) {
       auto screen = app_.screen_info();
-      ImGui::BeginChild("SelectObjectContainer", ImVec2(screen.width * 0.6, screen.height * 0.8));
+      ImGui::BeginChild("SelectObjectContainer", ImVec2(screen.width * 0.5, screen.height * 0.8));
       selected = DrawPopup(result);
       ImGui::EndChild();
       popup_.End();
@@ -57,18 +57,19 @@ class SelectObjectDialogImpl : public SelectObjectDialog {
     float char_x = ImGui::GetDefaultCharSizeX();
     ImGui::SetNextItemWidth(char_x * 30);
     if (ImGui::IsWindowAppearing()) {
-        ImGui::SetKeyboardFocusHere();
+      ImGui::SetKeyboardFocusHere();
     }
     ImGui::InputText("###SearchInput", &search_text_);
     ImGui::SameLine();
-    if (ImGui::ClearButton()) {
+    if (search_text_.size() > 0 && ImGui::ClearButton()) {
       search_text_ = "";
     }
     if (search_text_.size() > 0) {
       ImGui::Indent();
       auto names = GetNames();
-      SearchSelectorOptions options;
 
+      SearchSelectorOptions options;
+      options.max_results = 50;
       std::optional<std::string> selected_playlist = SearchSelector(search_text_, *names, options);
       if (selected_playlist) {
         result->selected_objects.push_back(*selected_playlist);
