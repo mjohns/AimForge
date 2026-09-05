@@ -23,20 +23,6 @@ namespace {
 
 constexpr const float kMaxDistance = 1500.0f;
 constexpr const float kCenterSphereSizeMultiplier = 0.2f;
-constexpr const glm::vec3 kWorldUp = glm::vec3(0, 0, 1);
-
-glm::mat4 RotateTowardsCameraAroundZ(const LookAtInfo& look_at,
-                                     const glm::vec3& position,
-                                     const glm::mat4& transform) {
-  // Rotate to face towards camera along the z axis
-  glm::vec3 to_camera = look_at.position - position;
-  to_camera.z = 0;
-  if (glm::length(to_camera) > 0.001) {
-    float angle = glm::orientedAngle(glm::vec3(0, -1, 0), glm::normalize(to_camera), kWorldUp);
-    return glm::rotate(transform, angle, kWorldUp);
-  }
-  return transform;
-}
 
 glm::mat4 RotateBasicShapeTowardsCamera(const LookAtInfo& look_at,
                                         const glm::vec3& position,
@@ -55,6 +41,9 @@ glm::mat4 RotateBasicShapeTowardsCamera(const LookAtInfo& look_at,
   }
   to_camera = glm::normalize(to_camera);
   glm::vec3 front(0, -1, 0);
+  if (to_camera == front) {
+    return transform;
+  }
   glm::vec3 rotate_axis = glm::normalize(glm::cross(front, to_camera));
   float angle = glm::orientedAngle(front, to_camera, rotate_axis);
   return glm::rotate(transform, angle, rotate_axis);

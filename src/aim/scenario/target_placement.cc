@@ -136,8 +136,8 @@ class WallTargetPlacerImpl : public WallTargetPlacer {
 
     if (region.has_point()) {
       glm::vec2 pos;
-      pos.x = wall_.GetRegionLength(region.point().x());
-      pos.y = wall_.GetRegionLength(region.point().y());
+      pos.x = wall_.GetRegionLength(region.point().x()) + x_offset;
+      pos.y = wall_.GetRegionLength(region.point().y()) + y_offset;
       return glm::vec3(pos, z);
     }
 
