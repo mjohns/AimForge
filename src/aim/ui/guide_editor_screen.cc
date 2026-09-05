@@ -12,11 +12,88 @@
 #include "aim/core/playlist_manager.h"
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/search_selector.h"
+#include "aim/ui/select_object_dialog.h"
 #include "aim/ui/ui_app.h"
 #include "imgui.h"
 
 namespace aim {
 namespace {
+
+class SectionEditor {
+ public:
+  void Draw(GuideSection& section) {
+    ImGui::InputTextMultiline("##DescriptionInput",
+                              section.mutable_text(),
+                              ImVec2(0, 0),
+                              ImGuiInputTextFlags_AllowTabInput);
+    DrawPlaylistsEditor(section);
+    DrawLinkedGuidesEditor(section);
+  }
+
+ private:
+  void DrawLinkedGuidesEditor(GuideSection& section) {
+    ImGui::IdGuard cid("LinkedGuides");
+    ImGui::LoopId loop_id;
+    ListUpdater list_updater;
+    for (int i = 0; i < section.guides_size(); ++i) {
+      auto lid = loop_id.Get("Guide");
+      const std::string& name = section.guides(i);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(name);
+      ImGui::SameLine();
+      if (ImGui::ClearButton()) {
+        list_updater.remove = i;
+      }
+    }
+
+    list_updater.Update(section.mutable_guides());
+
+    SelectObjectDialog::Result add_result;
+    if (add_guide_dialog_->Draw(&add_result)) {
+      for (const std::string& selected : add_result.selected_objects) {
+        section.add_guides(selected);
+      }
+    }
+
+    if (ImGui::Button(std::format("{} Guide", icons::kAdd))) {
+      add_guide_dialog_->NotifyOpen();
+    }
+  }
+
+  void DrawPlaylistsEditor(GuideSection& section) {
+    ImGui::IdGuard cid("Playlists");
+    ImGui::LoopId loop_id;
+    ListUpdater list_updater;
+    for (int i = 0; i < section.playlists_size(); ++i) {
+      auto lid = loop_id.Get("Playlist");
+      const std::string& playlist_name = section.playlists(i);
+      ImGui::AlignTextToFramePadding();
+      ImGui::Text(playlist_name);
+      ImGui::SameLine();
+      if (ImGui::ClearButton()) {
+        list_updater.remove = i;
+      }
+    }
+
+    list_updater.Update(section.mutable_playlists());
+
+    SelectObjectDialog::Result add_result;
+    if (add_playlist_dialog_->Draw(&add_result)) {
+      for (const std::string& selected_playlist : add_result.selected_objects) {
+        section.add_playlists(selected_playlist);
+      }
+    }
+
+    if (ImGui::Button(std::format("{} Playlist", icons::kAdd))) {
+      add_playlist_dialog_->NotifyOpen();
+    }
+  }
+
+  std::unique_ptr<SelectObjectDialog> add_playlist_dialog_ =
+      CreateSelectObjectDialog("AddPlaylistDialog", ObjectType::PLAYLIST);
+  std::unique_ptr<SelectObjectDialog> add_guide_dialog_ =
+      CreateSelectObjectDialog("AddGuideDialog", ObjectType::GUIDE);
+};
 
 class GuideEditorScreen : public UiScreen {
  public:
@@ -64,6 +141,7 @@ class GuideEditorScreen : public UiScreen {
 
     ListUpdater list_updater;
 
+    section_editors_.resize(def.sections_size());
     for (int i = 0; i < def.sections_size(); ++i) {
       auto lid = loop_id.Get("Section");
       GuideSection* section = def.mutable_sections(i);
@@ -86,7 +164,7 @@ class GuideEditorScreen : public UiScreen {
       if (i != 0) {
         ImGui::SpacedSeparator();
       }
-      DrawSectionEditor(*section);
+      section_editors_[i].Draw(*section);
       ImGui::Unindent();
     }
 
@@ -175,107 +253,6 @@ class GuideEditorScreen : public UiScreen {
     return true;
   }
 
-  void DrawSectionEditor(GuideSection& section) {
-    ImGui::InputTextMultiline("##DescriptionInput",
-                              section.mutable_text(),
-                              ImVec2(0, 0),
-                              ImGuiInputTextFlags_AllowTabInput);
-    DrawPlaylistsEditor(section);
-    DrawLinkedGuidesEditor(section);
-  }
-
-  void DrawPlaylistsEditor(GuideSection& section) {
-    ImGui::IdGuard cid("Playlists");
-    ImGui::LoopId loop_id;
-    ListUpdater list_updater;
-    for (int i = 0; i < section.playlists_size(); ++i) {
-      auto lid = loop_id.Get("Playlist");
-      const std::string& playlist_name = section.playlists(i);
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(playlist_name);
-      ImGui::SameLine();
-      if (ImGui::ClearButton()) {
-        list_updater.remove = i;
-      }
-    }
-
-    list_updater.Update(section.mutable_playlists());
-
-    ImGui::TextFmt("Add playlist");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 18);
-    ImGui::InputText("###AddPlaylistInput", &playlist_search_text_);
-    ImGui::SameLine();
-    if (ImGui::ClearButton()) {
-      playlist_search_text_ = "";
-    }
-    if (playlist_search_text_.size() > 0) {
-      ImGui::Indent();
-      auto names = app_.playlist_manager().playlist_names();
-      SearchSelectorOptions options;
-      // options.additional_predicate = [&](const std::string& scenario_name) {
-      //   bool already_in_guide =
-      //       std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-      //         return item.scenario() == scenario_name;
-      //       });
-      //   return !already_in_playlist;
-      // };
-
-      std::optional<std::string> selected_playlist =
-          SearchSelector(playlist_search_text_, *names, options);
-      if (selected_playlist) {
-        section.add_playlists(*selected_playlist);
-      }
-      ImGui::Unindent();
-    }
-  }
-
-  void DrawLinkedGuidesEditor(GuideSection& section) {
-    ImGui::IdGuard cid("LinkedGuides");
-    ImGui::LoopId loop_id;
-    ListUpdater list_updater;
-    for (int i = 0; i < section.guides_size(); ++i) {
-      auto lid = loop_id.Get("Guide");
-      const std::string& name = section.guides(i);
-      ImGui::AlignTextToFramePadding();
-      ImGui::Text(name);
-      ImGui::SameLine();
-      if (ImGui::ClearButton()) {
-        list_updater.remove = i;
-      }
-    }
-
-    list_updater.Update(section.mutable_guides());
-
-    ImGui::TextFmt("Add linked guide");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(char_x_ * 18);
-    ImGui::InputText("###AddGuideeInput", &guide_search_text_);
-    ImGui::SameLine();
-    if (ImGui::ClearButton()) {
-      guide_search_text_ = "";
-    }
-    if (guide_search_text_.size() > 0) {
-      ImGui::Indent();
-      auto names = app_.guide_manager().guide_names();
-      SearchSelectorOptions options;
-      // options.additional_predicate = [&](const std::string& scenario_name) {
-      //   bool already_in_guide =
-      //       std::any_of(scenario_items_.begin(), scenario_items_.end(), [=](const auto& item) {
-      //         return item.scenario() == scenario_name;
-      //       });
-      //   return !already_in_playlist;
-      // };
-
-      std::optional<std::string> selected_guide =
-          SearchSelector(guide_search_text_, *names, options);
-      if (selected_guide) {
-        section.add_guides(*selected_guide);
-      }
-      ImGui::Unindent();
-    }
-  }
-
   void SetErrorMessage(const std::string& msg) {
     notification_popup_.NotifyOpen(msg);
   }
@@ -305,6 +282,7 @@ class GuideEditorScreen : public UiScreen {
   ResourceName name_;
   ImGui::NotificationPopup notification_popup_{"Notification"};
   bool exit_after_notification_ = false;
+  std::vector<SectionEditor> section_editors_;
 };
 
 }  // namespace

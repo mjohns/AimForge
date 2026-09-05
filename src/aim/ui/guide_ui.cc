@@ -16,6 +16,7 @@
 #include "aim/proto/guide.pb.h"
 #include "aim/ui/guide_editor_screen.h"
 #include "aim/ui/object_browser.h"
+#include "aim/ui/select_object_dialog.h"
 #include "aim/ui/playlist_ui.h"
 #include "aim/ui/search_selector.h"
 #include "aim/ui/ui_app.h"

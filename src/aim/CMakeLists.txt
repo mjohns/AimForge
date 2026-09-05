@@ -194,6 +194,8 @@ set(SRCS
     "ui/search_selector.h"
     "ui/select_variation_dialog.cc"
     "ui/select_variation_dialog.h"
+    "ui/select_object_dialog.cc"
+    "ui/select_object_dialog.h"
     "ui/settings_screen.cc"
     "ui/settings_screen.h"
     "ui/stats/history_plot.cc"

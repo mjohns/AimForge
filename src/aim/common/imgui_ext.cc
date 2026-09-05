@@ -518,16 +518,26 @@ std::optional<std::string> MultilineTextEntryDialog::Draw() {
 }
 
 bool Popup::Begin() {
+  return BeginInternal(false);
+}
+
+bool Popup::BeginModal() {
+  return BeginInternal(true);
+}
+
+bool Popup::BeginInternal(bool is_modal) {
   if (do_open_) {
     do_open_ = false;
     ImGui::OpenPopup(id_.c_str());
   }
   ImGui::SetNextWindowPos(
       ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-  return ImGui::BeginPopupModal(id_.c_str(),
-                                nullptr,
-                                ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
-                                    ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
+  auto flags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove |
+               ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
+  if (is_modal) {
+    return ImGui::BeginPopupModal(id_.c_str(), nullptr, flags);
+  }
+  return ImGui::BeginPopup(id_.c_str(), flags);
 }
 
 void Popup::End() {

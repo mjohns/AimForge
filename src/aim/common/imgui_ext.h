@@ -383,12 +383,18 @@ class Popup {
  public:
   explicit Popup(const std::string& id) : id_(id) {}
 
+  // Begin as popup which closes if clicked outside.
   bool Begin();
+  // Begin as popup modal which requires explicit closing.
+  bool BeginModal();
+
   void End();
   void Close();
   void Open();
 
  private:
+  bool BeginInternal(bool is_modal);
+
   std::string id_;
   bool do_open_ = false;
 };
