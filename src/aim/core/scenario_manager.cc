@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+#include "absl/container/flat_hash_map.h"
 #include "aim/common/log.h"
 #include "aim/common/name_util.h"
 #include "aim/common/resource_name.h"
@@ -374,7 +375,7 @@ class ScenarioManagerImpl : public ScenarioManager {
   }
 
   std::shared_ptr<std::vector<std::string>> scenario_names_;
-  std::unordered_map<std::string, ScenarioCacheItem> scenario_map_;
+  absl::flat_hash_map<std::string, ScenarioCacheItem> scenario_map_;
 
   std::shared_ptr<Screen> current_running_scenario_;
 

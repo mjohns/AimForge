@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "absl/container/flat_hash_map.h"
 #include "absl/strings/strip.h"
 #include "aim/common/name_util.h"
 #include "aim/common/proto_util.h"
@@ -555,7 +556,7 @@ class PlaylistManagerImpl : public PlaylistManager {
   std::string current_playlist_name_;
   std::shared_ptr<std::vector<Playlist>> playlists_;
   std::shared_ptr<std::vector<std::string>> playlist_names_;
-  std::unordered_map<std::string, Playlist> playlist_map_;
+  absl::flat_hash_map<std::string, Playlist> playlist_map_;
   std::unordered_map<std::string, std::shared_ptr<PlaylistRun>> playlist_run_map_;
   std::unordered_set<std::string> dirty_bundles_;
   std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>

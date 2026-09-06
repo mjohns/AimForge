@@ -19,6 +19,7 @@ class SelectObjectDialog {
   virtual void NotifyOpen() = 0;
 };
 
-std::unique_ptr<SelectObjectDialog> CreateSelectObjectDialog(const std::string& id, ObjectType type);
+std::unique_ptr<SelectObjectDialog> CreateSelectObjectDialog(const std::string& id,
+                                                             ObjectType type);
 
 }  // namespace aim

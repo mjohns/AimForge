@@ -33,7 +33,7 @@ class GuideManager {
 
   virtual std::optional<GuideItem> GetGuide(const std::string& guide_name) = 0;
 
-  std::optional<GuideItem> GetCurrentGuide()  {
+  std::optional<GuideItem> GetCurrentGuide() {
     return GetGuide(current_guide_name());
   }
 

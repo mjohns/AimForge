@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "absl/container/flat_hash_map.h"
 #include "aim/common/name_util.h"
 #include "aim/common/resource_name.h"
 
@@ -199,7 +200,7 @@ class GuideManagerImpl : public GuideManager {
 
   std::shared_ptr<std::vector<GuideItem>> guides_;
   std::shared_ptr<std::vector<std::string>> guide_names_;
-  std::unordered_map<std::string, GuideItem> guide_map_;
+  absl::flat_hash_map<std::string, GuideItem> guide_map_;
   std::unordered_set<std::string> dirty_bundles_;
   std::vector<std::function<void(const std::string& old_name, const std::string& new_name)>>
       rename_listeners_;
